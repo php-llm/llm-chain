@@ -1,0 +1,37 @@
+{
+    "name": "symfony-llm/llm-chain",
+    "type": "library",
+    "description": "PHP component with tooling around LLMs.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christopher Hertel",
+            "email": "mail@christopher-hertel.de"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "psr/cache": "^3.0",
+        "psr/log": "^3.0",
+        "symfony/http-client": "^6.3 || ^7.0"
+    },
+    "require-dev": {
+        "php-cs-fixer/shim": "^3.35",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^10.4",
+        "probots-io/pinecone-php": "^0.0.3"
+    },
+    "suggest": {
+        "probots-io/pinecone-php": "For using the Pinecone client."
+    },
+    "autoload": {
+        "psr-4": {
+            "SymfonyLlm\\LlmChain\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SymfonyLlm\\LlmChain\\Tests\\": "tests/"
+        }
+    }
+}
