@@ -13,7 +13,7 @@ Installation
 The recommended way to install LlmChain is through [Composer](http://getcomposer.org/):
 
 ```bash
-composer require symfony-llm/llm-chain
+composer require php-llm/llm-chain
 ```
 
 Usage
