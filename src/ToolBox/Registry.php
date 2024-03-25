@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\ToolBox;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * @phpstan-import-type ParameterDefinition from ParameterAnalyzer
  * @phpstan-type ToolDefinition = array{
@@ -22,6 +24,7 @@ final class Registry
 
     public function __construct(
         private readonly ToolAnalyzer $toolAnalyzer,
+        private readonly LoggerInterface $logger,
         iterable $tools,
     ) {
         $this->tools = $tools instanceof \Traversable ? iterator_to_array($tools) : $tools;
@@ -63,6 +66,7 @@ final class Registry
         foreach ($this->tools as $tool) {
             foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
                 if ($metadata->name === $name) {
+                    $this->logger->debug(sprintf('Executing tool "%s" with "%s"', $name, $arguments));
                     return $tool->{$metadata->method}(...json_decode($arguments, true));
                 }
             }

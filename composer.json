@@ -19,7 +19,8 @@
         "php-cs-fixer/shim": "^3.35",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.4",
-        "probots-io/pinecone-php": "^0.0.3"
+        "probots-io/pinecone-php": "^0.0.3",
+        "symfony/console": "^6.4 || ^7.0"
     },
     "suggest": {
         "probots-io/pinecone-php": "For using the Pinecone client."
