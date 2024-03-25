@@ -67,7 +67,10 @@ final class Registry
             foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
                 if ($metadata->name === $name) {
                     $this->logger->debug(sprintf('Executing tool "%s" with "%s"', $name, $arguments));
-                    return $tool->{$metadata->method}(...json_decode($arguments, true));
+                    $result = $tool->{$metadata->method}(...json_decode($arguments, true));
+                    $this->logger->debug(sprintf('Tool "%s" executed with result "%s"', $name, $result));
+
+                    return $result;
                 }
             }
         }
