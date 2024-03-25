@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Tests\ToolBox;
+namespace PhpLlm\LlmChain\Tests\ToolBox;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use SymfonyLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
-use SymfonyLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
-use SymfonyLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
-use SymfonyLlm\LlmChain\ToolBox\ParameterAnalyzer;
-use SymfonyLlm\LlmChain\ToolBox\Registry;
-use SymfonyLlm\LlmChain\ToolBox\ToolAnalyzer;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
+use PhpLlm\LlmChain\ToolBox\Registry;
+use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 
 #[CoversClass(Registry::class)]
 final class RegistryTest extends TestCase

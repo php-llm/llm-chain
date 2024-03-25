@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Vector;
+namespace PhpLlm\LlmChain\Vector;
 
 use Probots\Pinecone\Client;
 use Probots\Pinecone\Resources\VectorResource;

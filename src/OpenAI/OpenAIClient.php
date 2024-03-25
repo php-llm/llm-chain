@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\OpenAI;
+namespace PhpLlm\LlmChain\OpenAI;
 
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

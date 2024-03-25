@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Message;
+namespace PhpLlm\LlmChain\Message;
 
 /**
  * @template-extends \ArrayObject<int, Message>

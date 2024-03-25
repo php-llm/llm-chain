@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\OpenAI;
+namespace PhpLlm\LlmChain\OpenAI;
 
 final class Embeddings
 {

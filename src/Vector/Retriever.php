@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Vector;
+namespace PhpLlm\LlmChain\Vector;
 
-use SymfonyLlm\LlmChain\Message\Message;
-use SymfonyLlm\LlmChain\OpenAI\Embeddings;
-use SymfonyLlm\LlmChain\RetrieverInterface;
+use PhpLlm\LlmChain\Message\Message;
+use PhpLlm\LlmChain\OpenAI\Embeddings;
+use PhpLlm\LlmChain\RetrieverInterface;
 
 final class Retriever implements RetrieverInterface
 {

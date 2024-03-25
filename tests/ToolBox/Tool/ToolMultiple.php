@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Tests\ToolBox\Tool;
+namespace PhpLlm\LlmChain\Tests\ToolBox\Tool;
 
-use SymfonyLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\AsTool;
 
 #[AsTool('tool_hello_world', 'Function to say hello', method: 'hello')]
 #[AsTool('tool_required_params', 'Function to say a number', method: 'bar')]

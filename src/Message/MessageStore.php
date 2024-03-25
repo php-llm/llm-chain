@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Message;
+namespace PhpLlm\LlmChain\Message;
 
 use Psr\Cache\CacheItemPoolInterface;
-use SymfonyLlm\LlmChain\Exception\MessageBagNotFound;
+use PhpLlm\LlmChain\Exception\MessageBagNotFound;
 
 final class MessageStore
 {

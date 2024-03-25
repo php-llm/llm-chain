@@ -1,17 +1,17 @@
 <?php
 
 use Symfony\Component\HttpClient\HttpClient;
-use SymfonyLlm\LlmChain\Message\Message;
-use SymfonyLlm\LlmChain\Message\MessageBag;
-use SymfonyLlm\LlmChain\OpenAI\ChatModel;
-use SymfonyLlm\LlmChain\OpenAI\OpenAIClient;
-use SymfonyLlm\LlmChain\ToolBox\ParameterAnalyzer;
-use SymfonyLlm\LlmChain\ToolBox\Registry;
-use SymfonyLlm\LlmChain\ToolBox\Tool\SerpApi;
-use SymfonyLlm\LlmChain\ToolBox\ToolAnalyzer;
-use SymfonyLlm\LlmChain\ToolChain;
+use PhpLlm\LlmChain\Message\Message;
+use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\OpenAI\ChatModel;
+use PhpLlm\LlmChain\OpenAI\OpenAIClient;
+use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
+use PhpLlm\LlmChain\ToolBox\Registry;
+use PhpLlm\LlmChain\ToolBox\Tool\SerpApi;
+use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
+use PhpLlm\LlmChain\ToolChain;
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once dirname(__DIR__).'/vendor/autoload.php';
 
 $httpClient = HttpClient::create();
 $openAiClient = new OpenAIClient($httpClient, getenv('OPENAI_API_KEY'));

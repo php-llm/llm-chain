@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\ToolBox;
+namespace PhpLlm\LlmChain\ToolBox;
 
 final class Metadata
 {

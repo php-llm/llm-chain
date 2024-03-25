@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain;
+namespace PhpLlm\LlmChain;
 
-use SymfonyLlm\LlmChain\Message\Message;
-use SymfonyLlm\LlmChain\Message\MessageBag;
-use SymfonyLlm\LlmChain\OpenAI\ChatModel;
+use PhpLlm\LlmChain\Message\Message;
+use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\OpenAI\ChatModel;
 
 final class ChatChain implements LlmChainInterface
 {

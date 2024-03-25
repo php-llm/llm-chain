@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Tests\ToolBox\Tool;
+namespace PhpLlm\LlmChain\Tests\ToolBox\Tool;
 
-use SymfonyLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\AsTool;
 
 #[AsTool('tool_optional_param', 'A tool with one optional parameter', method: 'bar')]
 final class ToolOptionalParam

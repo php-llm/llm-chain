@@ -1,12 +1,12 @@
 <?php
 
 use Symfony\Component\HttpClient\HttpClient;
-use SymfonyLlm\LlmChain\Message\Message;
-use SymfonyLlm\LlmChain\Message\MessageBag;
-use SymfonyLlm\LlmChain\OpenAI\ChatModel;
-use SymfonyLlm\LlmChain\OpenAI\OpenAIClient;
+use PhpLlm\LlmChain\Message\Message;
+use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\OpenAI\ChatModel;
+use PhpLlm\LlmChain\OpenAI\OpenAIClient;
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once dirname(__DIR__).'/vendor/autoload.php';
 
 $openAiClient = new OpenAIClient(HttpClient::create(), getenv('OPENAI_API_KEY'));
 $chatModel = new ChatModel($openAiClient);

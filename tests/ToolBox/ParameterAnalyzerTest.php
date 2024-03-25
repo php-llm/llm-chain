@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Tests\ToolBox;
+namespace PhpLlm\LlmChain\Tests\ToolBox;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use SymfonyLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
-use SymfonyLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
-use SymfonyLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
-use SymfonyLlm\LlmChain\ToolBox\ParameterAnalyzer;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 
 #[CoversClass(ParameterAnalyzer::class)]
 final class ParameterAnalyzerTest extends TestCase

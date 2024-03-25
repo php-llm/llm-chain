@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Tests;
+namespace PhpLlm\LlmChain\Tests;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use SymfonyLlm\LlmChain\Exception\InvalidToolImplementation;
-use SymfonyLlm\LlmChain\Tests\ToolBox\Tool\ToolMultiple;
-use SymfonyLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
-use SymfonyLlm\LlmChain\Tests\ToolBox\Tool\ToolWrong;
-use SymfonyLlm\LlmChain\ToolBox\Metadata;
-use SymfonyLlm\LlmChain\ToolBox\ParameterAnalyzer;
-use SymfonyLlm\LlmChain\ToolBox\ToolAnalyzer;
+use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolMultiple;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolWrong;
+use PhpLlm\LlmChain\ToolBox\Metadata;
+use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
+use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 
 #[CoversClass(ToolAnalyzer::class)]
 final class ToolAnalyzerTest extends TestCase

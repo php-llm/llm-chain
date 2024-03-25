@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\ToolBox;
+namespace PhpLlm\LlmChain\ToolBox;
 
-use SymfonyLlm\LlmChain\Exception\InvalidToolImplementation;
+use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
 
 final class ToolAnalyzer
 {

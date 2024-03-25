@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain;
+namespace PhpLlm\LlmChain;
 
-use SymfonyLlm\LlmChain\Message\Message;
+use PhpLlm\LlmChain\Message\Message;
 
 interface RetrieverInterface
 {

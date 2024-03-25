@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\ToolBox\Tool;
+namespace PhpLlm\LlmChain\ToolBox\Tool;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use SymfonyLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\AsTool;
 
 #[AsTool(name: 'serpapi', description: 'search for information on the internet')]
 final class SerpApi

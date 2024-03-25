@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\ToolBox;
+namespace PhpLlm\LlmChain\ToolBox;
 
 /**
  * @phpstan-import-type ParameterDefinition from ParameterAnalyzer

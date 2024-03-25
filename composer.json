@@ -1,5 +1,5 @@
 {
-    "name": "symfony-llm/llm-chain",
+    "name": "php-llm/llm-chain",
     "type": "library",
     "description": "PHP component with tooling around LLMs.",
     "license": "MIT",
@@ -26,12 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "SymfonyLlm\\LlmChain\\": "src/"
+            "PhpLlm\\LlmChain\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "SymfonyLlm\\LlmChain\\Tests\\": "tests/"
+            "PhpLlm\\LlmChain\\Tests\\": "tests/"
         }
     }
 }

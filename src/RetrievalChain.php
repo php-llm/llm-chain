@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain;
+namespace PhpLlm\LlmChain;
 
-use SymfonyLlm\LlmChain\Message\Message;
-use SymfonyLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\Message;
+use PhpLlm\LlmChain\Message\MessageBag;
 
 final class RetrievalChain implements LlmChainInterface
 {

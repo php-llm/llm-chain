@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\OpenAI;
+namespace PhpLlm\LlmChain\OpenAI;
 
-use SymfonyLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\MessageBag;
 
 final class ChatModel
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SymfonyLlm\LlmChain\Exception;
+namespace PhpLlm\LlmChain\Exception;
 
 final class MessageBagNotFound extends \DomainException
 {
