@@ -21,9 +21,8 @@ final class ToolChain implements LlmChainInterface
     {
         $messages[] = $message;
 
-        $response = $this->model->call($messages, [
-            'tools' => $this->toolRegistry->getMap(),
-        ]);
+        $toolMap = $this->toolRegistry->getMap();
+        $response = $this->model->call($messages, ['tools' => $toolMap]);
 
         while ('tool_calls' === $response['choices'][0]['finish_reason']) {
             ['name' => $name, 'arguments' => $arguments] = $response['choices'][0]['message']['tool_calls'][0]['function'];
@@ -35,7 +34,7 @@ final class ToolChain implements LlmChainInterface
             ]);
             $messages[] = Message::ofFunctionCall($name, $result);
 
-            $response = $this->model->call($messages);
+            $response = $this->model->call($messages, ['tools' => $toolMap]);
         }
 
         return $response['choices'][0]['message']['content'];
