@@ -17,12 +17,12 @@ final class ToolChain implements LlmChainInterface
     ) {
     }
 
-    public function call(Message $message, MessageBag $messages): string
+    public function call(Message $message, MessageBag $messages, array $options = []): string
     {
         $messages[] = $message;
 
-        $toolMap = $this->toolRegistry->getMap();
-        $response = $this->model->call($messages, ['tools' => $toolMap]);
+        $options['tools'] = $this->toolRegistry->getMap();
+        $response = $this->model->call($messages, $options);
 
         while ('tool_calls' === $response['choices'][0]['finish_reason']) {
             ['name' => $name, 'arguments' => $arguments] = $response['choices'][0]['message']['tool_calls'][0]['function'];
@@ -34,7 +34,7 @@ final class ToolChain implements LlmChainInterface
             ]);
             $messages[] = Message::ofFunctionCall($name, $result);
 
-            $response = $this->model->call($messages, ['tools' => $toolMap]);
+            $response = $this->model->call($messages, $options);
         }
 
         return $response['choices'][0]['message']['content'];

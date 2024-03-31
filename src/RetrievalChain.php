@@ -15,10 +15,10 @@ final class RetrievalChain implements LlmChainInterface
     ) {
     }
 
-    public function call(Message $message, MessageBag $messages): string
+    public function call(Message $message, MessageBag $messages, array $options = []): string
     {
         $retrievalPrompt = $this->retriever->enrich($message);
 
-        return $this->chain->call($retrievalPrompt, $messages);
+        return $this->chain->call($retrievalPrompt, $messages, $options);
     }
 }

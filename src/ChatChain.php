@@ -14,9 +14,9 @@ final class ChatChain implements LlmChainInterface
     {
     }
 
-    public function call(Message $message, MessageBag $messages): string
+    public function call(Message $message, MessageBag $messages, array $options = []): string
     {
-        $response = $this->model->call($messages->with($message));
+        $response = $this->model->call($messages->with($message), $options);
 
         return $response['choices'][0]['message']['content'];
     }

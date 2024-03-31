@@ -9,5 +9,5 @@ use PhpLlm\LlmChain\Message\MessageBag;
 
 interface LlmChainInterface
 {
-    public function call(Message $message, MessageBag $messages): string;
+    public function call(Message $message, MessageBag $messages, array $options = []): string;
 }
