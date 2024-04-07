@@ -35,6 +35,10 @@ final class ParameterAnalyzer
             $paramName = $parameter->getName();
             $paramType = $parameter->getType() ? $parameter->getType()->getName() : 'mixed';
 
+            if ('int' === $paramType) {
+                $paramType = 'integer';
+            }
+
             if (!$parameter->isOptional()) {
                 $result['required'][] = $paramName;
             }
