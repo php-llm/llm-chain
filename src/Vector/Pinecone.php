@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Vector;
 
 use Probots\Pinecone\Client;
-use Probots\Pinecone\Resources\VectorResource;
+use Probots\Pinecone\Resources\Data\VectorResource;
 
 final class Pinecone
 {
     public function __construct(
         private Client $pinecone,
-        private string $index,
     ) {
     }
 
@@ -24,11 +23,11 @@ final class Pinecone
     {
         $response = $this->getVectors()->query($vector);
 
-        return array_map(fn (array $match) => $match['id'], $response->json()['matches']);
+        return $response->json()['matches'];
     }
 
     /**
-     * @param list<array{id: string|int, values: list<float>}> $vectors
+     * @param list<array{id: string|int, values: list<float>, metadata: array<string, mixed>}> $vectors
      */
     public function upsert(array $vectors): void
     {
@@ -42,6 +41,6 @@ final class Pinecone
 
     private function getVectors(): VectorResource
     {
-        return $this->pinecone->index($this->index)->vectors();
+        return $this->pinecone->data()->vectors();
     }
 }
