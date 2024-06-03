@@ -8,5 +8,5 @@ use PhpLlm\LlmChain\Message\Message;
 
 interface RetrieverInterface
 {
-    public function enrich(Message $message): Message;
+    public function enrich(string $search): string;
 }
