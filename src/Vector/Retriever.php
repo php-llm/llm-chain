@@ -19,24 +19,21 @@ final class Retriever implements RetrieverInterface
     public function enrich(Message $message): Message
     {
         $vector = $this->embeddings->create($message->content ?? '');
-        $ids = $this->client->query($vector);
+        $hits = $this->client->query($vector);
 
         $prompt = <<<PROMPT
-            Beantworte mithilfe folgender Informationen oder Informationen aus vorherigen Nachrichten die Frage ganz am Ende.
-            Füge dabei keine Informationen hinzu und wenn du keine Antwort findest, sag es.
+            Use the following information or information from previous messages to answer the question at the very end.
+            Do not add any information and if you cannot find an answer, say so.
             PROMPT;
 
-        foreach ($ids as $id) {
-            $event = $this->eventRepository->find($id); // single query due to some sqlite thingy
-
-            if (null === $event) {
-                continue;
+        foreach ($hits as $hit) {
+            foreach ($hit['metadata'] as $key => $value) {
+                $prompt .= ucfirst($key).': '.$value.', ';
             }
-
-            $prompt .= $event->toString().PHP_EOL;
+            $prompt .= PHP_EOL;
         }
 
-        $prompt .= '. Frage: '.$message->content;
+        $prompt .= '. Question: '.$message->content;
 
         return Message::ofUser($prompt);
     }
