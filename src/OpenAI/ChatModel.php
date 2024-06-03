@@ -10,7 +10,7 @@ final class ChatModel
 {
     public function __construct(
         private OpenAIClient $client,
-        private string $model = 'gpt-4',
+        private string $model = 'gpt-4o',
         private float $temperature = 1.0,
     ) {
     }
