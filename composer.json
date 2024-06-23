@@ -1,7 +1,7 @@
 {
     "name": "php-llm/llm-chain",
     "type": "library",
-    "description": "PHP component with tooling around LLMs.",
+    "description": "A slim PHP component with tooling around LLMs.",
     "license": "MIT",
     "authors": [
         {
@@ -10,20 +10,25 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": ">=8.1",
         "psr/cache": "^3.0",
         "psr/log": "^3.0",
-        "symfony/http-client": "^6.3 || ^7.0"
+        "symfony/http-client": "^6.4 || ^7.0"
     },
     "require-dev": {
-        "php-cs-fixer/shim": "^3.35",
-        "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^10.4",
-        "probots-io/pinecone-php": "^0.0.3",
+        "codewithkyrian/chromadb-php": "^0.2.1",
+        "php-cs-fixer/shim": "^3.58",
+        "phpstan/phpstan": "^1.11",
+        "phpunit/phpunit": "^11.2",
+        "probots-io/pinecone-php": "^1.0",
         "symfony/console": "^6.4 || ^7.0"
     },
     "suggest": {
-        "probots-io/pinecone-php": "For using the Pinecone client."
+        "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
+        "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store."
+    },
+    "config": {
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
