@@ -38,7 +38,7 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
      *     name?: string
      * }>
      */
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
         return array_map(
             function (Message $message) {
@@ -59,5 +59,10 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
             },
             $this->getArrayCopy(),
         );
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }
