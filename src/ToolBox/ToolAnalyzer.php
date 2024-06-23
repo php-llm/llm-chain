@@ -14,9 +14,9 @@ final class ToolAnalyzer
     }
 
     /**
-     * @return \Generator<Metadata>
+     * @return iterable<Metadata>
      */
-    public function getMetadata(string $className): \Generator
+    public function getMetadata(string $className): iterable
     {
         $reflectionClass = new \ReflectionClass($className);
         $attributes = $reflectionClass->getAttributes(AsTool::class);
