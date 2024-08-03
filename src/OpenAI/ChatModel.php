@@ -9,7 +9,7 @@ use PhpLlm\LlmChain\Message\MessageBag;
 final class ChatModel
 {
     public function __construct(
-        private OpenAIClient $client,
+        private OpenAIClientInterface $client,
         private string $model = 'gpt-4o',
         private float $temperature = 1.0,
     ) {

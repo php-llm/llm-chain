@@ -13,7 +13,7 @@ final class Retriever implements RetrieverInterface
     public function __construct(
         private Embeddings $embeddings,
         private Client $chromaClient,
-        private string $collectionName = 'chroma-vector',
+        private string $collectionName,
     ) {
     }
 

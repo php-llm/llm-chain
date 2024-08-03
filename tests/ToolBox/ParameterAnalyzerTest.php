@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\ToolBox;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ParameterAnalyzer::class)]
 final class ParameterAnalyzerTest extends TestCase

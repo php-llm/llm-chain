@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message;
 
-use Psr\Cache\CacheItemPoolInterface;
 use PhpLlm\LlmChain\Exception\MessageBagNotFound;
+use Psr\Cache\CacheItemPoolInterface;
 
 final class MessageStore
 {

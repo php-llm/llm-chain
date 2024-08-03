@@ -25,7 +25,7 @@ final class Message
     /**
      * @param array{name: string, arguments: string} $functionCall
      */
-    public static function ofAssistant(string $content = null, array $functionCall = null): self
+    public static function ofAssistant(?string $content = null, ?array $functionCall = null): self
     {
         return new self($content, Role::Assistant, $functionCall);
     }

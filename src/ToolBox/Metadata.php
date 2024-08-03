@@ -11,7 +11,7 @@ final class Metadata
         public readonly string $name,
         public readonly string $description,
         public readonly string $method,
-        public readonly array|null $parameters,
+        public readonly ?array $parameters,
     ) {
     }
 }

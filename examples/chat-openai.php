@@ -1,10 +1,10 @@
 <?php
 
-use Symfony\Component\HttpClient\HttpClient;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\ChatModel;
 use PhpLlm\LlmChain\OpenAI\OpenAIClient;
+use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 

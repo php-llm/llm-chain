@@ -16,7 +16,7 @@ final class ParameterAnalyzer
     /**
      * @return ParameterDefinition|null
      */
-    public function getDefinition(string $className, string $methodName): array|null
+    public function getDefinition(string $className, string $methodName): ?array
     {
         $reflection = new \ReflectionMethod($className, $methodName);
         $parameters = $reflection->getParameters();

@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\OpenAI;
 final class Embeddings
 {
     public function __construct(
-        private OpenAIClient $client,
+        private OpenAIClientInterface $client,
         private string $model = 'text-embedding-ada-002',
     ) {
     }

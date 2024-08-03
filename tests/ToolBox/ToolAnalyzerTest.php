@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolMultiple;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
@@ -13,6 +11,8 @@ use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolWrong;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ToolAnalyzer::class)]
 final class ToolAnalyzerTest extends TestCase

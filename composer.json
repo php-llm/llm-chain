@@ -21,11 +21,14 @@
         "phpstan/phpstan": "^1.11",
         "phpunit/phpunit": "^11.2",
         "probots-io/pinecone-php": "^1.0",
-        "symfony/console": "^6.4 || ^7.0"
+        "symfony/clock": "^6.4 || ^7.0",
+        "symfony/console": "^6.4 || ^7.0",
+        "symfony/var-dumper": "^6.4 || ^7.0"
     },
     "suggest": {
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
-        "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store."
+        "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
+        "symfony/clock": "For using the clock tool."
     },
     "config": {
         "sort-packages": true

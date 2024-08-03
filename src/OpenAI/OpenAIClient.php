@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\OpenAI;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class OpenAIClient
+final class OpenAIClient implements OpenAIClientInterface
 {
     public function __construct(
         private HttpClientInterface $httpClient,

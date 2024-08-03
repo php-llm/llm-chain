@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @phpstan-import-type ParameterDefinition from ParameterAnalyzer
+ *
  * @phpstan-type ToolDefinition = array{
  *     type: 'function',
  *     function: array{
