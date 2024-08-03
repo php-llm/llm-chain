@@ -3,6 +3,9 @@ LlmChain
 
 Simple PHP toolkit for building LLM chains.
 
+This is not stable nor production ready, it's just a playground for me to experiment with LLMs.
+Abstractions, concepts and interfaces are not good at all and will definitely change.
+
 Requirements
 ------------
 * PHP 8.1 or higher
@@ -16,8 +19,8 @@ The recommended way to install LlmChain is through [Composer](http://getcomposer
 composer require php-llm/llm-chain
 ```
 
-Usage
------
+Usage Examples
+--------------
 
 See [examples](examples) - to run the examples, you need to export
 the needed environment variables with your API key:
@@ -34,4 +37,10 @@ export AZURE_OPENAI_RESOURCE=...
 export AZURE_OPENAI_DEPLOYMENT=...
 export AZURE_OPENAI_VERSION=...
 export AZURE_OPENAI_KEY=...
+```
+
+For Anthropic's Claude you need to export:
+
+```bash
+export ANTHROPIC_API_KEY=sk-...
 ```

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\OpenAI;
 
+use PhpLlm\LlmChain\ChatInterface;
 use PhpLlm\LlmChain\Message\MessageBag;
 
-final class ChatModel
+final class ChatModel implements ChatInterface
 {
     public function __construct(
         private OpenAIClientInterface $client,
@@ -15,11 +16,6 @@ final class ChatModel
     ) {
     }
 
-    /**
-     * @param array<string, mixed> $options
-     *
-     * @return array<string, mixed>
-     */
     public function call(MessageBag $messages, array $options = []): array
     {
         $body = [

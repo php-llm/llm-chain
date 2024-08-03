@@ -14,10 +14,31 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
         parent::__construct(array_values($messages));
     }
 
+    public function getSystemMessage(): ?Message
+    {
+        foreach ($this as $message) {
+            if (Role::System === $message->role) {
+                return $message;
+            }
+        }
+
+        return null;
+    }
+
     public function with(Message $message): self
     {
         $messages = clone $this;
         $messages->append($message);
+
+        return $messages;
+    }
+
+    public function withoutSystemMessage(): self
+    {
+        $messages = clone $this;
+        $messages->exchangeArray(
+            array_values(array_filter($messages->getArrayCopy(), fn (Message $message) => !$message->isSystem()))
+        );
 
         return $messages;
     }

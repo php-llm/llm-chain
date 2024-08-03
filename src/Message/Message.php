@@ -22,6 +22,11 @@ final class Message
         return new self($content, Role::System);
     }
 
+    public function isSystem(): bool
+    {
+        return Role::System === $this->role;
+    }
+
     /**
      * @param array{name: string, arguments: string} $functionCall
      */
