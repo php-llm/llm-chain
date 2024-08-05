@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 
-final class RetrievalChain implements LlmChainInterface
+final class RetrievalChain
 {
     public function __construct(
         private RetrieverInterface $retriever,

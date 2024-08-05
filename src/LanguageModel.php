@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain;
 
 use PhpLlm\LlmChain\Message\MessageBag;
 
-interface ChatInterface
+interface LanguageModel
 {
     /**
      * @param array<string, mixed> $options

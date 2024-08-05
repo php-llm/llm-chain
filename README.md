@@ -19,28 +19,79 @@ The recommended way to install LlmChain is through [Composer](http://getcomposer
 composer require php-llm/llm-chain
 ```
 
+Supported Models & Runtimes
+---------------------------
+
+Currently supported models and runtimes:
+
+| Vendor         | Model                  | Runtime                          |
+|----------------|------------------------|----------------------------------|
+| **OpenAI**     | - GPT<br/>- Embeddings | - OpenAI<br/>- Azure             |
+| **Anthropic**  | - Claude | - Anthropic  |
+
+Planned Models & Runtimes (not implemented yet):
+
+| Vendor         | Model                  | Runtime                          |
+|----------------|------------------------|----------------------------------|
+| **Anthropic**  | - Voyage | - GPC<br/>- AWS                  |
+| **Google**     | - Gemini<br/>- Gemma | - GPC                            |
+| **Meta**       | - Llama | - Meta AI<br/>- GPC<br/>- Ollama |
+| **Mistral AI** | - Mistral<br/>- Codestral | - Mistral<br/>- GPT<br/>- Ollama |
+
+Provided Tools
+--------------
+
+* [x] SerpApi
+* [x] Clock
+* [x] Wikipedia
+* [ ] Weather
+
 Usage Examples
 --------------
 
-See [examples](examples) - to run the examples, you need to export
-the needed environment variables with your API key:
+See [examples](examples) to run example implementations using this library.
+Depending on the example you need to export needed environment variables for API keys or deployment configurations:
 
-```bash
-export OPENAI_API_KEY=sk-...
-export SERP_API_KEY=...
-```
+### Chat Examples
 
-For the Azure example you need to export:
+1. Chat Example: OpenAI's GPT
+   ```bash
+   export OPENAI_API_KEY=sk-...
+   php examples/chat-gpt-openai.php
+   ```
+   
+1. Chat Example: OpenAI's GPT With Azure
+   ```bash
+   export AZURE_OPENAI_RESOURCE=...
+   export AZURE_OPENAI_DEPLOYMENT=...
+   export AZURE_OPENAI_VERSION=...
+   export AZURE_OPENAI_KEY=...
+   php examples/chat-gpt-azure.php
+   ```
+ 
+1. Chat Example: Anthropic's Claude
+   ```bash
+   export ANTHROPIC_API_KEY=sk-...
+   php examples/chat-claude-anthropic.php
+   ```
 
-```bash
-export AZURE_OPENAI_RESOURCE=...
-export AZURE_OPENAI_DEPLOYMENT=...
-export AZURE_OPENAI_VERSION=...
-export AZURE_OPENAI_KEY=...
-```
+### ToolChain Examples
 
-For Anthropic's Claude you need to export:
+1. Simple Clock Tool
+   ```bash
+   export OPENAI_API_KEY=sk-...
+   php examples/toolchain-clock.php
+   ```
 
-```bash
-export ANTHROPIC_API_KEY=sk-...
-```
+1. Wikipedia Tool
+   ```bash
+   export OPENAI_API_KEY=sk-...
+   php examples/toolchain-wikipedia.php
+   ```
+
+1. SerpAPI Tool
+   ```bash
+   export OPENAI_API_KEY=sk-...
+   export SERPAPI_API_KEY=...
+   php examples/toolchain-serpapi.php
+   ```

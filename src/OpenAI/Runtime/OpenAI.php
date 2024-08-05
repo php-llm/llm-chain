@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\OpenAI;
+namespace PhpLlm\LlmChain\OpenAI\Runtime;
 
+use PhpLlm\LlmChain\OpenAI\Runtime;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class OpenAIClient implements OpenAIClientInterface
+final class OpenAI implements Runtime
 {
     public function __construct(
         private HttpClientInterface $httpClient,
@@ -14,11 +15,6 @@ final class OpenAIClient implements OpenAIClientInterface
     ) {
     }
 
-    /**
-     * @param array<string, mixed> $body
-     *
-     * @return array<string, mixed>
-     */
     public function request(string $endpoint, array $body): array
     {
         $url = sprintf('https://api.openai.com/v1/%s', $endpoint);

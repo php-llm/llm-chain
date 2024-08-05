@@ -6,21 +6,21 @@ namespace PhpLlm\LlmChain;
 
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\OpenAI\ChatModel;
 use PhpLlm\LlmChain\ToolBox\Registry;
 
-final class ToolChain implements LlmChainInterface
+final class ToolChain
 {
     public function __construct(
-        private ChatModel $model,
+        private LanguageModel $llm,
         private Registry $toolRegistry,
     ) {
     }
 
-    public function call(Message $message, MessageBag $messages, array $options = []): string
+    public function call(MessageBag $messages, array $options = []): string
     {
         $options['tools'] = $this->toolRegistry->getMap();
-        $response = $this->model->call($clonedMessages = $messages->with($message), $options);
+        $clonedMessages = clone $messages;
+        $response = $this->llm->call($messages, $options);
 
         while ('tool_calls' === $response['choices'][0]['finish_reason']) {
             foreach ($response['choices'][0]['message']['tool_calls'] as $toolCall) {
@@ -34,7 +34,7 @@ final class ToolChain implements LlmChainInterface
                 $clonedMessages[] = Message::ofFunctionCall($name, $result);
             }
 
-            $response = $this->model->call($clonedMessages, $options);
+            $response = $this->llm->call($clonedMessages, $options);
         }
 
         return $response['choices'][0]['message']['content'];

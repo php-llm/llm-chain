@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain;
 
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 
-final class ChatChain implements LlmChainInterface
+final class Chat
 {
     public function __construct(
-        private ChatInterface $chat,
+        private LanguageModel $llm,
     ) {
     }
 
-    public function call(Message $message, MessageBag $messages, array $options = []): string
+    public function call(MessageBag $messages, array $options = []): string
     {
-        $response = $this->chat->call($messages->with($message), $options);
+        $response = $this->llm->call($messages, $options);
 
         // OpenAI GPT
         if (isset($response['choices'][0]['message']['content'])) {

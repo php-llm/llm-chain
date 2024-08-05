@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Vector\Pinecone;
 
-use PhpLlm\LlmChain\OpenAI\Embeddings;
+use PhpLlm\LlmChain\EmbeddingModel;
 use PhpLlm\LlmChain\RetrieverInterface;
 
 final class Retriever implements RetrieverInterface
 {
     public function __construct(
-        private Embeddings $embeddings,
+        private EmbeddingModel $embeddings,
         private Pinecone $client,
     ) {
     }

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Vector\ChromaDb;
 
 use Codewithkyrian\ChromaDB\Client;
-use PhpLlm\LlmChain\OpenAI\Embeddings;
+use PhpLlm\LlmChain\EmbeddingModel;
 use PhpLlm\LlmChain\Vector\RetrieverInterface;
 
 final class Retriever implements RetrieverInterface
 {
     public function __construct(
-        private Embeddings $embeddings,
+        private EmbeddingModel $embeddings,
         private Client $chromaClient,
         private string $collectionName,
     ) {

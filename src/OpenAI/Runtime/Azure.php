@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\OpenAI;
+namespace PhpLlm\LlmChain\OpenAI\Runtime;
 
-use Symfony\Component\HttpClient\Exception\ClientException;
+use PhpLlm\LlmChain\OpenAI\Runtime;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class AzureClient implements OpenAIClientInterface
+final class Azure implements Runtime
 {
     public function __construct(
         private HttpClientInterface $httpClient,

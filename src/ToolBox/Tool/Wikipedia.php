@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\ToolBox\Tool;
 
 use PhpLlm\LlmChain\ToolBox\AsTool;
-use PhpLlm\LlmChain\ToolBox\Tool\Wikipedia\Client;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsTool('wikipedia_search', description: 'Searches Wikipedia for a given query', method: 'search')]
 #[AsTool('wikipedia_article', description: 'Retrieves a Wikipedia article by its title', method: 'getArticle')]
 final class Wikipedia
 {
     public function __construct(
-        private Client $client,
+        private HttpClientInterface $httpClient,
+        private string $locale = 'en',
     ) {
     }
 
@@ -21,7 +22,13 @@ final class Wikipedia
      */
     public function search(string $query): string
     {
-        $result = $this->client->search($query);
+        $result = $this->execute([
+            'action' => 'query',
+            'format' => 'json',
+            'list' => 'search',
+            'srsearch' => $query,
+        ], $this->locale);
+
         $titles = array_map(fn (array $item) => $item['title'], $result['query']['search']);
 
         return 'On Wikipedia, I found the following articles: '.implode(', ', $titles).'.';
@@ -32,8 +39,27 @@ final class Wikipedia
      */
     public function getArticle(string $title): string
     {
-        $result = $this->client->getArticle($title);
+        $result = $this->execute([
+            'action' => 'query',
+            'format' => 'json',
+            'prop' => 'extracts|info|pageimages',
+            'titles' => $title,
+            'explaintext' => true,
+        ], $this->locale);
 
         return current($result['query']['pages'])['extract'];
+    }
+
+    /**
+     * @param array<string, mixed> $query
+     *
+     * @return array<string, mixed>
+     */
+    private function execute(array $query, ?string $locale = null): array
+    {
+        $url = sprintf('https://%s.wikipedia.org/w/api.php', $locale ?? $this->locale);
+        $response = $this->httpClient->request('GET', $url, ['query' => $query]);
+
+        return $response->toArray();
     }
 }
