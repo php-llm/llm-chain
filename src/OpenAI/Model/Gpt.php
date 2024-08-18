@@ -12,9 +12,9 @@ use PhpLlm\LlmChain\OpenAI\Runtime;
 final class Gpt implements LanguageModel
 {
     public function __construct(
-        private Runtime $client,
+        private Runtime $runtime,
         private Version $version = Version::GPT_4o,
-        private float   $temperature = 1.0,
+        private float $temperature = 1.0,
     ) {
     }
 
@@ -26,6 +26,6 @@ final class Gpt implements LanguageModel
             'messages' => $messages,
         ];
 
-        return $this->client->request('chat/completions', array_merge($body, $options));
+        return $this->runtime->request('chat/completions', array_merge($body, $options));
     }
 }

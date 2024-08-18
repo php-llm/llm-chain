@@ -11,7 +11,7 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 $runtime = new Azure(HttpClient::create(),
-    getenv('AZURE_OPENAI_RESOURCE'),
+    getenv('AZURE_OPENAI_BASEURL'),
     getenv('AZURE_OPENAI_DEPLOYMENT'),
     getenv('AZURE_OPENAI_VERSION'),
     getenv('AZURE_OPENAI_KEY')

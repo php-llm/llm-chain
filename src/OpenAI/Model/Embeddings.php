@@ -11,7 +11,7 @@ use PhpLlm\LlmChain\OpenAI\Runtime;
 final class Embeddings implements EmbeddingModel
 {
     public function __construct(
-        private Runtime $client,
+        private Runtime $runtime,
         private Version $version = Version::EMBEDDING_3_SMALL,
     ) {
     }
@@ -23,7 +23,7 @@ final class Embeddings implements EmbeddingModel
             'input' => $text,
         ];
 
-        $response = $this->client->request('embeddings', $body);
+        $response = $this->runtime->request('embeddings', $body);
 
         return $response['data'][0]['embedding'];
     }

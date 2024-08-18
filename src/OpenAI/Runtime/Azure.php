@@ -11,7 +11,7 @@ final class Azure implements Runtime
 {
     public function __construct(
         private HttpClientInterface $httpClient,
-        private string $resource,
+        private string $baseUrl,
         private string $deployment,
         private string $apiVersion,
         private string $key,
@@ -20,7 +20,7 @@ final class Azure implements Runtime
 
     public function request(string $endpoint, array $body): array
     {
-        $url = sprintf('https://%s.openai.azure.com/openai/deployments/%s/%s', $this->resource, $this->deployment, $endpoint);
+        $url = sprintf('https://%s/openai/deployments/%s/%s', $this->baseUrl, $this->deployment, $endpoint);
 
         $response = $this->httpClient->request('POST', $url, [
             'headers' => [
