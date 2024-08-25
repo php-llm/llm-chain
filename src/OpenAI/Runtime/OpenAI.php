@@ -6,8 +6,9 @@ namespace PhpLlm\LlmChain\OpenAI\Runtime;
 
 use PhpLlm\LlmChain\OpenAI\Runtime;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class OpenAI implements Runtime
+final class OpenAI extends AbstractRuntime implements Runtime
 {
     public function __construct(
         private HttpClientInterface $httpClient,
@@ -15,16 +16,14 @@ final class OpenAI implements Runtime
     ) {
     }
 
-    public function request(string $endpoint, array $body): array
+    protected function rawRequest(string $endpoint, array $body): ResponseInterface
     {
         $url = sprintf('https://api.openai.com/v1/%s', $endpoint);
 
-        $response = $this->httpClient->request('POST', $url, [
+        return $this->httpClient->request('POST', $url, [
             'auth_bearer' => $this->apiKey,
             'headers' => ['Content-Type' => 'application/json'],
             'body' => json_encode($body),
         ]);
-
-        return $response->toArray();
     }
 }
