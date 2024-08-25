@@ -33,7 +33,8 @@ final class ParameterAnalyzer
 
         foreach ($parameters as $parameter) {
             $paramName = $parameter->getName();
-            $paramType = $parameter->getType() ? $parameter->getType()->getName() : 'mixed';
+            $paramType = $parameter->getType();
+            $paramType = $paramType instanceof \ReflectionNamedType ? $paramType->getName() : 'mixed';
 
             if ('int' === $paramType) {
                 $paramType = 'integer';

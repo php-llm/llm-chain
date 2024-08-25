@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Store\ChromaDb;
 
 use Codewithkyrian\ChromaDB\Client;
+use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
-use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
@@ -54,7 +54,7 @@ final class Store implements VectorStoreInterface
         );
 
         $documents = [];
-        for ($i = 0; $i < count($queryResponse->metadatas[0]); $i++) {
+        for ($i = 0; $i < count($queryResponse->metadatas[0]); ++$i) {
             $documents[] = Document::fromVector(
                 Vector::create1536($queryResponse->embeddings[0][$i]),
                 Uuid::fromString($queryResponse->ids[0][$i]),

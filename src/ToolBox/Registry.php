@@ -14,15 +14,25 @@ use Psr\Log\LoggerInterface;
  *     function: array{
  *         name: string,
  *         description: string,
- *         parameters?: ParameterDefinition>
+ *         parameters?: ParameterDefinition
  *     }
  * }
  */
 final class Registry
 {
+    /**
+     * @var list<object>
+     */
     private readonly array $tools;
+
+    /**
+     * @var list<ToolDefinition>
+     */
     private array $map;
 
+    /**
+     * @param iterable<object> $tools
+     */
     public function __construct(
         private readonly ToolAnalyzer $toolAnalyzer,
         private readonly LoggerInterface $logger,

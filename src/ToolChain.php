@@ -16,6 +16,9 @@ final class ToolChain
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function call(MessageBag $messages, array $options = []): string
     {
         $options['tools'] = $this->toolRegistry->getMap();

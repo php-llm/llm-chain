@@ -15,6 +15,9 @@ final class DocumentEmbedder
     ) {
     }
 
+    /**
+     * @param Document|list<Document> $documents
+     */
     public function embed(Document|array $documents, int $chunkSize = 0, int $sleep = 0): void
     {
         if ($documents instanceof Document) {
