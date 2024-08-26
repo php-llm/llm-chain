@@ -38,6 +38,15 @@ Planned Models & Runtimes (not implemented yet):
 | **Meta**       | - Llama | - Meta AI<br/>- GPC<br/>- Ollama |
 | **Mistral AI** | - Mistral<br/>- Codestral | - Mistral<br/>- GPT<br/>- Ollama |
 
+Supported Stores
+----------------
+
+Currently supported stores:
+
+* [x] Chroma DB
+* [x] Azure AI Search
+* [ ] Pinecone
+
 Provided Tools
 --------------
 
