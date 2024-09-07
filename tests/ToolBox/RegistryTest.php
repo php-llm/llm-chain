@@ -12,6 +12,7 @@ use PhpLlm\LlmChain\ToolBox\Registry;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 #[CoversClass(Registry::class)]
 final class RegistryTest extends TestCase
@@ -21,7 +22,7 @@ final class RegistryTest extends TestCase
     protected function setUp(): void
     {
         $toolAnalyzer = new ToolAnalyzer(new ParameterAnalyzer());
-        $this->registry = new Registry($toolAnalyzer, [
+        $this->registry = new Registry($toolAnalyzer, new NullLogger(), [
             new ToolRequiredParams(),
             new ToolOptionalParam(),
             new ToolNoParams(),
@@ -45,7 +46,7 @@ final class RegistryTest extends TestCase
                                 'description' => 'The text given to the tool',
                             ],
                             'number' => [
-                                'type' => 'int',
+                                'type' => 'integer',
                                 'description' => 'A number given to the tool',
                             ],
                         ],
@@ -69,7 +70,7 @@ final class RegistryTest extends TestCase
                                 'description' => 'The text given to the tool',
                             ],
                             'number' => [
-                                'type' => 'int',
+                                'type' => 'integer',
                                 'description' => 'A number given to the tool',
                             ],
                         ],

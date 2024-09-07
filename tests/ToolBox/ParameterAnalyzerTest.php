@@ -32,7 +32,7 @@ final class ParameterAnalyzerTest extends TestCase
                     'description' => 'The text given to the tool',
                 ],
                 'number' => [
-                    'type' => 'int',
+                    'type' => 'integer',
                     'description' => 'A number given to the tool',
                 ],
             ],
@@ -56,7 +56,7 @@ final class ParameterAnalyzerTest extends TestCase
                     'description' => 'The text given to the tool',
                 ],
                 'number' => [
-                    'type' => 'int',
+                    'type' => 'integer',
                     'description' => 'A number given to the tool',
                 ],
             ],

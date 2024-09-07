@@ -13,6 +13,9 @@ final class Chat
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function call(MessageBag $messages, array $options = []): string
     {
         $response = $this->llm->call($messages, $options);

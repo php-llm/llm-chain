@@ -104,3 +104,11 @@ Depending on the example you need to export needed environment variables for API
    export SERPAPI_API_KEY=...
    php examples/toolchain-serpapi.php
    ```
+
+### Structured Output
+
+1. Structured Output Example: OpenAI's GPT
+   ```bash
+   export OPENAI_API_KEY=sk-...
+   php examples/structured-output-math.php
+   ```
