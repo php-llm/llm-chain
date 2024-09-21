@@ -50,8 +50,9 @@ Currently supported stores:
 Provided Tools
 --------------
 
-* [x] SerpApi
 * [x] Clock
+* [x] SerpApi
+* [x] Similarity Search (Basic)
 * [x] Wikipedia
 * [x] Weather
 * [x] YouTube Transcriber

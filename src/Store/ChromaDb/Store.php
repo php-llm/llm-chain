@@ -45,7 +45,7 @@ final class Store implements VectorStoreInterface
         $collection->add($ids, $vectors, $metadata);
     }
 
-    public function query(Vector $vector): array
+    public function query(Vector $vector, array $options = []): array
     {
         $collection = $this->client->getOrCreateCollection($this->collectionName);
         $queryResponse = $collection->query(

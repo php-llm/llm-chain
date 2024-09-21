@@ -10,7 +10,9 @@ use PhpLlm\LlmChain\Document\Vector;
 interface VectorStoreInterface extends StoreInterface
 {
     /**
-     * @return list<Document>
+     * @param array<string, mixed> $options
+     *
+     * @return Document[]
      */
-    public function query(Vector $vector): array;
+    public function query(Vector $vector, array $options = []): array;
 }
