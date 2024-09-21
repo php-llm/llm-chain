@@ -37,7 +37,7 @@ final class SearchStore implements VectorStoreInterface
     /**
      * @return list<Document>
      */
-    public function query(Vector $vector): array
+    public function query(Vector $vector, array $options = []): array
     {
         $result = $this->request('search', [
             'vectorQueries' => [$this->buildVectorQuery($vector)],
