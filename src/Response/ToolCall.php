@@ -12,7 +12,7 @@ final readonly class ToolCall implements \JsonSerializable
     public function __construct(
         public string $id,
         public string $name,
-        public array $arguments,
+        public array $arguments = [],
     ) {
     }
 
