@@ -1,6 +1,6 @@
 <?php
 
-use PhpLlm\LlmChain\Chat;
+use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
@@ -18,11 +18,11 @@ $runtime = new Azure(HttpClient::create(),
 );
 $llm = new Gpt($runtime, Version::GPT_4o_MINI);
 
-$chat = new Chat($llm);
+$chain = new Chain($llm);
 $messages = new MessageBag(
     Message::forSystem('You are a pirate and you write funny.'),
     Message::ofUser('What is the Symfony framework?'),
 );
-$response = $chat->call($messages);
+$response = $chain->call($messages);
 
 echo $response.PHP_EOL;

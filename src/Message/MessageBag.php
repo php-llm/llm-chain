@@ -67,15 +67,18 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
             function (Message $message) {
                 $array = [
                     'role' => $message->role->value,
-                    'content' => $message->content,
                 ];
 
-                if (null !== $message->functionCall) {
-                    $array['function_call'] = $message->functionCall;
+                if (null !== $message->content) {
+                    $array['content'] = $message->content;
                 }
 
-                if (null !== $message->name) {
-                    $array['name'] = $message->name;
+                if (null !== $message->hasToolCalls() && Role::ToolCall === $message->role) {
+                    $array['tool_call_id'] = $message->toolCalls[0]->id;
+                }
+
+                if (null !== $message->hasToolCalls() && Role::Assistant === $message->role) {
+                    $array['tool_calls'] = $message->toolCalls;
                 }
 
                 return $array;

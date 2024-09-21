@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\ToolBox;
 
+use PhpLlm\LlmChain\Response\ToolCall;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
@@ -12,7 +13,6 @@ use PhpLlm\LlmChain\ToolBox\Registry;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 
 #[CoversClass(Registry::class)]
 final class RegistryTest extends TestCase
@@ -22,7 +22,7 @@ final class RegistryTest extends TestCase
     protected function setUp(): void
     {
         $toolAnalyzer = new ToolAnalyzer(new ParameterAnalyzer());
-        $this->registry = new Registry($toolAnalyzer, new NullLogger(), [
+        $this->registry = new Registry($toolAnalyzer, [
             new ToolRequiredParams(),
             new ToolOptionalParam(),
             new ToolNoParams(),
@@ -94,7 +94,7 @@ final class RegistryTest extends TestCase
 
     public function testExecute(): void
     {
-        $actual = $this->registry->execute('tool_required_params', '{"text":"Hello", "number":3}');
+        $actual = $this->registry->execute(new ToolCall('call_1234', 'tool_required_params', ['text' => 'Hello', 'number' => 3]));
         $expected = 'Hello says "3".';
 
         self::assertSame($expected, $actual);
