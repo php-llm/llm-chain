@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\StructuredOutput\SchemaFactory;
 use Symfony\Component\Serializer\SerializerInterface;
+
 use function Symfony\Component\String\u;
 
 final class StructuredOutputChain

@@ -11,7 +11,7 @@ use Symfony\Component\Clock\ClockInterface;
 final class Clock
 {
     public function __construct(
-        private ClockInterface $clock
+        private ClockInterface $clock,
     ) {
     }
 

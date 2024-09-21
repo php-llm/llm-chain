@@ -33,6 +33,7 @@ final class SchemaFactory
 
     /**
      * @param class-string $className
+     *
      * @return array<string, mixed>
      */
     public function buildSchema(string $className): array
@@ -114,6 +115,7 @@ final class SchemaFactory
                     return $this->buildSchema($type->getClassName());
                 }
 
+                // no break
             case Type::BUILTIN_TYPE_STRING:
             default:
                 // Fallback to string for any unhandled types
