@@ -9,3 +9,6 @@ qa-lowest:
 	vendor/bin/phpstan
 	vendor/bin/phpunit
 	git restore composer.lock
+
+coverage:
+	XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html=coverage

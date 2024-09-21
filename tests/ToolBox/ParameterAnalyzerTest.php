@@ -7,11 +7,17 @@ namespace PhpLlm\LlmChain\Tests\ToolBox;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ParameterAnalyzer::class)]
+#[UsesClass(AsTool::class)]
+#[UsesClass(Metadata::class)]
+#[UsesClass(ParameterAnalyzer::class)]
 final class ParameterAnalyzerTest extends TestCase
 {
     private ParameterAnalyzer $analyzer;

@@ -2,19 +2,25 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests;
+namespace PhpLlm\LlmChain\Tests\ToolBox;
 
 use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolMultiple;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolWrong;
+use PhpLlm\LlmChain\ToolBox\AsTool;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ToolAnalyzer::class)]
+#[UsesClass(AsTool::class)]
+#[UsesClass(Metadata::class)]
+#[UsesClass(ParameterAnalyzer::class)]
+#[UsesClass(InvalidToolImplementation::class)]
 final class ToolAnalyzerTest extends TestCase
 {
     private ToolAnalyzer $toolAnalyzer;

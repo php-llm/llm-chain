@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Message;
 
 use PhpLlm\LlmChain\Response\ToolCall;
 
-final class Message
+final readonly class Message implements \JsonSerializable
 {
     /**
      * @param ?ToolCall[] $toolCalls
@@ -46,8 +46,52 @@ final class Message
         return Role::System === $this->role;
     }
 
+    public function isAssistant(): bool
+    {
+        return Role::Assistant === $this->role;
+    }
+
+    public function isUser(): bool
+    {
+        return Role::User === $this->role;
+    }
+
+    public function isToolCall(): bool
+    {
+        return Role::ToolCall === $this->role;
+    }
+
     public function hasToolCalls(): bool
     {
         return null !== $this->toolCalls && 0 !== count($this->toolCalls);
+    }
+
+    /**
+     * @return array{
+     *     role: 'system'|'assistant'|'user'|'tool',
+     *     content: ?string,
+     *     tool_calls?: ToolCall[],
+     *     tool_call_id?: string
+     * }
+     */
+    public function jsonSerialize(): array
+    {
+        $array = [
+            'role' => $this->role->value,
+        ];
+
+        if (null !== $this->content) {
+            $array['content'] = $this->content;
+        }
+
+        if ($this->hasToolCalls() && $this->isToolCall()) {
+            $array['tool_call_id'] = $this->toolCalls[0]->id;
+        }
+
+        if ($this->hasToolCalls() && $this->isAssistant()) {
+            $array['tool_calls'] = $this->toolCalls;
+        }
+
+        return $array;
     }
 }

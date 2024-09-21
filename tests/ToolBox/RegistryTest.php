@@ -8,13 +8,21 @@ use PhpLlm\LlmChain\Response\ToolCall;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\ToolBox\Registry;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Registry::class)]
+#[UsesClass(ToolCall::class)]
+#[UsesClass(AsTool::class)]
+#[UsesClass(Metadata::class)]
+#[UsesClass(ParameterAnalyzer::class)]
+#[UsesClass(ToolAnalyzer::class)]
 final class RegistryTest extends TestCase
 {
     private Registry $registry;

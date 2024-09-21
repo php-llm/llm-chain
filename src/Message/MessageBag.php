@@ -6,13 +6,6 @@ namespace PhpLlm\LlmChain\Message;
 
 /**
  * @template-extends \ArrayObject<int, Message>
- *
- * @phpstan-type MessageBagData array<int, array{
- *      role: 'system'|'assistant'|'user'|'function',
- *      content: ?string,
- *      function_call?: array{name: string, arguments: string},
- *      name?: string
- *  }>
  */
 final class MessageBag extends \ArrayObject implements \JsonSerializable
 {
@@ -59,39 +52,10 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
     }
 
     /**
-     * @return MessageBagData
-     */
-    public function toArray(): array
-    {
-        return array_map(
-            function (Message $message) {
-                $array = [
-                    'role' => $message->role->value,
-                ];
-
-                if (null !== $message->content) {
-                    $array['content'] = $message->content;
-                }
-
-                if (null !== $message->hasToolCalls() && Role::ToolCall === $message->role) {
-                    $array['tool_call_id'] = $message->toolCalls[0]->id;
-                }
-
-                if (null !== $message->hasToolCalls() && Role::Assistant === $message->role) {
-                    $array['tool_calls'] = $message->toolCalls;
-                }
-
-                return $array;
-            },
-            $this->getArrayCopy(),
-        );
-    }
-
-    /**
-     * @return MessageBagData
+     * @return Message[]
      */
     public function jsonSerialize(): array
     {
-        return $this->toArray();
+        return $this->getArrayCopy();
     }
 }
