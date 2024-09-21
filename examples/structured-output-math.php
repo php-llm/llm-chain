@@ -18,7 +18,7 @@ require_once dirname(__DIR__).'/vendor/autoload.php';
 $runtime = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
 $llm = new Gpt($runtime, Version::GPT_4o_MINI);
 
-$chain = new StructuredOutputChain($llm, new SchemaFactory(), new Serializer([new ObjectNormalizer()], [new JsonEncoder()]));
+$chain = new StructuredOutputChain($llm, SchemaFactory::create(), new Serializer([new ObjectNormalizer()], [new JsonEncoder()]));
 
 $messages = new MessageBag(
     Message::forSystem('You are a helpful math tutor. Guide the user through the solution step by step.'),

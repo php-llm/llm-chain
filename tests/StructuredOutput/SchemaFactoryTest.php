@@ -14,6 +14,13 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(SchemaFactory::class)]
 final class SchemaFactoryTest extends TestCase
 {
+    private SchemaFactory $schemaFactory;
+
+    protected function setUp(): void
+    {
+        $this->schemaFactory = SchemaFactory::create();
+    }
+
     public function testBuildSchemaForUserClass(): void
     {
         $expected = [
@@ -29,10 +36,10 @@ final class SchemaFactoryTest extends TestCase
                 'isActive' => ['type' => 'boolean'],
             ],
             'required' => ['id', 'name', 'createdAt', 'isActive'],
+            'additionalProperties' => false,
         ];
 
-        $schemaFactory = new SchemaFactory();
-        $actual = $schemaFactory->buildSchema(User::class);
+        $actual = $this->schemaFactory->buildSchema(User::class);
 
         self::assertSame($expected, $actual);
     }
@@ -53,15 +60,16 @@ final class SchemaFactoryTest extends TestCase
                             'output' => ['type' => 'string'],
                         ],
                         'required' => ['explanation', 'output'],
+                        'additionalProperties' => false,
                     ],
                 ],
                 'finalAnswer' => ['type' => 'string'],
             ],
             'required' => ['steps', 'finalAnswer'],
+            'additionalProperties' => false,
         ];
 
-        $schemaFactory = new SchemaFactory();
-        $actual = $schemaFactory->buildSchema(MathReasoning::class);
+        $actual = $this->schemaFactory->buildSchema(MathReasoning::class);
 
         self::assertSame($expected, $actual);
     }
@@ -76,10 +84,10 @@ final class SchemaFactoryTest extends TestCase
                 'output' => ['type' => 'string'],
             ],
             'required' => ['explanation', 'output'],
+            'additionalProperties' => false,
         ];
 
-        $schemaFactory = new SchemaFactory();
-        $actual = $schemaFactory->buildSchema(Step::class);
+        $actual = $this->schemaFactory->buildSchema(Step::class);
 
         self::assertSame($expected, $actual);
     }

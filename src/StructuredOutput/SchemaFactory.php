@@ -11,18 +11,23 @@ use Symfony\Component\PropertyInfo\Type;
 
 final class SchemaFactory
 {
-    private readonly PropertyInfoExtractor $propertyInfo;
+    public function __construct(
+        private readonly PropertyInfoExtractor $propertyInfo,
+    ) {
+    }
 
-    public function __construct()
+    public static function create(): self
     {
         $phpDocExtractor = new PhpDocExtractor();
         $reflectionExtractor = new ReflectionExtractor();
 
-        $this->propertyInfo = new PropertyInfoExtractor(
-            [$reflectionExtractor],
-            [$phpDocExtractor, $reflectionExtractor],
-            [$phpDocExtractor],
-            [$reflectionExtractor],
+        return new self(
+            new PropertyInfoExtractor(
+                [$reflectionExtractor],
+                [$phpDocExtractor, $reflectionExtractor],
+                [$phpDocExtractor],
+                [$reflectionExtractor],
+            )
         );
     }
 
@@ -77,9 +82,6 @@ final class SchemaFactory
             case Type::BUILTIN_TYPE_FLOAT:
                 return ['type' => 'number'];
 
-            case Type::BUILTIN_TYPE_STRING:
-                return ['type' => 'string'];
-
             case Type::BUILTIN_TYPE_BOOL:
                 return ['type' => 'boolean'];
 
@@ -98,7 +100,8 @@ final class SchemaFactory
                     ];
                 }
 
-                return ['type' => 'array', 'items' => ['type' => 'string']]; // Fallback for arrays
+                // Fallback for arrays
+                return ['type' => 'array', 'items' => ['type' => 'string']];
 
             case Type::BUILTIN_TYPE_OBJECT:
                 if (\DateTimeInterface::class === $type->getClassName()) {
@@ -108,7 +111,7 @@ final class SchemaFactory
                     return $this->buildSchema($type->getClassName());
                 }
 
-                // no break
+            case Type::BUILTIN_TYPE_STRING:
             default:
                 return ['type' => 'string']; // Fallback to string for any unhandled types
         }
