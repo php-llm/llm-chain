@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\ToolBox;
 
+use PhpLlm\LlmChain\Response\ToolCall;
+
 /**
  * @phpstan-import-type ParameterDefinition from ParameterAnalyzer
  *
@@ -23,5 +25,5 @@ interface RegistryInterface
      */
     public function getMap(): array;
 
-    public function execute(string $name, string $arguments): string;
+    public function execute(ToolCall $toolCall): string;
 }

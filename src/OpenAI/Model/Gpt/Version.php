@@ -12,4 +12,9 @@ enum Version: string
     case GPT_4_TURBO = 'gpt-4-turbo';
     case GPT_4o = 'gpt-4o';
     case GPT_4o_MINI = 'gpt-4o-mini';
+
+    public function hasStructuredOutputSupport(): bool
+    {
+        return self::GPT_4o === $this || self::GPT_4o_MINI === $this;
+    }
 }

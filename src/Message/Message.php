@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message;
 
+use PhpLlm\LlmChain\Response\ToolCall;
+
 final class Message
 {
     /**
-     * @param array{name: string, arguments: string} $functionCall
+     * @param ?ToolCall[] $toolCalls
      */
     public function __construct(
         public ?string $content,
         public Role $role,
-        public ?array $functionCall = null,
-        public ?string $name = null,
+        public ?array $toolCalls = null,
     ) {
     }
 
@@ -23,11 +24,11 @@ final class Message
     }
 
     /**
-     * @param array{name: string, arguments: string} $functionCall
+     * @param ?ToolCall[] $toolCalls
      */
-    public static function ofAssistant(?string $content = null, ?array $functionCall = null): self
+    public static function ofAssistant(?string $content = null, ?array $toolCalls = null): self
     {
-        return new self($content, Role::Assistant, $functionCall);
+        return new self($content, Role::Assistant, $toolCalls);
     }
 
     public static function ofUser(string $content): self
@@ -35,9 +36,9 @@ final class Message
         return new self($content, Role::User);
     }
 
-    public static function ofFunctionCall(string $name, string $content): self
+    public static function ofToolCall(ToolCall $toolCall, string $content): self
     {
-        return new self($content, Role::FunctionCall, null, $name);
+        return new self($content, Role::ToolCall, [$toolCall]);
     }
 
     public function isSystem(): bool
@@ -45,8 +46,8 @@ final class Message
         return Role::System === $this->role;
     }
 
-    public function hasFunctionCall(): bool
+    public function hasToolCalls(): bool
     {
-        return null !== $this->functionCall && 0 !== count($this->functionCall);
+        return null !== $this->toolCalls && 0 !== count($this->toolCalls);
     }
 }
