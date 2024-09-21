@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\OpenAI\Runtime;
 
+use PhpLlm\LlmChain\OpenAI\Runtime;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-abstract class AbstractRuntime
+abstract class AbstractRuntime implements Runtime
 {
     public function request(string $endpoint, array $body): array
     {
@@ -31,5 +32,8 @@ abstract class AbstractRuntime
         }
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     abstract protected function rawRequest(string $endpoint, array $body): ResponseInterface;
 }

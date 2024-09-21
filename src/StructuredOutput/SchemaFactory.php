@@ -73,6 +73,9 @@ final class SchemaFactory
         return $schema;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getTypeSchema(Type $type): array
     {
         switch ($type->getBuiltinType()) {
@@ -113,7 +116,8 @@ final class SchemaFactory
 
             case Type::BUILTIN_TYPE_STRING:
             default:
-                return ['type' => 'string']; // Fallback to string for any unhandled types
+                // Fallback to string for any unhandled types
+                return ['type' => 'string'];
         }
     }
 }

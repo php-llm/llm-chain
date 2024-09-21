@@ -15,6 +15,11 @@ final class Anthropic implements ClaudeRuntime
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $body
+     *
+     * @return array<string, mixed>
+     */
     public function request(array $body): array
     {
         $response = $this->httpClient->request('POST', 'https://api.anthropic.com/v1/messages', [

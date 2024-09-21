@@ -8,12 +8,11 @@ use PhpLlm\LlmChain\Document\Vector;
 
 interface EmbeddingModel
 {
-    /**
-     * @return list<float>
-     */
     public function create(string $text): Vector;
 
     /**
+     * @param list<string> $texts
+     *
      * @return list<Vector>
      */
     public function multiCreate(array $texts): array;

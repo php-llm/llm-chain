@@ -46,6 +46,11 @@ final class SearchStore implements VectorStoreInterface
         return array_map([$this, 'convertArrayToDocument'], $result['value']);
     }
 
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array<string, mixed>
+     */
     private function request(string $endpoint, array $payload): array
     {
         $url = sprintf('%s/indexes/%s/docs/%s', $this->endpointUrl, $this->indexName, $endpoint);
@@ -61,6 +66,9 @@ final class SearchStore implements VectorStoreInterface
         return $response->toArray();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function convertDocumentToIndexableArray(Document $document): array
     {
         return array_merge([
@@ -69,6 +77,9 @@ final class SearchStore implements VectorStoreInterface
         ], $document->metadata->getArrayCopy());
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private function convertArrayToDocument(array $data): Document
     {
         return new Document(
@@ -79,6 +90,16 @@ final class SearchStore implements VectorStoreInterface
         );
     }
 
+    /**
+     * @return array{
+     *     kind: string,
+     *     vector: float[],
+     *     exhaustive: bool,
+     *     fields: string,
+     *     weight: float,
+     *     k: int,
+     * }
+     */
     private function buildVectorQuery(Vector $vector): array
     {
         return [

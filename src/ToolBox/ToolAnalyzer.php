@@ -14,6 +14,8 @@ final class ToolAnalyzer
     }
 
     /**
+     * @param class-string $className
+     *
      * @return iterable<Metadata>
      */
     public function getMetadata(string $className): iterable

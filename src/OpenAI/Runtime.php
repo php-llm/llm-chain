@@ -12,4 +12,11 @@ interface Runtime
      * @return array<string, mixed>
      */
     public function request(string $endpoint, array $body): array;
+
+    /**
+     * @param array<array<string, mixed>> $bodies
+     *
+     * @return \Generator<array<string, mixed>>
+     */
+    public function multiRequest(string $endpoint, array $bodies): \Generator;
 }

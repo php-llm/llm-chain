@@ -36,6 +36,9 @@ final class Embeddings implements EmbeddingModel
         return $vectors;
     }
 
+    /**
+     * @return array{model: string, input: string}
+     */
     private function createBody(string $text): array
     {
         return [
@@ -44,6 +47,9 @@ final class Embeddings implements EmbeddingModel
         ];
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private function extractVector(array $data): Vector
     {
         return Vector::create1536($data['data'][0]['embedding']);
