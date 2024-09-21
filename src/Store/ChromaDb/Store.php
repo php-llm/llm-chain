@@ -36,7 +36,7 @@ final class Store implements VectorStoreInterface
                 $this->logger->warning('Document {id} does not have a vector', ['id' => $document->id]);
             }
 
-            $ids[] = $document->id->toString();
+            $ids[] = (string) $document->id;
             $vectors[] = $document->vector->getData();
             $metadata[] = $document->metadata->getArrayCopy();
         }
