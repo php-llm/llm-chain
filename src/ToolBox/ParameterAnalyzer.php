@@ -40,6 +40,10 @@ final class ParameterAnalyzer
                 $paramType = 'integer';
             }
 
+            if ('float' === $paramType) {
+                $paramType = 'number';
+            }
+
             if (!$parameter->isOptional()) {
                 $result['required'][] = $paramName;
             }

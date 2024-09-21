@@ -53,7 +53,7 @@ Provided Tools
 * [x] SerpApi
 * [x] Clock
 * [x] Wikipedia
-* [ ] Weather
+* [x] Weather
 
 Usage Examples
 --------------
