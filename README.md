@@ -54,6 +54,7 @@ Provided Tools
 * [x] Clock
 * [x] Wikipedia
 * [x] Weather
+* [x] YouTube Transcriber
 
 Usage Examples
 --------------
@@ -103,6 +104,18 @@ Depending on the example you need to export needed environment variables for API
    export OPENAI_API_KEY=sk-...
    export SERPAPI_API_KEY=...
    php examples/toolchain-serpapi.php
+   ```
+
+1. Weather Tool
+   ```bash
+   export OPENAI_API_KEY=sk-...
+   php examples/toolchain-weather.php
+   ```
+
+1. YouTube Transcriber Tool
+   ```bash
+   export OPENAI_API_KEY=sk-...
+   php examples/toolchain-youtube.php
    ```
 
 ### Structured Output

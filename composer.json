@@ -29,12 +29,16 @@
         "probots-io/pinecone-php": "^1.0",
         "symfony/clock": "^6.4 || ^7.1",
         "symfony/console": "^6.4 || ^7.1",
+        "symfony/css-selector": "^6.4 || ^7.1",
+        "symfony/dom-crawler": "^6.4 || ^7.1",
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
     "suggest": {
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
-        "symfony/clock": "For using the clock tool."
+        "symfony/clock": "For using the clock tool.",
+        "symfony/css-selector": "For using the YouTube transcription tool.",
+        "symfony/dom-crawler": "For using the YouTube transcription tool."
     },
     "config": {
         "sort-packages": true
