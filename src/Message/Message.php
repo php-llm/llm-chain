@@ -22,11 +22,6 @@ final class Message
         return new self($content, Role::System);
     }
 
-    public function isSystem(): bool
-    {
-        return Role::System === $this->role;
-    }
-
     /**
      * @param array{name: string, arguments: string} $functionCall
      */
@@ -43,5 +38,15 @@ final class Message
     public static function ofFunctionCall(string $name, string $content): self
     {
         return new self($content, Role::FunctionCall, null, $name);
+    }
+
+    public function isSystem(): bool
+    {
+        return Role::System === $this->role;
+    }
+
+    public function hasFunctionCall(): bool
+    {
+        return null !== $this->functionCall && 0 !== count($this->functionCall);
     }
 }
