@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\ToolBox;
 /**
  * @phpstan-import-type ParameterDefinition from ParameterAnalyzer
  */
-final class Metadata
+final class Metadata implements \JsonSerializable
 {
     /**
      * @param ParameterDefinition|null $parameters
@@ -19,5 +19,32 @@ final class Metadata
         public readonly string $method,
         public readonly ?array $parameters,
     ) {
+    }
+
+    /**
+     * @return array{
+     *     type: 'function',
+     *     function: array{
+     *         name: string,
+     *         description: string,
+     *         parameters?: ParameterDefinition
+     *     }
+     * }
+     */
+    public function jsonSerialize(): array
+    {
+        $function = [
+            'name' => $this->name,
+            'description' => $this->description,
+        ];
+
+        if (isset($this->parameters)) {
+            $function['parameters'] = $this->parameters;
+        }
+
+        return [
+            'type' => 'function',
+            'function' => $function,
+        ];
     }
 }

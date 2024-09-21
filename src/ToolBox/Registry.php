@@ -6,9 +6,6 @@ namespace PhpLlm\LlmChain\ToolBox;
 
 use PhpLlm\LlmChain\Response\ToolCall;
 
-/**
- * @phpstan-import-type ToolDefinition from RegistryInterface
- */
 final class Registry implements RegistryInterface
 {
     /**
@@ -17,7 +14,7 @@ final class Registry implements RegistryInterface
     private readonly array $tools;
 
     /**
-     * @var list<ToolDefinition>
+     * @var Metadata[]
      */
     private array $map;
 
@@ -40,19 +37,7 @@ final class Registry implements RegistryInterface
         $map = [];
         foreach ($this->tools as $tool) {
             foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
-                $function = [
-                    'name' => $metadata->name,
-                    'description' => $metadata->description,
-                ];
-
-                if (isset($metadata->parameters)) {
-                    $function['parameters'] = $metadata->parameters;
-                }
-
-                $map[] = [
-                    'type' => 'function',
-                    'function' => $function,
-                ];
+                $map[] = $metadata;
             }
         }
 

@@ -89,7 +89,7 @@ final class RegistryTest extends TestCase
             ],
         ];
 
-        self::assertSame($expected, $actual);
+        self::assertSame(json_encode($expected), json_encode($actual));
     }
 
     public function testExecute(): void
