@@ -6,6 +6,13 @@ namespace PhpLlm\LlmChain\Message;
 
 /**
  * @template-extends \ArrayObject<int, Message>
+ *
+ * @phpstan-type MessageBagData array<int, array{
+ *      role: 'system'|'assistant'|'user'|'function',
+ *      content: ?string,
+ *      function_call?: array{name: string, arguments: string},
+ *      name?: string
+ *  }>
  */
 final class MessageBag extends \ArrayObject implements \JsonSerializable
 {
@@ -52,12 +59,7 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
     }
 
     /**
-     * @return array<int, array{
-     *     role: 'system'|'assistant'|'user'|'function',
-     *     content: ?string,
-     *     function_call?: array{name: string, arguments: string},
-     *     name?: string
-     * }>
+     * @return MessageBagData
      */
     public function toArray(): array
     {
@@ -82,6 +84,9 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
         );
     }
 
+    /**
+     * @return MessageBagData
+     */
     public function jsonSerialize(): array
     {
         return $this->toArray();
