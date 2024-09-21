@@ -1,0 +1,36 @@
+name: pipeline
+on: pull_request
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Cache Vendors
+        uses: actions/cache@v4
+        id: cache-vendors
+        with:
+          path: vendor
+          key: ${{ runner.os }}-vendor-${{ hashFiles('**/composer.lock') }}
+
+      - name: Composer Validation
+        run: composer validate --strict
+
+      - name: Install PHP Dependencies
+        run: composer install --no-scripts
+
+      - name: Code Style PHP
+        run: vendor/bin/php-cs-fixer fix --dry-run
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse
+
+      - name: Tests
+        run: vendor/bin/phpunit
