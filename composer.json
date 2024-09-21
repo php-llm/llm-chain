@@ -14,7 +14,7 @@
         "phpdocumentor/reflection-docblock": "^5.4",
         "psr/cache": "^3.0",
         "psr/log": "^3.0",
-        "symfony/http-client": "^6.4 || ^7.0",
+        "symfony/http-client": "^6.4 || ^7.1",
         "symfony/property-access": "^7.1",
         "symfony/property-info": "^7.1",
         "symfony/serializer": "^7.1",
@@ -23,13 +23,13 @@
     },
     "require-dev": {
         "codewithkyrian/chromadb-php": "^0.2.1",
-        "php-cs-fixer/shim": "^3.58",
-        "phpstan/phpstan": "^1.11",
-        "phpunit/phpunit": "^11.2",
+        "php-cs-fixer/shim": "^3.64",
+        "phpstan/phpstan": "^1.12",
+        "phpunit/phpunit": "^11.3",
         "probots-io/pinecone-php": "^1.0",
-        "symfony/clock": "^6.4 || ^7.0",
-        "symfony/console": "^6.4 || ^7.0",
-        "symfony/var-dumper": "^6.4 || ^7.0"
+        "symfony/clock": "^6.4 || ^7.1",
+        "symfony/console": "^6.4 || ^7.1",
+        "symfony/var-dumper": "^6.4 || ^7.1"
     },
     "suggest": {
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
