@@ -7,18 +7,9 @@ namespace PhpLlm\LlmChain\ToolBox;
 use Psr\Log\LoggerInterface;
 
 /**
- * @phpstan-import-type ParameterDefinition from ParameterAnalyzer
- *
- * @phpstan-type ToolDefinition = array{
- *     type: 'function',
- *     function: array{
- *         name: string,
- *         description: string,
- *         parameters?: ParameterDefinition
- *     }
- * }
+ * @phpstan-import-type ToolDefinition from RegistryInterface
  */
-final class Registry
+final class Registry implements RegistryInterface
 {
     /**
      * @var list<object>
@@ -41,9 +32,6 @@ final class Registry
         $this->tools = $tools instanceof \Traversable ? iterator_to_array($tools) : $tools;
     }
 
-    /**
-     * @return list<ToolDefinition>
-     */
     public function getMap(): array
     {
         if (isset($this->map)) {

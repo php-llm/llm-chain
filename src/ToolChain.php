@@ -6,13 +6,13 @@ namespace PhpLlm\LlmChain;
 
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\ToolBox\Registry;
+use PhpLlm\LlmChain\ToolBox\RegistryInterface;
 
 final class ToolChain
 {
     public function __construct(
         private LanguageModel $llm,
-        private Registry $toolRegistry,
+        private RegistryInterface $toolRegistry,
     ) {
     }
 
