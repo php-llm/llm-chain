@@ -24,14 +24,15 @@ final class Claude implements LanguageModel
     public function call(MessageBag $messages, array $options = []): Response
     {
         $system = $messages->getSystemMessage();
-
-        $response = $this->runtime->request([
+        $body = [
             'model' => $this->version->value,
             'temperature' => $this->temperature,
             'max_tokens' => $this->maxTokens,
             'system' => $system->content,
             'messages' => $messages->withoutSystemMessage(),
-        ]);
+        ];
+
+        $response = $this->runtime->request(array_merge($body, $options));
 
         return new Response(new Choice($response['content'][0]['text']));
     }
