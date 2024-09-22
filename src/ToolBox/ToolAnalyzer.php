@@ -9,7 +9,7 @@ use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
 final class ToolAnalyzer
 {
     public function __construct(
-        private readonly ParameterAnalyzer $parameterAnalyzer,
+        private readonly ParameterAnalyzer $parameterAnalyzer = new ParameterAnalyzer(),
     ) {
     }
 
