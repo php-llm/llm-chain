@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Message;
+namespace PhpLlm\LlmChain\Tests\Message;
 
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Response\ToolCall;
