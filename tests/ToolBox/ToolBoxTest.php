@@ -11,35 +11,35 @@ use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\ToolBox\AsTool;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
-use PhpLlm\LlmChain\ToolBox\Registry;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
+use PhpLlm\LlmChain\ToolBox\ToolBox;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Registry::class)]
+#[CoversClass(ToolBox::class)]
 #[UsesClass(ToolCall::class)]
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
 #[UsesClass(ParameterAnalyzer::class)]
 #[UsesClass(ToolAnalyzer::class)]
-final class RegistryTest extends TestCase
+final class ToolBoxTest extends TestCase
 {
-    private Registry $registry;
+    private ToolBox $toolBox;
 
     protected function setUp(): void
     {
         $toolAnalyzer = new ToolAnalyzer(new ParameterAnalyzer());
-        $this->registry = new Registry($toolAnalyzer, [
+        $this->toolBox = new ToolBox($toolAnalyzer, [
             new ToolRequiredParams(),
             new ToolOptionalParam(),
             new ToolNoParams(),
         ]);
     }
 
-    public function testFunctionsMap(): void
+    public function testToolsMap(): void
     {
-        $actual = $this->registry->getMap();
+        $actual = $this->toolBox->getMap();
         $expected = [
             [
                 'type' => 'function',
@@ -102,7 +102,7 @@ final class RegistryTest extends TestCase
 
     public function testExecute(): void
     {
-        $actual = $this->registry->execute(new ToolCall('call_1234', 'tool_required_params', ['text' => 'Hello', 'number' => 3]));
+        $actual = $this->toolBox->execute(new ToolCall('call_1234', 'tool_required_params', ['text' => 'Hello', 'number' => 3]));
         $expected = 'Hello says "3".';
 
         self::assertSame($expected, $actual);

@@ -7,14 +7,14 @@ namespace PhpLlm\LlmChain;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
-use PhpLlm\LlmChain\ToolBox\RegistryInterface;
+use PhpLlm\LlmChain\ToolBox\ToolBoxInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final readonly class Chain
 {
     public function __construct(
         private LanguageModel $llm,
-        private ?RegistryInterface $toolRegistry = null,
+        private ?ToolBoxInterface $toolBox = null,
         private ?ResponseFormatFactory $responseFormatFactory = null,
         private ?SerializerInterface $serializer = null,
     ) {
@@ -27,8 +27,8 @@ final readonly class Chain
     {
         $llmOptions = $options;
 
-        if (!array_key_exists('tools', $llmOptions) && null !== $this->toolRegistry && $this->llm->supportsToolCalling()) {
-            $llmOptions['tools'] = $this->toolRegistry->getMap();
+        if (!array_key_exists('tools', $llmOptions) && null !== $this->toolBox && $this->llm->supportsToolCalling()) {
+            $llmOptions['tools'] = $this->toolBox->getMap();
         }
 
         if (array_key_exists('output_structure', $llmOptions) && null !== $this->responseFormatFactory && $this->llm->supportsStructuredOutput()) {
@@ -43,7 +43,7 @@ final readonly class Chain
             $clonedMessages[] = Message::ofAssistant(toolCalls: $response->getToolCalls());
 
             foreach ($response->getToolCalls() as $toolCall) {
-                $result = $this->toolRegistry->execute($toolCall);
+                $result = $this->toolBox->execute($toolCall);
                 $clonedMessages[] = Message::ofToolCall($toolCall, $result);
             }
 
