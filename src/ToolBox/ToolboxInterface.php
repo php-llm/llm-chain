@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\ToolBox;
 
 use PhpLlm\LlmChain\Response\ToolCall;
 
-interface RegistryInterface
+interface ToolboxInterface
 {
     /**
      * @return Metadata[]

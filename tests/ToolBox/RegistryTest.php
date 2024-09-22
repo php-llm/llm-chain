@@ -11,13 +11,13 @@ use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\ToolBox\AsTool;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
-use PhpLlm\LlmChain\ToolBox\Registry;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
+use PhpLlm\LlmChain\ToolBox\Toolbox;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Registry::class)]
+#[CoversClass(Toolbox::class)]
 #[UsesClass(ToolCall::class)]
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
@@ -25,12 +25,12 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ToolAnalyzer::class)]
 final class RegistryTest extends TestCase
 {
-    private Registry $registry;
+    private Toolbox $registry;
 
     protected function setUp(): void
     {
         $toolAnalyzer = new ToolAnalyzer(new ParameterAnalyzer());
-        $this->registry = new Registry($toolAnalyzer, [
+        $this->registry = new Toolbox($toolAnalyzer, [
             new ToolRequiredParams(),
             new ToolOptionalParam(),
             new ToolNoParams(),
