@@ -33,6 +33,14 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
         return $messages;
     }
 
+    public function merge(MessageBag $messageBag): self
+    {
+        $messages = clone $this;
+        $messages->exchangeArray(array_merge($messages->getArrayCopy(), $messageBag->getArrayCopy()));
+
+        return $messages;
+    }
+
     public function withoutSystemMessage(): self
     {
         $messages = clone $this;

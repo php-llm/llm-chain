@@ -60,6 +60,23 @@ final class MessageBagTest extends TestCase
     }
 
     #[Test]
+    public function merge(): void
+    {
+        $messageBag = new MessageBag(
+            Message::forSystem('My amazing system prompt.'),
+            Message::ofAssistant('It is time to sleep.'),
+            Message::ofUser('Hello, world!'),
+        );
+
+        $messageBag = $messageBag->merge(new MessageBag(
+            Message::ofAssistant('It is time to wake up.')
+        ));
+
+        self::assertCount(4, $messageBag);
+        self::assertSame('It is time to wake up.', $messageBag[3]->content);
+    }
+
+    #[Test]
     public function withoutSystemMessage(): void
     {
         $messageBag = new MessageBag(
