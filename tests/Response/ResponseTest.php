@@ -9,6 +9,7 @@ use PhpLlm\LlmChain\Response\Response;
 use PhpLlm\LlmChain\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +19,8 @@ use PHPUnit\Framework\TestCase;
 #[Small]
 final class ResponseTest extends TestCase
 {
-    public function testGetChoices(): void
+    #[Test]
+    public function getChoices(): void
     {
         $response = new Response(
             new Choice('content', [new ToolCall('call_123456', 'name', ['foo' => 'bar'])]),
@@ -28,7 +30,8 @@ final class ResponseTest extends TestCase
         self::assertCount(2, $response->getChoices());
     }
 
-    public function testConstructorThrowsException(): void
+    #[Test]
+    public function constructorThrowsException(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Response must have at least one choice');
@@ -36,7 +39,8 @@ final class ResponseTest extends TestCase
         $response = new Response();
     }
 
-    public function testGetContent(): void
+    #[Test]
+    public function getContent(): void
     {
         $response = new Response(
             new Choice('content', [new ToolCall('call_123456', 'name', ['foo' => 'bar'])]),
@@ -45,7 +49,8 @@ final class ResponseTest extends TestCase
         self::assertSame('content', $response->getContent());
     }
 
-    public function testGetContentThrowsException(): void
+    #[Test]
+    public function getContentThrowsException(): void
     {
         $response = new Response(
             new Choice('content', [new ToolCall('call_123456', 'name', ['foo' => 'bar'])]),
@@ -58,7 +63,8 @@ final class ResponseTest extends TestCase
         $response->getContent();
     }
 
-    public function testGetToolCalls(): void
+    #[Test]
+    public function getToolCalls(): void
     {
         $response = new Response(
             new Choice('content', [new ToolCall('call_123456', 'name', ['foo' => 'bar'])]),
@@ -67,7 +73,8 @@ final class ResponseTest extends TestCase
         self::assertCount(1, $response->getToolCalls());
     }
 
-    public function testGetToolCallsThrowsException(): void
+    #[Test]
+    public function getToolCallsThrowsException(): void
     {
         $response = new Response(
             new Choice('content', [new ToolCall('call_123456', 'name', ['foo' => 'bar'])]),
@@ -80,7 +87,8 @@ final class ResponseTest extends TestCase
         $response->getToolCalls();
     }
 
-    public function testHasToolCalls(): void
+    #[Test]
+    public function hasToolCalls(): void
     {
         $response = new Response(
             new Choice('content', [new ToolCall('call_123456', 'name', ['foo' => 'bar'])]),
@@ -89,7 +97,8 @@ final class ResponseTest extends TestCase
         self::assertTrue($response->hasToolCalls());
     }
 
-    public function testHasToolCallsReturnsFalse(): void
+    #[Test]
+    public function hasToolCallsReturnsFalse(): void
     {
         $response = new Response(new Choice('content'));
 

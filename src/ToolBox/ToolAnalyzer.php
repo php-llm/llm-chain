@@ -6,10 +6,10 @@ namespace PhpLlm\LlmChain\ToolBox;
 
 use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
 
-final class ToolAnalyzer
+final readonly class ToolAnalyzer
 {
     public function __construct(
-        private readonly ParameterAnalyzer $parameterAnalyzer = new ParameterAnalyzer(),
+        private ParameterAnalyzer $parameterAnalyzer = new ParameterAnalyzer(),
     ) {
     }
 

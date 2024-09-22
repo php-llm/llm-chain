@@ -13,6 +13,7 @@ use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -30,13 +31,15 @@ final class ToolAnalyzerTest extends TestCase
         $this->toolAnalyzer = new ToolAnalyzer(new ParameterAnalyzer());
     }
 
-    public function testWithoutAttribute(): void
+    #[Test]
+    public function withoutAttribute(): void
     {
         $this->expectException(InvalidToolImplementation::class);
         iterator_to_array($this->toolAnalyzer->getMetadata(ToolWrong::class));
     }
 
-    public function testGetDefinition(): void
+    #[Test]
+    public function getDefinition(): void
     {
         /** @var Metadata[] $actual */
         $actual = iterator_to_array($this->toolAnalyzer->getMetadata(ToolRequiredParams::class));
@@ -49,7 +52,8 @@ final class ToolAnalyzerTest extends TestCase
         self::assertIsArray($actual[0]->parameters);
     }
 
-    public function testGetDefinitionWithMultiple(): void
+    #[Test]
+    public function getDefinitionWithMultiple(): void
     {
         $actual = iterator_to_array($this->toolAnalyzer->getMetadata(ToolMultiple::class));
 

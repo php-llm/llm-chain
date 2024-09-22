@@ -9,7 +9,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsTool('wikipedia_search', description: 'Searches Wikipedia for a given query', method: 'search')]
 #[AsTool('wikipedia_article', description: 'Retrieves a Wikipedia article by its title', method: 'getArticle')]
-final class Wikipedia
+final readonly class Wikipedia
 {
     public function __construct(
         private HttpClientInterface $httpClient,

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\ToolBox;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class AsTool
+final readonly class AsTool
 {
     public function __construct(
-        public readonly string $name,
-        public readonly string $description,
-        public readonly string $method = '__invoke',
+        public string $name,
+        public string $description,
+        public string $method = '__invoke',
     ) {
     }
 }

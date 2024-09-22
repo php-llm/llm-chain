@@ -11,8 +11,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class OpenAI extends AbstractRuntime implements Runtime
 {
     public function __construct(
-        private HttpClientInterface $httpClient,
-        private string $apiKey,
+        private readonly HttpClientInterface $httpClient,
+        private readonly string $apiKey,
     ) {
     }
 

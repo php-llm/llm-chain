@@ -12,7 +12,7 @@ use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
-final class Store implements VectorStoreInterface
+final readonly class Store implements VectorStoreInterface
 {
     public function __construct(
         private Client $client,

@@ -2,6 +2,7 @@ qa:
 	vendor/bin/php-cs-fixer fix
 	vendor/bin/phpstan
 	vendor/bin/phpunit
+	vendor/bin/rector
 
 qa-lowest:
 	composer update --prefer-lowest

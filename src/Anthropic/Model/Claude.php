@@ -11,7 +11,7 @@ use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\Response;
 
-final class Claude implements LanguageModel
+final readonly class Claude implements LanguageModel
 {
     public function __construct(
         private ClaudeRuntime $runtime,

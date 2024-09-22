@@ -11,11 +11,11 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class Azure extends AbstractRuntime implements Runtime
 {
     public function __construct(
-        private HttpClientInterface $httpClient,
-        private string $baseUrl,
-        private string $deployment,
-        private string $apiVersion,
-        private string $key,
+        private readonly HttpClientInterface $httpClient,
+        private readonly string $baseUrl,
+        private readonly string $deployment,
+        private readonly string $apiVersion,
+        private readonly string $key,
     ) {
     }
 

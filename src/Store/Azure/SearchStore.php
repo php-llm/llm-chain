@@ -11,14 +11,14 @@ use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class SearchStore implements VectorStoreInterface
+final readonly class SearchStore implements VectorStoreInterface
 {
     public function __construct(
-        private readonly HttpClientInterface $httpClient,
-        private readonly string $endpointUrl,
-        private readonly string $apiKey,
-        private readonly string $indexName,
-        private readonly string $apiVersion,
+        private HttpClientInterface $httpClient,
+        private string $endpointUrl,
+        private string $apiKey,
+        private string $indexName,
+        private string $apiVersion,
     ) {
     }
 

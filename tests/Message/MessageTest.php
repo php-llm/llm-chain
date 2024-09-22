@@ -9,6 +9,7 @@ use PhpLlm\LlmChain\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +18,8 @@ use PHPUnit\Framework\TestCase;
 #[Small]
 final class MessageTest extends TestCase
 {
-    public function testCreateSystemMessage(): void
+    #[Test]
+    public function createSystemMessage(): void
     {
         $message = Message::forSystem('My amazing system prompt.');
 
@@ -29,7 +31,8 @@ final class MessageTest extends TestCase
         self::assertFalse($message->hasToolCalls());
     }
 
-    public function testCreateAssistantMessage(): void
+    #[Test]
+    public function createAssistantMessage(): void
     {
         $message = Message::ofAssistant('It is time to sleep.');
 
@@ -41,7 +44,8 @@ final class MessageTest extends TestCase
         self::assertFalse($message->hasToolCalls());
     }
 
-    public function testCreateAssistantMessageWithToolCalls(): void
+    #[Test]
+    public function createAssistantMessageWithToolCalls(): void
     {
         $toolCalls = [
             new ToolCall('call_123456', 'my_tool', ['foo' => 'bar']),
@@ -57,7 +61,8 @@ final class MessageTest extends TestCase
         self::assertTrue($message->hasToolCalls());
     }
 
-    public function testCreateUserMessage(): void
+    #[Test]
+    public function createUserMessage(): void
     {
         $message = Message::ofUser('Hi, my name is John.');
 
@@ -69,7 +74,8 @@ final class MessageTest extends TestCase
         self::assertFalse($message->hasToolCalls());
     }
 
-    public function testCreateToolCallMessage(): void
+    #[Test]
+    public function createToolCallMessage(): void
     {
         $toolCall = new ToolCall('call_123456', 'my_tool', ['foo' => 'bar']);
         $message = Message::ofToolCall($toolCall, 'Foo bar.');
@@ -84,7 +90,8 @@ final class MessageTest extends TestCase
     }
 
     #[DataProvider('provideJsonScenarios')]
-    public function testJsonSerialize(Message $message, array $expected): void
+    #[Test]
+    public function jsonSerialize(Message $message, array $expected): void
     {
         self::assertSame($expected, $message->jsonSerialize());
     }
