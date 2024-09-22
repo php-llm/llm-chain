@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain;
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Store\StoreInterface;
 
-final class DocumentEmbedder
+final readonly class DocumentEmbedder
 {
     public function __construct(
         private EmbeddingModel $embeddings,

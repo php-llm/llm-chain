@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +17,8 @@ use PHPUnit\Framework\TestCase;
 #[Small]
 final class MessageBagTest extends TestCase
 {
-    public function testGetSystemMessage(): void
+    #[Test]
+    public function getSystemMessage(): void
     {
         $messageBag = new MessageBag(
             Message::forSystem('My amazing system prompt.'),
@@ -29,7 +31,8 @@ final class MessageBagTest extends TestCase
         self::assertSame('My amazing system prompt.', $systemMessage->content);
     }
 
-    public function testGetSystemMessageWithoutSystemMessage(): void
+    #[Test]
+    public function getSystemMessageWithoutSystemMessage(): void
     {
         $messageBag = new MessageBag(
             Message::ofAssistant('It is time to sleep.'),
@@ -39,7 +42,8 @@ final class MessageBagTest extends TestCase
         self::assertNull($messageBag->getSystemMessage());
     }
 
-    public function testWith(): void
+    #[Test]
+    public function with(): void
     {
         $messageBag = new MessageBag(
             Message::forSystem('My amazing system prompt.'),
@@ -55,7 +59,8 @@ final class MessageBagTest extends TestCase
         self::assertSame('It is time to wake up.', $newMessageBag[3]->content);
     }
 
-    public function testWithoutSystemMessage(): void
+    #[Test]
+    public function withoutSystemMessage(): void
     {
         $messageBag = new MessageBag(
             Message::forSystem('My amazing system prompt.'),
@@ -70,7 +75,8 @@ final class MessageBagTest extends TestCase
         self::assertSame('It is time to sleep.', $newMessageBag[0]->content);
     }
 
-    public function testPrepend(): void
+    #[Test]
+    public function prepend(): void
     {
         $messageBag = new MessageBag(
             Message::ofAssistant('It is time to sleep.'),
@@ -85,7 +91,8 @@ final class MessageBagTest extends TestCase
         self::assertSame('My amazing system prompt.', $newMessageBag[0]->content);
     }
 
-    public function testJsonSerialize(): void
+    #[Test]
+    public function jsonSerialize(): void
     {
         $messageBag = new MessageBag(
             Message::forSystem('My amazing system prompt.'),

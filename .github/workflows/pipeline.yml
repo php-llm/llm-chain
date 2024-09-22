@@ -31,6 +31,9 @@ jobs:
       - name: Code Style PHP
         run: vendor/bin/php-cs-fixer fix --dry-run
 
+      - name: Rector
+        run: vendor/bin/rector
+
       - name: PHPStan
         run: vendor/bin/phpstan analyse
 

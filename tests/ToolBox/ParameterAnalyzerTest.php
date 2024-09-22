@@ -11,6 +11,7 @@ use PhpLlm\LlmChain\ToolBox\AsTool;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +28,8 @@ final class ParameterAnalyzerTest extends TestCase
         $this->analyzer = new ParameterAnalyzer();
     }
 
-    public function testDetectParameterDefinitionRequired(): void
+    #[Test]
+    public function detectParameterDefinitionRequired(): void
     {
         $actual = $this->analyzer->getDefinition(ToolRequiredParams::class, 'bar');
         $expected = [
@@ -51,7 +53,8 @@ final class ParameterAnalyzerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testDetectParameterDefinitionOptional(): void
+    #[Test]
+    public function detectParameterDefinitionOptional(): void
     {
         $actual = $this->analyzer->getDefinition(ToolOptionalParam::class, 'bar');
         $expected = [
@@ -74,7 +77,8 @@ final class ParameterAnalyzerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testDetectParameterDefinitionNone(): void
+    #[Test]
+    public function detectParameterDefinitionNone(): void
     {
         $actual = $this->analyzer->getDefinition(ToolNoParams::class, '__invoke');
 

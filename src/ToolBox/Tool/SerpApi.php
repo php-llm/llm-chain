@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\ToolBox\AsTool;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsTool(name: 'serpapi', description: 'search for information on the internet')]
-final class SerpApi
+final readonly class SerpApi
 {
     public function __construct(
         private HttpClientInterface $httpClient,

@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +17,8 @@ use PHPUnit\Framework\TestCase;
 #[Small]
 final class ChoiceTest extends TestCase
 {
-    public function testChoiceEmpty(): void
+    #[Test]
+    public function choiceEmpty(): void
     {
         $choice = new Choice();
         self::assertFalse($choice->hasContent());
@@ -25,7 +27,8 @@ final class ChoiceTest extends TestCase
         self::assertCount(0, $choice->getToolCalls());
     }
 
-    public function testChoiceWithContent(): void
+    #[Test]
+    public function choiceWithContent(): void
     {
         $choice = new Choice('content');
         self::assertTrue($choice->hasContent());
@@ -34,7 +37,8 @@ final class ChoiceTest extends TestCase
         self::assertCount(0, $choice->getToolCalls());
     }
 
-    public function testChoiceWithToolCall(): void
+    #[Test]
+    public function choiceWithToolCall(): void
     {
         $choice = new Choice(null, [new ToolCall('name', 'arguments')]);
         self::assertFalse($choice->hasContent());
@@ -43,7 +47,8 @@ final class ChoiceTest extends TestCase
         self::assertCount(1, $choice->getToolCalls());
     }
 
-    public function testChoiceWithContentAndToolCall(): void
+    #[Test]
+    public function choiceWithContentAndToolCall(): void
     {
         $choice = new Choice('content', [new ToolCall('name', 'arguments')]);
         self::assertTrue($choice->hasContent());

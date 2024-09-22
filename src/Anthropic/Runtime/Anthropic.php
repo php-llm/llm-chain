@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\Anthropic\Runtime;
 use PhpLlm\LlmChain\Anthropic\ClaudeRuntime;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class Anthropic implements ClaudeRuntime
+final readonly class Anthropic implements ClaudeRuntime
 {
     public function __construct(
         private HttpClientInterface $httpClient,

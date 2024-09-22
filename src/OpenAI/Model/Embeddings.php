@@ -9,7 +9,7 @@ use PhpLlm\LlmChain\EmbeddingModel;
 use PhpLlm\LlmChain\OpenAI\Model\Embeddings\Version;
 use PhpLlm\LlmChain\OpenAI\Runtime;
 
-final class Embeddings implements EmbeddingModel
+final readonly class Embeddings implements EmbeddingModel
 {
     public function __construct(
         private Runtime $runtime,

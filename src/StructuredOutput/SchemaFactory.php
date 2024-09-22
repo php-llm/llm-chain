@@ -9,10 +9,10 @@ use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\PropertyInfo\Type;
 
-final class SchemaFactory
+final readonly class SchemaFactory
 {
     public function __construct(
-        private readonly PropertyInfoExtractor $propertyInfo,
+        private PropertyInfoExtractor $propertyInfo,
     ) {
     }
 

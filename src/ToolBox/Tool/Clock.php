@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\ToolBox\AsTool;
 use Symfony\Component\Clock\ClockInterface;
 
 #[AsTool('clock', description: 'Provides the current date and time.')]
-final class Clock
+final readonly class Clock
 {
     public function __construct(
         private ClockInterface $clock,

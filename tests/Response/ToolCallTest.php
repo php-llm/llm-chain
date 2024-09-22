@@ -7,13 +7,15 @@ namespace PhpLlm\LlmChain\Tests\Response;
 use PhpLlm\LlmChain\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ToolCall::class)]
 #[Small]
 final class ToolCallTest extends TestCase
 {
-    public function testToolCall(): void
+    #[Test]
+    public function toolCall(): void
     {
         $toolCall = new ToolCall('id', 'name', ['foo' => 'bar']);
         self::assertSame('id', $toolCall->id);
@@ -21,7 +23,8 @@ final class ToolCallTest extends TestCase
         self::assertSame(['foo' => 'bar'], $toolCall->arguments);
     }
 
-    public function testToolCallJsonSerialize(): void
+    #[Test]
+    public function toolCallJsonSerialize(): void
     {
         $toolCall = new ToolCall('id', 'name', ['foo' => 'bar']);
         self::assertSame(

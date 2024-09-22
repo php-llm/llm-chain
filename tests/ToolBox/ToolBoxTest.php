@@ -14,6 +14,7 @@ use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolBox;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +38,7 @@ final class ToolBoxTest extends TestCase
         ]);
     }
 
+    #[Test]
     public function testToolsMap(): void
     {
         $actual = $this->toolBox->getMap();
@@ -100,7 +102,8 @@ final class ToolBoxTest extends TestCase
         self::assertSame(json_encode($expected), json_encode($actual));
     }
 
-    public function testExecute(): void
+    #[Test]
+    public function execute(): void
     {
         $actual = $this->toolBox->execute(new ToolCall('call_1234', 'tool_required_params', ['text' => 'Hello', 'number' => 3]));
         $expected = 'Hello says "3".';

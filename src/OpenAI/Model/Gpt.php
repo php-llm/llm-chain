@@ -12,7 +12,7 @@ use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\Response;
 use PhpLlm\LlmChain\Response\ToolCall;
 
-final class Gpt implements LanguageModel
+final readonly class Gpt implements LanguageModel
 {
     public function __construct(
         private Runtime $runtime,

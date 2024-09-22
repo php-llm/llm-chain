@@ -9,6 +9,7 @@ use PhpLlm\LlmChain\Tests\StructuredOutput\Data\MathReasoning;
 use PhpLlm\LlmChain\Tests\StructuredOutput\Data\Step;
 use PhpLlm\LlmChain\Tests\StructuredOutput\Data\User;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(SchemaFactory::class)]
@@ -21,7 +22,8 @@ final class SchemaFactoryTest extends TestCase
         $this->schemaFactory = SchemaFactory::create();
     }
 
-    public function testBuildSchemaForUserClass(): void
+    #[Test]
+    public function buildSchemaForUserClass(): void
     {
         $expected = [
             'title' => 'User',
@@ -44,7 +46,8 @@ final class SchemaFactoryTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testBuildSchemaForMathReasoningClass(): void
+    #[Test]
+    public function buildSchemaForMathReasoningClass(): void
     {
         $expected = [
             'title' => 'MathReasoning',
@@ -74,7 +77,8 @@ final class SchemaFactoryTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testBuildSchemaForStepClass(): void
+    #[Test]
+    public function buildSchemaForStepClass(): void
     {
         $expected = [
             'title' => 'Step',
