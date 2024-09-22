@@ -41,7 +41,7 @@ final class Gpt implements LanguageModel
 
     public function hasStructuredOutputSupport(): bool
     {
-        return $this->version->hasStructuredOutputSupport();
+        return $this->version->supportsStructuredOutput();
     }
 
     /**
