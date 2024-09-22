@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\ToolBox;
 
 use PhpLlm\LlmChain\Response\ToolCall;
 
-final class Toolbox implements ToolboxInterface
+final class ToolBox implements ToolBoxInterface
 {
     /**
      * @var list<object>

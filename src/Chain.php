@@ -7,14 +7,14 @@ namespace PhpLlm\LlmChain;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
-use PhpLlm\LlmChain\ToolBox\ToolboxInterface;
+use PhpLlm\LlmChain\ToolBox\ToolBoxInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final readonly class Chain
 {
     public function __construct(
         private LanguageModel $llm,
-        private ?ToolboxInterface $toolBox = null,
+        private ?ToolBoxInterface $toolBox = null,
         private ?ResponseFormatFactory $responseFormatFactory = null,
         private ?SerializerInterface $serializer = null,
     ) {

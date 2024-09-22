@@ -9,7 +9,7 @@ use PhpLlm\LlmChain\OpenAI\Runtime\OpenAI;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\ToolBox\Tool\Clock;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
-use PhpLlm\LlmChain\ToolBox\Toolbox;
+use PhpLlm\LlmChain\ToolBox\ToolBox;
 use Symfony\Component\Clock\Clock as SymfonyClock;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -19,8 +19,8 @@ $runtime = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
 $llm = new Gpt($runtime, Version::GPT_4o_MINI);
 
 $clock = new Clock(new SymfonyClock());
-$registry = new Toolbox(new ToolAnalyzer(new ParameterAnalyzer()), [$clock]);
-$chain = new Chain($llm, $registry);
+$toolBox = new ToolBox(new ToolAnalyzer(new ParameterAnalyzer()), [$clock]);
+$chain = new Chain($llm, $toolBox);
 
 $messages = new MessageBag(Message::ofUser('What date and time is it?'));
 $response = $chain->call($messages);
