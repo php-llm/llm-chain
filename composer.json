@@ -37,7 +37,7 @@
     "suggest": {
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
-        "symfony/clock": "For using the clock tool.",
+        "symfony/clock": "For using the clock tool."
     },
     "config": {
         "sort-packages": true
