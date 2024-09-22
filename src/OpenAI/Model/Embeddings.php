@@ -13,8 +13,9 @@ final readonly class Embeddings implements EmbeddingModel
 {
     public function __construct(
         private Runtime $runtime,
-        private Version $version = Version::EMBEDDING_3_SMALL,
+        private ?Model $model = null,
     ) {
+        $this->model = $this->model ?? Model::fromVersion(Version::EMBEDDING_3_SMALL);
     }
 
     public function create(string $text): Vector
@@ -37,12 +38,12 @@ final readonly class Embeddings implements EmbeddingModel
     }
 
     /**
-     * @return array{model: string, input: string}
+     * @return array{model: non-empty-string, input: string}
      */
     private function createBody(string $text): array
     {
         return [
-            'model' => $this->version->value,
+            'model' => $this->model->getName(),
             'input' => $text,
         ];
     }

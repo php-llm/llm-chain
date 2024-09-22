@@ -15,17 +15,18 @@ final readonly class Claude implements LanguageModel
 {
     public function __construct(
         private ClaudeRuntime $runtime,
-        private Version $version = Version::SONNET_35,
+        private ?Model $model = null,
         private float $temperature = 1.0,
         private int $maxTokens = 1000,
     ) {
+        $this->model = $this->model ?? Model::fromVersion(Version::SONNET_35);
     }
 
     public function call(MessageBag $messages, array $options = []): Response
     {
         $system = $messages->getSystemMessage();
         $body = [
-            'model' => $this->version->value,
+            'model' => $this->model->getName(),
             'temperature' => $this->temperature,
             'max_tokens' => $this->maxTokens,
             'system' => $system->content,

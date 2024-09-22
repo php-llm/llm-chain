@@ -19,7 +19,8 @@
         "symfony/property-info": "^6.4 || ^7.1",
         "symfony/serializer": "^6.4 || ^7.1",
         "symfony/type-info": "^6.4 || ^7.1",
-        "symfony/uid": "^6.4 || ^7.1"
+        "symfony/uid": "^6.4 || ^7.1",
+        "webmozart/assert": "^1.11"
     },
     "require-dev": {
         "codewithkyrian/chromadb-php": "^0.2.1",
