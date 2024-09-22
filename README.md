@@ -1,5 +1,5 @@
-LlmChain
-========
+LLM Chain
+=========
 
 Simple PHP toolkit for building LLM chains.
 
@@ -91,32 +91,32 @@ Depending on the example you need to export needed environment variables for API
 1. Simple Clock Tool
    ```bash
    export OPENAI_API_KEY=sk-...
-   php examples/toolchain-clock.php
+   php examples/toolbox-clock.php
    ```
 
 1. Wikipedia Tool
    ```bash
    export OPENAI_API_KEY=sk-...
-   php examples/toolchain-wikipedia.php
+   php examples/toolbox-wikipedia.php
    ```
 
 1. SerpAPI Tool
    ```bash
    export OPENAI_API_KEY=sk-...
    export SERPAPI_API_KEY=...
-   php examples/toolchain-serpapi.php
+   php examples/toolbox-serpapi.php
    ```
 
 1. Weather Tool
    ```bash
    export OPENAI_API_KEY=sk-...
-   php examples/toolchain-weather.php
+   php examples/toolbox-weather.php
    ```
 
 1. YouTube Transcriber Tool
    ```bash
    export OPENAI_API_KEY=sk-...
-   php examples/toolchain-youtube.php
+   php examples/toolbox-youtube.php
    ```
 
 ### Structured Output
