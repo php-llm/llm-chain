@@ -27,11 +27,11 @@ final readonly class Chain
     {
         $llmOptions = $options;
 
-        if (!array_key_exists('tools', $llmOptions) && null !== $this->toolRegistry && $this->llm->hasToolSupport()) {
+        if (!array_key_exists('tools', $llmOptions) && null !== $this->toolRegistry && $this->llm->supportsToolCalling()) {
             $llmOptions['tools'] = $this->toolRegistry->getMap();
         }
 
-        if (array_key_exists('output_structure', $llmOptions) && null !== $this->responseFormatFactory && $this->llm->hasStructuredOutputSupport()) {
+        if (array_key_exists('output_structure', $llmOptions) && null !== $this->responseFormatFactory && $this->llm->supportsStructuredOutput()) {
             $llmOptions['response_format'] = $this->responseFormatFactory->create($llmOptions['output_structure']);
             unset($llmOptions['output_structure']);
         }

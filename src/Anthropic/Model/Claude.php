@@ -37,12 +37,12 @@ final class Claude implements LanguageModel
         return new Response(new Choice($response['content'][0]['text']));
     }
 
-    public function hasToolSupport(): bool
+    public function supportsToolCalling(): bool
     {
         return false; // it does, but implementation here is still open.
     }
 
-    public function hasStructuredOutputSupport(): bool
+    public function supportsStructuredOutput(): bool
     {
         return false;
     }
