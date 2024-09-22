@@ -15,8 +15,6 @@ final readonly class YouTubeTranscriber
     public function __construct(
         private HttpClientInterface $client,
     ) {
-
-
         if (!class_exists(Crawler::class)) {
             throw new \LogicException('The Symfony DomCrawler component is required to use this tool. Try running "composer require symfony/dom-crawler".');
         }
