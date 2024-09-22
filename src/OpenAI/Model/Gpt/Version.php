@@ -12,6 +12,8 @@ enum Version: string
     case GPT_4_TURBO = 'gpt-4-turbo';
     case GPT_4o = 'gpt-4o';
     case GPT_4o_MINI = 'gpt-4o-mini';
+    case o1_MINI = 'o1-mini';
+    case o1_PREVIEW = 'o1-preview';
 
     public function hasStructuredOutputSupport(): bool
     {
