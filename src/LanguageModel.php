@@ -14,7 +14,7 @@ interface LanguageModel
      */
     public function call(MessageBag $messages, array $options = []): Response;
 
-    public function hasToolSupport(): bool;
+    public function supportsToolCalling(): bool;
 
-    public function hasStructuredOutputSupport(): bool;
+    public function supportsStructuredOutput(): bool;
 }

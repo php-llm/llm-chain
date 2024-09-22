@@ -34,12 +34,12 @@ final class Gpt implements LanguageModel
         return new Response(...array_map([$this, 'convertChoice'], $response['choices']));
     }
 
-    public function hasToolSupport(): bool
+    public function supportsToolCalling(): bool
     {
         return true;
     }
 
-    public function hasStructuredOutputSupport(): bool
+    public function supportsStructuredOutput(): bool
     {
         return $this->version->supportsStructuredOutput();
     }
