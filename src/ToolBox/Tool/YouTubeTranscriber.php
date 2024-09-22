@@ -15,11 +15,13 @@ final readonly class YouTubeTranscriber
     public function __construct(
         private HttpClientInterface $client,
     ) {
+
+
         if (!class_exists(Crawler::class)) {
-            throw new \LogicException('The Symfony DomCrawler component is required to use this tool.');
+            throw new \LogicException('The Symfony DomCrawler component is required to use this tool. Try running "composer require symfony/dom-crawler".');
         }
         if (!class_exists(CssSelectorConverter::class)) {
-            throw new \LogicException('The Symfony CSS Selector component is required to use this tool.');
+            throw new \LogicException('The Symfony CSS Selector component is required to use this tool. Try running "composer require symfony/css-selector".');
         }
     }
 
