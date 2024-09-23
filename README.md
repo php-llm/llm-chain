@@ -1,10 +1,10 @@
 LLM Chain
 =========
 
-Simple PHP toolkit for building LLM chains.
+PHP library for building LLM-based features and applications.
 
-This is not stable nor production ready, it's just a playground for me to experiment with LLMs.
-Abstractions, concepts and interfaces are not good at all and will definitely change.
+This is not a stable library yet, but still rather experimental. Feel free to try it out, give feedback, ask questions, contribute or share your use cases.
+Abstractions, concepts and interfaces are not final and potentially subject of change.
 
 Requirements
 ------------
@@ -13,11 +13,13 @@ Requirements
 Installation
 ------------
 
-The recommended way to install LlmChain is through [Composer](http://getcomposer.org/):
+The recommended way to install LLM Chain is through [Composer](http://getcomposer.org/):
 
 ```bash
 composer require php-llm/llm-chain
 ```
+
+When using Symfony Framework, check out the integration bundle [php-llm/llm-chain-bundle](https://github.com/php-llm/llm-chain-bundle).
 
 Supported Models & Runtimes
 ---------------------------
@@ -61,7 +63,7 @@ Usage Examples
 --------------
 
 See [examples](examples) to run example implementations using this library.
-Depending on the example you need to export needed environment variables for API keys or deployment configurations:
+Depending on the example you need to export different environment variables for API keys or deployment configurations:
 
 ### Chat Examples
 
@@ -86,7 +88,7 @@ Depending on the example you need to export needed environment variables for API
    php examples/chat-claude-anthropic.php
    ```
 
-### ToolChain Examples
+### Tool Examples
 
 1. Simple Clock Tool
    ```bash
@@ -126,3 +128,8 @@ Depending on the example you need to export needed environment variables for API
    export OPENAI_API_KEY=sk-...
    php examples/structured-output-math.php
    ```
+
+Contributions
+-------------
+
+Constributions are always welcome.
