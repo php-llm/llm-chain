@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Message;
 
+use PhpLlm\LlmChain\Message\ImageUrl;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -115,6 +116,8 @@ final class MessageBagTest extends TestCase
             Message::forSystem('My amazing system prompt.'),
             Message::ofAssistant('It is time to sleep.'),
             Message::ofUser('Hello, world!'),
+            Message::ofUser('Analyze the following image:'),
+            Message::ofUser(new ImageUrl('http://example.com/image.jpg')),
         );
 
         $json = json_encode($messageBag);
@@ -125,6 +128,10 @@ final class MessageBagTest extends TestCase
                 ['role' => 'system', 'content' => 'My amazing system prompt.'],
                 ['role' => 'assistant', 'content' => 'It is time to sleep.'],
                 ['role' => 'user', 'content' => 'Hello, world!'],
+                ['role' => 'user', 'content' => 'Analyze the following image:'],
+                ['role' => 'user', 'content' => [
+                    ['type' => 'image_url', 'image_url' => ['url' => 'http://example.com/image.jpg']],
+                ]],
             ]),
             $json
         );

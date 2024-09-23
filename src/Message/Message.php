@@ -12,7 +12,7 @@ final readonly class Message implements \JsonSerializable
      * @param ?ToolCall[] $toolCalls
      */
     public function __construct(
-        public ?string $content,
+        public string|ImageUrl|null $content,
         public Role $role,
         public ?array $toolCalls = null,
     ) {
@@ -31,7 +31,7 @@ final readonly class Message implements \JsonSerializable
         return new self($content, Role::Assistant, $toolCalls);
     }
 
-    public static function ofUser(string $content): self
+    public static function ofUser(string|ImageUrl $content): self
     {
         return new self($content, Role::User);
     }
@@ -81,7 +81,14 @@ final readonly class Message implements \JsonSerializable
         ];
 
         if (null !== $this->content) {
-            $array['content'] = $this->content;
+            $content = $this->content;
+
+            if ($this->content instanceof ImageUrl) {
+                $content = [];
+                $content[] = $this->content;
+            }
+
+            $array['content'] = $content;
         }
 
         if ($this->hasToolCalls() && $this->isToolCall()) {
