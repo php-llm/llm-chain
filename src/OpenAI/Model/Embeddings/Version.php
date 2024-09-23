@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\OpenAI\Model\Embeddings;
 
 use Webmozart\Assert\Assert;
 
-final class Version
+final readonly class Version
 {
     /**
      * @param non-empty-string $name

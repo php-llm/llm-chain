@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Anthropic\Model\Claude;
 
 use Webmozart\Assert\Assert;
 
-final class Version
+final readonly class Version
 {
     public function __construct(
         public string $name,
