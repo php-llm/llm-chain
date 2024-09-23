@@ -9,12 +9,13 @@ use PhpLlm\LlmChain\EmbeddingModel;
 use PhpLlm\LlmChain\OpenAI\Model\Embeddings\Version;
 use PhpLlm\LlmChain\OpenAI\Runtime;
 
-final readonly class Embeddings implements EmbeddingModel
+final class Embeddings implements EmbeddingModel
 {
     public function __construct(
-        private Runtime $runtime,
-        private Version $version = Version::EMBEDDING_3_SMALL,
+        private readonly Runtime $runtime,
+        private ?Version $version = null,
     ) {
+        $this->version ??= Version::textEmbedding3Small();
     }
 
     public function create(string $text): Vector
@@ -37,12 +38,12 @@ final readonly class Embeddings implements EmbeddingModel
     }
 
     /**
-     * @return array{model: string, input: string}
+     * @return array{model: non-empty-string, input: string}
      */
     private function createBody(string $text): array
     {
         return [
-            'model' => $this->version->value,
+            'model' => $this->version->name,
             'input' => $text,
         ];
     }

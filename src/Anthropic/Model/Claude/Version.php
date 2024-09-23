@@ -4,10 +4,33 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Anthropic\Model\Claude;
 
-enum Version: string
+use Webmozart\Assert\Assert;
+
+final readonly class Version
 {
-    case HAIKU_3 = 'claude-3-haiku-20240307';
-    case SONNET_3 = 'claude-3-sonnet-20240229';
-    case SONNET_35 = 'claude-3-5-sonnet-20240620';
-    case OPUS = 'claude-3-opus-20240229';
+    public function __construct(
+        public string $name,
+    ) {
+        Assert::stringNotEmpty($name);
+    }
+
+    public static function haiku3(): self
+    {
+        return new self('claude-3-haiku-20240307');
+    }
+
+    public static function sonnet3(): self
+    {
+        return new self('claude-3-sonnet-20240229');
+    }
+
+    public static function sonnet35(): self
+    {
+        return new self('claude-3-5-sonnet-20240620');
+    }
+
+    public static function opus(): self
+    {
+        return new self('claude-3-opus-20240229');
+    }
 }

@@ -11,21 +11,22 @@ use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\Response;
 
-final readonly class Claude implements LanguageModel
+final class Claude implements LanguageModel
 {
     public function __construct(
-        private ClaudeRuntime $runtime,
-        private Version $version = Version::SONNET_35,
-        private float $temperature = 1.0,
-        private int $maxTokens = 1000,
+        private readonly ClaudeRuntime $runtime,
+        private ?Version $version = null,
+        private readonly float $temperature = 1.0,
+        private readonly int $maxTokens = 1000,
     ) {
+        $this->version ??= Version::sonnet35();
     }
 
     public function call(MessageBag $messages, array $options = []): Response
     {
         $system = $messages->getSystemMessage();
         $body = [
-            'model' => $this->version->value,
+            'model' => $this->version->name,
             'temperature' => $this->temperature,
             'max_tokens' => $this->maxTokens,
             'system' => $system->content,

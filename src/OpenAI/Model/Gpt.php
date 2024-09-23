@@ -12,19 +12,20 @@ use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\Response;
 use PhpLlm\LlmChain\Response\ToolCall;
 
-final readonly class Gpt implements LanguageModel
+final class Gpt implements LanguageModel
 {
     public function __construct(
-        private Runtime $runtime,
-        private Version $version = Version::GPT_4o,
-        private float $temperature = 1.0,
+        private readonly Runtime $runtime,
+        private ?Version $version = null,
+        private readonly float $temperature = 1.0,
     ) {
+        $this->version ??= Version::gpt4o();
     }
 
     public function call(MessageBag $messages, array $options = []): Response
     {
         $body = [
-            'model' => $this->version->value,
+            'model' => $this->version->name,
             'temperature' => $this->temperature,
             'messages' => $messages,
         ];
@@ -41,7 +42,7 @@ final readonly class Gpt implements LanguageModel
 
     public function supportsStructuredOutput(): bool
     {
-        return $this->version->supportsStructuredOutput();
+        return $this->version->supportStructuredOutput;
     }
 
     /**
