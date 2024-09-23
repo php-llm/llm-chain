@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Serializer;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 $runtime = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
-$llm = new Gpt($runtime, Version::GPT_4o_MINI);
+$llm = new Gpt($runtime, Version::gpt4oMini());
 $responseFormatFactory = new ResponseFormatFactory(SchemaFactory::create());
 $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 

@@ -19,7 +19,7 @@ final class Gpt implements LanguageModel
         private ?Version $version = null,
         private readonly float $temperature = 1.0,
     ) {
-        $this->version = $this->version ?? Version::gpt4o();
+        $this->version ??= Version::gpt4o();
     }
 
     public function call(MessageBag $messages, array $options = []): Response

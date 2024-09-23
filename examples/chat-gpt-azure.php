@@ -16,7 +16,7 @@ $runtime = new Azure(HttpClient::create(),
     getenv('AZURE_OPENAI_VERSION'),
     getenv('AZURE_OPENAI_KEY')
 );
-$llm = new Gpt($runtime, Version::GPT_4o_MINI);
+$llm = new Gpt($runtime, Version::gpt4oMini());
 
 $chain = new Chain($llm);
 $messages = new MessageBag(

@@ -15,7 +15,7 @@ require_once dirname(__DIR__).'/vendor/autoload.php';
 
 $httpClient = HttpClient::create();
 $runtime = new OpenAI($httpClient, getenv('OPENAI_API_KEY'));
-$llm = new Gpt($runtime, Version::GPT_4o_MINI);
+$llm = new Gpt($runtime, Version::gpt4oMini());
 
 $serpApi = new SerpApi($httpClient, getenv('SERP_API_KEY'));
 $toolBox = new ToolBox(new ToolAnalyzer(), [$serpApi]);

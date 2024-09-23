@@ -34,4 +34,3 @@ final class Version
         return new self('claude-3-opus-20240229');
     }
 }
-

@@ -6,7 +6,6 @@ namespace PhpLlm\LlmChain\Anthropic\Model;
 
 use PhpLlm\LlmChain\Anthropic\ClaudeRuntime;
 use PhpLlm\LlmChain\Anthropic\Model\Claude\Version;
-use PhpLlm\LlmChain\Anthropic\Model\Claude\Version;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\Choice;
@@ -20,7 +19,7 @@ final class Claude implements LanguageModel
         private readonly float $temperature = 1.0,
         private readonly int $maxTokens = 1000,
     ) {
-        $this->version = $this->version ?? Version::sonnet35();
+        $this->version ??= Version::sonnet35();
     }
 
     public function call(MessageBag $messages, array $options = []): Response

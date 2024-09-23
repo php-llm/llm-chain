@@ -15,7 +15,7 @@ final class Embeddings implements EmbeddingModel
         private readonly Runtime $runtime,
         private ?Version $version = null,
     ) {
-        $this->version = $this->version ?? Version::textEmbedding3Small();
+        $this->version ??= Version::textEmbedding3Small();
     }
 
     public function create(string $text): Vector

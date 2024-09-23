@@ -15,7 +15,7 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 $runtime = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
-$llm = new Gpt($runtime, Version::GPT_4o_MINI);
+$llm = new Gpt($runtime, Version::gpt4oMini());
 
 $clock = new Clock(new SymfonyClock());
 $toolBox = new ToolBox(new ToolAnalyzer(), [$clock]);

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\OpenAI\Model\Gpt;
 
-use PhpLlm\LlmChain\OpenAI\Model\Embeddings\Version as EmbeddingsVersion;
-use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version as GptVersion;
 use Webmozart\Assert\Assert;
 
 final class Version

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\OpenAI\Model\Embeddings;
 
-use PhpLlm\LlmChain\OpenAI\Model\Embeddings\Version as EmbeddingsVersion;
-use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version as GptVersion;
 use Webmozart\Assert\Assert;
 
 final class Version
@@ -32,7 +30,5 @@ final class Version
     public static function textEmbedding3Small(): self
     {
         return new self('text-embedding-3-small');
-}}
-
-
-
+    }
+}
