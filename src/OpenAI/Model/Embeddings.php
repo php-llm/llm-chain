@@ -9,10 +9,10 @@ use PhpLlm\LlmChain\EmbeddingModel;
 use PhpLlm\LlmChain\OpenAI\Model\Embeddings\Version;
 use PhpLlm\LlmChain\OpenAI\Runtime;
 
-final readonly class Embeddings implements EmbeddingModel
+final class Embeddings implements EmbeddingModel
 {
     public function __construct(
-        private Runtime $runtime,
+        private readonly Runtime $runtime,
         private ?Model $model = null,
     ) {
         $this->model = $this->model ?? Model::fromVersion(Version::EMBEDDING_3_SMALL);

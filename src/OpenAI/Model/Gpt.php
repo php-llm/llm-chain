@@ -42,11 +42,7 @@ final class Gpt implements LanguageModel
 
     public function supportsStructuredOutput(): bool
     {
-<<<<<<< HEAD
-        return $this->version->supportsStructuredOutput();
-=======
         return $this->model->supportsStructuredOutput();
->>>>>>> 73a1215 (Introduce `Model` value object)
     }
 
     /**
