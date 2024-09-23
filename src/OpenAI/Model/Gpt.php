@@ -16,16 +16,16 @@ final class Gpt implements LanguageModel
 {
     public function __construct(
         private readonly Runtime $runtime,
-        private ?Model $model = null,
+        private ?Version $version = null,
         private readonly float $temperature = 1.0,
     ) {
-        $this->model = $this->model ?? Model::fromVersion(Version::GPT_4o);
+        $this->version = $this->version ?? Version::gpt4o();
     }
 
     public function call(MessageBag $messages, array $options = []): Response
     {
         $body = [
-            'model' => $this->model->getName(),
+            'model' => $this->version->name,
             'temperature' => $this->temperature,
             'messages' => $messages,
         ];
@@ -42,7 +42,7 @@ final class Gpt implements LanguageModel
 
     public function supportsStructuredOutput(): bool
     {
-        return $this->model->supportsStructuredOutput();
+        return $this->version->supportStructuredOutput;
     }
 
     /**
