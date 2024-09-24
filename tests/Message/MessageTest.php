@@ -7,15 +7,16 @@ namespace PhpLlm\LlmChain\Tests\Message;
 use PhpLlm\LlmChain\Message\Content\Image;
 use PhpLlm\LlmChain\Message\Content\Text;
 use PhpLlm\LlmChain\Message\Message;
+use PhpLlm\LlmChain\Message\Role;
 use PhpLlm\LlmChain\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(Message::class)]
+#[UsesClass(Role::class)]
 #[UsesClass(ToolCall::class)]
 #[Small]
 final class MessageTest extends TestCase
@@ -50,46 +51,44 @@ final class MessageTest extends TestCase
     }
 
     #[Test]
-    public function createUserMessageWithoutContentThrowsException(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('At least a single content part must be given.');
-
-        Message::ofUser();
-    }
-
-    #[Test]
-    public function createUserMessageWithoutTextContentInFirstPlaceIsNotPossible(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The first content piece has to be a string or Text part');
-
-        Message::ofUser(new Image('foo'), 'bar');
-    }
-
-    #[Test]
     public function createUserMessage(): void
     {
         $message = Message::ofUser('Hi, my name is John.');
 
-        self::assertSame('Hi, my name is John.', $message->text->text);
+        self::assertCount(1, $message->content);
+        self::assertInstanceOf(Text::class, $message->content[0]);
+        self::assertSame('Hi, my name is John.', $message->content[0]->text);
     }
 
     #[Test]
     public function createUserMessageWithTextContent(): void
     {
-        $message = Message::ofUser(new Text('Hi, my name is John.'));
+        $text = new Text('Hi, my name is John.');
+        $message = Message::ofUser($text);
 
-        self::assertSame('Hi, my name is John.', $message->text->text);
+        self::assertSame([$text], $message->content);
     }
 
     #[Test]
     public function createUserMessageWithImages(): void
     {
-        $message = Message::ofUser('Hi, my name is John.', 'http://images.local/my-image.png', 'http://images.local/my-image2.png');
+        $message = Message::ofUser(
+            new Text('Hi, my name is John.'),
+            new Image('http://images.local/my-image.png'),
+            'The following image is a joke.',
+            new Image('http://images.local/my-image2.png'),
+        );
 
-        self::assertSame('Hi, my name is John.', $message->text->text);
-        self::assertCount(2, $message->images);
+        self::assertCount(4, $message->content);
+        self::assertSame([
+            'role' => Role::User,
+            'content' => [
+                ['type' => 'text', 'text' => 'Hi, my name is John.'],
+                ['type' => 'image_url', 'image_url' => ['url' => 'http://images.local/my-image.png']],
+                ['type' => 'text', 'text' => 'The following image is a joke.'],
+                ['type' => 'image_url', 'image_url' => ['url' => 'http://images.local/my-image2.png']],
+            ],
+        ], $message->jsonSerialize());
     }
 
     #[Test]

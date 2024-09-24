@@ -18,16 +18,16 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(UserMessage::class)]
 #[UsesClass(Text::class)]
 #[UsesClass(Image::class)]
+#[UsesClass(Role::class)]
 #[Small]
 final class UserMessageTest extends TestCase
 {
     #[Test]
     public function constructionIsPossible(): void
     {
-        $obj = new UserMessage($text = new Text('foo'));
+        $obj = new UserMessage(new Text('foo'));
 
-        self::assertSame($text, $obj->text);
-        self::assertSame([], $obj->images);
+        self::assertSame(['role' => Role::User, 'content' => 'foo'], $obj->jsonSerialize());
         self::assertSame(Role::User, $obj->getRole());
     }
 

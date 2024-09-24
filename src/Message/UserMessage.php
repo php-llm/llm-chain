@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message;
 
+use PhpLlm\LlmChain\Message\Content\ContentInterface;
 use PhpLlm\LlmChain\Message\Content\Image;
 use PhpLlm\LlmChain\Message\Content\Text;
 
 final readonly class UserMessage implements MessageInterface
 {
     /**
-     * @var list<Image>
+     * @var list<ContentInterface>
      */
-    public array $images;
+    public array $content;
 
     public function __construct(
-        public Text $text,
-        Image ...$images,
+        ContentInterface ...$images,
     ) {
-        $this->images = $images;
+        $this->content = $images;
     }
 
     public function getRole(): Role
@@ -35,16 +35,14 @@ final readonly class UserMessage implements MessageInterface
     public function jsonSerialize(): array
     {
         $array = ['role' => Role::User];
-        if ([] === $this->images) {
-            $array['content'] = $this->text->text;
+        if (1 === count($this->content) && $this->content[0] instanceof Text) {
+            $array['content'] = $this->content[0]->text;
 
             return $array;
         }
 
-        $array['content'][] = $this->text->jsonSerialize();
-
-        foreach ($this->images as $image) {
-            $array['content'][] = $image->jsonSerialize();
+        foreach ($this->content as $entry) {
+            $array['content'][] = $entry->jsonSerialize();
         }
 
         return $array;
