@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Message;
 
+use PhpLlm\LlmChain\Message\AssistantMessage;
+use PhpLlm\LlmChain\Message\Content\ImageUrlContent;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\SystemMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
@@ -56,7 +59,11 @@ final class MessageBagTest extends TestCase
 
         self::assertCount(3, $messageBag);
         self::assertCount(4, $newMessageBag);
-        self::assertSame('It is time to wake up.', $newMessageBag[3]->content);
+
+        $newMessageFromBag = $newMessageBag[3];
+        assert($newMessageFromBag instanceof AssistantMessage);
+
+        self::assertSame('It is time to wake up.', $newMessageFromBag->content);
     }
 
     #[Test]
@@ -73,7 +80,11 @@ final class MessageBagTest extends TestCase
         ));
 
         self::assertCount(4, $messageBag);
-        self::assertSame('It is time to wake up.', $messageBag[3]->content);
+
+        $messageFromBag = $messageBag[3];
+        assert($messageFromBag instanceof AssistantMessage);
+
+        self::assertSame('It is time to wake up.', $messageFromBag->content);
     }
 
     #[Test]
@@ -89,7 +100,11 @@ final class MessageBagTest extends TestCase
 
         self::assertCount(3, $messageBag);
         self::assertCount(2, $newMessageBag);
-        self::assertSame('It is time to sleep.', $newMessageBag[0]->content);
+
+        $messageFromNewBag = $newMessageBag[0];
+        assert($messageFromNewBag instanceof AssistantMessage);
+
+        self::assertSame('It is time to sleep.', $messageFromNewBag->content);
     }
 
     #[Test]
@@ -105,7 +120,11 @@ final class MessageBagTest extends TestCase
 
         self::assertCount(2, $messageBag);
         self::assertCount(3, $newMessageBag);
-        self::assertSame('My amazing system prompt.', $newMessageBag[0]->content);
+
+        $newMessageBagMessage = $newMessageBag[0];
+        assert($newMessageBagMessage instanceof SystemMessage);
+
+        self::assertSame('My amazing system prompt.', $newMessageBagMessage->content);
     }
 
     #[Test]
@@ -115,6 +134,7 @@ final class MessageBagTest extends TestCase
             Message::forSystem('My amazing system prompt.'),
             Message::ofAssistant('It is time to sleep.'),
             Message::ofUser('Hello, world!'),
+            Message::ofUser('My hint for how to analyze an image.', new ImageUrlContent('http://image-generator.local/my-fancy-image.png')),
         );
 
         $json = json_encode($messageBag);
@@ -125,6 +145,10 @@ final class MessageBagTest extends TestCase
                 ['role' => 'system', 'content' => 'My amazing system prompt.'],
                 ['role' => 'assistant', 'content' => 'It is time to sleep.'],
                 ['role' => 'user', 'content' => 'Hello, world!'],
+                ['role' => 'user', 'content' => [
+                    ['type' => 'text', 'text' => 'My hint for how to analyze an image.'],
+                    ['type' => 'image_url', 'image_url' => ['url' => 'http://image-generator.local/my-fancy-image.png']],
+                ]],
             ]),
             $json
         );

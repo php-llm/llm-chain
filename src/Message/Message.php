@@ -4,94 +4,37 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message;
 
+use PhpLlm\LlmChain\Message\Content\ImageUrlContent;
+use PhpLlm\LlmChain\Message\Content\TextContent;
 use PhpLlm\LlmChain\Response\ToolCall;
 
-final readonly class Message implements \JsonSerializable
+final readonly class Message
 {
-    /**
-     * @param ?ToolCall[] $toolCalls
-     */
-    public function __construct(
-        public ?string $content,
-        public Role $role,
-        public ?array $toolCalls = null,
-    ) {
+    // Disabled by default, just a bridge to the specific messages
+    private function __construct()
+    {
     }
 
-    public static function forSystem(string $content): self
+    public static function forSystem(string $content): SystemMessage
     {
-        return new self($content, Role::System);
+        return new SystemMessage($content);
     }
 
     /**
      * @param ?ToolCall[] $toolCalls
      */
-    public static function ofAssistant(?string $content = null, ?array $toolCalls = null): self
+    public static function ofAssistant(?string $content = null, ?array $toolCalls = null): AssistantMessage
     {
-        return new self($content, Role::Assistant, $toolCalls);
+        return new AssistantMessage($content, $toolCalls);
     }
 
-    public static function ofUser(string $content): self
+    public static function ofUser(string|TextContent $content, ImageUrlContent|string ...$images): UserMessage
     {
-        return new self($content, Role::User);
+        return new UserMessage($content, ...$images);
     }
 
-    public static function ofToolCall(ToolCall $toolCall, string $content): self
+    public static function ofToolCall(ToolCall $toolCall, string $content): ToolCallMessage
     {
-        return new self($content, Role::ToolCall, [$toolCall]);
-    }
-
-    public function isSystem(): bool
-    {
-        return Role::System === $this->role;
-    }
-
-    public function isAssistant(): bool
-    {
-        return Role::Assistant === $this->role;
-    }
-
-    public function isUser(): bool
-    {
-        return Role::User === $this->role;
-    }
-
-    public function isToolCall(): bool
-    {
-        return Role::ToolCall === $this->role;
-    }
-
-    public function hasToolCalls(): bool
-    {
-        return null !== $this->toolCalls && 0 !== count($this->toolCalls);
-    }
-
-    /**
-     * @return array{
-     *     role: 'system'|'assistant'|'user'|'tool',
-     *     content: ?string,
-     *     tool_calls?: ToolCall[],
-     *     tool_call_id?: string
-     * }
-     */
-    public function jsonSerialize(): array
-    {
-        $array = [
-            'role' => $this->role->value,
-        ];
-
-        if (null !== $this->content) {
-            $array['content'] = $this->content;
-        }
-
-        if ($this->hasToolCalls() && $this->isToolCall()) {
-            $array['tool_call_id'] = $this->toolCalls[0]->id;
-        }
-
-        if ($this->hasToolCalls() && $this->isAssistant()) {
-            $array['tool_calls'] = $this->toolCalls;
-        }
-
-        return $array;
+        return new ToolCallMessage($toolCall, $content);
     }
 }
