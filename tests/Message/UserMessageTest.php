@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Message;
 
-use PhpLlm\LlmChain\Message\Content\ImageUrlContent;
-use PhpLlm\LlmChain\Message\Content\TextContent;
+use PhpLlm\LlmChain\Message\Content\Image;
+use PhpLlm\LlmChain\Message\Content\Text;
 use PhpLlm\LlmChain\Message\Role;
 use PhpLlm\LlmChain\Message\UserMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -16,8 +16,8 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(UserMessage::class)]
-#[UsesClass(TextContent::class)]
-#[UsesClass(ImageUrlContent::class)]
+#[UsesClass(Text::class)]
+#[UsesClass(Image::class)]
 #[Small]
 final class UserMessageTest extends TestCase
 {
@@ -46,7 +46,7 @@ final class UserMessageTest extends TestCase
         ];
 
         yield 'With only TextContent' => [
-            new UserMessage(new TextContent('foo')),
+            new UserMessage(new Text('foo')),
             ['role' => Role::User, 'content' => 'foo'],
         ];
 
@@ -62,7 +62,7 @@ final class UserMessageTest extends TestCase
         ];
 
         yield 'With single image as ImageUrlContent' => [
-            new UserMessage('foo', new ImageUrlContent('bar')),
+            new UserMessage('foo', new Image('bar')),
             [
                 'role' => Role::User,
                 'content' => [
@@ -73,7 +73,7 @@ final class UserMessageTest extends TestCase
         ];
 
         yield 'With single mixed images' => [
-            new UserMessage('foo', 'bar', new ImageUrlContent('baz')),
+            new UserMessage('foo', 'bar', new Image('baz')),
             [
                 'role' => Role::User,
                 'content' => [

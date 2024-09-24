@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message;
 
-use PhpLlm\LlmChain\Message\Content\ImageUrlContent;
-use PhpLlm\LlmChain\Message\Content\TextContent;
+use PhpLlm\LlmChain\Message\Content\Image;
+use PhpLlm\LlmChain\Message\Content\Text;
 
 final readonly class UserMessage implements MessageInterface
 {
     /**
-     * @var list<ImageUrlContent|string>
+     * @var list<Image|string>
      */
     public array $images;
 
     public function __construct(
-        public TextContent|string $content,
-        ImageUrlContent|string ...$images,
+        public Text|string $content,
+        Image|string ...$images,
     ) {
         $this->images = $images;
     }
@@ -41,12 +41,12 @@ final readonly class UserMessage implements MessageInterface
             return $array;
         }
 
-        $content = \is_string($this->content) ? new TextContent($this->content) : $this->content;
+        $content = \is_string($this->content) ? new Text($this->content) : $this->content;
 
         $array['content'][] = $content->jsonSerialize();
 
         foreach ($this->images as $image) {
-            $image = \is_string($image) ? new ImageUrlContent($image) : $image;
+            $image = \is_string($image) ? new Image($image) : $image;
 
             $array['content'][] = $image->jsonSerialize();
         }

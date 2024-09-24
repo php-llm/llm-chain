@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message\Content;
 
-final readonly class ImageUrlContent implements ContentInterface
+final readonly class Image implements ContentInterface
 {
-    public function __construct(public string $imageUrl)
+    public function __construct(public string $image)
     {
     }
 
@@ -15,6 +15,6 @@ final readonly class ImageUrlContent implements ContentInterface
      */
     public function jsonSerialize(): array
     {
-        return ['type' => 'image_url', 'image_url' => ['url' => $this->imageUrl]];
+        return ['type' => 'image_url', 'image_url' => ['url' => $this->image]];
     }
 }

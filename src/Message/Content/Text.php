@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message\Content;
 
-final readonly class TextContent implements ContentInterface
+final readonly class Text implements ContentInterface
 {
     public function __construct(public string $text)
     {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Message;
 
 use PhpLlm\LlmChain\Message\AssistantMessage;
-use PhpLlm\LlmChain\Message\Content\ImageUrlContent;
+use PhpLlm\LlmChain\Message\Content\Image;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Message\SystemMessage;
@@ -135,7 +135,7 @@ final class MessageBagTest extends TestCase
             Message::ofAssistant('It is time to sleep.'),
             Message::ofUser('Hello, world!'),
             new AssistantMessage('Hello User!'),
-            Message::ofUser('My hint for how to analyze an image.', new ImageUrlContent('http://image-generator.local/my-fancy-image.png')),
+            Message::ofUser('My hint for how to analyze an image.', new Image('http://image-generator.local/my-fancy-image.png')),
         );
 
         $json = json_encode($messageBag);

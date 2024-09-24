@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message;
 
-use PhpLlm\LlmChain\Message\Content\ImageUrlContent;
-use PhpLlm\LlmChain\Message\Content\TextContent;
+use PhpLlm\LlmChain\Message\Content\Image;
+use PhpLlm\LlmChain\Message\Content\Text;
 use PhpLlm\LlmChain\Response\ToolCall;
 
 final readonly class Message
@@ -28,7 +28,7 @@ final readonly class Message
         return new AssistantMessage($content, $toolCalls);
     }
 
-    public static function ofUser(string|TextContent $content, ImageUrlContent|string ...$images): UserMessage
+    public static function ofUser(string|Text $content, Image|string ...$images): UserMessage
     {
         return new UserMessage($content, ...$images);
     }
