@@ -10,13 +10,13 @@ use PhpLlm\LlmChain\Message\Content\Text;
 final readonly class UserMessage implements MessageInterface
 {
     /**
-     * @var list<Image|string>
+     * @var list<Image>
      */
     public array $images;
 
     public function __construct(
-        public Text|string $content,
-        Image|string ...$images,
+        public Text $text,
+        Image ...$images,
     ) {
         $this->images = $images;
     }
@@ -36,18 +36,14 @@ final readonly class UserMessage implements MessageInterface
     {
         $array = ['role' => Role::User];
         if ([] === $this->images) {
-            $array['content'] = \is_string($this->content) ? $this->content : $this->content->text;
+            $array['content'] = $this->text->text;
 
             return $array;
         }
 
-        $content = \is_string($this->content) ? new Text($this->content) : $this->content;
-
-        $array['content'][] = $content->jsonSerialize();
+        $array['content'][] = $this->text->jsonSerialize();
 
         foreach ($this->images as $image) {
-            $image = \is_string($image) ? new Image($image) : $image;
-
             $array['content'][] = $image->jsonSerialize();
         }
 

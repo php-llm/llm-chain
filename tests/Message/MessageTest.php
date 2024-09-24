@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Message;
 
+use PhpLlm\LlmChain\Message\Content\Image;
+use PhpLlm\LlmChain\Message\Content\Text;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -11,6 +13,7 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(Message::class)]
 #[UsesClass(ToolCall::class)]
@@ -47,11 +50,37 @@ final class MessageTest extends TestCase
     }
 
     #[Test]
+    public function createUserMessageWithoutContentThrowsException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('At least a single content part must be given.');
+
+        Message::ofUser();
+    }
+
+    #[Test]
+    public function createUserMessageWithoutTextContentInFirstPlaceIsNotPossible(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The first content piece has to be a string or Text part');
+
+        Message::ofUser(new Image('foo'), 'bar');
+    }
+
+    #[Test]
     public function createUserMessage(): void
     {
         $message = Message::ofUser('Hi, my name is John.');
 
-        self::assertSame('Hi, my name is John.', $message->content);
+        self::assertSame('Hi, my name is John.', $message->text->text);
+    }
+
+    #[Test]
+    public function createUserMessageWithTextContent(): void
+    {
+        $message = Message::ofUser(new Text('Hi, my name is John.'));
+
+        self::assertSame('Hi, my name is John.', $message->text->text);
     }
 
     #[Test]
@@ -59,8 +88,8 @@ final class MessageTest extends TestCase
     {
         $message = Message::ofUser('Hi, my name is John.', 'http://images.local/my-image.png', 'http://images.local/my-image2.png');
 
-        self::assertSame('Hi, my name is John.', $message->content);
-        self::assertSame(['http://images.local/my-image.png', 'http://images.local/my-image2.png'], $message->images);
+        self::assertSame('Hi, my name is John.', $message->text->text);
+        self::assertCount(2, $message->images);
     }
 
     #[Test]

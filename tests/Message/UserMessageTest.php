@@ -24,9 +24,9 @@ final class UserMessageTest extends TestCase
     #[Test]
     public function constructionIsPossible(): void
     {
-        $obj = new UserMessage('bar');
+        $obj = new UserMessage($text = new Text('foo'));
 
-        self::assertSame('bar', $obj->content);
+        self::assertSame($text, $obj->text);
         self::assertSame([], $obj->images);
         self::assertSame(Role::User, $obj->getRole());
     }
@@ -40,18 +40,13 @@ final class UserMessageTest extends TestCase
 
     public static function provideSerializationTests(): \Generator
     {
-        yield 'With only string content' => [
-            new UserMessage('foo'),
-            ['role' => Role::User, 'content' => 'foo'],
-        ];
-
-        yield 'With only TextContent' => [
+        yield 'With only text' => [
             new UserMessage(new Text('foo')),
             ['role' => Role::User, 'content' => 'foo'],
         ];
 
-        yield 'With single image as string' => [
-            new UserMessage('foo', 'bar'),
+        yield 'With single image' => [
+            new UserMessage(new Text('foo'), new Image('bar')),
             [
                 'role' => Role::User,
                 'content' => [
@@ -61,19 +56,8 @@ final class UserMessageTest extends TestCase
             ],
         ];
 
-        yield 'With single image as ImageUrlContent' => [
-            new UserMessage('foo', new Image('bar')),
-            [
-                'role' => Role::User,
-                'content' => [
-                    ['type' => 'text', 'text' => 'foo'],
-                    ['type' => 'image_url', 'image_url' => ['url' => 'bar']],
-                ],
-            ],
-        ];
-
-        yield 'With single mixed images' => [
-            new UserMessage('foo', 'bar', new Image('baz')),
+        yield 'With single multiple images' => [
+            new UserMessage(new Text('foo'), new Image('bar'), new Image('baz')),
             [
                 'role' => Role::User,
                 'content' => [
