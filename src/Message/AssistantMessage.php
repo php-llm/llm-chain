@@ -12,7 +12,7 @@ final readonly class AssistantMessage implements MessageInterface
      * @param ?ToolCall[] $toolCalls
      */
     public function __construct(
-        public ?string $content = '',
+        public ?string $content = null,
         public ?array $toolCalls = null,
     ) {
     }

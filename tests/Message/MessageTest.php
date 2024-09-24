@@ -55,6 +55,15 @@ final class MessageTest extends TestCase
     }
 
     #[Test]
+    public function createUserMessageWithImages(): void
+    {
+        $message = Message::ofUser('Hi, my name is John.', 'http://images.local/my-image.png', 'http://images.local/my-image2.png');
+
+        self::assertSame('Hi, my name is John.', $message->content);
+        self::assertSame(['http://images.local/my-image.png', 'http://images.local/my-image2.png'], $message->images);
+    }
+
+    #[Test]
     public function createToolCallMessage(): void
     {
         $toolCall = new ToolCall('call_123456', 'my_tool', ['foo' => 'bar']);

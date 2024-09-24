@@ -134,6 +134,7 @@ final class MessageBagTest extends TestCase
             Message::forSystem('My amazing system prompt.'),
             Message::ofAssistant('It is time to sleep.'),
             Message::ofUser('Hello, world!'),
+            new AssistantMessage('Hello User!'),
             Message::ofUser('My hint for how to analyze an image.', new ImageUrlContent('http://image-generator.local/my-fancy-image.png')),
         );
 
@@ -145,6 +146,7 @@ final class MessageBagTest extends TestCase
                 ['role' => 'system', 'content' => 'My amazing system prompt.'],
                 ['role' => 'assistant', 'content' => 'It is time to sleep.'],
                 ['role' => 'user', 'content' => 'Hello, world!'],
+                ['role' => 'assistant', 'content' => 'Hello User!'],
                 ['role' => 'user', 'content' => [
                     ['type' => 'text', 'text' => 'My hint for how to analyze an image.'],
                     ['type' => 'image_url', 'image_url' => ['url' => 'http://image-generator.local/my-fancy-image.png']],
