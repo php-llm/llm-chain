@@ -15,9 +15,9 @@ $llm = new Gpt($runtime, Version::gpt4oMini());
 
 $chain = new Chain($llm);
 $messages = new MessageBag(
-    Message::forSystem('You are an image analyzer that looks to images like a comedian would like.'),
+    Message::forSystem('You are an image analyzer bot that helps identify the content of images.'),
     Message::ofUser(
-        'Describe the image as a comedian would do it.',
+        'Describe the images as a comedian would do it.',
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Webysther_20160423_-_Elephpant.svg/350px-Webysther_20160423_-_Elephpant.svg.png',
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/African_Bush_Elephant.jpg/320px-African_Bush_Elephant.jpg',
     ),

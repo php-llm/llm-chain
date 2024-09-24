@@ -16,9 +16,9 @@ final readonly class UserMessage implements MessageInterface
     public array $content;
 
     public function __construct(
-        ContentInterface ...$images,
+        ContentInterface ...$content,
     ) {
-        $this->content = $images;
+        $this->content = $content;
     }
 
     public function getRole(): Role
