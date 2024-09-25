@@ -11,6 +11,7 @@ use PhpLlm\LlmChain\OpenAI\Runtime;
 use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\Response;
 use PhpLlm\LlmChain\Response\ToolCall;
+use Webmozart\Assert\Assert;
 
 final class Gpt implements LanguageModel
 {
@@ -18,8 +19,15 @@ final class Gpt implements LanguageModel
         private readonly Runtime $runtime,
         private ?Version $version = null,
         private readonly float $temperature = 1.0,
+        private readonly float $topP = 1.0,
     ) {
         $this->version ??= Version::gpt4o();
+
+        Assert::greaterThanEq($temperature, 0.01);
+        Assert::lessThanEq($temperature, 2);
+
+        Assert::greaterThanEq($topP, 0.01);
+        Assert::lessThanEq($topP, 1);
     }
 
     public function call(MessageBag $messages, array $options = []): Response
@@ -27,6 +35,7 @@ final class Gpt implements LanguageModel
         $body = [
             'model' => $this->version->name,
             'temperature' => $this->temperature,
+            'top_p' => $this->topP,
             'messages' => $messages,
         ];
 
