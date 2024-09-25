@@ -43,8 +43,6 @@ Planned Models & Runtimes (not implemented yet):
 Supported Stores
 ----------------
 
-Currently supported stores:
-
 * [x] Chroma DB
 * [x] Azure AI Search
 * [ ] Pinecone
