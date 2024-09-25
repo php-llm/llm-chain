@@ -30,7 +30,10 @@ final class SchemaFactoryTest extends TestCase
             'type' => 'object',
             'properties' => [
                 'id' => ['type' => 'integer'],
-                'name' => ['type' => 'string'],
+                'name' => [
+                    'type' => 'string',
+                    'description' => 'The name of the user in lowercase',
+                ],
                 'createdAt' => [
                     'type' => 'string',
                     'format' => 'date-time',
