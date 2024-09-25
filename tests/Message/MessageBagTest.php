@@ -61,8 +61,8 @@ final class MessageBagTest extends TestCase
         self::assertCount(4, $newMessageBag);
 
         $newMessageFromBag = $newMessageBag[3];
-        assert($newMessageFromBag instanceof AssistantMessage);
 
+        self::assertInstanceOf(AssistantMessage::class, $newMessageFromBag);
         self::assertSame('It is time to wake up.', $newMessageFromBag->content);
     }
 
@@ -82,8 +82,8 @@ final class MessageBagTest extends TestCase
         self::assertCount(4, $messageBag);
 
         $messageFromBag = $messageBag[3];
-        assert($messageFromBag instanceof AssistantMessage);
 
+        self::assertInstanceOf(AssistantMessage::class, $messageFromBag);
         self::assertSame('It is time to wake up.', $messageFromBag->content);
     }
 
@@ -102,8 +102,8 @@ final class MessageBagTest extends TestCase
         self::assertCount(2, $newMessageBag);
 
         $messageFromNewBag = $newMessageBag[0];
-        assert($messageFromNewBag instanceof AssistantMessage);
 
+        self::assertInstanceOf(AssistantMessage::class, $messageFromNewBag);
         self::assertSame('It is time to sleep.', $messageFromNewBag->content);
     }
 
@@ -122,8 +122,8 @@ final class MessageBagTest extends TestCase
         self::assertCount(3, $newMessageBag);
 
         $newMessageBagMessage = $newMessageBag[0];
-        assert($newMessageBagMessage instanceof SystemMessage);
 
+        self::assertInstanceOf(SystemMessage::class, $newMessageBagMessage);
         self::assertSame('My amazing system prompt.', $newMessageBagMessage->content);
     }
 

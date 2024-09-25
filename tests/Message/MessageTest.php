@@ -80,7 +80,7 @@ final class MessageTest extends TestCase
         );
 
         self::assertCount(4, $message->content);
-        self::assertSame([
+        self::assertSame(\json_encode([
             'role' => Role::User,
             'content' => [
                 ['type' => 'text', 'text' => 'Hi, my name is John.'],
@@ -88,7 +88,7 @@ final class MessageTest extends TestCase
                 ['type' => 'text', 'text' => 'The following image is a joke.'],
                 ['type' => 'image_url', 'image_url' => ['url' => 'http://images.local/my-image2.png']],
             ],
-        ], $message->jsonSerialize());
+        ]), \json_encode($message));
     }
 
     #[Test]

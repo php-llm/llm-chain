@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Message;
 
 use PhpLlm\LlmChain\Message\Content\ContentInterface;
-use PhpLlm\LlmChain\Message\Content\Image;
 use PhpLlm\LlmChain\Message\Content\Text;
 
 final readonly class UserMessage implements MessageInterface
@@ -29,7 +28,7 @@ final readonly class UserMessage implements MessageInterface
     /**
      * @return array{
      *     role: Role::User,
-     *     content: string|list<array{type: 'text', text: string}|array{type: 'image_url', image_url: array{url: string}}>
+     *     content: string|list<ContentInterface>
      * }
      */
     public function jsonSerialize(): array
@@ -41,9 +40,7 @@ final readonly class UserMessage implements MessageInterface
             return $array;
         }
 
-        foreach ($this->content as $entry) {
-            $array['content'][] = $entry->jsonSerialize();
-        }
+        $array['content'] = $this->content;
 
         return $array;
     }

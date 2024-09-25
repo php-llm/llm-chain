@@ -27,7 +27,7 @@ final class UserMessageTest extends TestCase
     {
         $obj = new UserMessage(new Text('foo'));
 
-        self::assertSame(['role' => Role::User, 'content' => 'foo'], $obj->jsonSerialize());
+        self::assertSame(\json_encode(['role' => Role::User, 'content' => 'foo']), \json_encode($obj));
         self::assertSame(Role::User, $obj->getRole());
     }
 
@@ -35,7 +35,7 @@ final class UserMessageTest extends TestCase
     #[DataProvider('provideSerializationTests')]
     public function serializationResultsAsExpected(UserMessage $message, array $expectedArray): void
     {
-        self::assertSame($message->jsonSerialize(), $expectedArray);
+        self::assertSame(\json_encode($message), \json_encode($expectedArray));
     }
 
     public static function provideSerializationTests(): \Generator

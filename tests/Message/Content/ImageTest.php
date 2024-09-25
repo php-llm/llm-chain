@@ -19,7 +19,7 @@ final class ImageTest extends TestCase
     {
         $obj = new Image('foo');
 
-        self::assertSame('foo', $obj->image);
+        self::assertSame('foo', $obj->url);
     }
 
     #[Test]

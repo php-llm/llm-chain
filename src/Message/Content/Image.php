@@ -6,7 +6,10 @@ namespace PhpLlm\LlmChain\Message\Content;
 
 final readonly class Image implements ContentInterface
 {
-    public function __construct(public string $image)
+    /**
+     * @param string $url An URL like "http://localhost:3000/my-image.png" or a data url like "data:image/png;base64,iVBOR[...]"
+     */
+    public function __construct(public string $url)
     {
     }
 
@@ -15,6 +18,6 @@ final readonly class Image implements ContentInterface
      */
     public function jsonSerialize(): array
     {
-        return ['type' => 'image_url', 'image_url' => ['url' => $this->image]];
+        return ['type' => 'image_url', 'image_url' => ['url' => $this->url]];
     }
 }

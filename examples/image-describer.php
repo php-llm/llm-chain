@@ -1,13 +1,13 @@
 <?php
 
 use PhpLlm\LlmChain\Chain;
+use PhpLlm\LlmChain\Message\Content\Image;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Runtime\OpenAI;
 use Symfony\Component\HttpClient\HttpClient;
-use PhpLlm\LlmChain\Message\Content\Image;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
@@ -20,7 +20,7 @@ $messages = new MessageBag(
     Message::ofUser(
         'Describe the images as a comedian would do it.',
         new Image('https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Webysther_20160423_-_Elephpant.svg/350px-Webysther_20160423_-_Elephpant.svg.png'),
-		new Image('https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/African_Bush_Elephant.jpg/320px-African_Bush_Elephant.jpg'),
+        new Image('https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/African_Bush_Elephant.jpg/320px-African_Bush_Elephant.jpg'),
     ),
 );
 $response = $chain->call($messages);
