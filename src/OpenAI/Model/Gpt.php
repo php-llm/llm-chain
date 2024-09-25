@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\OpenAI\Model;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
-use PhpLlm\LlmChain\OpenAI\Runtime;
+use PhpLlm\LlmChain\OpenAI\Platform;
 use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\Response;
 use PhpLlm\LlmChain\Response\ToolCall;
@@ -15,7 +15,7 @@ use PhpLlm\LlmChain\Response\ToolCall;
 final class Gpt implements LanguageModel
 {
     public function __construct(
-        private readonly Runtime $runtime,
+        private readonly Platform $platform,
         private ?Version $version = null,
         private readonly float $temperature = 1.0,
     ) {
@@ -30,7 +30,7 @@ final class Gpt implements LanguageModel
             'messages' => $messages,
         ];
 
-        $response = $this->runtime->request('chat/completions', array_merge($body, $options));
+        $response = $this->platform->request('chat/completions', array_merge($body, $options));
 
         return new Response(...array_map([$this, 'convertChoice'], $response['choices']));
     }

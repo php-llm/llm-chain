@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Anthropic\Model;
 
-use PhpLlm\LlmChain\Anthropic\ClaudeRuntime;
+use PhpLlm\LlmChain\Anthropic\ClaudePlatform;
 use PhpLlm\LlmChain\Anthropic\Model\Claude\Version;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
@@ -14,7 +14,7 @@ use PhpLlm\LlmChain\Response\Response;
 final class Claude implements LanguageModel
 {
     public function __construct(
-        private readonly ClaudeRuntime $runtime,
+        private readonly ClaudePlatform $platform,
         private ?Version $version = null,
         private readonly float $temperature = 1.0,
         private readonly int $maxTokens = 1000,
@@ -33,7 +33,7 @@ final class Claude implements LanguageModel
             'messages' => $messages->withoutSystemMessage(),
         ];
 
-        $response = $this->runtime->request(array_merge($body, $options));
+        $response = $this->platform->request(array_merge($body, $options));
 
         return new Response(new Choice($response['content'][0]['text']));
     }

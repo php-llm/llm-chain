@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Anthropic\Runtime;
+namespace PhpLlm\LlmChain\Anthropic\Platform;
 
-use PhpLlm\LlmChain\Anthropic\ClaudeRuntime;
+use PhpLlm\LlmChain\Anthropic\ClaudePlatform;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final readonly class Anthropic implements ClaudeRuntime
+final readonly class Anthropic implements ClaudePlatform
 {
     public function __construct(
         private HttpClientInterface $httpClient,

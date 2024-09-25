@@ -21,19 +21,19 @@ composer require php-llm/llm-chain
 
 When using Symfony Framework, check out the integration bundle [php-llm/llm-chain-bundle](https://github.com/php-llm/llm-chain-bundle).
 
-Supported Models & Runtimes
----------------------------
+Supported Models & Platforms
+----------------------------
 
-Currently supported models and runtimes:
+Currently supported models and platforms:
 
-| Vendor         | Model                  | Runtime                          |
-|----------------|------------------------|----------------------------------|
-| **OpenAI**     | - GPT<br/>- Embeddings | - OpenAI<br/>- Azure             |
-| **Anthropic**  | - Claude | - Anthropic  |
+| Vendor         | Model                  | Platform             |
+|----------------|------------------------|----------------------|
+| **OpenAI**     | - GPT<br/>- Embeddings | - OpenAI<br/>- Azure |
+| **Anthropic**  | - Claude | - Anthropic          |
 
-Planned Models & Runtimes (not implemented yet):
+Planned Models & Platforms (not implemented yet):
 
-| Vendor         | Model                  | Runtime                          |
+| Vendor         | Model                  | Platform                         |
 |----------------|------------------------|----------------------------------|
 | **Anthropic**  | - Voyage | - GPC<br/>- AWS                  |
 | **Google**     | - Gemini<br/>- Gemma | - GPC                            |

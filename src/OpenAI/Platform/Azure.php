@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\OpenAI\Runtime;
+namespace PhpLlm\LlmChain\OpenAI\Platform;
 
-use PhpLlm\LlmChain\OpenAI\Runtime;
+use PhpLlm\LlmChain\OpenAI\Platform;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class Azure extends AbstractRuntime implements Runtime
+final class Azure extends AbstractPlatform implements Platform
 {
     public function __construct(
         private readonly HttpClientInterface $httpClient,

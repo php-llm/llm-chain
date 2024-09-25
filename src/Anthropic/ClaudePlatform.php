@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Anthropic;
 
-interface ClaudeRuntime
+interface ClaudePlatform
 {
     /**
      * @param array<string, mixed> $body

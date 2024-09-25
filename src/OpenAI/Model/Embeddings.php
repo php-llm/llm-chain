@@ -7,12 +7,12 @@ namespace PhpLlm\LlmChain\OpenAI\Model;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\EmbeddingModel;
 use PhpLlm\LlmChain\OpenAI\Model\Embeddings\Version;
-use PhpLlm\LlmChain\OpenAI\Runtime;
+use PhpLlm\LlmChain\OpenAI\Platform;
 
 final class Embeddings implements EmbeddingModel
 {
     public function __construct(
-        private readonly Runtime $runtime,
+        private readonly Platform $platform,
         private ?Version $version = null,
     ) {
         $this->version ??= Version::textEmbedding3Small();
@@ -20,7 +20,7 @@ final class Embeddings implements EmbeddingModel
 
     public function create(string $text): Vector
     {
-        $response = $this->runtime->request('embeddings', $this->createBody($text));
+        $response = $this->platform->request('embeddings', $this->createBody($text));
 
         return $this->extractVector($response);
     }
@@ -30,7 +30,7 @@ final class Embeddings implements EmbeddingModel
         $bodies = array_map([$this, 'createBody'], $texts);
 
         $vectors = [];
-        foreach ($this->runtime->multiRequest('embeddings', $bodies) as $response) {
+        foreach ($this->platform->multiRequest('embeddings', $bodies) as $response) {
             $vectors[] = $this->extractVector($response);
         }
 

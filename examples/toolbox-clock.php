@@ -5,7 +5,7 @@ use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
-use PhpLlm\LlmChain\OpenAI\Runtime\OpenAI;
+use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
 use PhpLlm\LlmChain\ToolBox\Tool\Clock;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolBox;
@@ -14,8 +14,8 @@ use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
-$runtime = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
-$llm = new Gpt($runtime, Version::gpt4oMini());
+$platform = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
+$llm = new Gpt($platform, Version::gpt4oMini());
 
 $clock = new Clock(new SymfonyClock());
 $toolBox = new ToolBox(new ToolAnalyzer(), [$clock]);
