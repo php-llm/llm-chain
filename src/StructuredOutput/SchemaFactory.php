@@ -52,6 +52,7 @@ final readonly class SchemaFactory
         foreach ($properties as $property) {
             $propertyName = $property->getName();
             $types = $this->propertyInfo->getTypes($className, $propertyName);
+            $description = $this->propertyInfo->getShortDescription($className, $propertyName);
 
             if (empty($types)) {
                 // Skip if no type info is available
@@ -61,6 +62,11 @@ final readonly class SchemaFactory
             // Assume the first type is the main type (ignore union types for simplicity)
             $type = $types[0];
             $propertySchema = $this->getTypeSchema($type);
+
+            // Add description if available
+            if ($description) {
+                $propertySchema['description'] = $description;
+            }
 
             // Add property schema to main schema
             $schema['properties'][$propertyName] = $propertySchema;
