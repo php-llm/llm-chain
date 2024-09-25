@@ -11,13 +11,18 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 $platform = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
-$llm = new Gpt($platform, Version::gpt4oMini());
+$llm = new Gpt($platform, Version::gpt4oMini(), [
+    'temperature' => 0.5,
+    'top_p' => 0.9,
+]);
 
 $chain = new Chain($llm);
 $messages = new MessageBag(
     Message::forSystem('You are a pirate and you write funny.'),
     Message::ofUser('What is the Symfony framework?'),
 );
-$response = $chain->call($messages);
+$response = $chain->call($messages, [
+    'max_tokens' => 500,
+]);
 
 echo $response.PHP_EOL;
