@@ -43,7 +43,7 @@ Planned Models & Platforms (not implemented yet):
 Supported Stores
 ----------------
 
-* [x] [Chroma](https://trychroma.com)
+* [x] [ChromaDB](https://trychroma.com)
 * [x] [Azure AI Search](https://azure.microsoft.com/en-us/products/ai-services/ai-search)
 * [ ] [Pinecone](https://pinecone.io)
 
