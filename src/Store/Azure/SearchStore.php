@@ -4,21 +4,27 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Store\Azure;
 
+use MongoDB\Client;
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class SearchStore implements VectorStoreInterface
 {
+    /**
+     * @param string $vectorFieldName The name of the field int the index that contains the vector
+     */
     public function __construct(
         private HttpClientInterface $httpClient,
         private string $endpointUrl,
         private string $apiKey,
         private string $indexName,
         private string $apiVersion,
+        private string $vectorFieldName = 'vector',
     ) {
     }
 
@@ -73,7 +79,7 @@ final readonly class SearchStore implements VectorStoreInterface
     {
         return array_merge([
             'id' => $document->id,
-            'vector' => $document->vector->getData(),
+            $this->vectorFieldName => $document->vector->getData(),
         ], $document->metadata->getArrayCopy());
     }
 
@@ -106,7 +112,7 @@ final readonly class SearchStore implements VectorStoreInterface
             'kind' => 'vector',
             'vector' => $vector->getData(),
             'exhaustive' => true,
-            'fields' => 'vector',
+            'fields' => $this->vectorFieldName,
             'weight' => 0.5,
             'k' => 5,
         ];
