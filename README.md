@@ -43,9 +43,9 @@ Planned Models & Platforms (not implemented yet):
 Supported Stores
 ----------------
 
-* [x] Chroma DB
+* [x] [Chroma](https://trychroma.com)
 * [x] Azure AI Search
-* [ ] Pinecone
+* [ ] [Pinecone](https://pinecone.io)
 
 Provided Tools
 --------------
