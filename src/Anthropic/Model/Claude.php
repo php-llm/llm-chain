@@ -13,27 +13,31 @@ use PhpLlm\LlmChain\Response\Response;
 
 final class Claude implements LanguageModel
 {
+    /**
+     * @param array<mixed> $options The default options for the model usage
+     */
     public function __construct(
         private readonly ClaudePlatform $platform,
         private ?Version $version = null,
-        private readonly float $temperature = 1.0,
-        private readonly int $maxTokens = 1000,
+        private readonly array $options = ['temperature' => 1.0, 'max_tokens' => 1000],
     ) {
         $this->version ??= Version::sonnet35();
     }
 
+    /**
+     * @param array<mixed> $options The options to be used for this specific call.
+     *                              Can overwrite default options.
+     */
     public function call(MessageBag $messages, array $options = []): Response
     {
         $system = $messages->getSystemMessage();
-        $body = [
+        $body = array_merge($this->options, $options, [
             'model' => $this->version->name,
-            'temperature' => $this->temperature,
-            'max_tokens' => $this->maxTokens,
             'system' => $system->content,
             'messages' => $messages->withoutSystemMessage(),
-        ];
+        ]);
 
-        $response = $this->platform->request(array_merge($body, $options));
+        $response = $this->platform->request($body);
 
         return new Response(new Choice($response['content'][0]['text']));
     }

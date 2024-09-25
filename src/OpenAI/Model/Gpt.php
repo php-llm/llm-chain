@@ -14,23 +14,29 @@ use PhpLlm\LlmChain\Response\ToolCall;
 
 final class Gpt implements LanguageModel
 {
+    /**
+     * @param array<mixed> $options The default options for the model usage
+     */
     public function __construct(
         private readonly Platform $platform,
         private ?Version $version = null,
-        private readonly float $temperature = 1.0,
+        private readonly array $options = ['temperature' => 1.0],
     ) {
         $this->version ??= Version::gpt4o();
     }
 
+    /**
+     * @param array<mixed> $options The options to be used for this specific call.
+     *                              Can overwrite default options.
+     */
     public function call(MessageBag $messages, array $options = []): Response
     {
-        $body = [
+        $body = array_merge($this->options, $options, [
             'model' => $this->version->name,
-            'temperature' => $this->temperature,
             'messages' => $messages,
-        ];
+        ]);
 
-        $response = $this->platform->request('chat/completions', array_merge($body, $options));
+        $response = $this->platform->request('chat/completions', $body);
 
         return new Response(...array_map([$this, 'convertChoice'], $response['choices']));
     }
