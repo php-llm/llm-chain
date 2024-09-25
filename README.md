@@ -132,4 +132,4 @@ Depending on the example you need to export different environment variables for 
 Contributions
 -------------
 
-Constributions are always welcome.
+Contributions are always welcome.
