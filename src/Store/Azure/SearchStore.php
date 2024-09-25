@@ -13,12 +13,16 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class SearchStore implements VectorStoreInterface
 {
+    /**
+     * @param string $vectorFieldName The name of the field int the index that contains the vector
+     */
     public function __construct(
         private HttpClientInterface $httpClient,
         private string $endpointUrl,
         private string $apiKey,
         private string $indexName,
         private string $apiVersion,
+        private string $vectorFieldName = 'vector',
     ) {
     }
 
@@ -73,7 +77,7 @@ final readonly class SearchStore implements VectorStoreInterface
     {
         return array_merge([
             'id' => $document->id,
-            'vector' => $document->vector->getData(),
+            $this->vectorFieldName => $document->vector->getData(),
         ], $document->metadata->getArrayCopy());
     }
 
@@ -92,10 +96,10 @@ final readonly class SearchStore implements VectorStoreInterface
 
     /**
      * @return array{
-     *     kind: string,
+     *     kind: 'vector',
      *     vector: float[],
-     *     exhaustive: bool,
-     *     fields: string,
+     *     exhaustive: true,
+     *     fields: non-empty-string,
      *     weight: float,
      *     k: int,
      * }
@@ -106,7 +110,7 @@ final readonly class SearchStore implements VectorStoreInterface
             'kind' => 'vector',
             'vector' => $vector->getData(),
             'exhaustive' => true,
-            'fields' => 'vector',
+            'fields' => $this->vectorFieldName,
             'weight' => 0.5,
             'k' => 5,
         ];
