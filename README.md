@@ -3,7 +3,7 @@ LLM Chain
 
 PHP library for building LLM-based features and applications.
 
-This is not a stable library yet, but still rather experimental. Feel free to try it out, give feedback, ask questions, contribute or share your use cases.
+This library is not a stable yet, but still rather experimental. Feel free to try it out, give feedback, ask questions, contribute or share your use cases.
 Abstractions, concepts and interfaces are not final and potentially subject of change.
 
 Requirements
@@ -42,8 +42,6 @@ Planned Models & Runtimes (not implemented yet):
 
 Supported Stores
 ----------------
-
-Currently supported stores:
 
 * [x] Chroma DB
 * [x] Azure AI Search
