@@ -2,7 +2,7 @@ name: pipeline
 on: pull_request
 
 jobs:
-  pipeline:
+  tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,6 +28,29 @@ jobs:
       - name: Install PHP Dependencies
         run: composer install --no-scripts
 
+      - name: Tests
+        run: vendor/bin/phpunit
+
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install Composer
+        uses: "ramsey/composer-install@v3"
+
+      - name: Composer Validation
+        run: composer validate --strict
+
+      - name: Install PHP Dependencies
+        run: composer install --no-scripts
+
       - name: Code Style PHP
         run: vendor/bin/php-cs-fixer fix --dry-run
 
@@ -36,6 +59,3 @@ jobs:
 
       - name: PHPStan
         run: vendor/bin/phpstan analyse
-
-      - name: Tests
-        run: vendor/bin/phpunit
