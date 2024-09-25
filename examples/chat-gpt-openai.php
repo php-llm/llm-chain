@@ -13,7 +13,6 @@ require_once dirname(__DIR__).'/vendor/autoload.php';
 $platform = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
 $llm = new Gpt($platform, Version::gpt4oMini(), [
     'temperature' => 0.5,
-    'top_p' => 0.9,
 ]);
 
 $chain = new Chain($llm);
