@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Message;
 
 /**
- * @template-extends \ArrayObject<int, Message>
+ * @template-extends \ArrayObject<int, MessageInterface>
  */
 final class MessageBag extends \ArrayObject implements \JsonSerializable
 {
-    public function __construct(Message ...$messages)
+    public function __construct(MessageInterface ...$messages)
     {
         parent::__construct(array_values($messages));
     }
 
-    public function getSystemMessage(): ?Message
+    public function getSystemMessage(): ?SystemMessage
     {
         foreach ($this as $message) {
-            if (Role::System === $message->role) {
+            if ($message instanceof SystemMessage) {
                 return $message;
             }
         }
@@ -25,7 +25,7 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
         return null;
     }
 
-    public function with(Message $message): self
+    public function with(MessageInterface $message): self
     {
         $messages = clone $this;
         $messages->append($message);
@@ -45,13 +45,16 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
     {
         $messages = clone $this;
         $messages->exchangeArray(
-            array_values(array_filter($messages->getArrayCopy(), fn (Message $message) => !$message->isSystem()))
+            array_values(array_filter(
+                $messages->getArrayCopy(),
+                static fn (MessageInterface $message) => !$message instanceof SystemMessage,
+            ))
         );
 
         return $messages;
     }
 
-    public function prepend(Message $message): self
+    public function prepend(MessageInterface $message): self
     {
         $messages = clone $this;
         $messages->exchangeArray(array_merge([$message], $messages->getArrayCopy()));
@@ -60,7 +63,7 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
     }
 
     /**
-     * @return Message[]
+     * @return MessageInterface[]
      */
     public function jsonSerialize(): array
     {
