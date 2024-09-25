@@ -6,13 +6,13 @@ use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
-use PhpLlm\LlmChain\OpenAI\Runtime\OpenAI;
+use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
 use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
-$runtime = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
-$llm = new Gpt($runtime, Version::gpt4oMini());
+$platform = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
+$llm = new Gpt($platform, Version::gpt4oMini());
 
 $chain = new Chain($llm);
 $messages = new MessageBag(
