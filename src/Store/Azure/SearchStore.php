@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Store\Azure;
 
-use MongoDB\Client;
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -98,10 +96,10 @@ final readonly class SearchStore implements VectorStoreInterface
 
     /**
      * @return array{
-     *     kind: string,
+     *     kind: 'vector',
      *     vector: float[],
-     *     exhaustive: bool,
-     *     fields: string,
+     *     exhaustive: true,
+     *     fields: non-empty-string,
      *     weight: float,
      *     k: int,
      * }
