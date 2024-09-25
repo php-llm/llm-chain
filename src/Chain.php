@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain;
 
+use PhpLlm\LlmChain\Chain\Input;
+use PhpLlm\LlmChain\Chain\InputProcessor;
+use PhpLlm\LlmChain\Chain\Output;
+use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
-use PhpLlm\LlmChain\ToolBox\ToolBoxInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final readonly class Chain
 {
+    /**
+     * @param InputProcessor[]  $inputProcessor
+     * @param OutputProcessor[] $outputProcessor
+     */
     public function __construct(
         private LanguageModel $llm,
-        private ?ToolBoxInterface $toolBox = null,
-        private ?ResponseFormatFactory $responseFormatFactory = null,
-        private ?SerializerInterface $serializer = null,
+        private array $inputProcessor = [],
+        private array $outputProcessor = [],
     ) {
     }
 
@@ -26,39 +29,24 @@ final readonly class Chain
      */
     public function call(MessageBag $messages, array $options = []): string|object
     {
-        $llmOptions = $options;
+        $input = new Input($this->llm, $messages, $options);
+        array_map(fn (InputProcessor $processor) => $processor->processInput($input), $this->inputProcessor);
 
         if ($messages->containsImage() && !$this->llm->supportsImageInput()) {
             throw MissingModelSupport::forImageInput($this->llm::class);
         }
 
-        if (!array_key_exists('tools', $llmOptions) && null !== $this->toolBox && $this->llm->supportsToolCalling()) {
-            $llmOptions['tools'] = $this->toolBox->getMap();
-        }
+        $response = $this->llm->call($messages, $input->getOptions());
 
-        if (array_key_exists('output_structure', $llmOptions) && null !== $this->responseFormatFactory && $this->llm->supportsStructuredOutput()) {
-            $llmOptions['response_format'] = $this->responseFormatFactory->create($llmOptions['output_structure']);
-            unset($llmOptions['output_structure']);
-        }
+        $output = new Output($this->llm, $response, $messages, $options);
+        foreach ($this->outputProcessor as $outputProcessor) {
+            $result = $outputProcessor->processOutput($output);
 
-        $response = $this->llm->call($messages, $llmOptions);
-
-        while ($response->hasToolCalls()) {
-            $clonedMessages = clone $messages;
-            $clonedMessages[] = Message::ofAssistant(toolCalls: $response->getToolCalls());
-
-            foreach ($response->getToolCalls() as $toolCall) {
-                $result = $this->toolBox->execute($toolCall);
-                $clonedMessages[] = Message::ofToolCall($toolCall, $result);
+            if (null !== $result) {
+                return $result;
             }
-
-            $response = $this->llm->call($clonedMessages, $llmOptions);
         }
 
-        if (!array_key_exists('output_structure', $options) || null === $this->serializer) {
-            return $response->getContent();
-        }
-
-        return $this->serializer->deserialize($response->getContent(), $options['output_structure'], 'json');
+        return $response->getContent();
     }
 }

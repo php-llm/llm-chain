@@ -6,6 +6,7 @@ use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
+use PhpLlm\LlmChain\ToolBox\ChainProcessor;
 use PhpLlm\LlmChain\ToolBox\Tool\OpenMeteo;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolBox;
@@ -21,7 +22,8 @@ $llm = new Gpt($platform, Version::gpt4oMini());
 
 $wikipedia = new OpenMeteo($httpClient);
 $toolBox = new ToolBox(new ToolAnalyzer(), [$wikipedia]);
-$chain = new Chain($llm, $toolBox);
+$processor = new ChainProcessor($toolBox);
+$chain = new Chain($llm, [$processor], [$processor]);
 
 $messages = new MessageBag(Message::ofUser('How is the weather currently in Berlin?'));
 $response = $chain->call($messages);

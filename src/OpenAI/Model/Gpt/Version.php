@@ -36,7 +36,7 @@ final readonly class Version
 
     public static function gpt4Turbo(): self
     {
-        return new self('gpt-4-turbo', true, false);
+        return new self('gpt-4-turbo', true);
     }
 
     public static function gpt4o(): self
