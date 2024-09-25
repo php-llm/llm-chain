@@ -5,18 +5,18 @@ use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
-use PhpLlm\LlmChain\OpenAI\Runtime\Azure;
+use PhpLlm\LlmChain\OpenAI\Platform\Azure;
 use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
-$runtime = new Azure(HttpClient::create(),
+$platform = new Azure(HttpClient::create(),
     getenv('AZURE_OPENAI_BASEURL'),
     getenv('AZURE_OPENAI_DEPLOYMENT'),
     getenv('AZURE_OPENAI_VERSION'),
     getenv('AZURE_OPENAI_KEY')
 );
-$llm = new Gpt($runtime, Version::gpt4oMini());
+$llm = new Gpt($platform, Version::gpt4oMini());
 
 $chain = new Chain($llm);
 $messages = new MessageBag(

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\OpenAI\Runtime;
+namespace PhpLlm\LlmChain\OpenAI\Platform;
 
-use PhpLlm\LlmChain\OpenAI\Runtime;
+use PhpLlm\LlmChain\OpenAI\Platform;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-abstract class AbstractRuntime implements Runtime
+abstract class AbstractPlatform implements Platform
 {
     public function request(string $endpoint, array $body): array
     {

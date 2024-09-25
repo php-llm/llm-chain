@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\OpenAI;
 
-interface Runtime
+interface Platform
 {
     /**
      * @param array<string, mixed> $body

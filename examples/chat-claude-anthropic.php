@@ -1,7 +1,7 @@
 <?php
 
 use PhpLlm\LlmChain\Anthropic\Model\Claude;
-use PhpLlm\LlmChain\Anthropic\Runtime\Anthropic;
+use PhpLlm\LlmChain\Anthropic\Platform\Anthropic;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
@@ -9,8 +9,8 @@ use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
-$runtime = new Anthropic(HttpClient::create(), getenv('ANTHROPIC_API_KEY'));
-$llm = new Claude($runtime);
+$platform = new Anthropic(HttpClient::create(), getenv('ANTHROPIC_API_KEY'));
+$llm = new Claude($platform);
 
 $chain = new Chain($llm);
 $messages = new MessageBag(
