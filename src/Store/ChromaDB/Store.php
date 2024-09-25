@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Store\ChromaDb;
+namespace PhpLlm\LlmChain\Store\ChromaDB;
 
 use Codewithkyrian\ChromaDB\Client;
 use PhpLlm\LlmChain\Document\Document;
