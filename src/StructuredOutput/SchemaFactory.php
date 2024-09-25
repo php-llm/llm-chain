@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\StructuredOutput;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
-use Symfony\Component\PropertyInfo\Type;
+use Symfony\ComponeOnt\PropertyInfo\Type;
 
 final readonly class SchemaFactory
 {
