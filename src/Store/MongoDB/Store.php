@@ -10,6 +10,7 @@ use MongoDB\Collection;
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Store\InitializableStoreInterface;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
@@ -37,7 +38,7 @@ use Symfony\Component\Uid\Uuid;
  *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-final readonly class Store implements VectorStoreInterface
+final readonly class Store implements VectorStoreInterface, InitializableStoreInterface
 {
     /**
      * @param string $databaseName    The name of the database
@@ -55,6 +56,26 @@ final readonly class Store implements VectorStoreInterface
         private string $vectorFieldName = 'vector',
         private bool $bulkWrite = false,
     ) {
+    }
+
+    public function initialize(array $options = []): void
+    {
+        $this->getCollection()->createSearchIndex(
+            definition: [
+                'fields' => [
+                    [
+                        'numDimensions' => 1536,
+                        'path' => $this->vectorFieldName,
+                        'similarity' => 'euclidean',
+                        'type' => 'vector',
+                    ],
+                ],
+            ],
+            options: [
+                'name' => $this->indexName,
+                'type' => 'vectorSearch',
+            ],
+        );
     }
 
     public function addDocument(Document $document): void
