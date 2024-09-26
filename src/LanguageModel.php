@@ -16,5 +16,7 @@ interface LanguageModel
 
     public function supportsToolCalling(): bool;
 
+    public function supportsImageInput(): bool;
+
     public function supportsStructuredOutput(): bool;
 }

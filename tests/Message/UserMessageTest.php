@@ -32,6 +32,30 @@ final class UserMessageTest extends TestCase
     }
 
     #[Test]
+    public function constructionIsPossibleWithMultipleContent(): void
+    {
+        $message = new UserMessage(new Text('foo'), new Image('bar'));
+
+        self::assertCount(2, $message->content);
+    }
+
+    #[Test]
+    public function hasImageContentWithoutImage(): void
+    {
+        $message = new UserMessage(new Text('foo'), new Text('bar'));
+
+        self::assertFalse($message->hasImageContent());
+    }
+
+    #[Test]
+    public function hasImageContentWithImage(): void
+    {
+        $message = new UserMessage(new Text('foo'), new Image('bar'));
+
+        self::assertTrue($message->hasImageContent());
+    }
+
+    #[Test]
     #[DataProvider('provideSerializationTests')]
     public function serializationResultsAsExpected(UserMessage $message, array $expectedArray): void
     {

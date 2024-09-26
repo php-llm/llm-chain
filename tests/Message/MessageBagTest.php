@@ -128,6 +128,29 @@ final class MessageBagTest extends TestCase
     }
 
     #[Test]
+    public function containsImageWithoutImage(): void
+    {
+        $messageBag = new MessageBag(
+            Message::ofAssistant('It is time to sleep.'),
+            Message::ofUser('Hello, world!'),
+        );
+
+        self::assertFalse($messageBag->containsImage());
+    }
+
+    #[Test]
+    public function containsImageWithImage(): void
+    {
+        $messageBag = new MessageBag(
+            Message::ofAssistant('It is time to sleep.'),
+            Message::ofUser('Hello, world!'),
+            Message::ofUser('My hint for how to analyze an image.', new Image('http://image-generator.local/my-fancy-image.png')),
+        );
+
+        self::assertTrue($messageBag->containsImage());
+    }
+
+    #[Test]
     public function jsonSerialize(): void
     {
         $messageBag = new MessageBag(

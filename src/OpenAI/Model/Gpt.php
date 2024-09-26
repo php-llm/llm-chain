@@ -46,6 +46,11 @@ final class Gpt implements LanguageModel
         return true;
     }
 
+    public function supportsImageInput(): bool
+    {
+        return $this->version->supportImageInput;
+    }
+
     public function supportsStructuredOutput(): bool
     {
         return $this->version->supportStructuredOutput;

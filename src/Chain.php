@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain;
 
+use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
@@ -26,6 +27,10 @@ final readonly class Chain
     public function call(MessageBag $messages, array $options = []): string|object
     {
         $llmOptions = $options;
+
+        if ($messages->containsImage() && !$this->llm->supportsImageInput()) {
+            throw MissingModelSupport::forImageInput($this->llm::class);
+        }
 
         if (!array_key_exists('tools', $llmOptions) && null !== $this->toolBox && $this->llm->supportsToolCalling()) {
             $llmOptions['tools'] = $this->toolBox->getMap();

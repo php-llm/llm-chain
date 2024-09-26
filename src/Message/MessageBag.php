@@ -62,6 +62,17 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
         return $messages;
     }
 
+    public function containsImage(): bool
+    {
+        foreach ($this as $message) {
+            if ($message instanceof UserMessage && $message->hasImageContent()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @return MessageInterface[]
      */
