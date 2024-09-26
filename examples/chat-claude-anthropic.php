@@ -5,11 +5,13 @@ use PhpLlm\LlmChain\Anthropic\Platform\Anthropic;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
+(new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 
-$platform = new Anthropic(HttpClient::create(), getenv('ANTHROPIC_API_KEY'));
+$platform = new Anthropic(HttpClient::create(), $_ENV['ANTHROPIC_API_KEY']);
 $llm = new Claude($platform);
 
 $chain = new Chain($llm);
