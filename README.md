@@ -62,7 +62,10 @@ Usage Examples
 --------------
 
 See [examples](examples) to run example implementations using this library.
-Depending on the example you need to export different environment variables for API keys or deployment configurations:
+Depending on the example you need to export different environment variables
+for API keys or deployment configurations or create a `.env.local` based on `.env` file.
+
+To run all examples, just use `make run-all-examples`.
 
 ### Chat Examples
 
@@ -120,12 +123,20 @@ Depending on the example you need to export different environment variables for 
    php examples/toolbox-youtube.php
    ```
 
-### Structured Output
+### Structured Output Example
 
 1. Structured Output Example: OpenAI's GPT
    ```bash
    export OPENAI_API_KEY=sk-...
    php examples/structured-output-math.php
+   ```
+   
+### Reasoning Example
+
+1. Reasoning Example: OpenAI's o1
+   ```bash
+   export OPENAI_API_KEY=sk-...
+   php examples/reasoning-openai.php
    ```
 
 Contributions

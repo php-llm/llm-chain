@@ -34,6 +34,7 @@
         "symfony/console": "^6.4 || ^7.1",
         "symfony/css-selector": "^6.4 || ^7.1",
         "symfony/dom-crawler": "^6.4 || ^7.1",
+        "symfony/dotenv": "^6.4 || ^7.1",
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
     "suggest": {

@@ -3,3 +3,4 @@ vendor
 .php-cs-fixer.cache
 .phpunit.cache
 coverage
+.env.local

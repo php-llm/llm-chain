@@ -10,11 +10,13 @@ use PhpLlm\LlmChain\ToolBox\Tool\Clock;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolBox;
 use Symfony\Component\Clock\Clock as SymfonyClock;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
+(new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 
-$platform = new OpenAI(HttpClient::create(), getenv('OPENAI_API_KEY'));
+$platform = new OpenAI(HttpClient::create(), $_ENV['OPENAI_API_KEY']);
 $llm = new Gpt($platform, Version::gpt4oMini());
 
 $clock = new Clock(new SymfonyClock());

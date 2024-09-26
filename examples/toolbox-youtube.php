@@ -9,12 +9,14 @@ use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
 use PhpLlm\LlmChain\ToolBox\Tool\YouTubeTranscriber;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolBox;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
+(new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 
 $httpClient = HttpClient::create();
-$platform = new OpenAI($httpClient, getenv('OPENAI_API_KEY'));
+$platform = new OpenAI($httpClient, $_ENV['OPENAI_API_KEY']);
 $llm = new Gpt($platform, Version::gpt4oMini());
 
 $transcriber = new YouTubeTranscriber($httpClient);
