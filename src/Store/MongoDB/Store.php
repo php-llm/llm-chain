@@ -126,7 +126,7 @@ final readonly class Store implements VectorStoreInterface
 
         foreach ($results as $result) {
             $documents[] = Document::fromVector(
-                Vector::create1536($result[$this->vectorFieldName]),
+                new Vector($result[$this->vectorFieldName]),
                 $this->toUuid($result['_id']),
                 new Metadata($result['metadata'] ?? []),
             );

@@ -9,7 +9,7 @@ final class Vector
     /**
      * @param list<float> $data
      */
-    private function __construct(
+    public function __construct(
         private readonly array $data,
         private ?int $dimensions = null,
     ) {
