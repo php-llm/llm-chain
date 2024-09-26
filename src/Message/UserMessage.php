@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Message;
 
 use PhpLlm\LlmChain\Message\Content\ContentInterface;
+use PhpLlm\LlmChain\Message\Content\Image;
 use PhpLlm\LlmChain\Message\Content\Text;
 
 final readonly class UserMessage implements MessageInterface
@@ -23,6 +24,17 @@ final readonly class UserMessage implements MessageInterface
     public function getRole(): Role
     {
         return Role::User;
+    }
+
+    public function hasImageContent(): bool
+    {
+        foreach ($this->content as $content) {
+            if ($content instanceof Image) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

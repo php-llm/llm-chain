@@ -47,6 +47,11 @@ final class Claude implements LanguageModel
         return false; // it does, but implementation here is still open.
     }
 
+    public function supportsImageInput(): bool
+    {
+        return false; // it does, but implementation here is still open.
+    }
+
     public function supportsStructuredOutput(): bool
     {
         return false;
