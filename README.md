@@ -45,6 +45,7 @@ Supported Stores
 
 * [x] [ChromaDB](https://trychroma.com)
 * [x] [Azure AI Search](https://azure.microsoft.com/en-us/products/ai-services/ai-search)
+* [x] [MongoDB Atlas Search](https://mongodb.com/products/platform/atlas-vector-search)
 * [ ] [Pinecone](https://pinecone.io)
 
 Provided Tools

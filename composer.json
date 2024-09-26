@@ -24,6 +24,7 @@
     },
     "require-dev": {
         "codewithkyrian/chromadb-php": "^0.2.1",
+        "mongodb/mongodb": "^1.19",
         "php-cs-fixer/shim": "^3.64",
         "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^11.3",
@@ -36,6 +37,7 @@
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
     "suggest": {
+        "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
         "symfony/clock": "For using the clock tool.",
         "symfony/css-selector": "For using the YouTube transcription tool.",
