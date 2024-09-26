@@ -6,6 +6,7 @@ use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
+use PhpLlm\LlmChain\StructuredOutput\ChainProcessor;
 use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
 use PhpLlm\LlmChain\StructuredOutput\SchemaFactory;
 use PhpLlm\LlmChain\Tests\StructuredOutput\Data\MathReasoning;
@@ -23,7 +24,8 @@ $llm = new Gpt($platform, Version::gpt4oMini());
 $responseFormatFactory = new ResponseFormatFactory(SchemaFactory::create());
 $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 
-$chain = new Chain($llm, responseFormatFactory: $responseFormatFactory, serializer: $serializer);
+$processor = new ChainProcessor($responseFormatFactory, $serializer);
+$chain = new Chain($llm, [$processor], [$processor]);
 $messages = new MessageBag(
     Message::forSystem('You are a helpful math tutor. Guide the user through the solution step by step.'),
     Message::ofUser('how can I solve 8x + 7 = -23'),

@@ -6,6 +6,7 @@ use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
+use PhpLlm\LlmChain\ToolBox\ChainProcessor;
 use PhpLlm\LlmChain\ToolBox\Tool\Clock;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolBox;
@@ -21,7 +22,8 @@ $llm = new Gpt($platform, Version::gpt4oMini());
 
 $clock = new Clock(new SymfonyClock());
 $toolBox = new ToolBox(new ToolAnalyzer(), [$clock]);
-$chain = new Chain($llm, $toolBox);
+$processor = new ChainProcessor($toolBox);
+$chain = new Chain($llm, [$processor], [$processor]);
 
 $messages = new MessageBag(Message::ofUser('What date and time is it?'));
 $response = $chain->call($messages);
