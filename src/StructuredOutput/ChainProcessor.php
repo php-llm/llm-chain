@@ -23,11 +23,16 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
 
     public function processInput(Input $input): void
     {
+        $options = $input->getOptions();
+
+        if (!isset($options['output_structure'])) {
+            return;
+        }
+
         if (!$input->llm->supportsStructuredOutput()) {
             throw MissingModelSupport::forStructuredOutput($input->llm::class);
         }
 
-        $options = $input->getOptions();
         $options['response_format'] = $this->responseFormatFactory->create($options['output_structure']);
 
         $this->outputStructure = $options['output_structure'];
@@ -36,8 +41,14 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
         $input->setOptions($options);
     }
 
-    public function processOutput(Output $output): object
+    public function processOutput(Output $output): ?object
     {
+        $options = $output->options;
+
+        if (!isset($options['output_structure'])) {
+            return null;
+        }
+
         return $this->serializer->deserialize($output->response->getContent(), $this->outputStructure, 'json');
     }
 }

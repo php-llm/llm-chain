@@ -14,7 +14,7 @@ use PhpLlm\LlmChain\Message\Message;
 final readonly class ChainProcessor implements InputProcessor, OutputProcessor
 {
     public function __construct(
-        private ToolBox $toolBox,
+        private ToolBoxInterface $toolBox,
     ) {
     }
 

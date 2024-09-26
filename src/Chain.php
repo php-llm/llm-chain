@@ -14,14 +14,26 @@ use PhpLlm\LlmChain\Message\MessageBag;
 final readonly class Chain
 {
     /**
+     * @var InputProcessor[]
+     */
+    private array $inputProcessor;
+
+    /**
+     * @var OutputProcessor[]
+     */
+    private array $outputProcessor;
+
+    /**
      * @param InputProcessor[]  $inputProcessor
      * @param OutputProcessor[] $outputProcessor
      */
     public function __construct(
         private LanguageModel $llm,
-        private array $inputProcessor = [],
-        private array $outputProcessor = [],
+        iterable $inputProcessor = [],
+        iterable $outputProcessor = [],
     ) {
+        $this->inputProcessor = $inputProcessor instanceof \Traversable ? iterator_to_array($inputProcessor) : $inputProcessor;
+        $this->outputProcessor = $outputProcessor instanceof \Traversable ? iterator_to_array($outputProcessor) : $outputProcessor;
     }
 
     /**
