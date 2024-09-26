@@ -7,11 +7,12 @@ namespace PhpLlm\LlmChain\Store\Azure;
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Store\InitializableStoreInterface;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final readonly class SearchStore implements VectorStoreInterface
+final readonly class SearchStore implements VectorStoreInterface, InitializableStoreInterface
 {
     /**
      * @param string $vectorFieldName The name of the field int the index that contains the vector
@@ -24,6 +25,11 @@ final readonly class SearchStore implements VectorStoreInterface
         private string $apiVersion,
         private string $vectorFieldName = 'vector',
     ) {
+    }
+
+    public function initialize(array $options = []): void
+    {
+        // TODO: Add code to setup index
     }
 
     public function addDocument(Document $document): void
