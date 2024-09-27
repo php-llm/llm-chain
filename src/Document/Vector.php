@@ -21,21 +21,13 @@ final class Vector
             throw new \InvalidArgumentException('Vector must have at least one dimension');
         }
 
+        if (is_int($dimensions) && count($data) !== $dimensions) {
+            throw new \InvalidArgumentException('Vector must have '.$dimensions.' dimensions');
+        }
+
         if (null === $this->dimensions) {
             $this->dimensions = count($data);
         }
-    }
-
-    /**
-     * @param list<float> $data
-     */
-    public static function create1536(array $data): self
-    {
-        if (1536 !== count($data)) {
-            throw new \InvalidArgumentException('Vector must have 1536 dimensions');
-        }
-
-        return new self($data, 1536);
     }
 
     /**
