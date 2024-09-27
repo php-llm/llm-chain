@@ -37,6 +37,9 @@
         "symfony/dotenv": "^6.4 || ^7.1",
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
+    "conflict": {
+            "mongodb/mongodb": "<1.20"
+    },
     "suggest": {
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
         "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
