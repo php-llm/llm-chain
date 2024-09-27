@@ -11,6 +11,8 @@ use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform;
 use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\Response;
+use PhpLlm\LlmChain\Response\ResponseInterface;
+use PhpLlm\LlmChain\Response\StreamResponse;
 use PhpLlm\LlmChain\Response\ToolCall;
 
 final class Gpt implements LanguageModel
@@ -30,7 +32,7 @@ final class Gpt implements LanguageModel
      * @param array<mixed> $options The options to be used for this specific call.
      *                              Can overwrite default options.
      */
-    public function call(MessageBag $messages, array $options = []): Response
+    public function call(MessageBag $messages, array $options = []): ResponseInterface
     {
         $body = array_merge($this->options, $options, [
             'model' => $this->version->name,
@@ -38,6 +40,10 @@ final class Gpt implements LanguageModel
         ]);
 
         $response = $this->platform->request('chat/completions', $body);
+
+        if ($response instanceof \Generator) {
+            return new StreamResponse($this->convertStream($response));
+        }
 
         return new Response(...array_map([$this, 'convertChoice'], $response['choices']));
     }
@@ -55,6 +61,17 @@ final class Gpt implements LanguageModel
     public function supportsStructuredOutput(): bool
     {
         return $this->version->supportStructuredOutput;
+    }
+
+    private function convertStream(\Generator $generator): \Generator
+    {
+        foreach ($generator as $data) {
+            if (!isset($data['choices'][0]['delta']['content'])) {
+                continue;
+            }
+
+            yield $data['choices'][0]['delta']['content'];
+        }
     }
 
     /**

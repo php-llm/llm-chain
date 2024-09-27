@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessor;
 use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessor;
+use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -31,6 +32,10 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
 
         if (!$input->llm->supportsStructuredOutput()) {
             throw MissingModelSupport::forStructuredOutput($input->llm::class);
+        }
+
+        if (true === ($options['stream'] ?? false)) {
+            throw new InvalidArgumentException('Streamed responses are not supported for structured output');
         }
 
         $options['response_format'] = $this->responseFormatFactory->create($options['output_structure']);

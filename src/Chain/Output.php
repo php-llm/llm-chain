@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Chain;
 
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Response\Response;
+use PhpLlm\LlmChain\Response\ResponseInterface;
 
 final readonly class Output
 {
@@ -15,7 +15,7 @@ final readonly class Output
      */
     public function __construct(
         public LanguageModel $llm,
-        public Response $response,
+        public ResponseInterface $response,
         public MessageBag $messages,
         public array $options,
     ) {

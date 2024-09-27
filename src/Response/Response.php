@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\Response;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\LogicException;
 
-final readonly class Response
+final readonly class Response implements ResponseInterface
 {
     /**
      * @var Choice[]
@@ -23,9 +23,6 @@ final readonly class Response
         $this->choices = $choice;
     }
 
-    /**
-     * @return Choice[]
-     */
     public function getChoices(): array
     {
         return $this->choices;
@@ -40,9 +37,6 @@ final readonly class Response
         return $this->choices[0]->getContent();
     }
 
-    /**
-     * @return ToolCall[]
-     */
     public function getToolCalls(): array
     {
         if (1 < count($this->choices)) {

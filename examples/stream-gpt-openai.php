@@ -6,12 +6,8 @@ use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
-use PhpLlm\LlmChain\ToolBox\ChainProcessor;
-use PhpLlm\LlmChain\ToolBox\Tool\YouTubeTranscriber;
-use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
-use PhpLlm\LlmChain\ToolBox\ToolBox;
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\EventSourceHttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
@@ -21,16 +17,14 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
     exit(1);
 }
 
-$httpClient = HttpClient::create();
-$platform = new OpenAI($httpClient, $_ENV['OPENAI_API_KEY']);
+$platform = new OpenAI(new EventSourceHttpClient(), $_ENV['OPENAI_API_KEY']);
 $llm = new Gpt($platform, Version::gpt4oMini());
 
-$transcriber = new YouTubeTranscriber($httpClient);
-$toolBox = new ToolBox(new ToolAnalyzer(), [$transcriber]);
-$processor = new ChainProcessor($toolBox);
-$chain = new Chain($llm, [$processor], [$processor]);
-
-$messages = new MessageBag(Message::ofUser('Please summarize this video for me: https://www.youtube.com/watch?v=6uXW-ulpj0s'));
+$chain = new Chain($llm);
+$messages = new MessageBag(
+    Message::forSystem('You are a thoughtful philosopher.'),
+    Message::ofUser('What is the purpose of an ant?'),
+);
 $response = $chain->call($messages, [
     'stream' => true, // enable streaming of response text
 ]);

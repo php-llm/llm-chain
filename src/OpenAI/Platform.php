@@ -11,7 +11,7 @@ interface Platform
      *
      * @return array<string, mixed>
      */
-    public function request(string $endpoint, array $body): array;
+    public function request(string $endpoint, array $body): iterable;
 
     /**
      * @param array<array<string, mixed>> $bodies
