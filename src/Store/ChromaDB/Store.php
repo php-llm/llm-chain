@@ -56,7 +56,7 @@ final readonly class Store implements VectorStoreInterface
         $documents = [];
         for ($i = 0; $i < count($queryResponse->metadatas[0]); ++$i) {
             $documents[] = Document::fromVector(
-                Vector::create1536($queryResponse->embeddings[0][$i]),
+                new Vector($queryResponse->embeddings[0][$i]),
                 Uuid::fromString($queryResponse->ids[0][$i]),
                 new Metadata($queryResponse->metadatas[0][$i]),
             );
