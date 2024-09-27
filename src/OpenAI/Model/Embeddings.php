@@ -53,6 +53,6 @@ final class Embeddings implements EmbeddingModel
      */
     private function extractVector(array $data): Vector
     {
-        return Vector::create1536($data['data'][0]['embedding']);
+        return new Vector($data['data'][0]['embedding']);
     }
 }
