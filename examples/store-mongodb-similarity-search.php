@@ -23,6 +23,11 @@ use Symfony\Component\Uid\Uuid;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 
+if (empty($_ENV['OPENAI_API_KEY']) || empty($_ENV['MONGODB_URI'])) {
+    echo 'Please set OPENAI_API_KEY and MONGODB_URI environment variables.'.PHP_EOL;
+    exit(1);
+}
+
 // initialize the store
 $store = new Store(
     client: new MongoDBClient($_ENV['MONGODB_URI']),
