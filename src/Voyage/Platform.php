@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Anthropic;
+namespace PhpLlm\LlmChain\Voyage;
 
-interface ClaudePlatform
+interface Platform
 {
     /**
      * @param array<string, mixed> $body

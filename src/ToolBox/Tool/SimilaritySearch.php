@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\ToolBox\Tool;
 
 use PhpLlm\LlmChain\Document\Document;
-use PhpLlm\LlmChain\EmbeddingModel;
+use PhpLlm\LlmChain\EmbeddingsModel;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use PhpLlm\LlmChain\ToolBox\AsTool;
 
@@ -18,7 +18,7 @@ final class SimilaritySearch
     public array $usedDocuments = [];
 
     public function __construct(
-        private readonly EmbeddingModel $embeddings,
+        private readonly EmbeddingsModel $embeddings,
         private readonly VectorStoreInterface $vectorStore,
     ) {
     }
