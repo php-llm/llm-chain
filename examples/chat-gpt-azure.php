@@ -12,6 +12,12 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 
+if (empty($_ENV['AZURE_OPENAI_BASEURL']) || empty($_ENV['AZURE_OPENAI_DEPLOYMENT']) || empty($_ENV['AZURE_OPENAI_VERSION']) || empty($_ENV['AZURE_OPENAI_KEY'])
+) {
+    echo 'Please set the AZURE_OPENAI_BASEURL, AZURE_OPENAI_DEPLOYMENT, AZURE_OPENAI_VERSION, and AZURE_OPENAI_KEY environment variables.'.PHP_EOL;
+    exit(1);
+}
+
 $platform = new Azure(HttpClient::create(),
     $_ENV['AZURE_OPENAI_BASEURL'],
     $_ENV['AZURE_OPENAI_DEPLOYMENT'],

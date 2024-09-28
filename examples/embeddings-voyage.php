@@ -8,6 +8,11 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 
+if (empty($_ENV['VOYAGE_API_KEY'])) {
+    echo 'Please set the VOYAGE_API_KEY environment variable.'.PHP_EOL;
+    exit(1);
+}
+
 $platform = new VoyagePlatform(HttpClient::create(), $_ENV['VOYAGE_API_KEY']);
 $embeddings = new Voyage($platform);
 
