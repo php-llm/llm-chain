@@ -21,47 +21,31 @@ composer require php-llm/llm-chain
 
 When using Symfony Framework, check out the integration bundle [php-llm/llm-chain-bundle](https://github.com/php-llm/llm-chain-bundle).
 
-Supported Models & Platforms
-----------------------------
+Supported Models, Platforms & Stores
+------------------------------------
 
 Currently supported models and platforms:
 
-| Vendor         | Model                  | Platform             |
-|----------------|------------------------|----------------------|
-| **OpenAI**     | - GPT<br/>- Embeddings | - OpenAI<br/>- Azure |
-| **Anthropic**  | - Claude               | - Anthropic          |
-| **Voyage**     | - Voyage               | - Voyage             |
+| Language Model                                                                        | Embeddings Model                                                                              | Platform                                            | Store                                                                               |
+|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|-----------------------------------------------------|-------------------------------------------------------------------------------------|
+| [GPT](https://platform.openai.com/docs/models/overview)                               | [OpenAI Text Embeddings](https://platform.openai.com/docs/guides/embeddings/embedding-models) | [OpenAI](https://platform.openai.com/docs/overview) | [ChromaDB](https://trychroma.com)                                                   | 
+| [Anthropic Claude](https://www.anthropic.com/claude)<br />_(only partially done yet)_ | [Voyage Embeddings](https://docs.voyageai.com/docs/embeddings)                                | [Anthropic](https://www.anthropic.com/)             | [Azure AI Search](https://azure.microsoft.com/en-us/products/ai-services/ai-search) |
+|                                                                                       |                                                                                               | [Voyage](https://www.voyageai.com/)                 | [MongoDB Atlas Search](https://mongodb.com/products/platform/atlas-vector-search)   |
+|                                                                                       |                                                                                               | [Google](https://cloud.google.com/ai)               | [Pinecone](https://pinecone.io)                                                     |
 
-Planned Models & Platforms (not implemented yet):
-
-| Vendor         | Model                     | Platform                         |
-|----------------|---------------------------|----------------------------------|
-| **Anthropic**  | - Claude                  | - GPC<br/>- AWS                  |
-| **Voyage**     | - Voyage                  | - AWS                            |
-| **Google**     | - Gemini<br/>- Gemma      | - GPC                            |
-| **Meta**       | - Llama                   | - Meta AI<br/>- GPC<br/>- Ollama |
-| **Mistral AI** | - Mistral<br/>- Codestral | - Mistral<br/>- GPT<br/>- Ollama |
-
-Supported Stores
-----------------
-
-* [x] [ChromaDB](https://trychroma.com)
-* [x] [Azure AI Search](https://azure.microsoft.com/en-us/products/ai-services/ai-search)
-* [x] [MongoDB Atlas Search](https://mongodb.com/products/platform/atlas-vector-search)
-* [x] [Pinecone](https://pinecone.io)
-* [ ] [Milvus](https://milvus.io)
-* [ ] [Weaviate](https://weaviate.io)
-* [ ] 
+[Support will be extended to other models, platforms and stores in the future.](https://github.com/php-llm/llm-chain/issues/28) 
 
 Provided Tools
 --------------
 
-* [x] Clock
-* [x] SerpApi
-* [x] Similarity Search (Basic)
-* [x] Wikipedia
-* [x] Weather
-* [x] YouTube Transcriber
+LLM Chain provides a set of tools to be registered with language models out of the box:
+
+* **Clock** Tool to provide current time and date.
+* **SerpApi** Tool to search the web using SerpApi.
+* **Similarity Search (Basic)** Tool to search for similar items a vector store.
+* **Wikipedia** Tool to search Wikipedia and provide articles.
+* **Weather** Tool to provide weather information via OpenMeteo.
+* **YouTube Transcriber** Tool to fetch transcriptions from YouTube videos.
 
 Usage Examples
 --------------
