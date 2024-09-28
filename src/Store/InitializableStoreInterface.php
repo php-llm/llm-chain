@@ -10,7 +10,7 @@ use PhpLlm\LlmChain\Document\Vector;
 interface InitializableStoreInterface extends StoreInterface
 {
     /**
-     * @param array<string, mixed> $options
+     * @param array<mixed> $options
      */
     public function initialize(array $options = []): void;
 }
