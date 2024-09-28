@@ -1,8 +1,7 @@
 <?php
 
-use PhpLlm\LlmChain\OpenAI\Model\Embeddings;
-use PhpLlm\LlmChain\OpenAI\Model\Embeddings\Version;
-use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
+use PhpLlm\LlmChain\Model\Embeddings\OpenAI as Embeddings;
+use PhpLlm\LlmChain\Platform\OpenAI\OpenAI as Platform;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -14,8 +13,8 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
     exit(1);
 }
 
-$platform = new OpenAI(HttpClient::create(), $_ENV['OPENAI_API_KEY']);
-$embeddings = new Embeddings($platform, Version::textEmbedding3Small());
+$platform = new Platform(HttpClient::create(), $_ENV['OPENAI_API_KEY']);
+$embeddings = new Embeddings($platform);
 
 $vector = $embeddings->create(<<<TEXT
     Once upon a time, there was a country called Japan. It was a beautiful country with a lot of mountains and rivers.
