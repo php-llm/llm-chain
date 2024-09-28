@@ -1,8 +1,8 @@
 {
     "name": "php-llm/llm-chain",
-    "type": "library",
     "description": "A slim PHP component with tooling around LLMs.",
     "license": "MIT",
+    "type": "library",
     "authors": [
         {
             "name": "Christopher Hertel",
@@ -45,9 +45,6 @@
         "symfony/css-selector": "For using the YouTube transcription tool.",
         "symfony/dom-crawler": "For using the YouTube transcription tool."
     },
-    "config": {
-        "sort-packages": true
-    },
     "autoload": {
         "psr-4": {
             "PhpLlm\\LlmChain\\": "src/"
@@ -57,5 +54,8 @@
         "psr-4": {
             "PhpLlm\\LlmChain\\Tests\\": "tests/"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
