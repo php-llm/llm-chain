@@ -18,7 +18,7 @@ final class SimilaritySearch
     public array $usedDocuments = [];
 
     public function __construct(
-        private readonly EmbeddingModel $embedding,
+        private readonly EmbeddingModel $embeddings,
         private readonly VectorStoreInterface $vectorStore,
     ) {
     }
@@ -28,7 +28,7 @@ final class SimilaritySearch
      */
     public function __invoke(string $searchTerm): string
     {
-        $vector = $this->embedding->create($searchTerm);
+        $vector = $this->embeddings->create($searchTerm);
         $this->usedDocuments = $this->vectorStore->query($vector);
 
         if (0 === count($this->usedDocuments)) {
