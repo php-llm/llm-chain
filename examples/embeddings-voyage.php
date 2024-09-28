@@ -1,7 +1,7 @@
 <?php
 
-use PhpLlm\LlmChain\Voyage\Model\Voyage;
-use PhpLlm\LlmChain\Voyage\Platform\Voyage as VoyagePlatform;
+use PhpLlm\LlmChain\Model\Embeddings\Voyage;
+use PhpLlm\LlmChain\Platform\Voyage as Platform;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -13,7 +13,7 @@ if (empty($_ENV['VOYAGE_API_KEY'])) {
     exit(1);
 }
 
-$platform = new VoyagePlatform(HttpClient::create(), $_ENV['VOYAGE_API_KEY']);
+$platform = new Platform(HttpClient::create(), $_ENV['VOYAGE_API_KEY']);
 $embeddings = new Voyage($platform);
 
 $vector = $embeddings->create(<<<TEXT

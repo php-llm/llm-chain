@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\OpenAI\Model;
+namespace PhpLlm\LlmChain\Model\Language;
 
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
-use PhpLlm\LlmChain\OpenAI\Platform;
+use PhpLlm\LlmChain\Platform\OpenAI\Platform;
 use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\ChoiceResponse;
 use PhpLlm\LlmChain\Response\ResponseInterface;
@@ -19,25 +18,42 @@ use PhpLlm\LlmChain\Response\ToolCallResponse;
 
 final class Gpt implements LanguageModel
 {
+    public const GPT_35_TURBO = 'gpt-3.5-turbo';
+    public const GPT_35_TURBO_INSTRUCT = 'gpt-3.5-turbo-instruct';
+    public const GPT_4 = 'gpt-4';
+    public const GPT_4_TURBO = 'gpt-4-turbo';
+    public const GPT_4O = 'gpt-4o';
+    public const GPT_4O_MINI = 'gpt-4o-mini';
+    public const O1_MINI = 'o1-mini';
+    public const O1_PREVIEW = 'o1-preview';
+
     /**
      * @param array<mixed> $options The default options for the model usage
      */
     public function __construct(
         private readonly Platform $platform,
-        private ?Version $version = null,
+        private readonly string $version = self::GPT_4O,
         private readonly array $options = ['temperature' => 1.0],
+        private bool $supportsImageInput = false,
+        private bool $supportsStructuredOutput = false,
     ) {
-        $this->version ??= Version::gpt4o();
+        if (false === $this->supportsImageInput) {
+            $this->supportsImageInput = in_array($this->version, [self::GPT_4_TURBO, self::GPT_4O, self::GPT_4O_MINI, self::O1_MINI, self::O1_PREVIEW], true);
+        }
+
+        if (false === $this->supportsStructuredOutput) {
+            $this->supportsStructuredOutput = in_array($this->version, [self::GPT_4O, self::GPT_4O_MINI], true);
+        }
     }
 
     /**
-     * @param array<mixed> $options The options to be used for this specific call.
-     *                              Can overwrite default options.
+     * @param array<string, mixed> $options The options to be used for this specific call.
+     *                                      Can overwrite default options.
      */
     public function call(MessageBag $messages, array $options = []): ResponseInterface
     {
         $body = array_merge($this->options, $options, [
-            'model' => $this->version->name,
+            'model' => $this->version,
             'messages' => $messages,
         ]);
 
@@ -76,12 +92,12 @@ final class Gpt implements LanguageModel
 
     public function supportsImageInput(): bool
     {
-        return $this->version->supportImageInput;
+        return $this->supportsImageInput;
     }
 
     public function supportsStructuredOutput(): bool
     {
-        return $this->version->supportStructuredOutput;
+        return $this->supportsStructuredOutput;
     }
 
     private function streamIsToolCall(\Generator $response): bool

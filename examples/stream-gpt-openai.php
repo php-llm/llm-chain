@@ -3,9 +3,8 @@
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\OpenAI\Model\Gpt;
-use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
-use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
+use PhpLlm\LlmChain\Model\Language\Gpt;
+use PhpLlm\LlmChain\Platform\OpenAI\OpenAI;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 
@@ -18,7 +17,7 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = new OpenAI(new EventSourceHttpClient(), $_ENV['OPENAI_API_KEY']);
-$llm = new Gpt($platform, Version::gpt4oMini());
+$llm = new Gpt($platform, Gpt::GPT_4O_MINI);
 
 $chain = new Chain($llm);
 $messages = new MessageBag(
