@@ -18,4 +18,4 @@ $vector = $embeddings->create(<<<TEXT
     country was very peaceful and prosperous. The people lived happily ever after.
     TEXT);
 
-echo $vector->getDimensions().PHP_EOL;
+echo 'Dimensions: '.$vector->getDimensions().PHP_EOL;
