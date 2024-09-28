@@ -58,26 +58,6 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
     ) {
     }
 
-    public function initialize(array $options = []): void
-    {
-        $this->getCollection()->createSearchIndex(
-            definition: [
-                'fields' => [
-                    [
-                        'numDimensions' => 1536,
-                        'path' => $this->vectorFieldName,
-                        'similarity' => 'euclidean',
-                        'type' => 'vector',
-                    ],
-                ],
-            ],
-            options: [
-                'name' => $this->indexName,
-                'type' => 'vectorSearch',
-            ],
-        );
-    }
-
     public function addDocument(Document $document): void
     {
         $this->addDocuments([$document]);
@@ -154,6 +134,33 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
         }
 
         return $documents;
+    }
+
+    /**
+     * @param array{fields?: array} $options
+     */
+    public function initialize(array $options = []): void
+    {
+        if ($options !== [] && !array_key_exists('fields', $options)) {
+            throw new \InvalidArgumentException('The only supported option is "fields"');
+        }
+
+        $this->getCollection()->createSearchIndex(
+            [
+                'fields' => array_merge([
+                    [
+                        'numDimensions' => 1536,
+                        'path' => $this->vectorFieldName,
+                        'similarity' => 'euclidean',
+                        'type' => 'vector',
+                    ],
+                ], $options['fields'] ?? []),
+            ],
+            [
+                'name' => $this->indexName,
+                'type' => 'vectorSearch',
+            ],
+        );
     }
 
     private function getCollection(): Collection
