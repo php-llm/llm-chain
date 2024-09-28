@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\OpenAI\Platform;
+namespace PhpLlm\LlmChain\Platform\OpenAI;
 
-use PhpLlm\LlmChain\OpenAI\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;

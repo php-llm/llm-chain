@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\OpenAI;
+namespace PhpLlm\LlmChain\Platform\OpenAI;
 
 interface Platform
 {
