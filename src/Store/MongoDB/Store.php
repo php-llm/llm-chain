@@ -74,7 +74,7 @@ final readonly class Store implements VectorStoreInterface
             $operation = [
                 ['_id' => $this->toBinary($document->id)], // we use binary for the id, because of storage efficiency
                 array_filter([
-                    'metadata' => $document->metadata,
+                    'metadata' => $document->metadata->getArrayCopy(),
                     $this->vectorFieldName => $document->vector->getData(),
                     'text' => $document->text,
                 ]),
