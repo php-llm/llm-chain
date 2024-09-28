@@ -47,6 +47,9 @@ Supported Stores
 * [x] [Azure AI Search](https://azure.microsoft.com/en-us/products/ai-services/ai-search)
 * [x] [MongoDB Atlas Search](https://mongodb.com/products/platform/atlas-vector-search)
 * [x] [Pinecone](https://pinecone.io)
+* [ ] [Milvus](https://milvus.io)
+* [ ] [Weaviate](https://weaviate.io)
+* [ ] 
 
 Provided Tools
 --------------
