@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Anthropic\Model;
 
-use PhpLlm\LlmChain\Anthropic\ClaudePlatform;
 use PhpLlm\LlmChain\Anthropic\Model\Claude\Version;
+use PhpLlm\LlmChain\Anthropic\Platform;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\Choice;
@@ -14,10 +14,10 @@ use PhpLlm\LlmChain\Response\Response;
 final class Claude implements LanguageModel
 {
     /**
-     * @param array<mixed> $options The default options for the model usage
+     * @param array<string, mixed> $options The default options for the model usage
      */
     public function __construct(
-        private readonly ClaudePlatform $platform,
+        private readonly Platform $platform,
         private ?Version $version = null,
         private readonly array $options = ['temperature' => 1.0, 'max_tokens' => 1000],
     ) {
@@ -25,8 +25,8 @@ final class Claude implements LanguageModel
     }
 
     /**
-     * @param array<mixed> $options The options to be used for this specific call.
-     *                              Can overwrite default options.
+     * @param array<string, mixed> $options The options to be used for this specific call.
+     *                                      Can overwrite default options.
      */
     public function call(MessageBag $messages, array $options = []): Response
     {

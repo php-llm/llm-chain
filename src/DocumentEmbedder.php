@@ -10,7 +10,7 @@ use PhpLlm\LlmChain\Store\StoreInterface;
 final readonly class DocumentEmbedder
 {
     public function __construct(
-        private EmbeddingModel $embeddings,
+        private EmbeddingsModel $embeddings,
         private StoreInterface $store,
     ) {
     }

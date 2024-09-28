@@ -29,15 +29,17 @@ Currently supported models and platforms:
 | Vendor         | Model                  | Platform             |
 |----------------|------------------------|----------------------|
 | **OpenAI**     | - GPT<br/>- Embeddings | - OpenAI<br/>- Azure |
-| **Anthropic**  | - Claude | - Anthropic          |
+| **Anthropic**  | - Claude               | - Anthropic          |
+| **Voyage**     | - Voyage               | - Voyage             |
 
 Planned Models & Platforms (not implemented yet):
 
-| Vendor         | Model                  | Platform                         |
-|----------------|------------------------|----------------------------------|
-| **Anthropic**  | - Voyage | - GPC<br/>- AWS                  |
-| **Google**     | - Gemini<br/>- Gemma | - GPC                            |
-| **Meta**       | - Llama | - Meta AI<br/>- GPC<br/>- Ollama |
+| Vendor         | Model                     | Platform                         |
+|----------------|---------------------------|----------------------------------|
+| **Anthropic**  | - Claude                  | - GPC<br/>- AWS                  |
+| **Voyage**     | - Voyage                  | - AWS                            |
+| **Google**     | - Gemini<br/>- Gemma      | - GPC                            |
+| **Meta**       | - Llama                   | - Meta AI<br/>- GPC<br/>- Ollama |
 | **Mistral AI** | - Mistral<br/>- Codestral | - Mistral<br/>- GPT<br/>- Ollama |
 
 Supported Stores
@@ -72,13 +74,13 @@ To run all examples, just use `make run-all-examples`.
 
 ### Chat Examples
 
-1. Chat Example: OpenAI's GPT
+1. OpenAI's GPT
    ```bash
    export OPENAI_API_KEY=sk-...
    php examples/chat-gpt-openai.php
    ```
    
-1. Chat Example: OpenAI's GPT With Azure
+1. OpenAI's GPT with Azure
    ```bash
    export AZURE_OPENAI_BASEURL=... // e.g. your-resource.openai.azure.com
    export AZURE_OPENAI_DEPLOYMENT=...
@@ -87,11 +89,25 @@ To run all examples, just use `make run-all-examples`.
    php examples/chat-gpt-azure.php
    ```
  
-1. Chat Example: Anthropic's Claude
+1. Anthropic's Claude
    ```bash
    export ANTHROPIC_API_KEY=sk-...
    php examples/chat-claude-anthropic.php
    ```
+
+### Embeddings Examples
+
+1. OpenAI's Emebddings
+   ```bash
+   export OPENAI_API_KEY=sk-...
+   php examples/embeddings-openai.php
+   ```
+
+1. Voyage's Embeddings
+   ```bash
+   export VOYAGE_API_KEY=sk-...
+   php examples/embeddings-voyage.php
+    ```
 
 ### Tool Examples
 

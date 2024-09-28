@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Anthropic\Platform;
 
-use PhpLlm\LlmChain\Anthropic\ClaudePlatform;
+use PhpLlm\LlmChain\Anthropic\Platform;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final readonly class Anthropic implements ClaudePlatform
+final readonly class Anthropic implements Platform
 {
     public function __construct(
         private HttpClientInterface $httpClient,
