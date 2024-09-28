@@ -139,7 +139,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
     }
 
     /**
-     * @param array{fields?: array} $options
+     * @param array{fields?: array<mixed>} $options
      */
     public function initialize(array $options = []): void
     {

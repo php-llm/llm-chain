@@ -34,26 +34,23 @@ $store = new Store(
 
 // our data
 $movies = [
-    ['headline' => 'Inception', 'description' => 'A skilled thief is given a chance at redemption if he can successfully perform inception, the act of planting an idea in someone\'s subconscious.', 'regisseur' => 'Christopher Nolan'],
-    ['headline' => 'The Matrix', 'description' => 'A hacker discovers the world he lives in is a simulated reality and joins a rebellion to overthrow its controllers.', 'regisseur' => 'The Wachowskis'],
-    ['headline' => 'The Godfather', 'description' => 'The aging patriarch of an organized crime dynasty transfers control of his empire to his reluctant son.', 'regisseur' => 'Francis Ford Coppola'],
+    ['title' => 'Inception', 'description' => 'A skilled thief is given a chance at redemption if he can successfully perform inception, the act of planting an idea in someone\'s subconscious.', 'regisseur' => 'Christopher Nolan'],
+    ['title' => 'The Matrix', 'description' => 'A hacker discovers the world he lives in is a simulated reality and joins a rebellion to overthrow its controllers.', 'regisseur' => 'The Wachowskis'],
+    ['title' => 'The Godfather', 'description' => 'The aging patriarch of an organized crime dynasty transfers control of his empire to his reluctant son.', 'regisseur' => 'Francis Ford Coppola'],
 ];
 
 // create embeddings and documents
 foreach ($movies as $movie) {
     $documents[] = Document::fromText(
         id: Uuid::v4(),
-        text: $movie['headline'].' '.$movie['description'],
+        text: $movie['title'].' '.$movie['description'],
         metadata: new Metadata($movie),
     );
 }
 
 // create embeddings for documents
 $platform = new OpenAI(HttpClient::create(), $_ENV['OPENAI_API_KEY']);
-$embedder = new DocumentEmbedder(
-    $embeddings = new Embeddings($platform),
-    $store,
-);
+$embedder = new DocumentEmbedder($embeddings = new Embeddings($platform), $store);
 $embedder->embed($documents);
 
 // initialize the index
@@ -68,7 +65,7 @@ $chain = new Chain($llm, [$processor], [$processor]);
 
 $messages = new MessageBag(
     Message::forSystem('Please answer all user questions only using SimilaritySearch function.'),
-    Message::ofUser('Which movie would you recommend for the topic "mafia"?')
+    Message::ofUser('Which movie fits the theme of the mafia?')
 );
 $response = $chain->call($messages);
 

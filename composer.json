@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "codewithkyrian/chromadb-php": "^0.2.1",
-        "mongodb/mongodb": "^1.19",
+        "mongodb/mongodb": "^1.20",
         "php-cs-fixer/shim": "^3.64",
         "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^11.3",
