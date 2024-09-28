@@ -1,4 +1,5 @@
 qa:
+	composer update --prefer-stable
 	vendor/bin/php-cs-fixer fix --diff --verbose
 	vendor/bin/phpstan
 	vendor/bin/phpunit
