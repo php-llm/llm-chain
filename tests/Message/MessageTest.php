@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Message;
 
+use PhpLlm\LlmChain\Message\AssistantMessage;
 use PhpLlm\LlmChain\Message\Content\Image;
 use PhpLlm\LlmChain\Message\Content\Text;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\Role;
+use PhpLlm\LlmChain\Message\SystemMessage;
+use PhpLlm\LlmChain\Message\ToolCallMessage;
+use PhpLlm\LlmChain\Message\UserMessage;
 use PhpLlm\LlmChain\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
@@ -16,8 +20,14 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Message::class)]
+#[UsesClass(UserMessage::class)]
+#[UsesClass(SystemMessage::class)]
+#[UsesClass(AssistantMessage::class)]
+#[UsesClass(ToolCallMessage::class)]
 #[UsesClass(Role::class)]
 #[UsesClass(ToolCall::class)]
+#[UsesClass(Image::class)]
+#[UsesClass(Text::class)]
 #[Small]
 final class MessageTest extends TestCase
 {

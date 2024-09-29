@@ -6,9 +6,11 @@ namespace PhpLlm\LlmChain\Tests\Message;
 
 use PhpLlm\LlmChain\Message\AssistantMessage;
 use PhpLlm\LlmChain\Message\Content\Image;
+use PhpLlm\LlmChain\Message\Content\Text;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Message\SystemMessage;
+use PhpLlm\LlmChain\Message\UserMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
@@ -17,6 +19,11 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(MessageBag::class)]
 #[UsesClass(Message::class)]
+#[UsesClass(UserMessage::class)]
+#[UsesClass(SystemMessage::class)]
+#[UsesClass(AssistantMessage::class)]
+#[UsesClass(Image::class)]
+#[UsesClass(Text::class)]
 #[Small]
 final class MessageBagTest extends TestCase
 {
