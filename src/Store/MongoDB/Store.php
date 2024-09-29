@@ -7,11 +7,14 @@ namespace PhpLlm\LlmChain\Store\MongoDB;
 use MongoDB\BSON\Binary;
 use MongoDB\Client;
 use MongoDB\Collection;
+use MongoDB\Driver\Exception\CommandException;
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Store\InitializableStoreInterface;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -37,7 +40,7 @@ use Symfony\Component\Uid\Uuid;
  *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-final readonly class Store implements VectorStoreInterface
+final readonly class Store implements VectorStoreInterface, InitializableStoreInterface
 {
     /**
      * @param string $databaseName    The name of the database
@@ -48,12 +51,12 @@ final readonly class Store implements VectorStoreInterface
      */
     public function __construct(
         private Client $client,
-        private LoggerInterface $logger,
         private string $databaseName,
         private string $collectionName,
         private string $indexName,
         private string $vectorFieldName = 'vector',
         private bool $bulkWrite = false,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
     }
 
@@ -133,6 +136,37 @@ final readonly class Store implements VectorStoreInterface
         }
 
         return $documents;
+    }
+
+    /**
+     * @param array{fields?: array<mixed>} $options
+     */
+    public function initialize(array $options = []): void
+    {
+        try {
+            if ([] !== $options && !array_key_exists('fields', $options)) {
+                throw new \InvalidArgumentException('The only supported option is "fields"');
+            }
+
+            $this->getCollection()->createSearchIndex(
+                [
+                    'fields' => array_merge([
+                        [
+                            'numDimensions' => 1536,
+                            'path' => $this->vectorFieldName,
+                            'similarity' => 'euclidean',
+                            'type' => 'vector',
+                        ],
+                    ], $options['fields'] ?? []),
+                ],
+                [
+                    'name' => $this->indexName,
+                    'type' => 'vectorSearch',
+                ],
+            );
+        } catch (CommandException $e) {
+            $this->logger->warning($e->getMessage());
+        }
     }
 
     private function getCollection(): Collection
