@@ -1,3 +1,5 @@
+.PHONY: qa qa-lowest coverage run-all-examples
+
 qa:
 	composer update --prefer-stable
 	vendor/bin/php-cs-fixer fix --diff --verbose
