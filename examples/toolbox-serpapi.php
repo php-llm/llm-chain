@@ -16,6 +16,10 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 
+if (empty($_ENV['OPENAI_API_KEY']) || empty($_ENV['SERP_API_KEY'])) {
+    echo 'Please set the OPENAI_API_KEY and SERP_API_KEY environment variable.'.PHP_EOL;
+    exit(1);
+}
 $httpClient = HttpClient::create();
 $platform = new OpenAI($httpClient, $_ENV['OPENAI_API_KEY']);
 $llm = new Gpt($platform, Version::gpt4oMini());

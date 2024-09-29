@@ -13,6 +13,11 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 
+if (empty($_ENV['OPENAI_API_KEY'])) {
+    echo 'Please set the OPENAI_API_KEY environment variable.'.PHP_EOL;
+    exit(1);
+}
+
 $platform = new OpenAI(HttpClient::create(), $_ENV['OPENAI_API_KEY']);
 $llm = new Gpt($platform, Version::gpt4oMini());
 
