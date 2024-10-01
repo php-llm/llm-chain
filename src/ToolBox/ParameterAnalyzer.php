@@ -36,13 +36,11 @@ final class ParameterAnalyzer
             $paramType = $parameter->getType();
             $paramType = $paramType instanceof \ReflectionNamedType ? $paramType->getName() : 'mixed';
 
-            if ('int' === $paramType) {
-                $paramType = 'integer';
-            }
-
-            if ('float' === $paramType) {
-                $paramType = 'number';
-            }
+            $paramType = match ($paramType) {
+                'int' => 'integer',
+                'float' => 'number',
+                default => $paramType,
+            };
 
             if (!$parameter->isOptional()) {
                 $result['required'][] = $paramName;
