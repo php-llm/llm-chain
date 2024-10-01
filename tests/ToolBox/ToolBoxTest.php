@@ -39,7 +39,7 @@ final class ToolBoxTest extends TestCase
     }
 
     #[Test]
-    public function testToolsMap(): void
+    public function toolsMap(): void
     {
         $actual = $this->toolBox->getMap();
         $expected = [
