@@ -8,14 +8,20 @@ use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Store\StoreInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\ClockInterface;
 
 final readonly class DocumentEmbedder
 {
+    private ClockInterface $clock;
+
     public function __construct(
         private EmbeddingsModel $embeddings,
         private StoreInterface $store,
+        ?ClockInterface $clock = null,
         private LoggerInterface $logger = new NullLogger(),
     ) {
+        $this->clock = $clock ?? Clock::get();
     }
 
     /**
@@ -49,7 +55,7 @@ final readonly class DocumentEmbedder
             $this->store->addDocuments($vectorizedDocuments);
 
             if (0 !== $sleep) {
-                sleep($sleep);
+                $this->clock->sleep($sleep);
             }
         }
     }
