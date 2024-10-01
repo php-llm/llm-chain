@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Tests\ToolBox;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolWithToolParameterAttribute;
 use PhpLlm\LlmChain\ToolBox\AsTool;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
@@ -47,6 +48,82 @@ final class ParameterAnalyzerTest extends TestCase
             'required' => [
                 'text',
                 'number',
+            ],
+        ];
+
+        self::assertSame($expected, $actual);
+    }
+
+    #[Test]
+    public function detectParameterDefinitionRequiredWithAdditionalToolParameterAttribute(): void
+    {
+        $actual = $this->analyzer->getDefinition(ToolWithToolParameterAttribute::class, '__invoke');
+        $expected = [
+            'type' => 'object',
+            'properties' => [
+                'animal' => [
+                    'type' => 'string',
+                    'description' => 'The animal given to the tool',
+                    'enum' => ['dog', 'cat', 'bird'],
+                ],
+                'numberOfArticles' => [
+                    'type' => 'integer',
+                    'description' => 'The number of articles given to the tool',
+                    'const' => 42,
+                ],
+                'infoEmail' => [
+                    'type' => 'string',
+                    'description' => 'The info email given to the tool',
+                    'const' => 'info@example.de',
+                ],
+                'locales' => [
+                    'type' => 'string',
+                    'description' => 'The locales given to the tool',
+                    'const' => ['de', 'en'],
+                ],
+                'text' => [
+                    'type' => 'string',
+                    'description' => 'The text given to the tool',
+                    'pattern' => '^[a-zA-Z]+$',
+                    'minLength' => 1,
+                    'maxLength' => 10,
+                ],
+                'number' => [
+                    'type' => 'integer',
+                    'description' => 'The number given to the tool',
+                    'minimum' => 1,
+                    'maximum' => 10,
+                    'multipleOf' => 2,
+                    'exclusiveMinimum' => 1,
+                    'exclusiveMaximum' => 10,
+                ],
+                'products' => [
+                    'type' => 'array',
+                    'description' => 'The products given to the tool',
+                    'minItems' => 1,
+                    'maxItems' => 10,
+                    'uniqueItems' => true,
+                    'minContains' => 1,
+                    'maxContains' => 10,
+                ],
+                'shippingAddress' => [
+                    'type' => 'object',
+                    'description' => 'The shipping address given to the tool',
+                    'required' => true,
+                    'minProperties' => 1,
+                    'maxProperties' => 10,
+                    'dependentRequired' => true,
+                ],
+            ],
+            'required' => [
+                'animal',
+                'numberOfArticles',
+                'infoEmail',
+                'locales',
+                'text',
+                'number',
+                'products',
+                'shippingAddress',
             ],
         ];
 

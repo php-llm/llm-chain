@@ -4,10 +4,34 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\ToolBox;
 
+use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
+
 /**
  * @phpstan-type ParameterDefinition array{
  *     type: 'object',
- *     properties: array<string, array{type: string, description: string}>,
+ *     properties: array<string, array{
+ *         type: string,
+ *         description: string,
+ *         enum?: list<string>,
+ *         const?: string|int|list<string>,
+ *         pattern?: string,
+ *         minLength?: int,
+ *         maxLength?: int,
+ *         minimum?: int,
+ *         maximum?: int,
+ *         multipleOf?: int,
+ *         exclusiveMinimum?: int,
+ *         exclusiveMaximum?: int,
+ *         minItems?: int,
+ *         maxItems?: int,
+ *         uniqueItems?: bool,
+ *         minContains?: int,
+ *         maxContains?: int,
+ *         required?: bool,
+ *         minProperties?: int,
+ *         maxProperties?: int,
+ *         dependentRequired?: bool,
+ *     }>,
  *     required: list<string>,
  * }
  */
@@ -46,10 +70,19 @@ final class ParameterAnalyzer
                 $result['required'][] = $paramName;
             }
 
-            $result['properties'][$paramName] = [
+            $property = [
                 'type' => $paramType,
                 'description' => $this->getParameterDescription($reflection, $paramName),
             ];
+
+            // Check for ToolParameter attributes
+            $attributes = $parameter->getAttributes(ToolParameter::class);
+            if (count($attributes) > 0) {
+                $attributeState = array_filter((array) $attributes[0]->newInstance(), fn ($value) => null !== $value);
+                $property = array_merge($property, $attributeState);
+            }
+
+            $result['properties'][$paramName] = $property;
         }
 
         return $result;
