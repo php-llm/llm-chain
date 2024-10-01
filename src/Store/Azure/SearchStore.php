@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Store\Azure;
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Document\VectorizedDocument;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -39,7 +40,7 @@ final readonly class SearchStore implements VectorStoreInterface
     }
 
     /**
-     * @return list<Document>
+     * @return list<VectorizedDocument>
      */
     public function query(Vector $vector, array $options = []): array
     {
@@ -73,7 +74,7 @@ final readonly class SearchStore implements VectorStoreInterface
     /**
      * @return array<string, mixed>
      */
-    private function convertDocumentToIndexableArray(Document $document): array
+    private function convertDocumentToIndexableArray(VectorizedDocument $document): array
     {
         return array_merge([
             'id' => $document->id,
@@ -84,9 +85,9 @@ final readonly class SearchStore implements VectorStoreInterface
     /**
      * @param array<string, mixed> $data
      */
-    private function convertArrayToDocument(array $data): Document
+    private function convertArrayToDocument(array $data): VectorizedDocument
     {
-        return new Document(
+        return new VectorizedDocument(
             id: Uuid::fromString($data['id']),
             text: null,
             vector: null,
