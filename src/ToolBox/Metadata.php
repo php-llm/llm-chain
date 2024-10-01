@@ -11,6 +11,7 @@ final readonly class Metadata implements \JsonSerializable
 {
     /**
      * @param ParameterDefinition|null $parameters
+     * @param array<mixed>|null        $responseFormat
      */
     public function __construct(
         public string $className,
@@ -18,6 +19,7 @@ final readonly class Metadata implements \JsonSerializable
         public string $description,
         public string $method,
         public ?array $parameters,
+        public ?array $responseFormat = null,
     ) {
     }
 
@@ -27,7 +29,8 @@ final readonly class Metadata implements \JsonSerializable
      *     function: array{
      *         name: string,
      *         description: string,
-     *         parameters?: ParameterDefinition
+     *         parameters?: ParameterDefinition,
+     *         responseFormat?: array<mixed>|null
      *     }
      * }
      */
@@ -40,6 +43,10 @@ final readonly class Metadata implements \JsonSerializable
 
         if (isset($this->parameters)) {
             $function['parameters'] = $this->parameters;
+        }
+
+        if (null !== $this->responseFormat) {
+            $function['responseFormat'] = $this->responseFormat;
         }
 
         return [

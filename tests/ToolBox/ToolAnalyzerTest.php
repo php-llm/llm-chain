@@ -7,6 +7,8 @@ namespace PhpLlm\LlmChain\Tests\ToolBox;
 use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWithResponseFormatArray;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWithResponseFormatClassString;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWrong;
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\ToolBox\Metadata;
@@ -117,12 +119,92 @@ final class ToolAnalyzerTest extends TestCase
         );
     }
 
-    private function assertToolConfiguration(Metadata $metadata, string $className, string $name, string $description, string $method, array $parameters): void
+    #[Test]
+    public function getDefinitionWithResponseFormatArray(): void
+    {
+        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(ToolWithResponseFormatArray::class));
+
+        self::assertCount(1, $metadatas);
+
+        self::assertToolConfiguration(
+            metadata: $metadatas[0],
+            className: ToolWithResponseFormatArray::class,
+            name: 'tool_with_response_format_array',
+            description: 'A tool with response format array',
+            method: '__invoke',
+            parameters: [
+                'type' => 'object',
+                'properties' => [
+                    'text' => [
+                        'type' => 'string',
+                        'description' => 'The text given to the tool',
+                    ],
+                ],
+                'required' => ['text'],
+            ],
+            responseFormat: [
+                'type' => 'object',
+                'properties' => [
+                    'message' => [
+                        'type' => 'string',
+                    ],
+                ],
+                'required' => ['message'],
+                'additionalProperties' => false,
+            ],
+        );
+    }
+
+    #[Test]
+    public function getDefinitionWithResponseFormatClassString(): void
+    {
+        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(ToolWithResponseFormatClassString::class));
+
+        self::assertCount(1, $metadatas);
+
+        self::assertToolConfiguration(
+            metadata: $metadatas[0],
+            className: ToolWithResponseFormatClassString::class,
+            name: 'tool_with_response_format_class_string',
+            description: 'A tool with response format class-string',
+            method: '__invoke',
+            parameters: [
+                'type' => 'object',
+                'properties' => [
+                    'text' => [
+                        'type' => 'string',
+                        'description' => 'The text given to the tool',
+                    ],
+                ],
+                'required' => ['text'],
+            ],
+            responseFormat: [
+                'title' => 'FaqItem',
+                'type' => 'object',
+                'properties' => [
+                    'question' => [
+                        'type' => 'string',
+                    ],
+                    'answer' => [
+                        'type' => 'string',
+                    ],
+                    'url' => [
+                        'type' => 'string',
+                    ],
+                ],
+                'required' => ['question', 'answer'],
+                'additionalProperties' => false,
+            ],
+        );
+    }
+
+    private function assertToolConfiguration(Metadata $metadata, string $className, string $name, string $description, string $method, array $parameters, ?array $responseFormat = null): void
     {
         self::assertSame($className, $metadata->className);
         self::assertSame($name, $metadata->name);
         self::assertSame($description, $metadata->description);
         self::assertSame($method, $metadata->method);
         self::assertSame($parameters, $metadata->parameters);
+        self::assertSame($responseFormat, $metadata->responseFormat);
     }
 }

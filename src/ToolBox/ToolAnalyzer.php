@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\ToolBox;
 
 use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
+use PhpLlm\LlmChain\StructuredOutput\SchemaFactory;
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 
 final readonly class ToolAnalyzer
 {
     public function __construct(
         private ParameterAnalyzer $parameterAnalyzer = new ParameterAnalyzer(),
+        private SchemaFactory $schemaFactory = new SchemaFactory(),
     ) {
     }
 
@@ -35,12 +37,19 @@ final readonly class ToolAnalyzer
 
     private function convertAttribute(string $className, AsTool $attribute): Metadata
     {
+        $responseFormat = $attribute->responseFormat;
+
+        if (is_string($responseFormat)) {
+            $responseFormat = $this->schemaFactory->buildSchema($responseFormat);
+        }
+
         return new Metadata(
             $className,
             $attribute->name,
             $attribute->description,
             $attribute->method,
-            $this->parameterAnalyzer->getDefinition($className, $attribute->method)
+            $this->parameterAnalyzer->getDefinition($className, $attribute->method),
+            $responseFormat
         );
     }
 }

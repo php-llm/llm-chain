@@ -33,4 +33,5 @@ $chain = new Chain($llm, [$processor], [$processor]);
 $messages = new MessageBag(Message::ofUser('What date and time is it?'));
 $response = $chain->call($messages);
 
-echo $response->getContent().PHP_EOL;
+// Clock tool forced a structured output via #[AsTool] attribute
+dump(json_decode($response->getContent(), true));
