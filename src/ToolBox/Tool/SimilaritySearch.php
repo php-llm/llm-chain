@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\ToolBox\Tool;
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\EmbeddingsModel;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
-use PhpLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 
 #[AsTool('similarity_search', description: 'Searches for documents similar to a query or sentence.')]
 final class SimilaritySearch

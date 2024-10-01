@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Exception;
 
-use PhpLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 
 final class InvalidToolImplementation extends \InvalidArgumentException
 {

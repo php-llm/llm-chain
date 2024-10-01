@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\ToolBox\Tool;
 
-use PhpLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 
 #[AsTool('tool_hello_world', 'Function to say hello', method: 'hello')]
 #[AsTool('tool_required_params', 'Function to say a number', method: 'bar')]

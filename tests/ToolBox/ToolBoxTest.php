@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\Response\ToolCall;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
-use PhpLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
