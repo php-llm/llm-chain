@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests\Vector;
+namespace PhpLlm\LlmChain\Tests\Document;
 
 use PhpLlm\LlmChain\Document\Vector;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -15,10 +15,9 @@ final class VectorTest extends TestCase
     #[Test]
     public function withDimensionNull(): void
     {
-        $actual = new Vector([1.0, 2.0, 3.0], null);
-        $expected = [1.0, 2.0, 3.0];
+        $vector = new Vector($vectors = [1.0, 2.0, 3.0], null);
 
-        self::assertSame($expected, $actual->getData());
-        self::assertSame(3, $actual->getDimensions());
+        self::assertSame($vectors, $vector->getData());
+        self::assertSame(3, $vector->getDimensions());
     }
 }
