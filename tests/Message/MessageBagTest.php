@@ -171,18 +171,15 @@ final class MessageBagTest extends TestCase
         $json = json_encode($messageBag);
 
         self::assertJson($json);
-        self::assertJsonStringEqualsJsonString(
-            json_encode([
-                ['role' => 'system', 'content' => 'My amazing system prompt.'],
-                ['role' => 'assistant', 'content' => 'It is time to sleep.'],
-                ['role' => 'user', 'content' => 'Hello, world!'],
-                ['role' => 'assistant', 'content' => 'Hello User!'],
-                ['role' => 'user', 'content' => [
-                    ['type' => 'text', 'text' => 'My hint for how to analyze an image.'],
-                    ['type' => 'image_url', 'image_url' => ['url' => 'http://image-generator.local/my-fancy-image.png']],
-                ]],
-            ]),
-            $json
-        );
+        self::assertJsonStringEqualsJsonString(json_encode([
+            ['role' => 'system', 'content' => 'My amazing system prompt.'],
+            ['role' => 'assistant', 'content' => 'It is time to sleep.'],
+            ['role' => 'user', 'content' => 'Hello, world!'],
+            ['role' => 'assistant', 'content' => 'Hello User!'],
+            ['role' => 'user', 'content' => [
+                ['type' => 'text', 'text' => 'My hint for how to analyze an image.'],
+                ['type' => 'image_url', 'image_url' => ['url' => 'http://image-generator.local/my-fancy-image.png']],
+            ]],
+        ]), $json);
     }
 }

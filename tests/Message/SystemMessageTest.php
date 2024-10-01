@@ -29,9 +29,6 @@ final class SystemMessageTest extends TestCase
     {
         $systemMessage = new SystemMessage('foo');
 
-        self::assertSame(
-            ['role' => Role::System, 'content' => 'foo'],
-            $systemMessage->jsonSerialize(),
-        );
+        self::assertSame(['role' => Role::System, 'content' => 'foo'], $systemMessage->jsonSerialize());
     }
 }
