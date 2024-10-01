@@ -14,7 +14,7 @@
         "phpdocumentor/reflection-docblock": "^5.4",
         "psr/cache": "^3.0",
         "psr/log": "^3.0",
-        "symfony/clock": "^7.1",
+        "symfony/clock": "^6.4 || ^7.1",
         "symfony/http-client": "^6.4 || ^7.1",
         "symfony/property-access": "^6.4 || ^7.1",
         "symfony/property-info": "^6.4 || ^7.1",
