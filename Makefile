@@ -3,9 +3,10 @@
 qa:
 	composer update --prefer-stable
 	vendor/bin/php-cs-fixer fix --diff --verbose
+	vendor/bin/rector
 	vendor/bin/phpstan
 	vendor/bin/phpunit
-	vendor/bin/rector
+
 
 qa-lowest:
 	composer update --prefer-lowest
