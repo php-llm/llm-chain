@@ -6,8 +6,9 @@ namespace PhpLlm\LlmChain\Message\Content;
 
 final readonly class Text implements ContentInterface
 {
-    public function __construct(public string $text)
-    {
+    public function __construct(
+        public string $text,
+    ) {
     }
 
     /**

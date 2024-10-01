@@ -9,8 +9,9 @@ final readonly class Image implements ContentInterface
     /**
      * @param string $url An URL like "http://localhost:3000/my-image.png" or a data url like "data:image/png;base64,iVBOR[...]"
      */
-    public function __construct(public string $url)
-    {
+    public function __construct(
+        public string $url,
+    ) {
     }
 
     /**
