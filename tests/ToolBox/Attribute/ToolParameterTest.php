@@ -6,68 +6,78 @@ namespace PhpLlm\LlmChain\Tests\ToolBox\Attribute;
 
 use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(ToolParameter::class)]
 final class ToolParameterTest extends TestCase
 {
-    public function testValidEnum(): void
+    #[Test]
+    public function validEnum(): void
     {
         $enum = ['value1', 'value2'];
         $toolParameter = new ToolParameter(enum: $enum);
         $this->assertSame($enum, $toolParameter->enum);
     }
 
-    public function testInvalidEnumContainsNonString(): void
+    #[Test]
+    public function invalidEnumContainsNonString(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $enum = ['value1', 2];
         new ToolParameter(enum: $enum);
     }
 
-    public function testValidConstString(): void
+    #[Test]
+    public function validConstString(): void
     {
         $const = 'constant value';
         $toolParameter = new ToolParameter(const: $const);
         $this->assertSame($const, $toolParameter->const);
     }
 
-    public function testInvalidConstEmptyString(): void
+    #[Test]
+    public function invalidConstEmptyString(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $const = '   ';
         new ToolParameter(const: $const);
     }
 
-    public function testValidPattern(): void
+    #[Test]
+    public function validPattern(): void
     {
         $pattern = '/^[a-z]+$/';
         $toolParameter = new ToolParameter(pattern: $pattern);
         $this->assertSame($pattern, $toolParameter->pattern);
     }
 
-    public function testInvalidPatternEmptyString(): void
+    #[Test]
+    public function invalidPatternEmptyString(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $pattern = '   ';
         new ToolParameter(pattern: $pattern);
     }
 
-    public function testValidMinLength(): void
+    #[Test]
+    public function validMinLength(): void
     {
         $minLength = 5;
         $toolParameter = new ToolParameter(minLength: $minLength);
         $this->assertSame($minLength, $toolParameter->minLength);
     }
 
-    public function testInvalidMinLengthNegative(): void
+    #[Test]
+    public function invalidMinLengthNegative(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(minLength: -1);
     }
 
-    public function testValidMinLengthAndMaxLength(): void
+    #[Test]
+    public function validMinLengthAndMaxLength(): void
     {
         $minLength = 5;
         $maxLength = 10;
@@ -76,39 +86,45 @@ final class ToolParameterTest extends TestCase
         $this->assertSame($maxLength, $toolParameter->maxLength);
     }
 
-    public function testInvalidMaxLengthLessThanMinLength(): void
+    #[Test]
+    public function invalidMaxLengthLessThanMinLength(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(minLength: 10, maxLength: 5);
     }
 
-    public function testValidMinimum(): void
+    #[Test]
+    public function validMinimum(): void
     {
         $minimum = 0;
         $toolParameter = new ToolParameter(minimum: $minimum);
         $this->assertSame($minimum, $toolParameter->minimum);
     }
 
-    public function testInvalidMinimumNegative(): void
+    #[Test]
+    public function invalidMinimumNegative(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(minimum: -1);
     }
 
-    public function testValidMultipleOf(): void
+    #[Test]
+    public function validMultipleOf(): void
     {
         $multipleOf = 5;
         $toolParameter = new ToolParameter(multipleOf: $multipleOf);
         $this->assertSame($multipleOf, $toolParameter->multipleOf);
     }
 
-    public function testInvalidMultipleOfNegative(): void
+    #[Test]
+    public function invalidMultipleOfNegative(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(multipleOf: -5);
     }
 
-    public function testValidExclusiveMinimumAndMaximum(): void
+    #[Test]
+    public function validExclusiveMinimumAndMaximum(): void
     {
         $exclusiveMinimum = 1;
         $exclusiveMaximum = 10;
@@ -117,13 +133,15 @@ final class ToolParameterTest extends TestCase
         $this->assertSame($exclusiveMaximum, $toolParameter->exclusiveMaximum);
     }
 
-    public function testInvalidExclusiveMaximumLessThanExclusiveMinimum(): void
+    #[Test]
+    public function invalidExclusiveMaximumLessThanExclusiveMinimum(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(exclusiveMinimum: 10, exclusiveMaximum: 5);
     }
 
-    public function testValidMinItemsAndMaxItems(): void
+    #[Test]
+    public function validMinItemsAndMaxItems(): void
     {
         $minItems = 1;
         $maxItems = 5;
@@ -132,25 +150,29 @@ final class ToolParameterTest extends TestCase
         $this->assertSame($maxItems, $toolParameter->maxItems);
     }
 
-    public function testInvalidMaxItemsLessThanMinItems(): void
+    #[Test]
+    public function invalidMaxItemsLessThanMinItems(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(minItems: 5, maxItems: 1);
     }
 
-    public function testValidUniqueItemsTrue(): void
+    #[Test]
+    public function validUniqueItemsTrue(): void
     {
         $toolParameter = new ToolParameter(uniqueItems: true);
         $this->assertTrue($toolParameter->uniqueItems);
     }
 
-    public function testInvalidUniqueItemsFalse(): void
+    #[Test]
+    public function invalidUniqueItemsFalse(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(uniqueItems: false);
     }
 
-    public function testValidMinContainsAndMaxContains(): void
+    #[Test]
+    public function validMinContainsAndMaxContains(): void
     {
         $minContains = 1;
         $maxContains = 3;
@@ -159,19 +181,22 @@ final class ToolParameterTest extends TestCase
         $this->assertSame($maxContains, $toolParameter->maxContains);
     }
 
-    public function testInvalidMaxContainsLessThanMinContains(): void
+    #[Test]
+    public function invalidMaxContainsLessThanMinContains(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(minContains: 3, maxContains: 1);
     }
 
-    public function testValidRequired(): void
+    #[Test]
+    public function validRequired(): void
     {
         $toolParameter = new ToolParameter(required: true);
         $this->assertTrue($toolParameter->required);
     }
 
-    public function testValidMinPropertiesAndMaxProperties(): void
+    #[Test]
+    public function validMinPropertiesAndMaxProperties(): void
     {
         $minProperties = 1;
         $maxProperties = 5;
@@ -180,19 +205,22 @@ final class ToolParameterTest extends TestCase
         $this->assertSame($maxProperties, $toolParameter->maxProperties);
     }
 
-    public function testInvalidMaxPropertiesLessThanMinProperties(): void
+    #[Test]
+    public function invalidMaxPropertiesLessThanMinProperties(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(minProperties: 5, maxProperties: 1);
     }
 
-    public function testValidDependentRequired(): void
+    #[Test]
+    public function validDependentRequired(): void
     {
         $toolParameter = new ToolParameter(dependentRequired: true);
         $this->assertTrue($toolParameter->dependentRequired);
     }
 
-    public function testValidCombination(): void
+    #[Test]
+    public function validCombination(): void
     {
         $toolParameter = new ToolParameter(
             enum: ['value1', 'value2'],
@@ -219,7 +247,8 @@ final class ToolParameterTest extends TestCase
         $this->assertInstanceOf(ToolParameter::class, $toolParameter);
     }
 
-    public function testInvalidCombination(): void
+    #[Test]
+    public function invalidCombination(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new ToolParameter(minLength: -1, maxLength: -2);
