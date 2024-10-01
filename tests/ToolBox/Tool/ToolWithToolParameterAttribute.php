@@ -67,12 +67,6 @@ final class ToolWithToolParameterAttribute
         )]
         object $shippingAddress,
     ): string {
-        return implode(
-            ', ',
-            [
-                $text,
-                $number,
-            ]
-        );
+        return 'Hello, World!';
     }
 }
