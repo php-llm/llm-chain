@@ -1,8 +1,9 @@
 <?php
 
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\SystemMessage;
+use PhpLlm\LlmChain\Message\UserMessage;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
@@ -30,8 +31,8 @@ $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 $processor = new ChainProcessor(new ResponseFormatFactory(), $serializer);
 $chain = new Chain($llm, [$processor], [$processor]);
 $messages = new MessageBag(
-    Message::forSystem('You are a helpful math tutor. Guide the user through the solution step by step.'),
-    Message::ofUser('how can I solve 8x + 7 = -23'),
+    new SystemMessage('You are a helpful math tutor. Guide the user through the solution step by step.'),
+    new UserMessage('how can I solve 8x + 7 = -23'),
 );
 $response = $chain->call($messages, ['output_structure' => MathReasoning::class]);
 

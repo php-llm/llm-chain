@@ -2,8 +2,9 @@
 
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Message\Content\Image;
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\SystemMessage;
+use PhpLlm\LlmChain\Message\UserMessage;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
@@ -23,8 +24,8 @@ $llm = new Gpt($platform, Version::gpt4oMini());
 
 $chain = new Chain($llm);
 $messages = new MessageBag(
-    Message::forSystem('You are an image analyzer bot that helps identify the content of images.'),
-    Message::ofUser(
+    new SystemMessage('You are an image analyzer bot that helps identify the content of images.'),
+    new UserMessage(
         'Describe the image as a comedian would do it.',
         new Image(dirname(__DIR__).'/tests/Fixture/image.png'),
     ),

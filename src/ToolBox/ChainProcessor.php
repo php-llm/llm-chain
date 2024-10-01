@@ -11,7 +11,8 @@ use PhpLlm\LlmChain\Chain\InputProcessor;
 use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
-use PhpLlm\LlmChain\Message\Message;
+use PhpLlm\LlmChain\Message\AssistantMessage;
+use PhpLlm\LlmChain\Message\ToolCallMessage;
 use PhpLlm\LlmChain\Response\ToolCallResponse;
 
 final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwareProcessor
@@ -40,11 +41,11 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
 
         while ($output->response instanceof ToolCallResponse) {
             $toolCalls = $output->response->getContent();
-            $messages[] = Message::ofAssistant(toolCalls: $toolCalls);
+            $messages[] = new AssistantMessage(toolCalls: $toolCalls);
 
             foreach ($toolCalls as $toolCall) {
                 $result = $this->toolBox->execute($toolCall);
-                $messages[] = Message::ofToolCall($toolCall, $result);
+                $messages[] = new ToolCallMessage($toolCall, $result);
             }
 
             $output->response = $this->chain->call($messages, $output->options);

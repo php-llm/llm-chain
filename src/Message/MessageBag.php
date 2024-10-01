@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Message;
 
 /**
- * @template-extends \ArrayObject<int, MessageInterface>
+ * @template-extends \ArrayObject<int, Message>
  */
 final class MessageBag extends \ArrayObject implements \JsonSerializable
 {
-    public function __construct(MessageInterface ...$messages)
+    public function __construct(Message ...$messages)
     {
         parent::__construct(array_values($messages));
     }
@@ -25,7 +25,7 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
         return null;
     }
 
-    public function with(MessageInterface $message): self
+    public function with(Message $message): self
     {
         $messages = clone $this;
         $messages->append($message);
@@ -47,14 +47,14 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
         $messages->exchangeArray(
             array_values(array_filter(
                 $messages->getArrayCopy(),
-                static fn (MessageInterface $message) => !$message instanceof SystemMessage,
+                static fn (Message $message) => !$message instanceof SystemMessage,
             ))
         );
 
         return $messages;
     }
 
-    public function prepend(MessageInterface $message): self
+    public function prepend(Message $message): self
     {
         $messages = clone $this;
         $messages->exchangeArray(array_merge([$message], $messages->getArrayCopy()));
@@ -74,7 +74,7 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
     }
 
     /**
-     * @return MessageInterface[]
+     * @return Message[]
      */
     public function jsonSerialize(): array
     {

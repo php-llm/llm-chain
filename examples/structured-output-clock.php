@@ -1,8 +1,8 @@
 <?php
 
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\UserMessage;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
@@ -37,7 +37,7 @@ $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 $structuredOutputProcessor = new StructuredOutputProcessor(new ResponseFormatFactory(), $serializer);
 $chain = new Chain($llm, [$toolProcessor, $structuredOutputProcessor], [$toolProcessor, $structuredOutputProcessor]);
 
-$messages = new MessageBag(Message::ofUser('What date and time is it?'));
+$messages = new MessageBag(new UserMessage('What date and time is it?'));
 $response = $chain->call($messages, ['response_format' => [
     'type' => 'json_schema',
     'json_schema' => [

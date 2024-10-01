@@ -46,6 +46,19 @@ final class AssistantMessageTest extends TestCase
     }
 
     #[Test]
+    public function constructionWithMultipleToolCalls(): void
+    {
+        $toolCalls = [
+            new ToolCall('call_123456', 'my_tool', ['foo' => 'bar']),
+            new ToolCall('call_456789', 'my_faster_tool'),
+        ];
+        $message = new AssistantMessage(toolCalls: $toolCalls);
+
+        self::assertCount(2, $message->toolCalls);
+        self::assertTrue($message->hasToolCalls());
+    }
+
+    #[Test]
     #[DataProvider('provideJsonSerializerTests')]
     public function jsonConversionIsWorkingAsExpected(AssistantMessage $message, array $expectedResult): void
     {

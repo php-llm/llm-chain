@@ -32,11 +32,43 @@ final class UserMessageTest extends TestCase
     }
 
     #[Test]
+    public function constructionWithStringIsPossible(): void
+    {
+        $message = new UserMessage('Hi, my name is John.');
+
+        self::assertCount(1, $message->content);
+        self::assertInstanceOf(Text::class, $message->content[0]);
+        self::assertSame('Hi, my name is John.', $message->content[0]->text);
+    }
+
+    #[Test]
     public function constructionIsPossibleWithMultipleContent(): void
     {
         $message = new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg'));
 
         self::assertCount(2, $message->content);
+    }
+
+    #[Test]
+    public function constructionIsPossibleWithMultipleMixedContent(): void
+    {
+        $message = new UserMessage(
+            new Text('Hi, my name is John.'),
+            new Image('http://images.local/my-image.png'),
+            'The following image is a joke.',
+            new Image('http://images.local/my-image2.png'),
+        );
+
+        self::assertCount(4, $message->content);
+        self::assertSame(\json_encode([
+            'role' => Role::User,
+            'content' => [
+                ['type' => 'text', 'text' => 'Hi, my name is John.'],
+                ['type' => 'image_url', 'image_url' => ['url' => 'http://images.local/my-image.png']],
+                ['type' => 'text', 'text' => 'The following image is a joke.'],
+                ['type' => 'image_url', 'image_url' => ['url' => 'http://images.local/my-image2.png']],
+            ],
+        ]), \json_encode($message));
     }
 
     #[Test]
