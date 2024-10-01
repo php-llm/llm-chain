@@ -34,9 +34,6 @@ final class ToolCallMessageTest extends TestCase
         $toolCall = new ToolCall('foo', 'bar');
         $obj = new ToolCallMessage($toolCall, 'bar');
 
-        self::assertSame(
-            ['role' => Role::ToolCall, 'content' => 'bar', 'tool_call_id' => 'foo'],
-            $obj->jsonSerialize(),
-        );
+        self::assertSame(['role' => Role::ToolCall, 'content' => 'bar', 'tool_call_id' => 'foo'], $obj->jsonSerialize());
     }
 }

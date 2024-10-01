@@ -27,16 +27,13 @@ final class ToolCallTest extends TestCase
     public function toolCallJsonSerialize(): void
     {
         $toolCall = new ToolCall('id', 'name', ['foo' => 'bar']);
-        self::assertSame(
-            [
-                'id' => 'id',
-                'type' => 'function',
-                'function' => [
-                    'name' => 'name',
-                    'arguments' => '{"foo":"bar"}',
-                ],
+        self::assertSame([
+            'id' => 'id',
+            'type' => 'function',
+            'function' => [
+                'name' => 'name',
+                'arguments' => '{"foo":"bar"}',
             ],
-            $toolCall->jsonSerialize()
-        );
+        ], $toolCall->jsonSerialize());
     }
 }

@@ -27,9 +27,6 @@ final class TextContentTest extends TestCase
     {
         $obj = new Text('foo');
 
-        self::assertSame(
-            ['type' => 'text', 'text' => 'foo'],
-            $obj->jsonSerialize(),
-        );
+        self::assertSame(['type' => 'text', 'text' => 'foo'], $obj->jsonSerialize());
     }
 }

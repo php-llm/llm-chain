@@ -118,9 +118,6 @@ final class DocumentEmbedderTest extends TestCase
             sleep: 3
         );
 
-        $this->assertSame(
-            '2024-01-01 00:00:03',
-            $this->clock->now()->format('Y-m-d H:i:s')
-        );
+        self::assertSame('2024-01-01 00:00:03', $this->clock->now()->format('Y-m-d H:i:s'));
     }
 }

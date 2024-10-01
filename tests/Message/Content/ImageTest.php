@@ -27,9 +27,6 @@ final class ImageTest extends TestCase
     {
         $obj = new Image('foo');
 
-        self::assertSame(
-            ['type' => 'image_url', 'image_url' => ['url' => 'foo']],
-            $obj->jsonSerialize(),
-        );
+        self::assertSame(['type' => 'image_url', 'image_url' => ['url' => 'foo']], $obj->jsonSerialize());
     }
 }
