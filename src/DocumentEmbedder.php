@@ -6,12 +6,15 @@ namespace PhpLlm\LlmChain;
 
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Store\StoreInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 final readonly class DocumentEmbedder
 {
     public function __construct(
         private EmbeddingsModel $embeddings,
         private StoreInterface $store,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
     }
 
@@ -22,6 +25,15 @@ final readonly class DocumentEmbedder
     {
         if ($documents instanceof Document) {
             $documents = [$documents];
+        }
+
+        // Filter out documents without text
+        $documents = array_filter($documents, fn (Document $document) => is_string($document->text));
+
+        if ([] === $documents) {
+            $this->logger->debug('No documents to embed');
+
+            return;
         }
 
         $chunks = 0 !== $chunkSize ? array_chunk($documents, $chunkSize) : [$documents];
