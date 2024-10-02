@@ -33,9 +33,6 @@ final readonly class DocumentEmbedder
             $documents = [$documents];
         }
 
-        // Filter out documents without text
-        $documents = array_filter($documents, fn (Document $document) => is_string($document->text));
-
         if ([] === $documents) {
             $this->logger->debug('No documents to embed');
 

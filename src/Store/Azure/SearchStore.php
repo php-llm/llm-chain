@@ -78,6 +78,7 @@ final readonly class SearchStore implements VectorStoreInterface
         return array_merge([
             'id' => $document->id,
             $this->vectorFieldName => $document->vector->getData(),
+            'text' => $document->text,
         ], $document->metadata->getArrayCopy());
     }
 
@@ -88,8 +89,8 @@ final readonly class SearchStore implements VectorStoreInterface
     {
         return new Document(
             id: Uuid::fromString($data['id']),
-            text: null,
-            vector: null,
+            text: $data['text'],
+            vector: $data[$this->vectorFieldName] ? new Vector($data[$this->vectorFieldName]) : null,
             metadata: new Metadata($data),
         );
     }

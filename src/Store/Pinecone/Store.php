@@ -45,6 +45,7 @@ final readonly class Store implements VectorStoreInterface
             $vectors[] = [
                 'id' => (string) $document->id,
                 'values' => $document->vector->getData(),
+                'text' => $document->text,
                 'metadata' => $document->metadata->getArrayCopy(),
             ];
         }
@@ -68,10 +69,11 @@ final readonly class Store implements VectorStoreInterface
 
         $documents = [];
         foreach ($response->json()['matches'] as $match) {
-            $documents[] = Document::fromVector(
-                new Vector($match['values']),
-                Uuid::fromString($match['id']),
-                new Metadata($match['metadata']),
+            $documents[] = new Document(
+                id: Uuid::fromString($match['id']),
+                text: $match['text'],
+                vector: new Vector($match['values']),
+                metadata: new Metadata($match['metadata']),
             );
         }
 

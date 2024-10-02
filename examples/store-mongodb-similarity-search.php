@@ -46,9 +46,10 @@ $movies = [
 
 // create embeddings and documents
 foreach ($movies as $movie) {
-    $documents[] = Document::fromText(
+    $documents[] = new Document(
         id: Uuid::v4(),
         text: $movie['title'].' '.$movie['description'],
+        vector: null,
         metadata: new Metadata($movie),
     );
 }
