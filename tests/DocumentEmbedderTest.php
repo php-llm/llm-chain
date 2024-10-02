@@ -65,30 +65,11 @@ final class DocumentEmbedderTest extends TestCase
     }
 
     #[Test]
-    public function embedDocumentWithoutText(): void
-    {
-        $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())->method('debug')->with('No documents to embed');
-
-        $embedder = new DocumentEmbedder(
-            $embeddings = new TestEmbeddingsModel(),
-            $store = new TestStore(),
-            new MockClock(),
-            $logger,
-        );
-
-        $embedder->embed(new Document(Uuid::v4(), null, null));
-
-        self::assertSame(0, $embeddings->multiCreateCalls);
-        self::assertSame([], $store->documents);
-    }
-
-    #[Test]
     public function embedDocumentWithMetadata(): void
     {
         $vectorData = [0.1, 0.2, 0.3];
         $metadata = new Metadata(['key' => 'value']);
-        $document = Document::fromText('Test content', Uuid::v4(), $metadata);
+        $document = new Document(Uuid::v4(), 'Test content', null, $metadata);
 
         $embedder = new DocumentEmbedder(
             new TestEmbeddingsModel(multiCreate: [$vector = new Vector($vectorData)]),

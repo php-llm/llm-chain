@@ -129,10 +129,11 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
         $documents = [];
 
         foreach ($results as $result) {
-            $documents[] = Document::fromVector(
-                new Vector($result[$this->vectorFieldName]),
-                $this->toUuid($result['_id']),
-                new Metadata($result['metadata'] ?? []),
+            $documents[] = new Document(
+                id: $this->toUuid($result['_id']),
+                text: $result['text'],
+                vector: new Vector($result[$this->vectorFieldName]),
+                metadata: new Metadata($result['metadata'] ?? []),
             );
         }
 
