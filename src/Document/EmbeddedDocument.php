@@ -16,5 +16,4 @@ final readonly class EmbeddedDocument extends Document
     ) {
         parent::__construct($id, $text, $metadata);
     }
-
 }
