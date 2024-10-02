@@ -48,6 +48,10 @@ final readonly class Store implements VectorStoreInterface
             ];
         }
 
+        if ([] === $vectors) {
+            return;
+        }
+
         $this->getVectors()->upsert($vectors);
     }
 
