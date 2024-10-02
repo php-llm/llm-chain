@@ -8,77 +8,77 @@ use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\DocumentEmbedder;
-use PhpLlm\LlmChain\EmbeddingsModel;
-use PhpLlm\LlmChain\Store\StoreInterface;
+use PhpLlm\LlmChain\Tests\Double\ConfigurableEmbeddingsModel;
+use PhpLlm\LlmChain\Tests\Double\SpyEmbeddingsModel;
+use PhpLlm\LlmChain\Tests\Double\SpyStore;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(DocumentEmbedder::class)]
-#[Small]
 final class DocumentEmbedderTest extends TestCase
 {
-    private EmbeddingsModel&MockObject $embeddings;
-    private StoreInterface&MockObject $store;
-    private MockClock $clock;
-    private LoggerInterface&MockObject $logger;
-    private DocumentEmbedder $embedder;
-
-    protected function setUp(): void
-    {
-        $this->embeddings = $this->createMock(EmbeddingsModel::class);
-        $this->store = $this->createMock(StoreInterface::class);
-        $this->clock = new MockClock('2024-01-01 00:00:00');
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->embedder = new DocumentEmbedder(
-            $this->embeddings,
-            $this->store,
-            $this->clock,
-            $this->logger,
-        );
-    }
-
     #[Test]
     public function embedSingleDocument(): void
     {
         $vectorData = [0.1, 0.2, 0.3];
-        $document = new Document(Uuid::v4(), 'Test content', $vector = new Vector($vectorData));
+        $vector = new Vector($vectorData);
+        $document = new Document(Uuid::v4(), 'Test content', vector: null);
 
-        $this->embeddings->method('multiCreate')->willReturn([$vector]);
-        $this->store->expects($this->once())->method('addDocuments')->with($this->callback(function ($docs) use ($vector) {
-            self::assertSame($vector->getData(), $docs[0]->vector->getData());
-            self::assertSame('Test content', $docs[0]->text);
+        $embedder = new DocumentEmbedder(
+            new ConfigurableEmbeddingsModel(multiCreate: [$vector]),
+            $store = new SpyStore(),
+            new MockClock(),
+            new NullLogger(),
+        );
 
-            return true;
-        }));
+        $embedder->embed($document);
 
-        $this->embedder->embed($document);
+        self::assertCount(1, $store->documents);
+        self::assertInstanceOf(Document::class, $store->documents[0]);
+        self::assertSame('Test content', $store->documents[0]->text);
+        self::assertSame($vectorData, $store->documents[0]->vector->getData());
     }
 
     #[Test]
     public function embedEmptyDocumentList(): void
     {
-        $this->logger->expects($this->once())->method('debug')->with('No documents to embed');
-        $this->store->expects($this->never())->method('addDocuments');
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('debug')->with('No documents to embed');
 
-        $this->embedder->embed([]);
+        $embedder = new DocumentEmbedder(
+            new ConfigurableEmbeddingsModel(),
+            $store = new SpyStore(),
+            new MockClock(),
+            $logger,
+        );
+
+        $embedder->embed([]);
+
+        self::assertSame([], $store->documents);
     }
 
     #[Test]
     public function embedDocumentWithoutText(): void
     {
-        $document = new Document(Uuid::v4(), null, null);
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('debug')->with('No documents to embed');
 
-        $this->logger->expects($this->once())->method('debug')->with('No documents to embed');
-        $this->embeddings->expects($this->never())->method('multiCreate');
-        $this->store->expects($this->never())->method('addDocuments');
+        $embedder = new DocumentEmbedder(
+            $embeddings = new SpyEmbeddingsModel(),
+            $store = new SpyStore(),
+            new MockClock(),
+            $logger,
+        );
 
-        $this->embedder->embed($document);
+        $embedder->embed(new Document(Uuid::v4(), null, null));
+
+        self::assertSame(0, $embeddings->callsMultiCreate);
+        self::assertSame([], $store->documents);
     }
 
     #[Test]
@@ -88,18 +88,20 @@ final class DocumentEmbedderTest extends TestCase
         $metadata = new Metadata(['key' => 'value']);
         $document = Document::fromText('Test content', Uuid::v4(), $metadata);
 
-        $this->embeddings->method('multiCreate')->willReturn([$vector = new Vector($vectorData)]);
-        $this->store->expects($this->once())->method('addDocuments')->with($this->callback(function ($docs) use ($vector, $metadata) {
-            self::assertSame($vector->getData(), $docs[0]->vector->getData());
-            self::assertSame('Test content', $docs[0]->text);
-            self::assertSame([
-                'key' => 'value',
-            ], $metadata->getArrayCopy());
+        $embedder = new DocumentEmbedder(
+            new ConfigurableEmbeddingsModel(multiCreate: [$vector = new Vector($vectorData)]),
+            $store = new SpyStore(),
+            new MockClock(),
+            new NullLogger(),
+        );
 
-            return true;
-        }));
+        $embedder->embed($document);
 
-        $this->embedder->embed($document);
+        self::assertCount(1, $store->documents);
+        self::assertInstanceOf(Document::class, $store->documents[0]);
+        self::assertSame('Test content', $store->documents[0]->text);
+        self::assertSame($vectorData, $store->documents[0]->vector->getData());
+        self::assertSame(['key' => 'value'], $store->documents[0]->metadata->getArrayCopy());
     }
 
     #[Test]
@@ -109,15 +111,19 @@ final class DocumentEmbedderTest extends TestCase
         $document1 = new Document(Uuid::v4(), 'Test content 1', $vector1 = new Vector($vectorData));
         $document2 = new Document(Uuid::v4(), 'Test content 2', $vector2 = new Vector($vectorData));
 
-        $this->embeddings->method('multiCreate')->willReturn([$vector1, $vector2]);
+        $embedder = new DocumentEmbedder(
+            new ConfigurableEmbeddingsModel(multiCreate: [$vector1, $vector2]),
+            $store = new SpyStore(),
+            $clock = new MockClock('2024-01-01 00:00:00'),
+            new NullLogger(),
+        );
 
-        $this->store->expects($this->once())->method('addDocuments')->with([$document1, $document2]);
-
-        $this->embedder->embed(
+        $embedder->embed(
             documents: [$document1, $document2],
             sleep: 3
         );
 
-        self::assertSame('2024-01-01 00:00:03', $this->clock->now()->format('Y-m-d H:i:s'));
+        self::assertCount(2, $store->documents);
+        self::assertSame('2024-01-01 00:00:03', $clock->now()->format('Y-m-d H:i:s'));
     }
 }
