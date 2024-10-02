@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Exception;
 
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 
-final class InvalidToolImplementation extends \InvalidArgumentException
+final class InvalidToolImplementation extends InvalidArgumentException
 {
     public static function missingAttribute(string $className): self
     {

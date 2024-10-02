@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\OpenAI\Model;
 
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
@@ -86,7 +87,7 @@ final class Gpt implements LanguageModel
             return new Choice($choice['message']['content']);
         }
 
-        throw new \RuntimeException('Unsupported finish reason');
+        throw new RuntimeException('Unsupported finish reason');
     }
 
     /**

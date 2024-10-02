@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Response;
 
+use PhpLlm\LlmChain\Exception\InvalidArgumentException;
+use PhpLlm\LlmChain\Exception\LogicException;
+
 final readonly class Response
 {
     /**
@@ -14,7 +17,7 @@ final readonly class Response
     public function __construct(Choice ...$choice)
     {
         if (0 === count($choice)) {
-            throw new \InvalidArgumentException('Response must have at least one choice');
+            throw new InvalidArgumentException('Response must have at least one choice');
         }
 
         $this->choices = $choice;
@@ -31,7 +34,7 @@ final readonly class Response
     public function getContent(): ?string
     {
         if (1 < count($this->choices)) {
-            throw new \LogicException('Response has more than one choice');
+            throw new LogicException('Response has more than one choice');
         }
 
         return $this->choices[0]->getContent();
@@ -43,7 +46,7 @@ final readonly class Response
     public function getToolCalls(): array
     {
         if (1 < count($this->choices)) {
-            throw new \LogicException('Response has more than one choice');
+            throw new LogicException('Response has more than one choice');
         }
 
         return $this->choices[0]->getToolCalls();

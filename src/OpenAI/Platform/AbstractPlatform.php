@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\OpenAI\Platform;
 
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\OpenAI\Platform;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -16,7 +17,7 @@ abstract class AbstractPlatform implements Platform
             return $this->rawRequest($endpoint, $body)->toArray();
         } catch (ClientException $e) {
             dump($e->getResponse()->getContent(false));
-            throw new \RuntimeException('Failed to make request', 0, $e);
+            throw new RuntimeException('Failed to make request', 0, $e);
         }
     }
 
