@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests;
 
 use PhpLlm\LlmChain\Document\Document;
-use PhpLlm\LlmChain\Document\EmbeddedDocument;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\DocumentEmbedder;
@@ -29,10 +28,10 @@ final class DocumentEmbedderTest extends TestCase
     public function embedSingleDocument(): void
     {
         $vectorData = [0.1, 0.2, 0.3];
-        $document = new EmbeddedDocument(Uuid::v4(), 'Test content', $vector = new Vector($vectorData));
+        $document = new Document(Uuid::v4(), 'Test content');
 
         $embedder = new DocumentEmbedder(
-            new TestEmbeddingsModel(multiCreate: [$vector]),
+            new TestEmbeddingsModel(),
             $store = new TestStore(),
             new MockClock(),
             new NullLogger(),
@@ -92,8 +91,12 @@ final class DocumentEmbedderTest extends TestCase
     public function embedWithSleep(): void
     {
         $vectorData = [0.1, 0.2, 0.3];
-        $document1 = new EmbeddedDocument(Uuid::v4(), 'Test content 1', $vector1 = new Vector($vectorData));
-        $document2 = new EmbeddedDocument(Uuid::v4(), 'Test content 2', $vector2 = new Vector($vectorData));
+
+        $vector1 = new Vector($vectorData);
+        $vector2 = new Vector($vectorData);
+
+        $document1 = new Document(Uuid::v4(), 'Test content 1');
+        $document2 = new Document(Uuid::v4(), 'Test content 2');
 
         $embedder = new DocumentEmbedder(
             new TestEmbeddingsModel(multiCreate: [$vector1, $vector2]),
