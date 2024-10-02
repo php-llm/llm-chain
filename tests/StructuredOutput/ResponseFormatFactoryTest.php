@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\StructuredOutput;
 
 use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
-use PhpLlm\LlmChain\StructuredOutput\SchemaFactory;
 use PhpLlm\LlmChain\Tests\StructuredOutput\Data\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -14,13 +13,6 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ResponseFormatFactory::class)]
 final class ResponseFormatFactoryTest extends TestCase
 {
-    private ResponseFormatFactory $responseFormatFactory;
-
-    protected function setUp(): void
-    {
-        $this->responseFormatFactory = new ResponseFormatFactory(SchemaFactory::create());
-    }
-
     #[Test]
     public function create(): void
     {
@@ -48,6 +40,6 @@ final class ResponseFormatFactoryTest extends TestCase
                 ],
                 'strict' => true,
             ],
-        ], $this->responseFormatFactory->create(User::class));
+        ], (new ResponseFormatFactory())->create(User::class));
     }
 }

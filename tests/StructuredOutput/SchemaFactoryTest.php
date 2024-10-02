@@ -19,7 +19,7 @@ final class SchemaFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->schemaFactory = SchemaFactory::create();
+        $this->schemaFactory = new SchemaFactory();
     }
 
     #[Test]
