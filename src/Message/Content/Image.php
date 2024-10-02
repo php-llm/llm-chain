@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message\Content;
 
-final readonly class Image implements ContentInterface
+final readonly class Image implements Content
 {
     /**
      * @param string $url An URL like "http://localhost:3000/my-image.png" or a data url like "data:image/png;base64,iVBOR[...]"
