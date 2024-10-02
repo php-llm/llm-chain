@@ -8,7 +8,7 @@ use MongoDB\BSON\Binary;
 use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\Driver\Exception\CommandException;
-use PhpLlm\LlmChain\Document\Document;
+use PhpLlm\LlmChain\Document\EmbeddedDocument;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
@@ -61,7 +61,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
     ) {
     }
 
-    public function addDocument(Document $document): void
+    public function addDocument(EmbeddedDocument $document): void
     {
         $this->addDocuments([$document]);
     }
@@ -71,10 +71,6 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
         $operations = [];
 
         foreach ($documents as $document) {
-            if (!$document->hasVector()) {
-                $this->logger->warning('Document {id} does not have a vector', ['id' => $document->id]);
-            }
-
             $operation = [
                 ['_id' => $this->toBinary($document->id)], // we use binary for the id, because of storage efficiency
                 array_filter([
@@ -105,7 +101,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
      *     filter?: array<mixed>
      * } $options
      *
-     * @return Document[]
+     * @return EmbeddedDocument[]
      */
     public function query(Vector $vector, array $options = []): array
     {
@@ -129,7 +125,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
         $documents = [];
 
         foreach ($results as $result) {
-            $documents[] = new Document(
+            $documents[] = new EmbeddedDocument(
                 id: $this->toUuid($result['_id']),
                 text: $result['text'],
                 vector: new Vector($result[$this->vectorFieldName]),

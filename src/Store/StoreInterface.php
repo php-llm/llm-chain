@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Store;
 
-use PhpLlm\LlmChain\Document\Document;
+use PhpLlm\LlmChain\Document\EmbeddedDocument;
 
 interface StoreInterface
 {
-    public function addDocument(Document $document): void;
+    public function addDocument(EmbeddedDocument $document): void;
 
     /**
-     * @param list<Document> $documents
+     * @param EmbeddedDocument[] $documents
      */
     public function addDocuments(array $documents): void;
 }
