@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\ToolBox\Tool;
 
-use PhpLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 use Symfony\Component\Clock\ClockInterface;
 
 #[AsTool('clock', description: 'Provides the current date and time.')]

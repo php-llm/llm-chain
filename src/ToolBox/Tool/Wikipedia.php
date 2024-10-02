@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\ToolBox\Tool;
 
-use PhpLlm\LlmChain\ToolBox\AsTool;
+use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsTool('wikipedia_search', description: 'Searches Wikipedia for a given query', method: 'search')]

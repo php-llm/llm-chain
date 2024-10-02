@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\ToolBox;
 
 use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
+use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 
 final readonly class ToolAnalyzer
 {
