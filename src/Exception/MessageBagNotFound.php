@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Exception;
 
-final class MessageBagNotFound extends \DomainException
+final class MessageBagNotFound extends DomainException
 {
     public static function withId(string $id): self
     {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\ToolBox\Tool;
 
+use PhpLlm\LlmChain\Exception\LogicException;
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 use Symfony\Component\DomCrawler\Crawler;
@@ -16,10 +18,10 @@ final readonly class YouTubeTranscriber
         private HttpClientInterface $client,
     ) {
         if (!class_exists(Crawler::class)) {
-            throw new \LogicException('The Symfony DomCrawler component is required to use this tool. Try running "composer require symfony/dom-crawler".');
+            throw new LogicException('The Symfony DomCrawler component is required to use this tool. Try running "composer require symfony/dom-crawler".');
         }
         if (!class_exists(CssSelectorConverter::class)) {
-            throw new \LogicException('The Symfony CSS Selector component is required to use this tool. Try running "composer require symfony/css-selector".');
+            throw new LogicException('The Symfony CSS Selector component is required to use this tool. Try running "composer require symfony/css-selector".');
         }
     }
 
@@ -48,7 +50,7 @@ final readonly class YouTubeTranscriber
 
         // Extract the URL for the captions
         if (!isset($data['captions']['playerCaptionsTracklistRenderer']['captionTracks'][0]['baseUrl'])) {
-            throw new \Exception('Captions are not available for this video.');
+            throw new RuntimeException('Captions are not available for this video.');
         }
         $captionsUrl = $data['captions']['playerCaptionsTracklistRenderer']['captionTracks'][0]['baseUrl'];
 

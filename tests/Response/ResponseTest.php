@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Response;
 
+use PhpLlm\LlmChain\Exception\InvalidArgumentException;
+use PhpLlm\LlmChain\Exception\LogicException;
 use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\Response;
 use PhpLlm\LlmChain\Response\ToolCall;
@@ -33,10 +35,10 @@ final class ResponseTest extends TestCase
     #[Test]
     public function constructorThrowsException(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Response must have at least one choice');
 
-        $response = new Response();
+        new Response();
     }
 
     #[Test]
@@ -57,7 +59,7 @@ final class ResponseTest extends TestCase
             new Choice('content', [new ToolCall('call_123456', 'name', ['foo' => 'bar'])]),
         );
 
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Response has more than one choice');
 
         $response->getContent();
@@ -81,7 +83,7 @@ final class ResponseTest extends TestCase
             new Choice('content', [new ToolCall('call_123456', 'name', ['foo' => 'bar'])]),
         );
 
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Response has more than one choice');
 
         $response->getToolCalls();

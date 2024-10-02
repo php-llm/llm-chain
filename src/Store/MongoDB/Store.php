@@ -11,6 +11,7 @@ use MongoDB\Driver\Exception\CommandException;
 use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Store\InitializableStoreInterface;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Psr\Log\LoggerInterface;
@@ -145,7 +146,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
     {
         try {
             if ([] !== $options && !array_key_exists('fields', $options)) {
-                throw new \InvalidArgumentException('The only supported option is "fields"');
+                throw new InvalidArgumentException('The only supported option is "fields"');
             }
 
             $this->getCollection()->createSearchIndex(

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Document;
 
+use PhpLlm\LlmChain\Exception\InvalidArgumentException;
+
 final class Vector
 {
     /**
@@ -14,15 +16,15 @@ final class Vector
         private ?int $dimensions = null,
     ) {
         if (null !== $dimensions && $dimensions !== count($data)) {
-            throw new \InvalidArgumentException('Vector must have '.$dimensions.' dimensions');
+            throw new InvalidArgumentException('Vector must have '.$dimensions.' dimensions');
         }
 
         if (0 === count($data)) {
-            throw new \InvalidArgumentException('Vector must have at least one dimension');
+            throw new InvalidArgumentException('Vector must have at least one dimension');
         }
 
         if (is_int($dimensions) && count($data) !== $dimensions) {
-            throw new \InvalidArgumentException('Vector must have '.$dimensions.' dimensions');
+            throw new InvalidArgumentException('Vector must have '.$dimensions.' dimensions');
         }
 
         if (null === $this->dimensions) {
