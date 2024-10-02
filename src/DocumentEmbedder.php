@@ -49,7 +49,7 @@ final readonly class DocumentEmbedder
                 $embeddedDocuments[] = $document->withVector($vectors[$i]);
             }
 
-            $this->store->addDocuments(...$embeddedDocuments);
+            $this->store->addDocuments($embeddedDocuments);
 
             if (0 !== $sleep) {
                 $this->clock->sleep($sleep);
