@@ -41,34 +41,88 @@ final class ToolAnalyzerTest extends TestCase
     #[Test]
     public function getDefinition(): void
     {
-        /** @var Metadata[] $actual */
-        $actual = iterator_to_array($this->toolAnalyzer->getMetadata(ToolRequiredParams::class));
+        /** @var Metadata[] $metadatas */
+        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(ToolRequiredParams::class));
 
-        self::assertCount(1, $actual);
-        self::assertSame(ToolRequiredParams::class, $actual[0]->className);
-        self::assertSame('tool_required_params', $actual[0]->name);
-        self::assertSame('A tool with required parameters', $actual[0]->description);
-        self::assertSame('bar', $actual[0]->method);
-        self::assertIsArray($actual[0]->parameters);
+        self::assertToolConfiguration(
+            metadata: $metadatas[0],
+            className: ToolRequiredParams::class,
+            name: 'tool_required_params',
+            description: 'A tool with required parameters',
+            method: 'bar',
+            parameters: [
+                'type' => 'object',
+                'properties' => [
+                    'text' => [
+                        'type' => 'string',
+                        'description' => 'The text given to the tool',
+                    ],
+                    'number' => [
+                        'type' => 'integer',
+                        'description' => 'A number given to the tool',
+                    ],
+                ],
+                'required' => ['text', 'number'],
+            ],
+        );
     }
 
     #[Test]
     public function getDefinitionWithMultiple(): void
     {
-        $actual = iterator_to_array($this->toolAnalyzer->getMetadata(ToolMultiple::class));
+        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(ToolMultiple::class));
 
-        self::assertCount(2, $actual);
+        self::assertCount(2, $metadatas);
 
-        self::assertSame(ToolMultiple::class, $actual[0]->className);
-        self::assertSame('tool_hello_world', $actual[0]->name);
-        self::assertSame('Function to say hello', $actual[0]->description);
-        self::assertSame('hello', $actual[0]->method);
-        self::assertIsArray($actual[0]->parameters);
+        [$first, $second] = $metadatas;
 
-        self::assertSame(ToolMultiple::class, $actual[1]->className);
-        self::assertSame('tool_required_params', $actual[1]->name);
-        self::assertSame('Function to say a number', $actual[1]->description);
-        self::assertSame('bar', $actual[1]->method);
-        self::assertIsArray($actual[1]->parameters);
+        self::assertToolConfiguration(
+            metadata: $first,
+            className: ToolMultiple::class,
+            name: 'tool_hello_world',
+            description: 'Function to say hello',
+            method: 'hello',
+            parameters: [
+                'type' => 'object',
+                'properties' => [
+                    'world' => [
+                        'type' => 'string',
+                        'description' => 'The world to say hello to',
+                    ],
+                ],
+                'required' => ['world'],
+            ],
+        );
+
+        self::assertToolConfiguration(
+            metadata: $second,
+            className: ToolMultiple::class,
+            name: 'tool_required_params',
+            description: 'Function to say a number',
+            method: 'bar',
+            parameters: [
+                'type' => 'object',
+                'properties' => [
+                    'text' => [
+                        'type' => 'string',
+                        'description' => 'The text given to the tool',
+                    ],
+                    'number' => [
+                        'type' => 'integer',
+                        'description' => 'A number given to the tool',
+                    ],
+                ],
+                'required' => ['text', 'number'],
+            ],
+        );
+    }
+
+    private function assertToolConfiguration(Metadata $metadata, string $className, string $name, string $description, string $method, array $parameters): void
+    {
+        self::assertSame($className, $metadata->className);
+        self::assertSame($name, $metadata->name);
+        self::assertSame($description, $metadata->description);
+        self::assertSame($method, $metadata->method);
+        self::assertSame($parameters, $metadata->parameters);
     }
 }
