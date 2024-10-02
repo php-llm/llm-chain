@@ -6,25 +6,13 @@ namespace PhpLlm\LlmChain\StructuredOutput;
 
 use function Symfony\Component\String\u;
 
-final readonly class ResponseFormatFactory
+final readonly class ResponseFormatFactory implements ResponseFormatFactoryInterface
 {
     public function __construct(
         private SchemaFactory $schemaFactory,
     ) {
     }
 
-    /**
-     * @param class-string $responseClass
-     *
-     * @return array{
-     *     type: 'json_schema',
-     *     json_schema: array{
-     *         name: string,
-     *         schema: array<string, mixed>,
-     *         strict: true,
-     *     }
-     * }
-     */
     public function create(string $responseClass): array
     {
         return [

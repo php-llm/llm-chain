@@ -16,7 +16,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
     private string $outputStructure;
 
     public function __construct(
-        private readonly ResponseFormatFactory $responseFormatFactory,
+        private readonly ResponseFormatFactoryInterface $responseFormatFactory,
         private readonly SerializerInterface $serializer,
     ) {
     }
