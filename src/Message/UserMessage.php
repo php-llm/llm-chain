@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message;
 
-use PhpLlm\LlmChain\Message\Content\ContentInterface;
+use PhpLlm\LlmChain\Message\Content\Content;
 use PhpLlm\LlmChain\Message\Content\Image;
 use PhpLlm\LlmChain\Message\Content\Text;
 
 final readonly class UserMessage implements MessageInterface
 {
     /**
-     * @var list<ContentInterface>
+     * @var list<Content>
      */
     public array $content;
 
     public function __construct(
-        ContentInterface ...$content,
+        Content ...$content,
     ) {
         $this->content = $content;
     }
@@ -40,7 +40,7 @@ final readonly class UserMessage implements MessageInterface
     /**
      * @return array{
      *     role: Role::User,
-     *     content: string|list<ContentInterface>
+     *     content: string|list<Content>
      * }
      */
     public function jsonSerialize(): array

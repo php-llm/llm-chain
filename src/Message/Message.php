@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message;
 
-use PhpLlm\LlmChain\Message\Content\ContentInterface;
+use PhpLlm\LlmChain\Message\Content\Content;
 use PhpLlm\LlmChain\Message\Content\Text;
 use PhpLlm\LlmChain\Response\ToolCall;
 
@@ -28,10 +28,10 @@ final readonly class Message
         return new AssistantMessage($content, $toolCalls);
     }
 
-    public static function ofUser(string|ContentInterface ...$content): UserMessage
+    public static function ofUser(string|Content ...$content): UserMessage
     {
         $content = \array_map(
-            static fn (string|ContentInterface $entry) => \is_string($entry) ? new Text($entry) : $entry,
+            static fn (string|Content $entry) => \is_string($entry) ? new Text($entry) : $entry,
             $content,
         );
 
