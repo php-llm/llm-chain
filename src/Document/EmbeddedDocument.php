@@ -17,18 +17,4 @@ final readonly class EmbeddedDocument extends Document
         parent::__construct($id, $text, $metadata);
     }
 
-    public function withVector(Vector $vector): self
-    {
-        return new self(
-            $this->id,
-            $this->text,
-            $vector,
-            $this->metadata,
-        );
-    }
-
-    public function hasVector(): bool
-    {
-        return null !== $this->vector;
-    }
 }
