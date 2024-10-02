@@ -49,7 +49,6 @@ foreach ($movies as $movie) {
     $documents[] = new Document(
         id: Uuid::v4(),
         text: 'Title: '.$movie['title'].PHP_EOL.'Director: '.$movie['director'].PHP_EOL.'Description: '.$movie['description'],
-        vector: null,
         metadata: new Metadata($movie),
     );
 }

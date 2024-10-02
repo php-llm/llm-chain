@@ -5,23 +5,21 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Store\ChromaDB;
 
 use Codewithkyrian\ChromaDB\Client;
-use PhpLlm\LlmChain\Document\Document;
+use PhpLlm\LlmChain\Document\EmbeddedDocument;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
 final readonly class Store implements VectorStoreInterface
 {
     public function __construct(
         private Client $client,
-        private LoggerInterface $logger,
         private string $collectionName,
     ) {
     }
 
-    public function addDocument(Document $document): void
+    public function addDocument(EmbeddedDocument $document): void
     {
         $this->addDocuments([$document]);
     }
@@ -32,10 +30,6 @@ final readonly class Store implements VectorStoreInterface
         $vectors = [];
         $metadata = [];
         foreach ($documents as $document) {
-            if (!$document->hasVector()) {
-                $this->logger->warning('Document {id} does not have a vector', ['id' => $document->id]);
-            }
-
             $ids[] = (string) $document->id;
             $vectors[] = $document->vector->getData();
             $metadata[] = $document->metadata->getArrayCopy();
@@ -55,7 +49,7 @@ final readonly class Store implements VectorStoreInterface
 
         $documents = [];
         for ($i = 0; $i < count($queryResponse->metadatas[0]); ++$i) {
-            $documents[] = new Document( // not sure how to insert and get the text here @chr-hertel
+            $documents[] = new EmbeddedDocument(
                 id: Uuid::fromString($queryResponse->ids[0][$i]),
                 text: '???',
                 vector: new Vector($queryResponse->embeddings[0][$i]),

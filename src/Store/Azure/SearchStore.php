@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Store\Azure;
 
-use PhpLlm\LlmChain\Document\Document;
+use PhpLlm\LlmChain\Document\EmbeddedDocument;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
@@ -26,7 +26,7 @@ final readonly class SearchStore implements VectorStoreInterface
     ) {
     }
 
-    public function addDocument(Document $document): void
+    public function addDocument(EmbeddedDocument $document): void
     {
         $this->addDocuments([$document]);
     }
@@ -39,7 +39,7 @@ final readonly class SearchStore implements VectorStoreInterface
     }
 
     /**
-     * @return list<Document>
+     * @return list<EmbeddedDocument>
      */
     public function query(Vector $vector, array $options = []): array
     {
@@ -73,7 +73,7 @@ final readonly class SearchStore implements VectorStoreInterface
     /**
      * @return array<string, mixed>
      */
-    private function convertDocumentToIndexableArray(Document $document): array
+    private function convertDocumentToIndexableArray(EmbeddedDocument $document): array
     {
         return array_merge([
             'id' => $document->id,
@@ -85,9 +85,9 @@ final readonly class SearchStore implements VectorStoreInterface
     /**
      * @param array<string, mixed> $data
      */
-    private function convertArrayToDocument(array $data): Document
+    private function convertArrayToDocument(array $data): EmbeddedDocument
     {
-        return new Document(
+        return new EmbeddedDocument(
             id: Uuid::fromString($data['id']),
             text: $data['text'],
             vector: $data[$this->vectorFieldName] ? new Vector($data[$this->vectorFieldName]) : null,

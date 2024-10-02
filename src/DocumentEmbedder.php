@@ -44,12 +44,12 @@ final readonly class DocumentEmbedder
         foreach ($chunks as $chunk) {
             $vectors = $this->embeddings->multiCreate(array_map(fn (Document $document) => $document->text, $chunk));
 
-            $vectorizedDocuments = [];
+            $embeddedDocuments = [];
             foreach ($chunk as $i => $document) {
-                $vectorizedDocuments[] = $document->withVector($vectors[$i]);
+                $embeddedDocuments[] = $document->withVector($vectors[$i]);
             }
 
-            $this->store->addDocuments($vectorizedDocuments);
+            $this->store->addDocuments(...$embeddedDocuments);
 
             if (0 !== $sleep) {
                 $this->clock->sleep($sleep);
