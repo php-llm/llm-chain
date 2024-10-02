@@ -8,9 +8,8 @@ use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\DocumentEmbedder;
-use PhpLlm\LlmChain\Tests\Double\ConfigurableEmbeddingsModel;
-use PhpLlm\LlmChain\Tests\Double\SpyEmbeddingsModel;
-use PhpLlm\LlmChain\Tests\Double\SpyStore;
+use PhpLlm\LlmChain\Tests\Double\TestEmbeddingsModel;
+use PhpLlm\LlmChain\Tests\Double\TestStore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -30,8 +29,8 @@ final class DocumentEmbedderTest extends TestCase
         $document = new Document(Uuid::v4(), 'Test content', vector: null);
 
         $embedder = new DocumentEmbedder(
-            new ConfigurableEmbeddingsModel(multiCreate: [$vector]),
-            $store = new SpyStore(),
+            new TestEmbeddingsModel(multiCreate: [$vector]),
+            $store = new TestStore(),
             new MockClock(),
             new NullLogger(),
         );
@@ -51,8 +50,8 @@ final class DocumentEmbedderTest extends TestCase
         $logger->expects($this->once())->method('debug')->with('No documents to embed');
 
         $embedder = new DocumentEmbedder(
-            new ConfigurableEmbeddingsModel(),
-            $store = new SpyStore(),
+            new TestEmbeddingsModel(),
+            $store = new TestStore(),
             new MockClock(),
             $logger,
         );
@@ -69,15 +68,15 @@ final class DocumentEmbedderTest extends TestCase
         $logger->expects($this->once())->method('debug')->with('No documents to embed');
 
         $embedder = new DocumentEmbedder(
-            $embeddings = new SpyEmbeddingsModel(),
-            $store = new SpyStore(),
+            $embeddings = new TestEmbeddingsModel(),
+            $store = new TestStore(),
             new MockClock(),
             $logger,
         );
 
         $embedder->embed(new Document(Uuid::v4(), null, null));
 
-        self::assertSame(0, $embeddings->callsMultiCreate);
+        self::assertSame(0, $embeddings->multiCreateCalls);
         self::assertSame([], $store->documents);
     }
 
@@ -89,14 +88,15 @@ final class DocumentEmbedderTest extends TestCase
         $document = Document::fromText('Test content', Uuid::v4(), $metadata);
 
         $embedder = new DocumentEmbedder(
-            new ConfigurableEmbeddingsModel(multiCreate: [$vector = new Vector($vectorData)]),
-            $store = new SpyStore(),
+            new TestEmbeddingsModel(multiCreate: [$vector = new Vector($vectorData)]),
+            $store = new TestStore(),
             new MockClock(),
             new NullLogger(),
         );
 
         $embedder->embed($document);
 
+        self::assertSame(1, $store->addDocumentsCalls);
         self::assertCount(1, $store->documents);
         self::assertInstanceOf(Document::class, $store->documents[0]);
         self::assertSame('Test content', $store->documents[0]->text);
@@ -112,8 +112,8 @@ final class DocumentEmbedderTest extends TestCase
         $document2 = new Document(Uuid::v4(), 'Test content 2', $vector2 = new Vector($vectorData));
 
         $embedder = new DocumentEmbedder(
-            new ConfigurableEmbeddingsModel(multiCreate: [$vector1, $vector2]),
-            $store = new SpyStore(),
+            new TestEmbeddingsModel(multiCreate: [$vector1, $vector2]),
+            $store = new TestStore(),
             $clock = new MockClock('2024-01-01 00:00:00'),
             new NullLogger(),
         );
@@ -123,6 +123,7 @@ final class DocumentEmbedderTest extends TestCase
             sleep: 3
         );
 
+        self::assertSame(1, $store->addDocumentsCalls);
         self::assertCount(2, $store->documents);
         self::assertSame('2024-01-01 00:00:03', $clock->now()->format('Y-m-d H:i:s'));
     }
