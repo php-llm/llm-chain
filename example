@@ -1,0 +1,67 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleSectionOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\SingleCommandApplication;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Process\Process;
+
+require_once __DIR__.'/vendor/autoload.php';
+
+$app = (new SingleCommandApplication('LLM Chain Example Runner'))
+    ->setDescription('Runs all LLM Chain examples in folder examples/')
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
+        $io = new SymfonyStyle($input, $output);
+        $io->title('LLM Chain Examples');
+
+        $examples = (new Finder())
+            ->in(__DIR__.'/examples')
+            ->name('*.php')
+            ->sortByName()
+            ->files();
+
+        /** @var array{example: SplFileInfo, section: ConsoleSectionOutput, process: Process, state: 'running'|'finished'} $exampleRuns */
+        $exampleRuns = [];
+        foreach ($examples as $example) {
+            $exampleRuns[] = [
+                'example' => $example,
+                'section' => $section = $output->section(),
+                'process' => $process = new Process(['php', $example->getRealPath()]),
+                'state' => 'running',
+            ];
+
+            $process->start();
+            $section->writeln(sprintf('Example %s: <comment>Running</comment>', $example->getFilename()));
+        }
+
+        $examplesRunning = fn () => array_reduce($exampleRuns, fn ($running, $example) => $running || $example['process']->isRunning(), false);
+        $examplesSuccessful = fn () => array_reduce($exampleRuns, fn ($successful, $example) => $successful && $example['process']->isSuccessful(), true);
+
+        while ($examplesRunning()) {
+            sleep(1);
+            foreach ($exampleRuns as $run) {
+                if ('running' === $run['state'] && !$run['process']->isRunning()) {
+                    $result = $run['process']->isSuccessful() ? '<info>Finished</info>' : '<error>Failed</error>';
+                    $run['section']->overwrite(sprintf('Example %s: %s', $run['example']->getFilename(), $result));
+                    $run['state'] = 'finished';
+                }
+            }
+        }
+
+        $io->newLine();
+        if (!$examplesSuccessful()) {
+            $io->error('Some examples failed!');
+
+            return Command::FAILURE;
+        }
+
+        $io->success('All examples ran successfully!');
+
+        return Command::SUCCESS;
+    })
+    ->run();
