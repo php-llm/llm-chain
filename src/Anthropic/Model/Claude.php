@@ -10,6 +10,8 @@ use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\Response;
+use PhpLlm\LlmChain\Response\ResponseInterface;
+use PhpLlm\LlmChain\Response\StreamResponse;
 
 final class Claude implements LanguageModel
 {
@@ -28,7 +30,7 @@ final class Claude implements LanguageModel
      * @param array<string, mixed> $options The options to be used for this specific call.
      *                                      Can overwrite default options.
      */
-    public function call(MessageBag $messages, array $options = []): Response
+    public function call(MessageBag $messages, array $options = []): ResponseInterface
     {
         $system = $messages->getSystemMessage();
         $body = array_merge($this->options, $options, [
@@ -38,6 +40,10 @@ final class Claude implements LanguageModel
         ]);
 
         $response = $this->platform->request($body);
+
+        if ($response instanceof \Generator) {
+            return new StreamResponse($this->convertStream($response));
+        }
 
         return new Response(new Choice($response['content'][0]['text']));
     }
@@ -55,5 +61,16 @@ final class Claude implements LanguageModel
     public function supportsStructuredOutput(): bool
     {
         return false;
+    }
+
+    private function convertStream(\Generator $generator): \Generator
+    {
+        foreach ($generator as $data) {
+            if ('content_block_delta' != $data['type'] || !isset($data['delta']['text'])) {
+                continue;
+            }
+
+            yield $data['delta']['text'];
+        }
     }
 }

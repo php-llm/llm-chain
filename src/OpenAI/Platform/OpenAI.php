@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\OpenAI\Platform;
 
 use PhpLlm\LlmChain\OpenAI\Platform;
+use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class OpenAI extends AbstractPlatform implements Platform
+final readonly class OpenAI extends AbstractPlatform implements Platform
 {
+    private EventSourceHttpClient $httpClient;
+
     public function __construct(
-        private readonly HttpClientInterface $httpClient,
-        private readonly string $apiKey,
+        HttpClientInterface $httpClient,
+        private string $apiKey,
     ) {
+        $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
     }
 
     protected function rawRequest(string $endpoint, array $body): ResponseInterface
