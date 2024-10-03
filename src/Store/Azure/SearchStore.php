@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Store\Azure;
 
-use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -26,28 +26,20 @@ final readonly class SearchStore implements VectorStoreInterface
     ) {
     }
 
-    public function addDocument(Document $document): void
-    {
-        $this->addDocuments([$document]);
-    }
-
-    public function addDocuments(array $documents): void
+    public function add(VectorDocument ...$documents): void
     {
         $this->request('index', [
-            'value' => array_map([$this, 'convertDocumentToIndexableArray'], $documents),
+            'value' => array_map([$this, 'convertToIndexableArray'], $documents),
         ]);
     }
 
-    /**
-     * @return list<Document>
-     */
     public function query(Vector $vector, array $options = []): array
     {
         $result = $this->request('search', [
             'vectorQueries' => [$this->buildVectorQuery($vector)],
         ]);
 
-        return array_map([$this, 'convertArrayToDocument'], $result['value']);
+        return array_map([$this, 'convertToVectorDocument'], $result['value']);
     }
 
     /**
@@ -73,7 +65,7 @@ final readonly class SearchStore implements VectorStoreInterface
     /**
      * @return array<string, mixed>
      */
-    private function convertDocumentToIndexableArray(Document $document): array
+    private function convertToIndexableArray(VectorDocument $document): array
     {
         return array_merge([
             'id' => $document->id,
@@ -84,12 +76,11 @@ final readonly class SearchStore implements VectorStoreInterface
     /**
      * @param array<string, mixed> $data
      */
-    private function convertArrayToDocument(array $data): Document
+    private function convertToVectorDocument(array $data): VectorDocument
     {
-        return new Document(
+        return new VectorDocument(
             id: Uuid::fromString($data['id']),
-            text: null,
-            vector: null,
+            vector: $data[$this->vectorFieldName] ? new Vector($data[$this->vectorFieldName]) : null,
             metadata: new Metadata($data),
         );
     }

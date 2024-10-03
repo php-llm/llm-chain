@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain;
 
-use PhpLlm\LlmChain\Document\Document;
+use PhpLlm\LlmChain\Document\TextDocument;
+use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\StoreInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -25,16 +26,13 @@ final readonly class DocumentEmbedder
     }
 
     /**
-     * @param Document|list<Document> $documents
+     * @param TextDocument|TextDocument[] $documents
      */
-    public function embed(Document|array $documents, int $chunkSize = 0, int $sleep = 0): void
+    public function embed(TextDocument|array $documents, int $chunkSize = 0, int $sleep = 0): void
     {
-        if ($documents instanceof Document) {
+        if ($documents instanceof TextDocument) {
             $documents = [$documents];
         }
-
-        // Filter out documents without text
-        $documents = array_filter($documents, fn (Document $document) => is_string($document->text));
 
         if ([] === $documents) {
             $this->logger->debug('No documents to embed');
@@ -45,14 +43,14 @@ final readonly class DocumentEmbedder
         $chunks = 0 !== $chunkSize ? array_chunk($documents, $chunkSize) : [$documents];
 
         foreach ($chunks as $chunk) {
-            $vectors = $this->embeddings->multiCreate(array_map(fn (Document $document) => $document->text, $chunk));
+            $vectors = $this->embeddings->multiCreate(array_map(fn (TextDocument $document) => $document->content, $chunk));
 
-            $vectorizedDocuments = [];
+            $vectorDocuments = [];
             foreach ($chunk as $i => $document) {
-                $vectorizedDocuments[] = $document->withVector($vectors[$i]);
+                $vectorDocuments[] = new VectorDocument($document->id, $vectors[$i], $document->metadata);
             }
 
-            $this->store->addDocuments($vectorizedDocuments);
+            $this->store->add(...$vectorDocuments);
 
             if (0 !== $sleep) {
                 $this->clock->sleep($sleep);

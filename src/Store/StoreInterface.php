@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Store;
 
-use PhpLlm\LlmChain\Document\Document;
+use PhpLlm\LlmChain\Document\VectorDocument;
 
 interface StoreInterface
 {
-    public function addDocument(Document $document): void;
-
-    /**
-     * @param list<Document> $documents
-     */
-    public function addDocuments(array $documents): void;
+    public function add(VectorDocument ...$documents): void;
 }

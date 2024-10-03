@@ -8,9 +8,9 @@ use MongoDB\BSON\Binary;
 use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\Driver\Exception\CommandException;
-use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Store\InitializableStoreInterface;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
@@ -61,26 +61,16 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
     ) {
     }
 
-    public function addDocument(Document $document): void
-    {
-        $this->addDocuments([$document]);
-    }
-
-    public function addDocuments(array $documents): void
+    public function add(VectorDocument ...$documents): void
     {
         $operations = [];
 
         foreach ($documents as $document) {
-            if (!$document->hasVector()) {
-                $this->logger->warning('Document {id} does not have a vector', ['id' => $document->id]);
-            }
-
             $operation = [
                 ['_id' => $this->toBinary($document->id)], // we use binary for the id, because of storage efficiency
                 array_filter([
                     'metadata' => $document->metadata->getArrayCopy(),
                     $this->vectorFieldName => $document->vector->getData(),
-                    'text' => $document->text,
                 ]),
                 ['upsert' => true], // insert if not exists
             ];
@@ -104,8 +94,6 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
      *     numCandidates?: positive-int,
      *     filter?: array<mixed>
      * } $options
-     *
-     * @return Document[]
      */
     public function query(Vector $vector, array $options = []): array
     {
@@ -129,10 +117,10 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
         $documents = [];
 
         foreach ($results as $result) {
-            $documents[] = Document::fromVector(
-                new Vector($result[$this->vectorFieldName]),
-                $this->toUuid($result['_id']),
-                new Metadata($result['metadata'] ?? []),
+            $documents[] = new VectorDocument(
+                id: $this->toUuid($result['_id']),
+                vector: new Vector($result[$this->vectorFieldName]),
+                metadata: new Metadata($result['metadata'] ?? []),
             );
         }
 
