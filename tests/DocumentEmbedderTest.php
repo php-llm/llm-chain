@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests;
 
 use PhpLlm\LlmChain\Document\Document;
+use PhpLlm\LlmChain\Document\EmbeddedDocument;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\DocumentEmbedder;
@@ -27,22 +28,20 @@ final class DocumentEmbedderTest extends TestCase
     #[Test]
     public function embedSingleDocument(): void
     {
-        $vectorData = [0.1, 0.2, 0.3];
-        $document = new Document(Uuid::v4(), 'Test content');
+        $document = new Document($id = Uuid::v4(), 'Test content');
 
         $embedder = new DocumentEmbedder(
-            new TestEmbeddingsModel(),
+            new TestEmbeddingsModel(multiCreate: [$vector = new Vector([0.1, 0.2, 0.3])]),
             $store = new TestStore(),
             new MockClock(),
-            new NullLogger(),
         );
 
         $embedder->embed($document);
 
         self::assertCount(1, $store->documents);
-        self::assertInstanceOf(Document::class, $store->documents[0]);
-        self::assertSame('Test content', $store->documents[0]->text);
-        self::assertSame($vectorData, $store->documents[0]->vector->getData());
+        self::assertInstanceOf(EmbeddedDocument::class, $store->documents[0]);
+        self::assertSame($id, $store->documents[0]->id);
+        self::assertSame($vector, $store->documents[0]->vector);
     }
 
     #[Test]
@@ -66,12 +65,11 @@ final class DocumentEmbedderTest extends TestCase
     #[Test]
     public function embedDocumentWithMetadata(): void
     {
-        $vectorData = [0.1, 0.2, 0.3];
         $metadata = new Metadata(['key' => 'value']);
-        $document = new Document(Uuid::v4(), 'Test content', $metadata);
+        $document = new Document($id = Uuid::v4(), 'Test content', $metadata);
 
         $embedder = new DocumentEmbedder(
-            new TestEmbeddingsModel(multiCreate: [$vector = new Vector($vectorData)]),
+            new TestEmbeddingsModel(multiCreate: [$vector = new Vector([0.1, 0.2, 0.3])]),
             $store = new TestStore(),
             new MockClock(),
             new NullLogger(),
@@ -81,9 +79,9 @@ final class DocumentEmbedderTest extends TestCase
 
         self::assertSame(1, $store->addDocumentsCalls);
         self::assertCount(1, $store->documents);
-        self::assertInstanceOf(Document::class, $store->documents[0]);
-        self::assertSame('Test content', $store->documents[0]->text);
-        self::assertSame($vectorData, $store->documents[0]->vector->getData());
+        self::assertInstanceOf(EmbeddedDocument::class, $store->documents[0]);
+        self::assertSame($id, $store->documents[0]->id);
+        self::assertSame($vector, $store->documents[0]->vector);
         self::assertSame(['key' => 'value'], $store->documents[0]->metadata->getArrayCopy());
     }
 
