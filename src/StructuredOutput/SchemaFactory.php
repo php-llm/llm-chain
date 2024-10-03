@@ -9,26 +9,22 @@ use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\PropertyInfo\Type;
 
-final readonly class SchemaFactory
+final class SchemaFactory
 {
     public function __construct(
-        private PropertyInfoExtractor $propertyInfo,
+        private ?PropertyInfoExtractor $propertyInfo = null,
     ) {
-    }
+        if (null === $propertyInfo) {
+            $phpDocExtractor = new PhpDocExtractor();
+            $reflectionExtractor = new ReflectionExtractor();
 
-    public static function create(): self
-    {
-        $phpDocExtractor = new PhpDocExtractor();
-        $reflectionExtractor = new ReflectionExtractor();
-
-        return new self(
-            new PropertyInfoExtractor(
+            $this->propertyInfo = new PropertyInfoExtractor(
                 [$reflectionExtractor],
                 [$phpDocExtractor, $reflectionExtractor],
                 [$phpDocExtractor],
                 [$reflectionExtractor],
-            )
-        );
+            );
+        }
     }
 
     /**

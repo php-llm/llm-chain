@@ -9,7 +9,7 @@ use function Symfony\Component\String\u;
 final readonly class ResponseFormatFactory implements ResponseFormatFactoryInterface
 {
     public function __construct(
-        private SchemaFactory $schemaFactory,
+        private SchemaFactory $schemaFactory = new SchemaFactory(),
     ) {
     }
 
