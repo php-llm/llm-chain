@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\StructuredOutput;
 
 use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
+use PhpLlm\LlmChain\StructuredOutput\SchemaFactory;
 use PhpLlm\LlmChain\Tests\StructuredOutput\Data\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ResponseFormatFactory::class)]
+#[UsesClass(SchemaFactory::class)]
 final class ResponseFormatFactoryTest extends TestCase
 {
     #[Test]

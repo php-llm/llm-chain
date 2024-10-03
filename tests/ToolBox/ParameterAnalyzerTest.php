@@ -9,6 +9,7 @@ use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWithToolParameterAttribute;
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
 #[UsesClass(ParameterAnalyzer::class)]
+#[UsesClass(ToolParameter::class)]
 final class ParameterAnalyzerTest extends TestCase
 {
     private ParameterAnalyzer $analyzer;

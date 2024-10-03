@@ -16,6 +16,7 @@ use PhpLlm\LlmChain\Tests\Double\ConfigurableResponseFormatFactory;
 use PhpLlm\LlmChain\Tests\Fixture\SomeStructure;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -23,6 +24,12 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[CoversClass(ChainProcessor::class)]
+#[UsesClass(Input::class)]
+#[UsesClass(Output::class)]
+#[UsesClass(MessageBag::class)]
+#[UsesClass(Choice::class)]
+#[UsesClass(Response::class)]
+#[UsesClass(MissingModelSupport::class)]
 final class ChainProcessorTest extends TestCase
 {
     #[Test]

@@ -12,6 +12,7 @@ use PhpLlm\LlmChain\Tests\Double\TestEmbeddingsModel;
 use PhpLlm\LlmChain\Tests\Double\TestStore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -19,6 +20,8 @@ use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(DocumentEmbedder::class)]
+#[UsesClass(Document::class)]
+#[UsesClass(Vector::class)]
 final class DocumentEmbedderTest extends TestCase
 {
     #[Test]
