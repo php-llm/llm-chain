@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests\ToolBox\Tool;
+namespace PhpLlm\LlmChain\Tests\Fixture\Tool;
 
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;

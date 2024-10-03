@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\ToolBox;
 
 use PhpLlm\LlmChain\Response\ToolCall;
-use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolNoParams;
-use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolOptionalParam;
-use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;

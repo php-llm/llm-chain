@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\ToolBox;
 
 use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
-use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolMultiple;
-use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolRequiredParams;
-use PhpLlm\LlmChain\Tests\ToolBox\Tool\ToolWrong;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWrong;
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
