@@ -18,7 +18,7 @@ final readonly class Azure extends AbstractPlatform implements Platform
         private string $baseUrl,
         private string $deployment,
         private string $apiVersion,
-        private string $key,
+        #[\SensitiveParameter] private string $apiKey,
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
     }
@@ -29,7 +29,7 @@ final readonly class Azure extends AbstractPlatform implements Platform
 
         return $this->httpClient->request('POST', $url, [
             'headers' => [
-                'api-key' => $this->key,
+                'api-key' => $this->apiKey,
                 'Content-Type' => 'application/json',
             ],
             'query' => ['api-version' => $this->apiVersion],

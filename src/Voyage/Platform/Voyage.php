@@ -11,7 +11,7 @@ final readonly class Voyage implements Platform
 {
     public function __construct(
         private HttpClientInterface $httpClient,
-        private string $apiKey,
+        #[\SensitiveParameter] private string $apiKey,
     ) {
     }
 

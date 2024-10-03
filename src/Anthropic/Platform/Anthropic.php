@@ -16,7 +16,7 @@ final readonly class Anthropic implements Platform
 
     public function __construct(
         HttpClientInterface $httpClient,
-        private string $apiKey,
+        #[\SensitiveParameter] private string $apiKey,
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
     }
