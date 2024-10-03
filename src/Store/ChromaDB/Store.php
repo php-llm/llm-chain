@@ -55,7 +55,7 @@ final readonly class Store implements VectorStoreInterface
 
         $documents = [];
         for ($i = 0; $i < count($queryResponse->metadatas[0]); ++$i) {
-            $documents[] = new Document( // not sure how to insert and get the text here @chr-hertel
+            $documents[] = new Document(
                 id: Uuid::fromString($queryResponse->ids[0][$i]),
                 text: '???',
                 vector: new Vector($queryResponse->embeddings[0][$i]),
