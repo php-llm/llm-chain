@@ -11,6 +11,7 @@ use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Probots\Pinecone\Client;
 use Probots\Pinecone\Resources\Data\VectorResource;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
 final readonly class Store implements VectorStoreInterface
@@ -20,7 +21,7 @@ final readonly class Store implements VectorStoreInterface
      */
     public function __construct(
         private Client $pinecone,
-        private LoggerInterface $logger,
+        private LoggerInterface $logger = new NullLogger(),
         private ?string $namespace = null,
         private array $filter = [],
         private int $topK = 3,
