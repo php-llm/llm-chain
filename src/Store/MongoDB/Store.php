@@ -8,9 +8,9 @@ use MongoDB\BSON\Binary;
 use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\Driver\Exception\CommandException;
-use PhpLlm\LlmChain\Document\EmbeddedDocument;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Store\InitializableStoreInterface;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
@@ -61,12 +61,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
     ) {
     }
 
-    public function addDocument(EmbeddedDocument $document): void
-    {
-        $this->addDocuments([$document]);
-    }
-
-    public function addDocuments(array $documents): void
+    public function add(VectorDocument ...$documents): void
     {
         $operations = [];
 
@@ -76,7 +71,6 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
                 array_filter([
                     'metadata' => $document->metadata->getArrayCopy(),
                     $this->vectorFieldName => $document->vector->getData(),
-                    'text' => $document->text,
                 ]),
                 ['upsert' => true], // insert if not exists
             ];
@@ -100,8 +94,6 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
      *     numCandidates?: positive-int,
      *     filter?: array<mixed>
      * } $options
-     *
-     * @return EmbeddedDocument[]
      */
     public function query(Vector $vector, array $options = []): array
     {
@@ -125,9 +117,8 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
         $documents = [];
 
         foreach ($results as $result) {
-            $documents[] = new EmbeddedDocument(
+            $documents[] = new VectorDocument(
                 id: $this->toUuid($result['_id']),
-                text: $result['text'],
                 vector: new Vector($result[$this->vectorFieldName]),
                 metadata: new Metadata($result['metadata'] ?? []),
             );

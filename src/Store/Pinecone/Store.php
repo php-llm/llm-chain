@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Store\Pinecone;
 
-use PhpLlm\LlmChain\Document\EmbeddedDocument;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Probots\Pinecone\Client;
 use Probots\Pinecone\Resources\Data\VectorResource;
@@ -25,19 +25,13 @@ final readonly class Store implements VectorStoreInterface
     ) {
     }
 
-    public function addDocument(EmbeddedDocument $document): void
-    {
-        $this->addDocuments([$document]);
-    }
-
-    public function addDocuments(array $documents): void
+    public function add(VectorDocument ...$documents): void
     {
         $vectors = [];
         foreach ($documents as $document) {
             $vectors[] = [
                 'id' => (string) $document->id,
                 'values' => $document->vector->getData(),
-                'text' => $document->text,
                 'metadata' => $document->metadata->getArrayCopy(),
             ];
         }
@@ -61,9 +55,8 @@ final readonly class Store implements VectorStoreInterface
 
         $documents = [];
         foreach ($response->json()['matches'] as $match) {
-            $documents[] = new EmbeddedDocument(
+            $documents[] = new VectorDocument(
                 id: Uuid::fromString($match['id']),
-                text: $match['text'],
                 vector: new Vector($match['values']),
                 metadata: new Metadata($match['metadata']),
             );

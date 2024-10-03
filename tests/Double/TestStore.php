@@ -4,28 +4,21 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Double;
 
-use PhpLlm\LlmChain\Document\Document;
+use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\StoreInterface;
 
 final class TestStore implements StoreInterface
 {
     /**
-     * @var Document[]
+     * @var VectorDocument[]
      */
     public array $documents = [];
 
-    public int $addDocumentsCalls = 0;
-    public int $addDocumentCalls = 0;
+    public int $addCalls = 0;
 
-    public function addDocuments(array $documents): void
+    public function add(VectorDocument ...$documents): void
     {
-        ++$this->addDocumentsCalls;
+        ++$this->addCalls;
         $this->documents = array_merge($this->documents, $documents);
-    }
-
-    public function addDocument(Document $document): void
-    {
-        ++$this->addDocumentCalls;
-        $this->documents[] = $document;
     }
 }

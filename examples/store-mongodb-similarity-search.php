@@ -2,8 +2,8 @@
 
 use MongoDB\Client as MongoDBClient;
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Document\Document;
 use PhpLlm\LlmChain\Document\Metadata;
+use PhpLlm\LlmChain\Document\TextDocument;
 use PhpLlm\LlmChain\DocumentEmbedder;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
@@ -46,9 +46,9 @@ $movies = [
 
 // create embeddings and documents
 foreach ($movies as $movie) {
-    $documents[] = new Document(
+    $documents[] = new TextDocument(
         id: Uuid::v4(),
-        text: 'Title: '.$movie['title'].PHP_EOL.'Director: '.$movie['director'].PHP_EOL.'Description: '.$movie['description'],
+        content: 'Title: '.$movie['title'].PHP_EOL.'Director: '.$movie['director'].PHP_EOL.'Description: '.$movie['description'],
         metadata: new Metadata($movie),
     );
 }

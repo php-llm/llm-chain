@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\ToolBox\Tool;
 
-use PhpLlm\LlmChain\Document\Document;
+use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\EmbeddingsModel;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
@@ -13,7 +13,7 @@ use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 final class SimilaritySearch
 {
     /**
-     * @var Document[]
+     * @var VectorDocument[]
      */
     public array $usedDocuments = [];
 

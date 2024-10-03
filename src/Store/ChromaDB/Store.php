@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Store\ChromaDB;
 
 use Codewithkyrian\ChromaDB\Client;
-use PhpLlm\LlmChain\Document\EmbeddedDocument;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -19,12 +19,7 @@ final readonly class Store implements VectorStoreInterface
     ) {
     }
 
-    public function addDocument(EmbeddedDocument $document): void
-    {
-        $this->addDocuments([$document]);
-    }
-
-    public function addDocuments(array $documents): void
+    public function add(VectorDocument ...$documents): void
     {
         $ids = [];
         $vectors = [];
@@ -49,9 +44,8 @@ final readonly class Store implements VectorStoreInterface
 
         $documents = [];
         for ($i = 0; $i < count($queryResponse->metadatas[0]); ++$i) {
-            $documents[] = new EmbeddedDocument(
+            $documents[] = new VectorDocument(
                 id: Uuid::fromString($queryResponse->ids[0][$i]),
-                text: '???',
                 vector: new Vector($queryResponse->embeddings[0][$i]),
                 metadata: new Metadata($queryResponse->metadatas[0][$i]),
             );
