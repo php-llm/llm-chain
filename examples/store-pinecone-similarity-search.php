@@ -42,7 +42,7 @@ $movies = [
 foreach ($movies as $movie) {
     $documents[] = Document::fromText(
         id: Uuid::v4(),
-        text: 'Title: '.$movie['title'].PHP_EOL.'Director: '.$movie['director'].PHP_EOL.$movie['description'],
+        text: 'Title: '.$movie['title'].PHP_EOL.'Director: '.$movie['director'].PHP_EOL.'Description: '.$movie['description'],
         metadata: new Metadata($movie),
     );
 }

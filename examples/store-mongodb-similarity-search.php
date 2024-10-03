@@ -39,16 +39,16 @@ $store = new Store(
 
 // our data
 $movies = [
-    ['title' => 'Inception', 'description' => 'A skilled thief is given a chance at redemption if he can successfully perform inception, the act of planting an idea in someone\'s subconscious.', 'regisseur' => 'Christopher Nolan'],
-    ['title' => 'The Matrix', 'description' => 'A hacker discovers the world he lives in is a simulated reality and joins a rebellion to overthrow its controllers.', 'regisseur' => 'The Wachowskis'],
-    ['title' => 'The Godfather', 'description' => 'The aging patriarch of an organized crime dynasty transfers control of his empire to his reluctant son.', 'regisseur' => 'Francis Ford Coppola'],
+    ['title' => 'Inception', 'description' => 'A skilled thief is given a chance at redemption if he can successfully perform inception, the act of planting an idea in someone\'s subconscious.', 'director' => 'Christopher Nolan'],
+    ['title' => 'The Matrix', 'description' => 'A hacker discovers the world he lives in is a simulated reality and joins a rebellion to overthrow its controllers.', 'director' => 'The Wachowskis'],
+    ['title' => 'The Godfather', 'description' => 'The aging patriarch of an organized crime dynasty transfers control of his empire to his reluctant son.', 'director' => 'Francis Ford Coppola'],
 ];
 
 // create embeddings and documents
 foreach ($movies as $movie) {
     $documents[] = Document::fromText(
         id: Uuid::v4(),
-        text: $movie['title'].' '.$movie['description'],
+        text: 'Title: '.$movie['title'].PHP_EOL.'Director: '.$movie['director'].PHP_EOL.'Description: '.$movie['description'],
         metadata: new Metadata($movie),
     );
 }
