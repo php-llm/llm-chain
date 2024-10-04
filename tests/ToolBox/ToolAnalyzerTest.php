@@ -28,7 +28,7 @@ final class ToolAnalyzerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->toolAnalyzer = new ToolAnalyzer(new ParameterAnalyzer());
+        $this->toolAnalyzer = new ToolAnalyzer();
     }
 
     #[Test]

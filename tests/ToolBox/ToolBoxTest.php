@@ -30,8 +30,7 @@ final class ToolBoxTest extends TestCase
 
     protected function setUp(): void
     {
-        $toolAnalyzer = new ToolAnalyzer(new ParameterAnalyzer());
-        $this->toolBox = new ToolBox($toolAnalyzer, [
+        $this->toolBox = new ToolBox(new ToolAnalyzer(), [
             new ToolRequiredParams(),
             new ToolOptionalParam(),
             new ToolNoParams(),
