@@ -10,7 +10,7 @@ final readonly class VectorDocument
 {
     public function __construct(
         public Uuid $id,
-        public Vector $vector,
+        public VectorInterface $vector,
         public Metadata $metadata = new Metadata(),
     ) {
     }

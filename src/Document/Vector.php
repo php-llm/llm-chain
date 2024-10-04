@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Document;
 
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 
-final class Vector
+final class Vector implements VectorInterface
 {
     /**
      * @param list<float> $data
