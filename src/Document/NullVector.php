@@ -17,3 +17,4 @@ final class NullVector implements VectorInterface
     {
         throw new RuntimeException('getDimensions() method cannot be called on a NullVector.');
     }
+}
