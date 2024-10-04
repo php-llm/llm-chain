@@ -80,7 +80,7 @@ final readonly class SearchStore implements VectorStoreInterface
     {
         return new VectorDocument(
             id: Uuid::fromString($data['id']),
-            vector: $data[$this->vectorFieldName] ? new Vector($data[$this->vectorFieldName]) : null,
+            vector: new Vector($data[$this->vectorFieldName]),
             metadata: new Metadata($data),
         );
     }
