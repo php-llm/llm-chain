@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Store\Azure;
 
 use PhpLlm\LlmChain\Document\Metadata;
+use PhpLlm\LlmChain\Document\NullVector;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
@@ -80,7 +81,9 @@ final readonly class SearchStore implements VectorStoreInterface
     {
         return new VectorDocument(
             id: Uuid::fromString($data['id']),
-            vector: $data[$this->vectorFieldName] ? new Vector($data[$this->vectorFieldName]) : null,
+            vector: !array_key_exists($this->vectorFieldName, $data) || null === $data[$this->vectorFieldName]
+                ? new NullVector()
+                : new Vector($data[$this->vectorFieldName]),
             metadata: new Metadata($data),
         );
     }
