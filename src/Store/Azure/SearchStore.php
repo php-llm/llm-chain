@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Store\Azure;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Document\VectorDocument;
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -78,6 +79,10 @@ final readonly class SearchStore implements VectorStoreInterface
      */
     private function convertToVectorDocument(array $data): VectorDocument
     {
+        if (!array_key_exists($this->vectorFieldName, $data)) {
+            throw new RuntimeException(sprintf('The field "%s" is missing in the search result. This mostly happens if the index was not populated by this library. Please make sure to add this information to your index.', $this->vectorFieldName));
+        }
+
         return new VectorDocument(
             id: Uuid::fromString($data['id']),
             vector: new Vector($data[$this->vectorFieldName]),
