@@ -36,4 +36,4 @@ PROMPT;
 
 $response = (new Chain($llm))->call(new MessageBag(Message::ofUser($prompt)));
 
-echo $response.PHP_EOL;
+echo $response->getContent().PHP_EOL;
