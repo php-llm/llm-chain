@@ -17,7 +17,6 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
     exit(1);
 }
 
-
 if (empty($_ENV['RUN_EXPENSIVE_EXAMPLES']) || false === filter_var($_ENV['RUN_EXPENSIVE_EXAMPLES'], FILTER_VALIDATE_BOOLEAN)) {
     echo 'This example is marked as expensive and will not run unless RUN_EXPENSIVE_EXAMPLES is set to true.'.PHP_EOL;
     exit(1);
