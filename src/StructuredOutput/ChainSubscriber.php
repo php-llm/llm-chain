@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\StructuredOutput;
 
-use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\InputProcessor;
-use PhpLlm\LlmChain\Chain\Output;
-use PhpLlm\LlmChain\Chain\OutputProcessor;
+use PhpLlm\LlmChain\Event\InputEvent;
+use PhpLlm\LlmChain\Event\OutputEvent;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Response\StructuredResponse;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class ChainProcessor implements InputProcessor, OutputProcessor
+final class ChainSubscriber implements EventSubscriberInterface
 {
     private string $outputStructure;
 
@@ -23,7 +22,15 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
     ) {
     }
 
-    public function processInput(Input $input): void
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            InputEvent::class => 'processInput',
+            OutputEvent::class => 'processOutput',
+        ];
+    }
+
+    public function processInput(InputEvent $input): void
     {
         $options = $input->getOptions();
 
@@ -47,7 +54,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
         $input->setOptions($options);
     }
 
-    public function processOutput(Output $output): void
+    public function processOutput(OutputEvent $output): void
     {
         $options = $output->options;
 

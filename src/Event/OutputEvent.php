@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Chain;
+namespace PhpLlm\LlmChain\Event;
 
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\ResponseInterface;
 
-final class Output
+final class OutputEvent
 {
     /**
      * @param array<string, mixed> $options

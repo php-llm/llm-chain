@@ -6,7 +6,7 @@ use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
-use PhpLlm\LlmChain\ToolBox\ChainProcessor;
+use PhpLlm\LlmChain\ToolBox\ChainSubscriber;
 use PhpLlm\LlmChain\ToolBox\Tool\SerpApi;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolBox;
@@ -26,7 +26,7 @@ $llm = new Gpt($platform, Version::gpt4oMini());
 
 $serpApi = new SerpApi($httpClient, $_ENV['SERP_API_KEY']);
 $toolBox = new ToolBox(new ToolAnalyzer(), [$serpApi]);
-$processor = new ChainProcessor($toolBox);
+$processor = new ChainSubscriber($toolBox);
 $chain = new Chain($llm, [$processor], [$processor]);
 
 $messages = new MessageBag(Message::ofUser('Who is the current chancellor of Germany?'));

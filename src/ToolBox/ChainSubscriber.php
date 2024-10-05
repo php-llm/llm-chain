@@ -4,26 +4,31 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\ToolBox;
 
-use PhpLlm\LlmChain\Chain\ChainAwareProcessor;
-use PhpLlm\LlmChain\Chain\ChainAwareTrait;
-use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\InputProcessor;
-use PhpLlm\LlmChain\Chain\Output;
-use PhpLlm\LlmChain\Chain\OutputProcessor;
+use PhpLlm\LlmChain\Chain;
+use PhpLlm\LlmChain\Event\InputEvent;
+use PhpLlm\LlmChain\Event\OutputEvent;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Response\ToolCallResponse;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwareProcessor
+final readonly class ChainSubscriber implements EventSubscriberInterface
 {
-    use ChainAwareTrait;
-
     public function __construct(
         private ToolBoxInterface $toolBox,
+        private Chain $chain,
     ) {
     }
 
-    public function processInput(Input $input): void
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            InputEvent::class => 'processInput',
+            OutputEvent::class => 'processOutput',
+        ];
+    }
+
+    public function processInput(InputEvent $input): void
     {
         if (!$input->llm->supportsToolCalling()) {
             throw MissingModelSupport::forToolCalling($input->llm::class);
@@ -34,7 +39,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
         $input->setOptions($options);
     }
 
-    public function processOutput(Output $output): void
+    public function processOutput(OutputEvent $output): void
     {
         $messages = clone $output->messages;
 
