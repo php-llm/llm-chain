@@ -46,7 +46,6 @@
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
         "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
-        "symfony/clock": "For using the clock tool.",
         "symfony/css-selector": "For using the YouTube transcription tool.",
         "symfony/dom-crawler": "For using the YouTube transcription tool."
     },
