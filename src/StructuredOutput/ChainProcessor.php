@@ -47,15 +47,25 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
         $input->setOptions($options);
     }
 
-    public function processOutput(Output $output): ?StructuredResponse
+    public function processOutput(Output $output): void
     {
         $options = $output->options;
 
-        if (!isset($options['output_structure'])) {
-            return null;
+        if ($output->response instanceof StructuredResponse) {
+            return;
         }
 
-        return new StructuredResponse(
+        if (!isset($options['response_format'])) {
+            return;
+        }
+
+        if (!isset($this->outputStructure)) {
+            $output->response = new StructuredResponse(json_decode($output->response->getContent(), true));
+
+            return;
+        }
+
+        $output->response = new StructuredResponse(
             $this->serializer->deserialize($output->response->getContent(), $this->outputStructure, 'json')
         );
     }
