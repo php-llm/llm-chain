@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Tests\StructuredOutput;
 
 use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
 use PhpLlm\LlmChain\StructuredOutput\SchemaFactory;
-use PhpLlm\LlmChain\Tests\StructuredOutput\Data\User;
+use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
