@@ -47,7 +47,7 @@ final readonly class Llama implements LanguageModel
                 continue;
             }
 
-            $messages[] = sprintf('%s: %s', ucfirst($message->getRole()->value), $message->content[0]->text);
+            $messages[] = sprintf('%s: %s', ucfirst($message->getRole()->value), $content);
         }
 
         return implode(PHP_EOL, $messages);
