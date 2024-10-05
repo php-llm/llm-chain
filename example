@@ -46,10 +46,19 @@ $app = (new SingleCommandApplication('LLM Chain Example Runner'))
             sleep(1);
             foreach ($exampleRuns as $run) {
                 if ('running' === $run['state'] && !$run['process']->isRunning()) {
-                    $result = $run['process']->isSuccessful() ? '<info>Finished</info>'
-                        : (1 === $run['process']->getExitCode() ? '<error>Failed</error>' : '<comment>Skipped</comment>');
+                    $emptyOutput = 0 === strlen(trim($run['process']->getOutput()));
+                    $success = $run['process']->isSuccessful() && !$emptyOutput;
+                    $result = $success ? '<info>Finished</info>'
+                        : (1 === $run['process']->getExitCode() || $emptyOutput ? '<error>Failed</error>' : '<comment>Skipped</comment>');
                     $run['section']->overwrite(sprintf('Example %s: %s', $run['example']->getFilename(), $result));
                     $run['state'] = 'finished';
+                    if ($output->isVerbose()) {
+                        $exampleOutput = $emptyOutput ? 'Output was empty' : $run['process']->getOutput();
+                        $exampleOutput = strlen($exampleOutput) <= 100 ? $exampleOutput : substr($exampleOutput, 0, 100).'...';
+                        $run['section']->writeln(
+                            sprintf('<%s>%s</>', $success ? 'fg=#999999' : 'fg=red', trim($exampleOutput))
+                        );
+                    }
                 }
             }
         }
