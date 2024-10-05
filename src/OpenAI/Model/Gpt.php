@@ -10,10 +10,12 @@ use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform;
 use PhpLlm\LlmChain\Response\Choice;
-use PhpLlm\LlmChain\Response\Response;
+use PhpLlm\LlmChain\Response\ChoiceResponse;
 use PhpLlm\LlmChain\Response\ResponseInterface;
 use PhpLlm\LlmChain\Response\StreamResponse;
+use PhpLlm\LlmChain\Response\TextResponse;
 use PhpLlm\LlmChain\Response\ToolCall;
+use PhpLlm\LlmChain\Response\ToolCallResponse;
 
 final class Gpt implements LanguageModel
 {
@@ -45,7 +47,22 @@ final class Gpt implements LanguageModel
             return new StreamResponse($this->convertStream($response));
         }
 
-        return new Response(...array_map([$this, 'convertChoice'], $response['choices']));
+        if (!isset($response['choices'])) {
+            throw new RuntimeException('Response does not contain choices');
+        }
+
+        /** @var Choice[] $choices */
+        $choices = array_map([$this, 'convertChoice'], $response['choices']);
+
+        if (1 !== count($choices)) {
+            return new ChoiceResponse(...$choices);
+        }
+
+        if ($choices[0]->hasToolCall()) {
+            return new ToolCallResponse(...$choices[0]->getToolCalls());
+        }
+
+        return new TextResponse($choices[0]->getContent());
     }
 
     public function supportsToolCalling(): bool
@@ -104,7 +121,7 @@ final class Gpt implements LanguageModel
             return new Choice($choice['message']['content']);
         }
 
-        throw new RuntimeException('Unsupported finish reason');
+        throw new RuntimeException(sprintf('Unsupported finish reason "%s".', $choice['finish_reason']));
     }
 
     /**

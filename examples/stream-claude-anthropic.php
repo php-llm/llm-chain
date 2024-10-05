@@ -28,9 +28,7 @@ $response = $chain->call($messages, [
     'stream' => true, // enable streaming of response text
 ]);
 
-assert($response instanceof Generator);
-
-foreach ($response as $word) {
+foreach ($response->getContent() as $word) {
     echo $word;
 }
 echo PHP_EOL;

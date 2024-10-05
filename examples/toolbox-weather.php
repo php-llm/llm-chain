@@ -33,4 +33,4 @@ $chain = new Chain($llm, [$processor], [$processor]);
 $messages = new MessageBag(Message::ofUser('How is the weather currently in Berlin?'));
 $response = $chain->call($messages);
 
-echo $response.PHP_EOL;
+echo $response->getContent().PHP_EOL;

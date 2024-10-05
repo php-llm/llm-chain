@@ -26,4 +26,4 @@ $messages = new MessageBag(
 );
 $response = $chain->call($messages);
 
-echo $response.PHP_EOL;
+echo $response->getContent().PHP_EOL;

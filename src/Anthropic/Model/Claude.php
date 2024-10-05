@@ -8,10 +8,9 @@ use PhpLlm\LlmChain\Anthropic\Model\Claude\Version;
 use PhpLlm\LlmChain\Anthropic\Platform;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Response\Choice;
-use PhpLlm\LlmChain\Response\Response;
 use PhpLlm\LlmChain\Response\ResponseInterface;
 use PhpLlm\LlmChain\Response\StreamResponse;
+use PhpLlm\LlmChain\Response\TextResponse;
 
 final class Claude implements LanguageModel
 {
@@ -45,7 +44,7 @@ final class Claude implements LanguageModel
             return new StreamResponse($this->convertStream($response));
         }
 
-        return new Response(new Choice($response['content'][0]['text']));
+        return new TextResponse($response['content'][0]['text']);
     }
 
     public function supportsToolCalling(): bool
