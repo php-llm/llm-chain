@@ -1,10 +1,10 @@
 <?php
 
-use PhpLlm\LlmChain\Anthropic\Model\Claude;
-use PhpLlm\LlmChain\Anthropic\Platform\Anthropic;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Language\Claude;
+use PhpLlm\LlmChain\Platform\Anthropic;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 

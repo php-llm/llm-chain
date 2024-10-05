@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Anthropic\Platform;
+namespace PhpLlm\LlmChain\Platform;
 
-use PhpLlm\LlmChain\Anthropic\Platform;
 use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final readonly class Anthropic implements Platform
+final readonly class Anthropic
 {
     private EventSourceHttpClient $httpClient;
 

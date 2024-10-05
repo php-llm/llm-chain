@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\OpenAI\Platform;
+namespace PhpLlm\LlmChain\Platform\OpenAI;
 
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\OpenAI\Platform;
 use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Component\HttpClient\Exception\ClientException;

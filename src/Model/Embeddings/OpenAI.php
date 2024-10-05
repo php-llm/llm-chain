@@ -2,20 +2,22 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\OpenAI\Model;
+namespace PhpLlm\LlmChain\Model\Embeddings;
 
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\EmbeddingsModel;
-use PhpLlm\LlmChain\OpenAI\Model\Embeddings\Version;
-use PhpLlm\LlmChain\OpenAI\Platform;
+use PhpLlm\LlmChain\Platform\OpenAI\Platform;
 
-final class Embeddings implements EmbeddingsModel
+final readonly class OpenAI implements EmbeddingsModel
 {
+    public const TEXT_ADA_002 = 'text-embedding-ada-002';
+    public const TEXT_3_LARGE = 'text-embedding-3-large';
+    public const TEXT_3_SMALL = 'text-embedding-3-small';
+
     public function __construct(
-        private readonly Platform $platform,
-        private ?Version $version = null,
+        private Platform $platform,
+        private string $version = self::TEXT_3_SMALL,
     ) {
-        $this->version ??= Version::textEmbedding3Small();
     }
 
     public function create(string $text, array $options = []): Vector
@@ -43,7 +45,7 @@ final class Embeddings implements EmbeddingsModel
     private function createBody(string $text): array
     {
         return [
-            'model' => $this->version->name,
+            'model' => $this->version,
             'input' => $text,
         ];
     }
