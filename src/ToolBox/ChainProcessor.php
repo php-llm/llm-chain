@@ -26,6 +26,7 @@ final readonly class ChainProcessor implements InputProcessor, OutputProcessor
             throw MissingModelSupport::forToolCalling($input->llm::class);
         }
 
+        $options = $input->getOptions();
         $options['tools'] = $this->toolBox->getMap();
         $input->setOptions($options);
     }
