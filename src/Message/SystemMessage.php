@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Message;
 
-final readonly class SystemMessage implements MessageInterface
+final readonly class SystemMessage implements Message
 {
-    public function __construct(public string $content)
-    {
-    }
+    use HasMetadata;
+    use HasRole;
 
-    public function getRole(): Role
-    {
-        return Role::System;
+    public function __construct(
+        public string $content,
+    ) {
+        $this->metadata = new Metadata();
+        $this->role = Role::System;
     }
 
     /**

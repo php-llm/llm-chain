@@ -8,22 +8,27 @@ use PhpLlm\LlmChain\Message\Content\Content;
 use PhpLlm\LlmChain\Message\Content\Image;
 use PhpLlm\LlmChain\Message\Content\Text;
 
-final readonly class UserMessage implements MessageInterface
+final readonly class UserMessage implements Message
 {
+    use HasMetadata;
+    use HasRole;
+
     /**
-     * @var list<Content>
+     * @var Content[]
      */
     public array $content;
 
     public function __construct(
-        Content ...$content,
+        string|Content ...$content,
     ) {
-        $this->content = $content;
-    }
+        $this->metadata = new Metadata();
+        $this->role = Role::User;
 
-    public function getRole(): Role
-    {
-        return Role::User;
+        $content = \array_map(
+            static fn (string|Content $entry) => \is_string($entry) ? new Text($entry) : $entry,
+            $content,
+        );
+        $this->content = $content;
     }
 
     public function hasImageContent(): bool
@@ -40,7 +45,7 @@ final readonly class UserMessage implements MessageInterface
     /**
      * @return array{
      *     role: Role::User,
-     *     content: string|list<Content>
+     *     content: string|Content[]
      * }
      */
     public function jsonSerialize(): array

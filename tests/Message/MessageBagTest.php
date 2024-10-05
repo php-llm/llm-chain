@@ -31,9 +31,9 @@ final class MessageBagTest extends TestCase
     public function getSystemMessage(): void
     {
         $messageBag = new MessageBag(
-            Message::forSystem('My amazing system prompt.'),
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
+            new SystemMessage('My amazing system prompt.'),
+            new AssistantMessage('It is time to sleep.'),
+            new UserMessage('Hello, world!'),
         );
 
         $systemMessage = $messageBag->getSystemMessage();
@@ -45,8 +45,8 @@ final class MessageBagTest extends TestCase
     public function getSystemMessageWithoutSystemMessage(): void
     {
         $messageBag = new MessageBag(
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
+            new AssistantMessage('It is time to sleep.'),
+            new UserMessage('Hello, world!'),
         );
 
         self::assertNull($messageBag->getSystemMessage());
@@ -56,12 +56,12 @@ final class MessageBagTest extends TestCase
     public function with(): void
     {
         $messageBag = new MessageBag(
-            Message::forSystem('My amazing system prompt.'),
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
+            new SystemMessage('My amazing system prompt.'),
+            new AssistantMessage('It is time to sleep.'),
+            new UserMessage('Hello, world!'),
         );
 
-        $newMessage = Message::ofAssistant('It is time to wake up.');
+        $newMessage = new AssistantMessage('It is time to wake up.');
         $newMessageBag = $messageBag->with($newMessage);
 
         self::assertCount(3, $messageBag);
@@ -77,13 +77,13 @@ final class MessageBagTest extends TestCase
     public function merge(): void
     {
         $messageBag = new MessageBag(
-            Message::forSystem('My amazing system prompt.'),
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
+            new SystemMessage('My amazing system prompt.'),
+            new AssistantMessage('It is time to sleep.'),
+            new UserMessage('Hello, world!'),
         );
 
         $messageBag = $messageBag->merge(new MessageBag(
-            Message::ofAssistant('It is time to wake up.')
+            new AssistantMessage('It is time to wake up.')
         ));
 
         self::assertCount(4, $messageBag);
@@ -98,9 +98,9 @@ final class MessageBagTest extends TestCase
     public function withoutSystemMessage(): void
     {
         $messageBag = new MessageBag(
-            Message::forSystem('My amazing system prompt.'),
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
+            new SystemMessage('My amazing system prompt.'),
+            new AssistantMessage('It is time to sleep.'),
+            new UserMessage('Hello, world!'),
         );
 
         $newMessageBag = $messageBag->withoutSystemMessage();
@@ -118,11 +118,11 @@ final class MessageBagTest extends TestCase
     public function prepend(): void
     {
         $messageBag = new MessageBag(
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
+            new AssistantMessage('It is time to sleep.'),
+            new UserMessage('Hello, world!'),
         );
 
-        $newMessage = Message::forSystem('My amazing system prompt.');
+        $newMessage = new SystemMessage('My amazing system prompt.');
         $newMessageBag = $messageBag->prepend($newMessage);
 
         self::assertCount(2, $messageBag);
@@ -138,8 +138,8 @@ final class MessageBagTest extends TestCase
     public function containsImageWithoutImage(): void
     {
         $messageBag = new MessageBag(
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
+            new AssistantMessage('It is time to sleep.'),
+            new UserMessage('Hello, world!'),
         );
 
         self::assertFalse($messageBag->containsImage());
@@ -149,9 +149,9 @@ final class MessageBagTest extends TestCase
     public function containsImageWithImage(): void
     {
         $messageBag = new MessageBag(
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
-            Message::ofUser('My hint for how to analyze an image.', new Image('http://image-generator.local/my-fancy-image.png')),
+            new AssistantMessage('It is time to sleep.'),
+            new UserMessage('Hello, world!'),
+            new UserMessage('My hint for how to analyze an image.', new Image('http://image-generator.local/my-fancy-image.png')),
         );
 
         self::assertTrue($messageBag->containsImage());
@@ -161,11 +161,11 @@ final class MessageBagTest extends TestCase
     public function jsonSerialize(): void
     {
         $messageBag = new MessageBag(
-            Message::forSystem('My amazing system prompt.'),
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
+            new SystemMessage('My amazing system prompt.'),
+            new AssistantMessage('It is time to sleep.'),
+            new UserMessage('Hello, world!'),
             new AssistantMessage('Hello User!'),
-            Message::ofUser('My hint for how to analyze an image.', new Image('http://image-generator.local/my-fancy-image.png')),
+            new UserMessage('My hint for how to analyze an image.', new Image('http://image-generator.local/my-fancy-image.png')),
         );
 
         $json = json_encode($messageBag);

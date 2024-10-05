@@ -1,8 +1,8 @@
 <?php
 
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\UserMessage;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
@@ -30,7 +30,7 @@ $toolBox = new ToolBox(new ToolAnalyzer(), [$transcriber]);
 $processor = new ChainProcessor($toolBox);
 $chain = new Chain($llm, [$processor], [$processor]);
 
-$messages = new MessageBag(Message::ofUser('Please summarize this video for me: https://www.youtube.com/watch?v=6uXW-ulpj0s'));
+$messages = new MessageBag(new UserMessage('Please summarize this video for me: https://www.youtube.com/watch?v=6uXW-ulpj0s'));
 $response = $chain->call($messages, [
     'stream' => true, // enable streaming of response text
 ]);

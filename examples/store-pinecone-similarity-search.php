@@ -4,8 +4,9 @@ use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\TextDocument;
 use PhpLlm\LlmChain\DocumentEmbedder;
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\SystemMessage;
+use PhpLlm\LlmChain\Message\UserMessage;
 use PhpLlm\LlmChain\OpenAI\Model\Embeddings;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
@@ -60,8 +61,8 @@ $processor = new ChainProcessor($toolBox);
 $chain = new Chain($llm, [$processor], [$processor]);
 
 $messages = new MessageBag(
-    Message::forSystem('Please answer all user questions only using SimilaritySearch function.'),
-    Message::ofUser('Which movie fits the theme of the mafia?')
+    new SystemMessage('Please answer all user questions only using SimilaritySearch function.'),
+    new UserMessage('Which movie fits the theme of the mafia?'),
 );
 $response = $chain->call($messages);
 

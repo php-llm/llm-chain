@@ -1,8 +1,8 @@
 <?php
 
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\UserMessage;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
@@ -30,7 +30,7 @@ $toolBox = new ToolBox(new ToolAnalyzer(), [$clock]);
 $processor = new ChainProcessor($toolBox);
 $chain = new Chain($llm, [$processor], [$processor]);
 
-$messages = new MessageBag(Message::ofUser('What date and time is it?'));
+$messages = new MessageBag(new UserMessage('What date and time is it?'));
 $response = $chain->call($messages);
 
 echo $response->getContent().PHP_EOL;

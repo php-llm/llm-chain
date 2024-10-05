@@ -1,8 +1,9 @@
 <?php
 
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Message\SystemMessage;
+use PhpLlm\LlmChain\Message\UserMessage;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
@@ -22,8 +23,8 @@ $llm = new Gpt($platform, Version::gpt4oMini());
 
 $chain = new Chain($llm);
 $messages = new MessageBag(
-    Message::forSystem('You are a thoughtful philosopher.'),
-    Message::ofUser('What is the purpose of an ant?'),
+    new SystemMessage('You are a thoughtful philosopher.'),
+    new UserMessage('What is the purpose of an ant?'),
 );
 $response = $chain->call($messages, [
     'stream' => true, // enable streaming of response text
