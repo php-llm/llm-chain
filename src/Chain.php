@@ -49,7 +49,7 @@ final readonly class Chain
             throw MissingModelSupport::forImageInput($this->llm::class);
         }
 
-        $response = $this->llm->call($messages, $input->getOptions());
+        $response = $this->llm->call($messages, $options = $input->getOptions());
 
         $output = new Output($this->llm, $response, $messages, $options);
         foreach ($this->outputProcessor as $outputProcessor) {
