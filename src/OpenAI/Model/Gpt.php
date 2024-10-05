@@ -44,7 +44,11 @@ final class Gpt implements LanguageModel
         $response = $this->platform->request('chat/completions', $body);
 
         if ($response instanceof \Generator) {
-            return new StreamResponse($this->convertStream($response));
+            if ($this->streamIsToolCall($response)) {
+                return new ToolCallResponse(...$this->convertStreamToToolCalls($response));
+            } else {
+                return new StreamResponse($this->convertStream($response));
+            }
         }
 
         if (!isset($response['choices'])) {
@@ -80,6 +84,13 @@ final class Gpt implements LanguageModel
         return $this->version->supportStructuredOutput;
     }
 
+    private function streamIsToolCall(\Generator $response): bool
+    {
+        $data = $response->current();
+
+        return isset($data['choices'][0]['delta']['tool_calls']);
+    }
+
     private function convertStream(\Generator $generator): \Generator
     {
         foreach ($generator as $data) {
@@ -89,6 +100,35 @@ final class Gpt implements LanguageModel
 
             yield $data['choices'][0]['delta']['content'];
         }
+    }
+
+    /**
+     * @return ToolCall[]
+     */
+    private function convertStreamToToolCalls(\Generator $response): array
+    {
+        $toolCalls = [];
+        foreach ($response as $data) {
+            if (!isset($data['choices'][0]['delta']['tool_calls'])) {
+                continue;
+            }
+
+            foreach ($data['choices'][0]['delta']['tool_calls'] as $i => $toolCall) {
+                if (isset($toolCall['id'])) {
+                    // initialize tool call
+                    $toolCalls[$i] = [
+                        'id' => $toolCall['id'],
+                        'function' => $toolCall['function'],
+                    ];
+                    continue;
+                }
+
+                // add arguments delta to tool call
+                $toolCalls[$i]['function']['arguments'] .= $toolCall['function']['arguments'];
+            }
+        }
+
+        return array_map([$this, 'convertToolCall'], $toolCalls);
     }
 
     /**
