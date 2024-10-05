@@ -6,7 +6,6 @@ namespace PhpLlm\LlmChain\Model\Language;
 
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\AssistantMessage;
-use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Message\MessageInterface;
 use PhpLlm\LlmChain\Message\UserMessage;
@@ -26,7 +25,6 @@ final readonly class Llama implements LanguageModel
         $systemMessage = $messages->getSystemMessage();
         $endpoint = $this->platform instanceof Replicate ? 'predictions' : 'chat';
 
-
         $response = $this->platform->request('meta/meta-llama-3.1-405b-instruct', $endpoint, [
             'system' => $systemMessage?->content,
             'prompt' => self::convertToPrompt($messages->withoutSystemMessage()),
@@ -43,9 +41,7 @@ final readonly class Llama implements LanguageModel
         foreach ($messageBag->getIterator() as $message) {
             if ($message instanceof UserMessage) {
                 $content = $message->content[0]->text;
-            }
-
-            elseif ($message instanceof AssistantMessage && $message->content !== null) {
+            } elseif ($message instanceof AssistantMessage && null !== $message->content) {
                 $content = $message->content;
             } else {
                 continue;
