@@ -54,7 +54,6 @@ final readonly class SearchStore implements VectorStoreInterface
         $response = $this->httpClient->request('POST', $url, [
             'headers' => [
                 'api-key' => $this->apiKey,
-                'Content-Type' => 'application/json',
             ],
             'query' => ['api-version' => $this->apiVersion],
             'json' => $payload,
