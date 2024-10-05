@@ -10,6 +10,7 @@ use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\Choice;
+use PhpLlm\LlmChain\Response\StructuredResponse;
 use PhpLlm\LlmChain\Response\TextResponse;
 use PhpLlm\LlmChain\StructuredOutput\ChainProcessor;
 use PhpLlm\LlmChain\Tests\Double\ConfigurableResponseFormatFactory;
@@ -98,10 +99,11 @@ final class ChainProcessorTest extends TestCase
 
         $output = new Output($llm, $response, new MessageBag(), $options);
 
-        $result = $chainProcessor->processOutput($output)->getContent();
+        $chainProcessor->processOutput($output);
 
-        self::assertInstanceOf(SomeStructure::class, $result);
-        self::assertSame('data', $result->some);
+        self::assertInstanceOf(StructuredResponse::class, $output->response);
+        self::assertInstanceOf(SomeStructure::class, $output->response->getContent());
+        self::assertSame('data', $output->response->getContent()->some);
     }
 
     #[Test]
@@ -116,8 +118,8 @@ final class ChainProcessorTest extends TestCase
 
         $output = new Output($llm, $response, new MessageBag(), []);
 
-        $result = $chainProcessor->processOutput($output);
+        $chainProcessor->processOutput($output);
 
-        self::assertNull($result);
+        self::assertSame($response, $output->response);
     }
 }

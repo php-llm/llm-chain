@@ -8,16 +8,16 @@ use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\ResponseInterface;
 
-final readonly class Output
+final class Output
 {
     /**
      * @param array<string, mixed> $options
      */
     public function __construct(
-        public LanguageModel $llm,
+        public readonly LanguageModel $llm,
         public ResponseInterface $response,
-        public MessageBag $messages,
-        public array $options,
+        public readonly MessageBag $messages,
+        public readonly array $options,
     ) {
     }
 }

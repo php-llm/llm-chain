@@ -6,5 +6,5 @@ namespace PhpLlm\LlmChain\Chain;
 
 interface OutputProcessor
 {
-    public function processOutput(Output $output): mixed;
+    public function processOutput(Output $output): void;
 }
