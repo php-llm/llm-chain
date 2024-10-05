@@ -14,8 +14,6 @@ use PHPUnit\Framework\TestCase;
 #[Small]
 final class StreamResponseTest extends TestCase
 {
-
-
     #[Test]
     public function getContent(): void
     {
@@ -25,12 +23,12 @@ final class StreamResponseTest extends TestCase
         })();
 
         $response = new StreamResponse($generator);
-        $this->assertInstanceOf(\Generator::class, $response->getContent());
+        self::assertInstanceOf(\Generator::class, $response->getContent());
 
         $content = iterator_to_array($response->getContent());
 
-        $this->assertCount(2, $content);
-        $this->assertSame('data1', $content[0]);
-        $this->assertSame('data2', $content[1]);
+        self::assertCount(2, $content);
+        self::assertSame('data1', $content[0]);
+        self::assertSame('data2', $content[1]);
     }
 }
