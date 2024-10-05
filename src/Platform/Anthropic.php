@@ -30,7 +30,6 @@ final readonly class Anthropic
         $response = $this->httpClient->request('POST', 'https://api.anthropic.com/v1/messages', [
             'headers' => [
                 'x-api-key' => $this->apiKey,
-                'Content-Type' => 'application/json',
                 'anthropic-version' => '2023-06-01',
             ],
             'json' => $body,
