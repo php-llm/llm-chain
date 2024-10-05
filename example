@@ -46,7 +46,8 @@ $app = (new SingleCommandApplication('LLM Chain Example Runner'))
             sleep(1);
             foreach ($exampleRuns as $run) {
                 if ('running' === $run['state'] && !$run['process']->isRunning()) {
-                    $result = $run['process']->isSuccessful() ? '<info>Finished</info>' : '<error>Failed</error>';
+                    $result = $run['process']->isSuccessful() ? '<info>Finished</info>'
+                        : (1 === $run['process']->getExitCode() ? '<error>Failed</error>' : '<comment>Skipped</comment>');
                     $run['section']->overwrite(sprintf('Example %s: %s', $run['example']->getFilename(), $result));
                     $run['state'] = 'finished';
                 }
@@ -55,7 +56,7 @@ $app = (new SingleCommandApplication('LLM Chain Example Runner'))
 
         $io->newLine();
         if (!$examplesSuccessful()) {
-            $io->error('Some examples failed!');
+            $io->error('Some examples failed or were skipped!');
 
             return Command::FAILURE;
         }
