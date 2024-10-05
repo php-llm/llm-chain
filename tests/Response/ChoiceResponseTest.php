@@ -10,14 +10,16 @@ use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ChoiceResponse::class)]
+#[UsesClass(Choice::class)]
 #[Small]
 final class ChoiceResponseTest extends TestCase
 {
     #[Test]
-    public function testChoiceResponseCreation(): void
+    public function choiceResponseCreation(): void
     {
         $choice1 = new Choice('choice1');
         $choice2 = new Choice(null);
@@ -31,7 +33,7 @@ final class ChoiceResponseTest extends TestCase
     }
 
     #[Test]
-    public function testChoiceResponseWithNoChoices(): void
+    public function choiceResponseWithNoChoices(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Response must have at least one choice.');
