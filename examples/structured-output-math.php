@@ -35,4 +35,4 @@ $messages = new MessageBag(
 );
 $response = $chain->call($messages, ['output_structure' => MathReasoning::class]);
 
-dump($response);
+dump($response->getContent());

@@ -10,7 +10,7 @@ use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\Choice;
-use PhpLlm\LlmChain\Response\Response;
+use PhpLlm\LlmChain\Response\TextResponse;
 use PhpLlm\LlmChain\StructuredOutput\ChainProcessor;
 use PhpLlm\LlmChain\Tests\Double\ConfigurableResponseFormatFactory;
 use PhpLlm\LlmChain\Tests\Fixture\SomeStructure;
@@ -28,7 +28,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[UsesClass(Output::class)]
 #[UsesClass(MessageBag::class)]
 #[UsesClass(Choice::class)]
-#[UsesClass(Response::class)]
 #[UsesClass(MissingModelSupport::class)]
 final class ChainProcessorTest extends TestCase
 {
@@ -95,12 +94,11 @@ final class ChainProcessorTest extends TestCase
         $input = new Input($llm, new MessageBag(), $options);
         $chainProcessor->processInput($input);
 
-        $choice = new Choice('{"some": "data"}');
-        $response = new Response($choice);
+        $response = new TextResponse('{"some": "data"}');
 
         $output = new Output($llm, $response, new MessageBag(), $options);
 
-        $result = $chainProcessor->processOutput($output);
+        $result = $chainProcessor->processOutput($output)->getContent();
 
         self::assertInstanceOf(SomeStructure::class, $result);
         self::assertSame('data', $result->some);
@@ -114,8 +112,7 @@ final class ChainProcessorTest extends TestCase
         $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
 
         $llm = $this->createMock(LanguageModel::class);
-        $choice = new Choice('');
-        $response = new Response($choice);
+        $response = new TextResponse('');
 
         $output = new Output($llm, $response, new MessageBag(), []);
 

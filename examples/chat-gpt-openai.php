@@ -31,4 +31,4 @@ $response = $chain->call($messages, [
     'max_tokens' => 500, // specific options just for this call
 ]);
 
-echo $response.PHP_EOL;
+echo $response->getContent().PHP_EOL;

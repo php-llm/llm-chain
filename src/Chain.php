@@ -10,6 +10,7 @@ use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Response\ResponseInterface;
 
 final readonly class Chain
 {
@@ -39,7 +40,7 @@ final readonly class Chain
     /**
      * @param array<string, mixed> $options
      */
-    public function call(MessageBag $messages, array $options = []): string|object
+    public function call(MessageBag $messages, array $options = []): ResponseInterface
     {
         $input = new Input($this->llm, $messages, $options);
         array_map(fn (InputProcessor $processor) => $processor->processInput($input), $this->inputProcessor);
@@ -59,6 +60,6 @@ final readonly class Chain
             }
         }
 
-        return $response->getContent();
+        return $response;
     }
 }

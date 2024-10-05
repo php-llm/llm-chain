@@ -10,6 +10,8 @@ use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Message\Message;
+use PhpLlm\LlmChain\Response\ResponseInterface;
+use PhpLlm\LlmChain\Response\ToolCallResponse;
 
 final readonly class ChainProcessor implements InputProcessor, OutputProcessor
 {
@@ -28,15 +30,16 @@ final readonly class ChainProcessor implements InputProcessor, OutputProcessor
         $input->setOptions($options);
     }
 
-    public function processOutput(Output $output): mixed
+    public function processOutput(Output $output): ResponseInterface
     {
         $response = $output->response;
         $messages = clone $output->messages;
 
-        while ($response->hasToolCalls()) {
-            $messages[] = Message::ofAssistant(toolCalls: $response->getToolCalls());
+        while ($response instanceof ToolCallResponse) {
+            $toolCalls = $response->getContent();
+            $messages[] = Message::ofAssistant(toolCalls: $toolCalls);
 
-            foreach ($response->getToolCalls() as $toolCall) {
+            foreach ($toolCalls as $toolCall) {
                 $result = $this->toolBox->execute($toolCall);
                 $messages[] = Message::ofToolCall($toolCall, $result);
             }
@@ -44,6 +47,6 @@ final readonly class ChainProcessor implements InputProcessor, OutputProcessor
             $response = $output->llm->call($messages, $output->options);
         }
 
-        return $response->getContent();
+        return $response;
     }
 }

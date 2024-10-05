@@ -10,6 +10,7 @@ use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
+use PhpLlm\LlmChain\Response\StructuredResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class ChainProcessor implements InputProcessor, OutputProcessor
@@ -46,7 +47,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
         $input->setOptions($options);
     }
 
-    public function processOutput(Output $output): ?object
+    public function processOutput(Output $output): ?StructuredResponse
     {
         $options = $output->options;
 
@@ -54,6 +55,8 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
             return null;
         }
 
-        return $this->serializer->deserialize($output->response->getContent(), $this->outputStructure, 'json');
+        return new StructuredResponse(
+            $this->serializer->deserialize($output->response->getContent(), $this->outputStructure, 'json')
+        );
     }
 }

@@ -33,4 +33,4 @@ $chain = new Chain($llm, [$processor], [$processor]);
 $messages = new MessageBag(Message::ofUser('Who is the current chancellor of Germany?'));
 $response = $chain->call($messages);
 
-echo $response.PHP_EOL;
+echo $response->getContent().PHP_EOL;
