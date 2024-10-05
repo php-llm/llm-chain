@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
 use PhpLlm\LlmChain\StructuredOutput\ChainProcessor;
 use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
-use PhpLlm\LlmChain\Tests\StructuredOutput\Data\MathReasoning;
+use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\MathReasoning;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;

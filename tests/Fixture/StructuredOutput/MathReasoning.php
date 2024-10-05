@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests\StructuredOutput\Data;
+namespace PhpLlm\LlmChain\Tests\Fixture\StructuredOutput;
 
 final class MathReasoning
 {
