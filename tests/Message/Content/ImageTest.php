@@ -15,18 +15,42 @@ use PHPUnit\Framework\TestCase;
 final class ImageTest extends TestCase
 {
     #[Test]
-    public function constructionIsPossible(): void
+    public function constructWithValidUrl(): void
     {
-        $obj = new Image('foo');
+        $image = new Image('https://foo.com/test.png');
 
-        self::assertSame('foo', $obj->url);
+        self::assertSame('https://foo.com/test.png', $image->url);
+    }
+
+    #[Test]
+    public function constructWithValidDataUrl(): void
+    {
+        $image = new Image('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABKklEQVR42mNk+A8AAwMhIv9n+X');
+
+        self::assertStringStartsWith('data:image/png;base64', $image->url);
+    }
+
+    #[Test]
+    public function withValidFile(): void
+    {
+        $image = new Image(dirname(__DIR__, 2).'/Fixture/image.png');
+
+        self::assertStringStartsWith('data:image/png;base64,', $image->url);
+    }
+
+    #[Test]
+    public function fromBinaryWithInvalidFile(): void
+    {
+        $this->expectExceptionMessage('The file "foo.jpg" does not exist or is not readable.');
+
+        new Image('foo.jpg');
     }
 
     #[Test]
     public function jsonConversionIsWorkingAsExpected(): void
     {
-        $obj = new Image('foo');
+        $image = new Image('https://foo.com/test.png');
 
-        self::assertSame(['type' => 'image_url', 'image_url' => ['url' => 'foo']], $obj->jsonSerialize());
+        self::assertSame(['type' => 'image_url', 'image_url' => ['url' => 'https://foo.com/test.png']], $image->jsonSerialize());
     }
 }

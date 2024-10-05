@@ -34,7 +34,7 @@ final class UserMessageTest extends TestCase
     #[Test]
     public function constructionIsPossibleWithMultipleContent(): void
     {
-        $message = new UserMessage(new Text('foo'), new Image('bar'));
+        $message = new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg'));
 
         self::assertCount(2, $message->content);
     }
@@ -50,7 +50,7 @@ final class UserMessageTest extends TestCase
     #[Test]
     public function hasImageContentWithImage(): void
     {
-        $message = new UserMessage(new Text('foo'), new Image('bar'));
+        $message = new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg'));
 
         self::assertTrue($message->hasImageContent());
     }
@@ -70,24 +70,24 @@ final class UserMessageTest extends TestCase
         ];
 
         yield 'With single image' => [
-            new UserMessage(new Text('foo'), new Image('bar')),
+            new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg')),
             [
                 'role' => Role::User,
                 'content' => [
                     ['type' => 'text', 'text' => 'foo'],
-                    ['type' => 'image_url', 'image_url' => ['url' => 'bar']],
+                    ['type' => 'image_url', 'image_url' => ['url' => 'https://foo.com/bar.jpg']],
                 ],
             ],
         ];
 
         yield 'With single multiple images' => [
-            new UserMessage(new Text('foo'), new Image('bar'), new Image('baz')),
+            new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg'), new Image('https://foo.com/baz.jpg')),
             [
                 'role' => Role::User,
                 'content' => [
                     ['type' => 'text', 'text' => 'foo'],
-                    ['type' => 'image_url', 'image_url' => ['url' => 'bar']],
-                    ['type' => 'image_url', 'image_url' => ['url' => 'baz']],
+                    ['type' => 'image_url', 'image_url' => ['url' => 'https://foo.com/bar.jpg']],
+                    ['type' => 'image_url', 'image_url' => ['url' => 'https://foo.com/baz.jpg']],
                 ],
             ],
         ];
