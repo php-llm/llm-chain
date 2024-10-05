@@ -7,19 +7,7 @@ namespace PhpLlm\LlmChain\Response;
 interface ResponseInterface
 {
     /**
-     * @return Choice[]
+     * @return string|iterable<mixed>|object|null
      */
-    public function getChoices(): array;
-
-    /**
-     * @return string|iterable<string>|null
-     */
-    public function getContent(): string|iterable|null;
-
-    /**
-     * @return ToolCall[]
-     */
-    public function getToolCalls(): array;
-
-    public function hasToolCalls(): bool;
+    public function getContent(): string|iterable|object|null;
 }
