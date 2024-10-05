@@ -15,9 +15,16 @@ use PHPUnit\Framework\TestCase;
 final class StructuredResponseTest extends TestCase
 {
     #[Test]
-    public function getContent(): void
+    public function getContentWithArray(): void
     {
-        $response = new StructuredResponse(['data1', 'data2']);
-        self::assertSame(['data1', 'data2'], $response->getContent());
+        $response = new StructuredResponse($expected = ['foo' => 'bar', 'baz' => ['qux']]);
+        self::assertSame($expected, $response->getContent());
+    }
+
+    #[Test]
+    public function getContentWithObject(): void
+    {
+        $response = new StructuredResponse($expected = (object) ['foo' => 'bar', 'baz' => ['qux']]);
+        self::assertSame($expected, $response->getContent());
     }
 }
