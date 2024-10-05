@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\ToolBox;
 
-use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\Output;
+use PhpLlm\LlmChain\Event\InputEvent;
+use PhpLlm\LlmChain\Event\OutputEvent;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\Choice;
 use PhpLlm\LlmChain\Response\StructuredResponse;
 use PhpLlm\LlmChain\Response\TextResponse;
-use PhpLlm\LlmChain\StructuredOutput\ChainProcessor;
+use PhpLlm\LlmChain\StructuredOutput\ChainSubscriber;
 use PhpLlm\LlmChain\Tests\Double\ConfigurableResponseFormatFactory;
 use PhpLlm\LlmChain\Tests\Fixture\SomeStructure;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -24,9 +24,9 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[CoversClass(ChainProcessor::class)]
-#[UsesClass(Input::class)]
-#[UsesClass(Output::class)]
+#[CoversClass(ChainSubscriber::class)]
+#[UsesClass(InputEvent::class)]
+#[UsesClass(OutputEvent::class)]
 #[UsesClass(MessageBag::class)]
 #[UsesClass(Choice::class)]
 #[UsesClass(MissingModelSupport::class)]
@@ -37,12 +37,12 @@ final class ChainProcessorTest extends TestCase
     {
         $responseFormatFactory = new ConfigurableResponseFormatFactory(['some' => 'format']);
         $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
-        $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
+        $chainProcessor = new ChainSubscriber($responseFormatFactory, $serializer);
 
         $llm = $this->createMock(LanguageModel::class);
         $llm->method('supportsStructuredOutput')->willReturn(true);
 
-        $input = new Input($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
+        $input = new InputEvent($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
 
         $chainProcessor->processInput($input);
 
@@ -54,10 +54,10 @@ final class ChainProcessorTest extends TestCase
     {
         $responseFormatFactory = new ConfigurableResponseFormatFactory();
         $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
-        $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
+        $chainProcessor = new ChainSubscriber($responseFormatFactory, $serializer);
 
         $llm = $this->createMock(LanguageModel::class);
-        $input = new Input($llm, new MessageBag(), []);
+        $input = new InputEvent($llm, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
 
@@ -71,12 +71,12 @@ final class ChainProcessorTest extends TestCase
 
         $responseFormatFactory = new ConfigurableResponseFormatFactory();
         $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
-        $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
+        $chainProcessor = new ChainSubscriber($responseFormatFactory, $serializer);
 
         $llm = $this->createMock(LanguageModel::class);
         $llm->method('supportsStructuredOutput')->willReturn(false);
 
-        $input = new Input($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
+        $input = new InputEvent($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
 
         $chainProcessor->processInput($input);
     }
@@ -86,18 +86,18 @@ final class ChainProcessorTest extends TestCase
     {
         $responseFormatFactory = new ConfigurableResponseFormatFactory(['some' => 'format']);
         $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
-        $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
+        $chainProcessor = new ChainSubscriber($responseFormatFactory, $serializer);
 
         $llm = $this->createMock(LanguageModel::class);
         $llm->method('supportsStructuredOutput')->willReturn(true);
 
         $options = ['output_structure' => SomeStructure::class];
-        $input = new Input($llm, new MessageBag(), $options);
+        $input = new InputEvent($llm, new MessageBag(), $options);
         $chainProcessor->processInput($input);
 
         $response = new TextResponse('{"some": "data"}');
 
-        $output = new Output($llm, $response, new MessageBag(), $options);
+        $output = new OutputEvent($llm, $response, new MessageBag(), $options);
 
         $chainProcessor->processOutput($output);
 
@@ -111,12 +111,12 @@ final class ChainProcessorTest extends TestCase
     {
         $responseFormatFactory = new ConfigurableResponseFormatFactory();
         $serializer = $this->createMock(SerializerInterface::class);
-        $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
+        $chainProcessor = new ChainSubscriber($responseFormatFactory, $serializer);
 
         $llm = $this->createMock(LanguageModel::class);
         $response = new TextResponse('');
 
-        $output = new Output($llm, $response, new MessageBag(), []);
+        $output = new OutputEvent($llm, $response, new MessageBag(), []);
 
         $chainProcessor->processOutput($output);
 

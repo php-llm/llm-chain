@@ -12,7 +12,7 @@ use PhpLlm\LlmChain\OpenAI\Model\Gpt;
 use PhpLlm\LlmChain\OpenAI\Model\Gpt\Version;
 use PhpLlm\LlmChain\OpenAI\Platform\OpenAI;
 use PhpLlm\LlmChain\Store\MongoDB\Store;
-use PhpLlm\LlmChain\ToolBox\ChainProcessor;
+use PhpLlm\LlmChain\ToolBox\ChainSubscriber;
 use PhpLlm\LlmChain\ToolBox\Tool\SimilaritySearch;
 use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\ToolBox\ToolBox;
@@ -65,7 +65,7 @@ $llm = new Gpt($platform, Version::gpt4oMini());
 
 $similaritySearch = new SimilaritySearch($embeddings, $store);
 $toolBox = new ToolBox(new ToolAnalyzer(), [$similaritySearch]);
-$processor = new ChainProcessor($toolBox);
+$processor = new ChainSubscriber($toolBox);
 $chain = new Chain($llm, [$processor], [$processor]);
 
 $messages = new MessageBag(
