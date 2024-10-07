@@ -32,8 +32,6 @@ final class LlamaTest extends TestCase
             $messageBag->append($message[1]);
         }
 
-        $llama = new Llama(new Ollama(new MockHttpClient(), 'http://example.com'));
-
         self::assertSame(<<<EXPECTED
 <|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
@@ -60,7 +58,7 @@ I am an assistant.<|eot_id|>
 
 <|start_header_id|>assistant<|end_header_id|>
 EXPECTED,
-            $llama->convertToPrompt($messageBag)
+            (new Llama(new Ollama(new MockHttpClient(), 'http://example.com')))->convertToPrompt($messageBag)
         );
     }
 
