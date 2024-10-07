@@ -22,6 +22,7 @@ final readonly class Voyage
     public function request(array $body): array
     {
         $response = $this->httpClient->request('POST', 'https://api.voyageai.com/v1/embeddings', [
+            'headers' => ['Content-Type' => 'application/json'],
             'auth_bearer' => $this->apiKey,
             'json' => $body,
         ]);

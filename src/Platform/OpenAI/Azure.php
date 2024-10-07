@@ -29,6 +29,7 @@ final readonly class Azure extends AbstractPlatform implements Platform
         return $this->httpClient->request('POST', $url, [
             'headers' => [
                 'api-key' => $this->apiKey,
+                'Content-Type' => 'application/json',
             ],
             'query' => ['api-version' => $this->apiVersion],
             'json' => $body,

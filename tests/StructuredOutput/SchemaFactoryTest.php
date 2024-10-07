@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\StructuredOutput;
 
 use PhpLlm\LlmChain\StructuredOutput\SchemaFactory;
-use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\MathReasoning;
-use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\Step;
-use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\User;
+use PhpLlm\LlmChain\Tests\StructuredOutput\Data\MathReasoning;
+use PhpLlm\LlmChain\Tests\StructuredOutput\Data\Step;
+use PhpLlm\LlmChain\Tests\StructuredOutput\Data\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

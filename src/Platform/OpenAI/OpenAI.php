@@ -25,7 +25,8 @@ final readonly class OpenAI extends AbstractPlatform implements Platform
 
         return $this->httpClient->request('POST', $url, [
             'auth_bearer' => $this->apiKey,
-            'json' => $body,
+            'headers' => ['Content-Type' => 'application/json'],
+            'body' => json_encode($body),
         ]);
     }
 }
