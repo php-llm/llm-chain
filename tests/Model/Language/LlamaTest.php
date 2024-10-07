@@ -57,6 +57,8 @@ https://example.com/image.jpg<|eot_id|>
 <|start_header_id|>assistant<|end_header_id|>
 
 I am an assistant.<|eot_id|>
+
+<|start_header_id|>assistant<|end_header_id|>
 EXPECTED,
             $llama->convertToPrompt($messageBag)
         );

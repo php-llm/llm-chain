@@ -37,7 +37,7 @@ final readonly class Llama implements LanguageModel
     }
 
     /**
-     * @todo make method private, just for testing
+     * @todo make method private, just for testing, or create a MessageBag to LLama convert class :thinking:
      */
     public static function convertToPrompt(MessageBag $messageBag): string
     {
@@ -48,7 +48,9 @@ final readonly class Llama implements LanguageModel
             $messages[] = self::convertMessage($message);
         }
 
-        return trim(implode(PHP_EOL.PHP_EOL, $messages));
+        $messages = array_filter($messages, fn ($message) => '' !== $message);
+
+        return trim(implode(PHP_EOL.PHP_EOL, $messages)).PHP_EOL.PHP_EOL.'<|start_header_id|>assistant<|end_header_id|>';
     }
 
     /**
