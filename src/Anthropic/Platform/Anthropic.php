@@ -17,6 +17,7 @@ final readonly class Anthropic implements Platform
     public function __construct(
         HttpClientInterface $httpClient,
         #[\SensitiveParameter] private string $apiKey,
+        private string $version = '2023-06-01',
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
     }
@@ -31,7 +32,7 @@ final readonly class Anthropic implements Platform
         $response = $this->httpClient->request('POST', 'https://api.anthropic.com/v1/messages', [
             'headers' => [
                 'x-api-key' => $this->apiKey,
-                'anthropic-version' => '2023-06-01',
+                'anthropic-version' => $this->version,
             ],
             'json' => $body,
         ]);
