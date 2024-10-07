@@ -35,7 +35,10 @@ final readonly class Llama implements LanguageModel
         return new TextResponse(implode('', $response['output']));
     }
 
-    private static function convertToPrompt(MessageBag $messageBag): string
+    /**
+     * @todo make method private, just for testing
+     */
+    public static function convertToPrompt(MessageBag $messageBag): string
     {
         $messages = [];
 
@@ -47,7 +50,10 @@ final readonly class Llama implements LanguageModel
         return implode(PHP_EOL.PHP_EOL, $messages);
     }
 
-    private static function convertMessage(UserMessage|SystemMessage|AssistantMessage $message): string
+    /**
+     * @todo make method private, just for testing
+     */
+    public static function convertMessage(UserMessage|SystemMessage|AssistantMessage $message): string
     {
         if ($message instanceof SystemMessage) {
             return $prompt = <<<SYSTEM
