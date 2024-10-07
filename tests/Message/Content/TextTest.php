@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Text::class)]
 #[Small]
-final class TextContentTest extends TestCase
+final class TextTest extends TestCase
 {
     #[Test]
     public function constructionIsPossible(): void
