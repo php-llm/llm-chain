@@ -96,7 +96,7 @@ $response = $chain->call($messages);
 echo $response->getContent(); // "I'm fine, thank you. How can I help you today?"
 ```
 
-The `MessageInterface` and `Conent` interface help to customize this process if needed, e.g. additional state handling.
+The `MessageInterface` and `Content` interface help to customize this process if needed, e.g. additional state handling.
 
 #### Code Examples
 
