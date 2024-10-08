@@ -321,7 +321,7 @@ To leverage this, configure the `#[ToolParameter]` attribute on the method argum
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
 
-#[AsTool('my_tool', 'Just an example tool with parameters requirements.')]
+#[AsTool('my_tool', 'Example tool with parameters requirements.')]
 final class MyTool
 {
     /**
