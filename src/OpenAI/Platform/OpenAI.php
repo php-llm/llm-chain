@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\OpenAI\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Webmozart\Assert\Assert;
 
 final readonly class OpenAI extends AbstractPlatform implements Platform
 {
@@ -18,6 +19,8 @@ final readonly class OpenAI extends AbstractPlatform implements Platform
         #[\SensitiveParameter] private string $apiKey,
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
+        Assert::stringNotEmpty($apiKey, 'The API key must not be empty.');
+        Assert::startsWith($apiKey, 'sk-', 'The API key must start with "sk-".');
     }
 
     protected function rawRequest(string $endpoint, array $body): ResponseInterface

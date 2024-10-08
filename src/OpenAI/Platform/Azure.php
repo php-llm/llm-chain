@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\OpenAI\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Webmozart\Assert\Assert;
 
 final readonly class Azure extends AbstractPlatform implements Platform
 {
@@ -21,6 +22,11 @@ final readonly class Azure extends AbstractPlatform implements Platform
         #[\SensitiveParameter] private string $apiKey,
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
+        Assert::notStartsWith($baseUrl, 'http://', 'The base URL must not contain the protocol.');
+        Assert::notStartsWith($baseUrl, 'https://', 'The base URL must not contain the protocol.');
+        Assert::stringNotEmpty($deployment, 'The deployment must not be empty.');
+        Assert::stringNotEmpty($apiVersion, 'The API version must not be empty.');
+        Assert::stringNotEmpty($apiKey, 'The API key must not be empty.');
     }
 
     protected function rawRequest(string $endpoint, array $body): ResponseInterface
