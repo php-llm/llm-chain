@@ -187,9 +187,9 @@ foreach ($entities as $entity) {
     );
 }
 ```
-
-*Note that not all data needs to be stored in the vector store, but you could also hydrate the original data entry based
-on the ID or metadata after retrieval from the store.*
+> [!NOTE]
+> Not all data needs to be stored in the vector store, but you could also hydrate the original data entry based
+> on the ID or metadata after retrieval from the store.*
 
 In the end the chain is used in combination with a retrieval tool on top of the vector store, e.g. the built-in
 `SimilaritySearch` tool provided by the library:
@@ -338,8 +338,8 @@ final class MyTool
     }
 }
 ```
-
-Please be aware, that this is only converted in a JSON Schema for the LLM to respect, but not validated by LLM Chain.
+> [!NOTE]
+> Please be aware, that this is only converted in a JSON Schema for the LLM to respect, but not validated by LLM Chain.
 
 ### Response Streaming
 
