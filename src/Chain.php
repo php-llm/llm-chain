@@ -11,8 +11,9 @@ use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
-use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Response\ResponseInterface;
+use PhpLlm\LlmChain\Model\LanguageModel;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 
 final readonly class Chain implements ChainInterface
 {
@@ -31,6 +32,7 @@ final readonly class Chain implements ChainInterface
      * @param OutputProcessor[] $outputProcessor
      */
     public function __construct(
+        private Platform $platform,
         private LanguageModel $llm,
         iterable $inputProcessor = [],
         iterable $outputProcessor = [],
@@ -51,7 +53,7 @@ final readonly class Chain implements ChainInterface
             throw MissingModelSupport::forImageInput($this->llm::class);
         }
 
-        $response = $this->llm->call($messages, $options = $input->getOptions());
+        $response = $this->platform->request($this->llm, $messages, $options = $input->getOptions());
 
         $output = new Output($this->llm, $response, $messages, $options);
         array_map(fn (OutputProcessor $processor) => $processor->processOutput($output), $this->outputProcessor);

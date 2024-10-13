@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Fixture\Tool;
 
-use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
 
 #[AsTool('tool_with_ToolParameter_attribute', 'A tool which has a parameter with described with #[ToolParameter] attribute')]
 final class ToolWithToolParameterAttribute

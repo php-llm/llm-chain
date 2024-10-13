@@ -1,22 +1,21 @@
 <?php
 
+use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings;
+use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
+use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
+use PhpLlm\LlmChain\Bridge\Pinecone\Store;
 use PhpLlm\LlmChain\Chain;
+use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\ToolBox\Tool\SimilaritySearch;
+use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
+use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\TextDocument;
-use PhpLlm\LlmChain\DocumentEmbedder;
-use PhpLlm\LlmChain\Message\Message;
-use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Model\Embeddings\OpenAI as Embeddings;
-use PhpLlm\LlmChain\Model\Language\Gpt;
-use PhpLlm\LlmChain\Platform\OpenAI\OpenAI as Platform;
-use PhpLlm\LlmChain\Store\Pinecone\Store;
-use PhpLlm\LlmChain\ToolBox\ChainProcessor;
-use PhpLlm\LlmChain\ToolBox\Tool\SimilaritySearch;
-use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
-use PhpLlm\LlmChain\ToolBox\ToolBox;
+use PhpLlm\LlmChain\Embedder;
+use PhpLlm\LlmChain\Model\Message\Message;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Probots\Pinecone\Pinecone;
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Uid\Uuid;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
@@ -47,16 +46,16 @@ foreach ($movies as $movie) {
 }
 
 // create embeddings for documents
-$platform = new Platform(HttpClient::create(), $_ENV['OPENAI_API_KEY']);
-$embedder = new DocumentEmbedder($embeddings = new Embeddings($platform), $store);
+$platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
+$embedder = new Embedder($platform, $embeddings = new Embeddings(), $store);
 $embedder->embed($documents);
 
-$llm = new Gpt($platform, Gpt::GPT_4O_MINI);
+$llm = new GPT(GPT::GPT_4O_MINI);
 
-$similaritySearch = new SimilaritySearch($embeddings, $store);
+$similaritySearch = new SimilaritySearch($platform, $embeddings, $store);
 $toolBox = new ToolBox(new ToolAnalyzer(), [$similaritySearch]);
 $processor = new ChainProcessor($toolBox);
-$chain = new Chain($llm, [$processor], [$processor]);
+$chain = new Chain($platform, $llm, [$processor], [$processor]);
 
 $messages = new MessageBag(
     Message::forSystem('Please answer all user questions only using SimilaritySearch function.'),

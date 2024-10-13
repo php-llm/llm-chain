@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Double;
 
-use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactoryInterface;
+use PhpLlm\LlmChain\Chain\StructuredOutput\ResponseFormatFactoryInterface;
 
 final readonly class ConfigurableResponseFormatFactory implements ResponseFormatFactoryInterface
 {

@@ -1,12 +1,11 @@
 <?php
 
+use PhpLlm\LlmChain\Bridge\Azure\OpenAI\PlatformFactory;
+use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Message\Message;
-use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Model\Language\Gpt;
-use PhpLlm\LlmChain\Platform\OpenAI\Azure;
+use PhpLlm\LlmChain\Model\Message\Message;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
@@ -17,15 +16,15 @@ if (empty($_ENV['AZURE_OPENAI_BASEURL']) || empty($_ENV['AZURE_OPENAI_DEPLOYMENT
     exit(1);
 }
 
-$platform = new Azure(HttpClient::create(),
+$platform = PlatformFactory::create(
     $_ENV['AZURE_OPENAI_BASEURL'],
     $_ENV['AZURE_OPENAI_DEPLOYMENT'],
     $_ENV['AZURE_OPENAI_VERSION'],
     $_ENV['AZURE_OPENAI_KEY'],
 );
-$llm = new Gpt($platform, Gpt::GPT_4O_MINI);
+$llm = new GPT(GPT::GPT_4O_MINI);
 
-$chain = new Chain($llm);
+$chain = new Chain($platform, $llm);
 $messages = new MessageBag(
     Message::forSystem('You are a pirate and you write funny.'),
     Message::ofUser('What is the Symfony framework?'),

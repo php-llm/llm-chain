@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain;
 
-use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Response\ResponseInterface;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 
 interface ChainInterface
 {
