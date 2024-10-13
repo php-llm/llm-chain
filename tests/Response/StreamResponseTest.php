@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Response;
 
-use PhpLlm\LlmChain\Response\StreamResponse;
+use PhpLlm\LlmChain\Model\Response\StreamResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Model\Language;
 
-use PhpLlm\LlmChain\Message\AssistantMessage;
-use PhpLlm\LlmChain\Message\Content\Image;
-use PhpLlm\LlmChain\Message\Message;
-use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Message\SystemMessage;
-use PhpLlm\LlmChain\Message\UserMessage;
-use PhpLlm\LlmChain\Model\Language\Llama;
-use PhpLlm\LlmChain\Platform\Ollama;
+use PhpLlm\LlmChain\Bridge\Meta\Llama;
+use PhpLlm\LlmChain\Bridge\Ollama\Client;
+use PhpLlm\LlmChain\Model\Message\AssistantMessage;
+use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Model\Message\Message;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Message\SystemMessage;
+use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
@@ -58,7 +58,7 @@ I am an assistant.<|eot_id|>
 
 <|start_header_id|>assistant<|end_header_id|>
 EXPECTED,
-            (new Llama(new Ollama(new MockHttpClient(), 'http://example.com')))->convertToPrompt($messageBag)
+            (new Llama(new Client(new MockHttpClient(), 'http://example.com')))->convertToPrompt($messageBag)
         );
     }
 
@@ -68,7 +68,7 @@ EXPECTED,
     {
         self::assertSame(
             $expected,
-            (new Llama(new Ollama(new MockHttpClient(), 'http://example.com')))->convertMessage($message)
+            (new Llama(new Client(new MockHttpClient(), 'http://example.com')))->convertMessage($message)
         );
     }
 

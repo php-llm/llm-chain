@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\ToolBox;
 
-use PhpLlm\LlmChain\Response\ToolCall;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
+use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
+use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
+use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
+use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
-use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\ToolBox\Metadata;
-use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
-use PhpLlm\LlmChain\ToolBox\ToolAnalyzer;
-use PhpLlm\LlmChain\ToolBox\ToolBox;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;

@@ -28,6 +28,7 @@
         "mongodb/mongodb": "^1.20",
         "php-cs-fixer/shim": "^3.64",
         "phpstan/phpstan": "^1.12",
+        "phpstan/phpstan-webmozart-assert": "^1.2",
         "phpunit/phpunit": "^11.3",
         "probots-io/pinecone-php": "^1.0",
         "rector/rector": "^1.2",

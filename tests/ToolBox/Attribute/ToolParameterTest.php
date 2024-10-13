@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\ToolBox\Attribute;
 
-use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

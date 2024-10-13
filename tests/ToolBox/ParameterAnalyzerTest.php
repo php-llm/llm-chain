@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\ToolBox;
 
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
+use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
+use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWithToolParameterAttribute;
-use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
-use PhpLlm\LlmChain\ToolBox\Metadata;
-use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;

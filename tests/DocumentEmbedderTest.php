@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\TextDocument;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Document\VectorDocument;
-use PhpLlm\LlmChain\DocumentEmbedder;
+use PhpLlm\LlmChain\Embedder;
 use PhpLlm\LlmChain\Tests\Double\TestEmbeddingsModel;
 use PhpLlm\LlmChain\Tests\Double\TestStore;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,7 +20,7 @@ use Psr\Log\NullLogger;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(DocumentEmbedder::class)]
+#[CoversClass(Embedder::class)]
 #[UsesClass(TextDocument::class)]
 #[UsesClass(Vector::class)]
 #[UsesClass(VectorDocument::class)]
@@ -31,7 +31,7 @@ final class DocumentEmbedderTest extends TestCase
     {
         $document = new TextDocument($id = Uuid::v4(), 'Test content');
 
-        $embedder = new DocumentEmbedder(
+        $embedder = new Embedder(
             new TestEmbeddingsModel(multiCreate: [$vector = new Vector([0.1, 0.2, 0.3])]),
             $store = new TestStore(),
             new MockClock(),
@@ -51,7 +51,7 @@ final class DocumentEmbedderTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())->method('debug')->with('No documents to embed');
 
-        $embedder = new DocumentEmbedder(
+        $embedder = new Embedder(
             new TestEmbeddingsModel(),
             $store = new TestStore(),
             new MockClock(),
@@ -69,7 +69,7 @@ final class DocumentEmbedderTest extends TestCase
         $metadata = new Metadata(['key' => 'value']);
         $document = new TextDocument($id = Uuid::v4(), 'Test content', $metadata);
 
-        $embedder = new DocumentEmbedder(
+        $embedder = new Embedder(
             new TestEmbeddingsModel(multiCreate: [$vector = new Vector([0.1, 0.2, 0.3])]),
             $store = new TestStore(),
             new MockClock(),
@@ -95,7 +95,7 @@ final class DocumentEmbedderTest extends TestCase
         $document1 = new TextDocument(Uuid::v4(), 'Test content 1');
         $document2 = new TextDocument(Uuid::v4(), 'Test content 2');
 
-        $embedder = new DocumentEmbedder(
+        $embedder = new Embedder(
             new TestEmbeddingsModel(multiCreate: [$vector1, $vector2]),
             $store = new TestStore(),
             $clock = new MockClock('2024-01-01 00:00:00'),

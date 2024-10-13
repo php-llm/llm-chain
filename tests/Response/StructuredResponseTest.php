@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Response;
 
-use PhpLlm\LlmChain\Response\StructuredResponse;
+use PhpLlm\LlmChain\Model\Response\StructuredResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;

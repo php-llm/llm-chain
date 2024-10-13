@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Response;
 
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
-use PhpLlm\LlmChain\Response\ToolCall;
-use PhpLlm\LlmChain\Response\ToolCallResponse;
+use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;

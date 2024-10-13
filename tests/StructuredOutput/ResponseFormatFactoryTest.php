@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\StructuredOutput;
 
-use PhpLlm\LlmChain\StructuredOutput\ResponseFormatFactory;
-use PhpLlm\LlmChain\StructuredOutput\SchemaFactory;
+use PhpLlm\LlmChain\Chain\StructuredOutput\ResponseFormatFactory;
+use PhpLlm\LlmChain\Chain\StructuredOutput\SchemaFactory;
 use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
