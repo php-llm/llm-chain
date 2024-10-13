@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Double;
 
 use PhpLlm\LlmChain\Document\Vector;
-use PhpLlm\LlmChain\EmbeddingsModel;
+use PhpLlm\LlmChain\Model\EmbeddingsModel;
 use Webmozart\Assert\Assert;
 
 final class TestEmbeddingsModel implements EmbeddingsModel

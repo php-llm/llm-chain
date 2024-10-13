@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\StructuredOutput;
 
-use PhpLlm\LlmChain\StructuredOutput\SchemaFactory;
+use PhpLlm\LlmChain\Chain\StructuredOutput\SchemaFactory;
 use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\MathReasoning;
 use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\Step;
 use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\User;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Response;
 
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
-use PhpLlm\LlmChain\Response\Choice;
-use PhpLlm\LlmChain\Response\ChoiceResponse;
+use PhpLlm\LlmChain\Model\Response\Choice;
+use PhpLlm\LlmChain\Model\Response\ChoiceResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;

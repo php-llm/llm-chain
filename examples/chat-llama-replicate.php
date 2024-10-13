@@ -1,12 +1,11 @@
 <?php
 
+use PhpLlm\LlmChain\Bridge\Meta\Llama;
+use PhpLlm\LlmChain\Bridge\Replicate\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Message\Message;
-use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Model\Language\Llama;
-use PhpLlm\LlmChain\Platform\Replicate;
+use PhpLlm\LlmChain\Model\Message\Message;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
@@ -16,10 +15,10 @@ if (empty($_ENV['REPLICATE_API_KEY'])) {
     exit(1);
 }
 
-$platform = new Replicate(HttpClient::create(), $_ENV['REPLICATE_API_KEY']);
-$llm = new Llama($platform);
+$platform = PlatformFactory::create($_ENV['REPLICATE_API_KEY']);
+$llm = new Llama();
 
-$chain = new Chain($llm);
+$chain = new Chain($platform, $llm);
 $messages = new MessageBag(
     Message::forSystem('You are a helpful assistant.'),
     Message::ofUser('Tina has one brother and one sister. How many sisters do Tina\'s siblings have?'),

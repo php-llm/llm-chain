@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain;
 
-use PhpLlm\LlmChain\LanguageModel;
-use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Model\LanguageModel;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
 
 final class Input
 {

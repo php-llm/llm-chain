@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Message\Content;
 
-use PhpLlm\LlmChain\Message\Content\Text;
+use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;

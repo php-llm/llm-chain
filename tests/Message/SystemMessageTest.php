@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Message;
 
-use PhpLlm\LlmChain\Message\Role;
-use PhpLlm\LlmChain\Message\SystemMessage;
+use PhpLlm\LlmChain\Model\Message\Role;
+use PhpLlm\LlmChain\Model\Message\SystemMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;

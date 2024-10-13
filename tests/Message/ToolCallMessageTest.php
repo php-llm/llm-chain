@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Message;
 
-use PhpLlm\LlmChain\Message\Role;
-use PhpLlm\LlmChain\Message\ToolCallMessage;
-use PhpLlm\LlmChain\Response\ToolCall;
+use PhpLlm\LlmChain\Model\Message\Role;
+use PhpLlm\LlmChain\Model\Message\ToolCallMessage;
+use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
