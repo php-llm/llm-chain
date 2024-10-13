@@ -1,12 +1,11 @@
 <?php
 
+use PhpLlm\LlmChain\Bridge\Anthropic\Claude;
+use PhpLlm\LlmChain\Bridge\Anthropic\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Message\Message;
-use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Model\Language\Claude;
-use PhpLlm\LlmChain\Platform\Anthropic;
+use PhpLlm\LlmChain\Model\Message\Message;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
@@ -16,10 +15,10 @@ if (empty($_ENV['ANTHROPIC_API_KEY'])) {
     exit(1);
 }
 
-$platform = new Anthropic(HttpClient::create(), $_ENV['ANTHROPIC_API_KEY']);
-$llm = new Claude($platform);
+$platform = PlatformFactory::create($_ENV['ANTHROPIC_API_KEY']);
+$llm = new Claude();
 
-$chain = new Chain($llm);
+$chain = new Chain($platform, $llm);
 $messages = new MessageBag(
     Message::forSystem('You are a pirate and you write funny.'),
     Message::ofUser('What is the Symfony framework?'),
