@@ -2,27 +2,30 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Anthropic\Model;
+namespace PhpLlm\LlmChain\Model\Language;
 
-use PhpLlm\LlmChain\Anthropic\Model\Claude\Version;
-use PhpLlm\LlmChain\Anthropic\Platform;
 use PhpLlm\LlmChain\LanguageModel;
 use PhpLlm\LlmChain\Message\MessageBag;
+use PhpLlm\LlmChain\Platform\Anthropic;
 use PhpLlm\LlmChain\Response\ResponseInterface;
 use PhpLlm\LlmChain\Response\StreamResponse;
 use PhpLlm\LlmChain\Response\TextResponse;
 
-final class Claude implements LanguageModel
+final readonly class Claude implements LanguageModel
 {
+    public const VERSION_3_HAIKU = 'claude-3-haiku-20240307';
+    public const VERSION_3_SONNET = 'claude-3-sonnet-20240229';
+    public const VERSION_35_SONNET = 'claude-3-5-sonnet-20240620';
+    public const VERSION_3_OPUS = 'claude-3-opus-20240229';
+
     /**
      * @param array<string, mixed> $options The default options for the model usage
      */
     public function __construct(
-        private readonly Platform $platform,
-        private ?Version $version = null,
-        private readonly array $options = ['temperature' => 1.0, 'max_tokens' => 1000],
+        private Anthropic $platform,
+        private string $version = self::VERSION_35_SONNET,
+        private array $options = ['temperature' => 1.0, 'max_tokens' => 1000],
     ) {
-        $this->version ??= Version::sonnet35();
     }
 
     /**
@@ -33,7 +36,7 @@ final class Claude implements LanguageModel
     {
         $system = $messages->getSystemMessage();
         $body = array_merge($this->options, $options, [
-            'model' => $this->version->name,
+            'model' => $this->version,
             'system' => $system->content,
             'messages' => $messages->withoutSystemMessage(),
         ]);
