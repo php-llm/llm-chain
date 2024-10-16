@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Model;
+use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 use PhpLlm\LlmChain\Platform\ModelClient;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
@@ -80,7 +81,7 @@ final readonly class Platform
     {
         foreach ($this->responseConverter as $responseConverter) {
             if ($responseConverter->supports($model, $input)) {
-                return $responseConverter->convert($response, $options);
+                return new AsyncResponse($responseConverter, $response, $options);
             }
         }
 
