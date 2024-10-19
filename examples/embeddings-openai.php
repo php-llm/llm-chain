@@ -1,9 +1,9 @@
 <?php
 
-use PhpLlm\LlmChain\Model\Embeddings\OpenAI as Embeddings;
-use PhpLlm\LlmChain\Platform\OpenAI\OpenAI as Platform;
+use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings;
+use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
+use PhpLlm\LlmChain\Model\Response\VectorResponse;
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
@@ -13,13 +13,15 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
     exit(1);
 }
 
-$platform = new Platform(HttpClient::create(), $_ENV['OPENAI_API_KEY']);
-$embeddings = new Embeddings($platform);
+$platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
+$embeddings = new Embeddings();
 
-$vector = $embeddings->create(<<<TEXT
+$response = $platform->request($embeddings, <<<TEXT
     Once upon a time, there was a country called Japan. It was a beautiful country with a lot of mountains and rivers.
     The people of Japan were very kind and hardworking. They loved their country very much and took care of it. The
     country was very peaceful and prosperous. The people lived happily ever after.
     TEXT);
 
-echo 'Dimensions: '.$vector->getDimensions().PHP_EOL;
+assert($response instanceof VectorResponse);
+
+echo 'Dimensions: '.$response->getContent()[0]->getDimensions().PHP_EOL;

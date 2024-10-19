@@ -1,12 +1,11 @@
 <?php
 
+use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
+use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Message\Message;
-use PhpLlm\LlmChain\Message\MessageBag;
-use PhpLlm\LlmChain\Model\Language\Gpt;
-use PhpLlm\LlmChain\Platform\OpenAI\OpenAI;
+use PhpLlm\LlmChain\Model\Message\Message;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
@@ -21,8 +20,8 @@ if (empty($_ENV['RUN_EXPENSIVE_EXAMPLES']) || false === filter_var($_ENV['RUN_EX
     exit(134);
 }
 
-$platform = new OpenAI(HttpClient::create(), $_ENV['OPENAI_API_KEY']);
-$llm = new Gpt($platform, Gpt::O1_PREVIEW);
+$platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
+$llm = new GPT(GPT::O1_PREVIEW);
 
 $prompt = <<<PROMPT
 I want to build a Symfony app in PHP 8.2 that takes user questions and looks them
@@ -33,6 +32,6 @@ structure you'll need, then return each file in full. Only supply your reasoning
 at the beginning and end, not throughout the code.
 PROMPT;
 
-$response = (new Chain($llm))->call(new MessageBag(Message::ofUser($prompt)));
+$response = (new Chain($platform, $llm))->call(new MessageBag(Message::ofUser($prompt)));
 
 echo $response->getContent().PHP_EOL;
