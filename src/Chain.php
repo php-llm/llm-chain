@@ -14,7 +14,7 @@ use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Message\MessageBag;
 use PhpLlm\LlmChain\Response\ResponseInterface;
 
-final readonly class Chain
+final readonly class Chain implements ChainInterface
 {
     /**
      * @var InputProcessor[]
