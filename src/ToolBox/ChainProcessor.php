@@ -29,8 +29,13 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
             throw MissingModelSupport::forToolCalling($input->llm::class);
         }
 
+        $toolMap = $this->toolBox->getMap();
+        if ([] === $toolMap) {
+            return;
+        }
+
         $options = $input->getOptions();
-        $options['tools'] = $this->toolBox->getMap();
+        $options['tools'] = $toolMap;
         $input->setOptions($options);
     }
 
