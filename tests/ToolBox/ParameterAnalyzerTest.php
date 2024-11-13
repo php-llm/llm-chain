@@ -13,6 +13,7 @@ use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
 use PhpLlm\LlmChain\ToolBox\Metadata;
 use PhpLlm\LlmChain\ToolBox\ParameterAnalyzer;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -162,5 +163,77 @@ final class ParameterAnalyzerTest extends TestCase
         $actual = $this->analyzer->getDefinition(ToolNoParams::class, '__invoke');
 
         self::assertNull($actual);
+    }
+
+    #[Test]
+    public function getParameterDescriptionWithoutDocBlock(): void
+    {
+        $targetMethod = self::createStub(\ReflectionMethod::class);
+        $targetMethod->method('getDocComment')->willReturn(false);
+
+        $methodToTest = new \ReflectionMethod(ParameterAnalyzer::class, 'getParameterDescription');
+
+        self::assertSame(
+            '',
+            $methodToTest->invoke(
+                $this->analyzer,
+                $targetMethod,
+                'myParam',
+            )
+        );
+    }
+
+    #[Test]
+    #[DataProvider('provideGetParameterDescriptionCases')]
+    public function getParameterDescriptionWithDocs(string $docComment, string $expectedResult): void
+    {
+        $targetMethod = self::createStub(\ReflectionMethod::class);
+        $targetMethod->method('getDocComment')->willReturn($docComment);
+
+        $methodToTest = new \ReflectionMethod(ParameterAnalyzer::class, 'getParameterDescription');
+
+        self::assertSame(
+            $expectedResult,
+            $methodToTest->invoke(
+                $this->analyzer,
+                $targetMethod,
+                'myParam',
+            )
+        );
+    }
+
+    public static function provideGetParameterDescriptionCases(): \Generator
+    {
+        yield 'empty doc block' => [
+            'docComment' => '',
+            'expectedResult' => '',
+        ];
+
+        yield 'single line doc block with description' => [
+            'docComment' => '/** @param string $myParam The description */',
+            'expectedResult' => 'The description',
+        ];
+
+        yield 'multi line doc block with description and other tags' => [
+            'docComment' => '/** @param string $myParam The description
+			 * @return void
+			 */',
+            'expectedResult' => 'The description',
+        ];
+
+        yield 'multi line doc block with multiple parameters' => [
+            'docComment' => '/**
+			 * @param string $myParam The description
+			 * @param string $anotherParam The wrong description
+			 */',
+            'expectedResult' => 'The description',
+        ];
+
+        yield 'multi line doc block with parameter that is not searched for' => [
+            'docComment' => '/**
+			 * @param string $unknownParam The description
+			 */',
+            'expectedResult' => '',
+        ];
     }
 }
