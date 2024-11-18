@@ -95,7 +95,7 @@ final class ParameterAnalyzer
             return '';
         }
 
-        $pattern = '/@param\s+\S+\s+\$'.preg_quote($paramName, '/').'\s+(.*)/';
+        $pattern = '/@param\s+\S+\s+\$'.preg_quote($paramName, '/').'\s+((.*)(?=\*)|.*)/';
         if (preg_match($pattern, $docComment, $matches)) {
             return trim($matches[1]);
         }
