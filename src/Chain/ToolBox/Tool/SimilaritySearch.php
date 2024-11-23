@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Model\EmbeddingsModel;
-use PhpLlm\LlmChain\Platform;
+use PhpLlm\LlmChain\PlatformInterface;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 
 #[AsTool('similarity_search', description: 'Searches for documents similar to a query or sentence.')]
@@ -20,7 +20,7 @@ final class SimilaritySearch
     public array $usedDocuments = [];
 
     public function __construct(
-        private readonly Platform $platform,
+        private readonly PlatformInterface $platform,
         private readonly EmbeddingsModel $embeddings,
         private readonly VectorStoreInterface $vectorStore,
     ) {

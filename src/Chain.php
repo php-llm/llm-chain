@@ -33,7 +33,7 @@ final readonly class Chain implements ChainInterface
      * @param OutputProcessor[] $outputProcessor
      */
     public function __construct(
-        private Platform $platform,
+        private PlatformInterface $platform,
         private LanguageModel $llm,
         iterable $inputProcessor = [],
         iterable $outputProcessor = [],

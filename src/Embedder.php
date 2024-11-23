@@ -18,7 +18,7 @@ final readonly class Embedder
     private ClockInterface $clock;
 
     public function __construct(
-        private Platform $platform,
+        private PlatformInterface $platform,
         private EmbeddingsModel $embeddings,
         private StoreInterface $store,
         ?ClockInterface $clock = null,

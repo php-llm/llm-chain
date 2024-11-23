@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\OpenAI;
 
-use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ModelClient;
-use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ResponseConverter;
-use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ModelClient as GPTResponseFactory;
+use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ModelClient as EmbeddingsModelClient;
+use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ResponseConverter as EmbeddingsResponseConverter;
+use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ModelClient as GPTModelClient;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ResponseConverter as GPTResponseConverter;
 use PhpLlm\LlmChain\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
@@ -18,8 +18,8 @@ final readonly class PlatformFactory
         $httpClient = new EventSourceHttpClient();
 
         return new Platform(
-            [new GPTResponseFactory($httpClient, $apiKey), new ModelClient($httpClient, $apiKey)],
-            [new GPTResponseConverter(), new ResponseConverter()],
+            [new GPTModelClient($httpClient, $apiKey), new EmbeddingsModelClient($httpClient, $apiKey)],
+            [new GPTResponseConverter(), new EmbeddingsResponseConverter()],
         );
     }
 }

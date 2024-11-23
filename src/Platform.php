@@ -15,7 +15,7 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
-final readonly class Platform
+final readonly class Platform implements PlatformInterface
 {
     /**
      * @var ModelClient[]
@@ -37,10 +37,6 @@ final readonly class Platform
         $this->responseConverter = $responseConverter instanceof \Traversable ? iterator_to_array($responseConverter) : $responseConverter;
     }
 
-    /**
-     * @param array<mixed>|string|object $input
-     * @param array<string, mixed>       $options
-     */
     public function request(Model $model, array|string|object $input, array $options = []): ResponseInterface
     {
         $options = array_merge($model->getOptions(), $options);
