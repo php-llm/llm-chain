@@ -522,3 +522,5 @@ Contributions are always welcome, so feel free to join the development of this l
 ### Current Contributors
 
 [![LLM Chain Contributors](https://contrib.rocks/image?repo=php-llm/llm-chain 'LLM Chain Contributors')](https://github.com/php-llm/llm-chain/graphs/contributors)
+
+Made with [contrib.rocks](https://contrib.rocks).
