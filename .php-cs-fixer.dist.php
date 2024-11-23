@@ -1,12 +1,13 @@
 <?php
 
-$finder = (new PhpCsFixer\Finder())
-    ->in(__DIR__)
-;
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
-return (new PhpCsFixer\Config())
-    ->setRules([
-        '@Symfony' => true,
-    ])
-    ->setFinder($finder)
-;
+$finder = (new Finder())
+    ->in(__DIR__);
+
+return (new Config())
+    ->setParallelConfig(ParallelConfigFactory::detect())
+    ->setRules(['@Symfony' => true])
+    ->setFinder($finder);
