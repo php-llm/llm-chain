@@ -2,7 +2,7 @@
 
 qa:
 	composer update --prefer-stable
-	vendor/bin/php-cs-fixer fix --diff --verbose
+	PHP_CS_FIXER_IGNORE_ENV=true vendor/bin/php-cs-fixer fix --diff --verbose
 	vendor/bin/rector
 	vendor/bin/phpstan
 	vendor/bin/phpunit
@@ -10,7 +10,7 @@ qa:
 
 qa-lowest:
 	composer update --prefer-lowest
-	vendor/bin/php-cs-fixer fix --diff --verbose
+	PHP_CS_FIXER_IGNORE_ENV=true vendor/bin/php-cs-fixer fix --diff --verbose
 	vendor/bin/phpstan
 	vendor/bin/phpunit
 
