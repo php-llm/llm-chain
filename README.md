@@ -430,6 +430,33 @@ dump($vectors[0]->getData()); // Array of float values
 1. **OpenAI's Emebddings**: [embeddings-openai.php](examples/embeddings-openai.php)
 1. **Voyage's Embeddings**: [embeddings-voyage.php](examples/embeddings-voyage.php)
 
+### Parallel Platform Calls
+
+Platform supports multiple model calls in parallel, which can be useful to speed up the processing:
+
+```php
+// Initialize Platform & Model
+
+foreach ($inputs as $input) {
+    $responses[] = $platform->request($model, $input);
+}
+
+foreach ($responses as $response) {
+    echo $response->getContent().PHP_EOL;
+}
+```
+
+> [!NOTE]
+> This requires cURL and the `ext-curl` extension to be installed.
+
+#### Code Examples
+
+1. **Parallel GPT Calls**: [parallel-chat-gpt.php](examples/parallel-chat-gpt.php)
+1. **Parallel Embeddings Calls**: [parallel-embeddings.php](examples/parallel-embeddings.php)
+
+> [!NOTE]
+> Please be aware that some embeddings models also support batch processing out of the box.
+
 ### Input & Output Processing
 
 The behavior of the Chain is extendable with services that implement `InputProcessor` and/or `OutputProcessor`

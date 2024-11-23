@@ -13,6 +13,7 @@ use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Model\LanguageModel;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 
 final readonly class Chain implements ChainInterface
@@ -54,6 +55,10 @@ final readonly class Chain implements ChainInterface
         }
 
         $response = $this->platform->request($this->llm, $messages, $options = $input->getOptions());
+
+        if ($response instanceof AsyncResponse) {
+            $response = $response->unwrap();
+        }
 
         $output = new Output($this->llm, $response, $messages, $options);
         array_map(fn (OutputProcessor $processor) => $processor->processOutput($output), $this->outputProcessor);
