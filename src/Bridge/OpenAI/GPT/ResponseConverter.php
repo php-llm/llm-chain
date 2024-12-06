@@ -17,6 +17,7 @@ use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
 use PhpLlm\LlmChain\Platform\ResponseConverter as PlatformResponseConverter;
 use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 final class ResponseConverter implements PlatformResponseConverter
@@ -70,7 +71,12 @@ final class ResponseConverter implements PlatformResponseConverter
                 continue;
             }
 
-            yield $chunk->getArrayData();
+            try {
+                yield $chunk->getArrayData();
+            } catch (JsonException) {
+                // try catch only needed for Symfony 6.4
+                continue;
+            }
         }
     }
 
