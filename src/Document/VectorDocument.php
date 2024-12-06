@@ -12,6 +12,7 @@ final readonly class VectorDocument
         public Uuid $id,
         public VectorInterface $vector,
         public Metadata $metadata = new Metadata(),
+        public ?float $score = null,
     ) {
     }
 }
