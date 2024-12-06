@@ -95,9 +95,9 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
      *     filter?: array<mixed>
      * } $options
      */
-    public function query(Vector $vector, array $options = []): array
+    public function query(Vector $vector, array $options = [], ?float $minScore = null): array
     {
-        $results = $this->getCollection()->aggregate([
+        $pipeline = [
             [
                 '$vectorSearch' => array_merge([
                     'index' => $this->indexName,
@@ -112,7 +112,20 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
                     'score' => ['$meta' => 'vectorSearchScore'],
                 ],
             ],
-        ], ['typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array']]);
+        ];
+
+        if (null !== $minScore) {
+            $pipeline[] = [
+                '$match' => [
+                    'score' => ['$gte' => $minScore],
+                ],
+            ];
+        }
+
+        $results = $this->getCollection()->aggregate(
+            $pipeline,
+            ['typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array']]
+        );
 
         $documents = [];
 

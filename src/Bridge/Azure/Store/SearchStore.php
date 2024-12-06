@@ -34,7 +34,7 @@ final readonly class SearchStore implements VectorStoreInterface
         ]);
     }
 
-    public function query(Vector $vector, array $options = []): array
+    public function query(Vector $vector, array $options = [], ?float $minScore = null): array
     {
         $result = $this->request('search', [
             'vectorQueries' => [$this->buildVectorQuery($vector)],
