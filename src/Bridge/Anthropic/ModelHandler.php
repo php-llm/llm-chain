@@ -13,6 +13,7 @@ use PhpLlm\LlmChain\Platform\ModelClient;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
 use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
@@ -72,7 +73,12 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
                 continue;
             }
 
-            $data = $chunk->getArrayData();
+            try {
+                $data = $chunk->getArrayData();
+            } catch (JsonException) {
+                // try catch only needed for Symfony 6.4
+                continue;
+            }
 
             if ('content_block_delta' != $data['type'] || !isset($data['delta']['text'])) {
                 continue;
