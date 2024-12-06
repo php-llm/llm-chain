@@ -134,6 +134,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
                 id: $this->toUuid($result['_id']),
                 vector: new Vector($result[$this->vectorFieldName]),
                 metadata: new Metadata($result['metadata'] ?? []),
+                score: $result['score'],
             );
         }
 
