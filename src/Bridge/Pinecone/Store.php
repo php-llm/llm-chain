@@ -59,6 +59,7 @@ final readonly class Store implements VectorStoreInterface
                 id: Uuid::fromString($match['id']),
                 vector: new Vector($match['values']),
                 metadata: new Metadata($match['metadata']),
+                score: $match['score'],
             );
         }
 
