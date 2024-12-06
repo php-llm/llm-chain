@@ -22,6 +22,11 @@ final class ResponseConverter implements PlatformResponseConverter
     {
         $data = $response->toArray();
 
-        return new VectorResponse(new Vector($data['data'][0]['embedding']));
+        return new VectorResponse(
+            ...\array_map(
+                static fn (array $item): Vector => new Vector($item['embedding']),
+                $data['data']
+            ),
+        );
     }
 }
