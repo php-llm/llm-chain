@@ -66,7 +66,7 @@ final readonly class Platform implements PlatformInterface
             }
         }
 
-        throw new RuntimeException('No response factory found for the given model');
+        throw new RuntimeException('No response factory registered for model "'.$model::class.'" with given input.');
     }
 
     /**
@@ -81,6 +81,6 @@ final readonly class Platform implements PlatformInterface
             }
         }
 
-        throw new RuntimeException('No response converter found for the given model');
+        throw new RuntimeException('No response converter registered for model "'.$model::class.'" with given input.');
     }
 }
