@@ -10,12 +10,16 @@ use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ModelClient as GPTModelClient;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ResponseConverter as GPTResponseConverter;
 use PhpLlm\LlmChain\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class PlatformFactory
 {
-    public static function create(#[\SensitiveParameter] string $apiKey): Platform
-    {
-        $httpClient = new EventSourceHttpClient();
+    public static function create(
+        #[\SensitiveParameter]
+        string $apiKey,
+        ?HttpClientInterface $httpClient = null,
+    ): Platform {
+        $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
 
         return new Platform(
             [new GPTModelClient($httpClient, $apiKey), new EmbeddingsModelClient($httpClient, $apiKey)],
