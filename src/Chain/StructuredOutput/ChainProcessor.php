@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\StructuredOutput;
 
+use PhpLlm\LlmChain\Chain\ChainAwareProcessor;
+use PhpLlm\LlmChain\Chain\ChainAwareTrait;
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessor;
 use PhpLlm\LlmChain\Chain\Output;
@@ -13,8 +15,10 @@ use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Model\Response\StructuredResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class ChainProcessor implements InputProcessor, OutputProcessor
+final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwareProcessor
 {
+    use ChainAwareTrait;
+
     private string $outputStructure;
 
     public function __construct(

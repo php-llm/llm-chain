@@ -7,21 +7,14 @@ namespace PhpLlm\LlmChain\Chain\ToolBox;
 use PhpLlm\LlmChain\Chain\ChainAwareProcessor;
 use PhpLlm\LlmChain\Chain\ChainAwareTrait;
 use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\InputProcessor;
 use PhpLlm\LlmChain\Chain\Output;
-use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
 
-final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwareProcessor
+final class ChainProcessor implements ChainAwareProcessor
 {
     use ChainAwareTrait;
-
-    public function __construct(
-        private ToolBoxInterface $toolBox,
-    ) {
-    }
 
     public function processInput(Input $input): void
     {
@@ -52,7 +45,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
                 $messages[] = Message::ofToolCall($toolCall, $result);
             }
 
-            $output->response = $this->chain->call($messages, $output->options);
+            $output->response = $this->chain->process($messages, $output->options, $this);
         }
     }
 }
