@@ -27,6 +27,6 @@ $messages = new MessageBag(
         new Image('https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Webysther_20160423_-_Elephpant.svg/350px-Webysther_20160423_-_Elephpant.svg.png'),
     ),
 );
-$response = $chain->call($messages);
+$response = $chain->process($messages);
 
 echo $response->getContent().PHP_EOL;

@@ -24,10 +24,10 @@ $llm = new GPT(GPT::GPT_4O_MINI);
 
 $serpApi = new SerpApi(HttpClient::create(), $_ENV['SERP_API_KEY']);
 $toolBox = new ToolBox(new ToolAnalyzer(), [$serpApi]);
-$processor = new ChainProcessor($toolBox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$processor = (new ChainProcessor())->withToolBox($toolBox);
+$chain = new Chain($platform, $llm);
 
 $messages = new MessageBag(Message::ofUser('Who is the current chancellor of Germany?'));
-$response = $chain->call($messages);
+$response = $chain->process(messages: $messages, chainProcessor: $processor);
 
 echo $response->getContent().PHP_EOL;

@@ -25,10 +25,10 @@ $llm = new GPT(GPT::GPT_4O_MINI);
 
 $clock = new Clock(new SymfonyClock());
 $toolBox = new ToolBox(new ToolAnalyzer(), [$clock]);
-$processor = new ChainProcessor($toolBox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$processor = (new ChainProcessor())->withToolBox($toolBox);
+$chain = new Chain($platform, $llm);
 
 $messages = new MessageBag(Message::ofUser('What date and time is it?'));
-$response = $chain->call($messages);
+$response = $chain->process($messages, [], $processor);
 
 echo $response->getContent().PHP_EOL;

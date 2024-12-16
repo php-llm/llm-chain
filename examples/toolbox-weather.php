@@ -25,10 +25,10 @@ $llm = new GPT(GPT::GPT_4O_MINI);
 
 $wikipedia = new OpenMeteo(HttpClient::create());
 $toolBox = new ToolBox(new ToolAnalyzer(), [$wikipedia]);
-$processor = new ChainProcessor($toolBox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$processor = (new ChainProcessor())->withToolBox($toolBox);
+$chain = new Chain($platform, $llm);
 
 $messages = new MessageBag(Message::ofUser('How is the weather currently in Berlin?'));
-$response = $chain->call($messages);
+$response = $chain->process($messages, [], $processor);
 
 echo $response->getContent().PHP_EOL;

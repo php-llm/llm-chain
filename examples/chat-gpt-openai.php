@@ -25,7 +25,7 @@ $messages = new MessageBag(
     Message::forSystem('You are a pirate and you write funny.'),
     Message::ofUser('What is the Symfony framework?'),
 );
-$response = $chain->call($messages, [
+$response = $chain->process($messages, [
     'max_tokens' => 500, // specific options just for this call
 ]);
 

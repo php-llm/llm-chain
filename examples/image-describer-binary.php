@@ -27,6 +27,6 @@ $messages = new MessageBag(
         new Image(dirname(__DIR__).'/tests/Fixture/image.png'),
     ),
 );
-$response = $chain->call($messages);
+$response = $chain->process($messages);
 
 echo $response->getContent().PHP_EOL;

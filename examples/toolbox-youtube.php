@@ -25,13 +25,13 @@ $llm = new GPT(GPT::GPT_4O_MINI);
 
 $transcriber = new YouTubeTranscriber(HttpClient::create());
 $toolBox = new ToolBox(new ToolAnalyzer(), [$transcriber]);
-$processor = new ChainProcessor($toolBox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$processor = (new ChainProcessor())->withToolBox($toolBox);
+$chain = new Chain($platform, $llm);
 
 $messages = new MessageBag(Message::ofUser('Please summarize this video for me: https://www.youtube.com/watch?v=6uXW-ulpj0s'));
-$response = $chain->call($messages, [
+$response = $chain->process($messages, [
     'stream' => true, // enable streaming of response text
-]);
+], $processor);
 
 foreach ($response->getContent() as $word) {
     echo $word;

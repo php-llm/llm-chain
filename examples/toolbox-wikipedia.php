@@ -25,10 +25,10 @@ $llm = new GPT(GPT::GPT_4O_MINI);
 
 $wikipedia = new Wikipedia(HttpClient::create());
 $toolBox = new ToolBox(new ToolAnalyzer(), [$wikipedia]);
-$processor = new ChainProcessor($toolBox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$processor = (new ChainProcessor())->withToolBox($toolBox);
+$chain = new Chain($platform, $llm);
 
 $messages = new MessageBag(Message::ofUser('Who is the current chancellor of Germany?'));
-$response = $chain->call($messages);
+$response = $chain->process(messages: $messages, chainProcessor: $processor);
 
 echo $response->getContent().PHP_EOL;

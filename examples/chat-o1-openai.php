@@ -32,6 +32,6 @@ structure you'll need, then return each file in full. Only supply your reasoning
 at the beginning and end, not throughout the code.
 PROMPT;
 
-$response = (new Chain($platform, $llm))->call(new MessageBag(Message::ofUser($prompt)));
+$response = (new Chain($platform, $llm))->process(new MessageBag(Message::ofUser($prompt)));
 
 echo $response->getContent().PHP_EOL;

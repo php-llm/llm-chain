@@ -26,11 +26,11 @@ $llm = new GPT(GPT::GPT_4O_MINI);
 $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 
 $processor = new ChainProcessor(new ResponseFormatFactory(), $serializer);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $llm);
 $messages = new MessageBag(
     Message::forSystem('You are a helpful math tutor. Guide the user through the solution step by step.'),
     Message::ofUser('how can I solve 8x + 7 = -23'),
 );
-$response = $chain->call($messages, ['output_structure' => MathReasoning::class]);
+$response = $chain->process($messages, ['output_structure' => MathReasoning::class], $processor);
 
 dump($response->getContent());

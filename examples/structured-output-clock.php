@@ -30,13 +30,15 @@ $llm = new GPT(GPT::GPT_4O_MINI);
 
 $clock = new Clock(new SymfonyClock());
 $toolBox = new ToolBox(new ToolAnalyzer(), [$clock]);
-$toolProcessor = new ToolProcessor($toolBox);
+$toolProcessor = (new ToolProcessor())->withToolBox($toolBox);
 $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 $structuredOutputProcessor = new StructuredOutputProcessor(new ResponseFormatFactory(), $serializer);
-$chain = new Chain($platform, $llm, [$toolProcessor, $structuredOutputProcessor], [$toolProcessor, $structuredOutputProcessor]);
+$structuredOutputProcessor->setOutputProcessors([$toolProcessor, $structuredOutputProcessor]);
+$structuredOutputProcessor->setInputProcessors([$toolProcessor, $structuredOutputProcessor]);
+$chain = new Chain($platform, $llm);
 
 $messages = new MessageBag(Message::ofUser('What date and time is it?'));
-$response = $chain->call($messages, ['response_format' => [
+$response = $chain->process($messages, ['response_format' => [
     'type' => 'json_schema',
     'json_schema' => [
         'name' => 'clock',
@@ -51,6 +53,6 @@ $response = $chain->call($messages, ['response_format' => [
             'additionalProperties' => false,
         ],
     ],
-]]);
+]], $structuredOutputProcessor);
 
 dump($response->getContent());

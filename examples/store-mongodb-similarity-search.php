@@ -63,13 +63,13 @@ $llm = new GPT(GPT::GPT_4O_MINI);
 
 $similaritySearch = new SimilaritySearch($platform, $embeddings, $store);
 $toolBox = new ToolBox(new ToolAnalyzer(), [$similaritySearch]);
-$processor = new ChainProcessor($toolBox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$processor = (new ChainProcessor())->withToolBox($toolBox);
+$chain = new Chain($platform, $llm);
 
 $messages = new MessageBag(
     Message::forSystem('Please answer all user questions only using SimilaritySearch function.'),
     Message::ofUser('Which movie fits the theme of the mafia?')
 );
-$response = $chain->call($messages);
+$response = $chain->process(messages: $messages, chainProcessor: $processor);
 
 echo $response->getContent().PHP_EOL;
