@@ -42,7 +42,7 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
     {
         $response = $response->toArray(false);
 
-        if (!isset($data['embedding']) || !isset($data['data'])) {
+        if (!isset($response['data'])) {
             throw new RuntimeException('Response does not contain embedding data');
         }
 
