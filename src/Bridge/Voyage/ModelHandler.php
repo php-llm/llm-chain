@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Voyage;
 
+use http\Exception\RuntimeException;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
@@ -39,7 +40,11 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
 
     public function convert(ResponseInterface $response, array $options = []): LlmResponse
     {
-        $response = $response->toArray();
+        $response = json_decode($response->getContent(false), true);
+
+        if (!isset($data['embedding']) || !isset($data['data'])) {
+            throw new RuntimeException('Response does not contain embedding data');
+        }
 
         $vectors = array_map(fn (array $data) => new Vector($data['embedding']), $response['data']);
 

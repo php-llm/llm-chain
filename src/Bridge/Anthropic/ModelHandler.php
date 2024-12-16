@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Anthropic;
 
+use http\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
@@ -14,6 +15,10 @@ use PhpLlm\LlmChain\Platform\ResponseConverter;
 use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Component\HttpClient\Exception\JsonException;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
@@ -55,13 +60,27 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
         ]);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     public function convert(ResponseInterface $response, array $options = []): LlmResponse
     {
         if ($options['stream'] ?? false) {
             return new StreamResponse($this->convertStream($response));
         }
 
-        $data = $response->toArray();
+        $data = json_decode($response->getContent(false), true);
+
+        if (!isset($data['content']) || !count($data['content'])) {
+            throw new RuntimeException('Response does not contain any content');
+        }
+
+        if (!isset($data['content'][0]['text'])) {
+            throw new RuntimeException('Response content does not contain any text');
+        }
 
         return new TextResponse($data['content'][0]['text']);
     }

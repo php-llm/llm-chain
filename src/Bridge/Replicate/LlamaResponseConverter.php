@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Replicate;
 
+use http\Exception\RuntimeException;
 use PhpLlm\LlmChain\Bridge\Meta\Llama;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Model;
@@ -21,7 +22,11 @@ final readonly class LlamaResponseConverter implements ResponseConverter
 
     public function convert(HttpResponse $response, array $options = []): LlmResponse
     {
-        $data = $response->toArray();
+        $data = json_decode($response->getContent(false), true);
+
+        if (!isset($data['output'])) {
+            throw new RuntimeException('Response does not contain output');
+        }
 
         return new TextResponse(implode('', $data['output']));
     }
