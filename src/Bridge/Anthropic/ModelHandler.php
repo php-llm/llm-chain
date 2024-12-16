@@ -72,7 +72,7 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
             return new StreamResponse($this->convertStream($response));
         }
 
-        $data = json_decode($response->getContent(false), true);
+        $data = $response->toArray(false);
 
         if (!isset($data['content']) || !count($data['content'])) {
             throw new RuntimeException('Response does not contain any content');

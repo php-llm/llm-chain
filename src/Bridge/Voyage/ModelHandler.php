@@ -40,7 +40,7 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
 
     public function convert(ResponseInterface $response, array $options = []): LlmResponse
     {
-        $response = json_decode($response->getContent(false), true);
+        $response = $response->toArray(false);
 
         if (!isset($data['embedding']) || !isset($data['data'])) {
             throw new RuntimeException('Response does not contain embedding data');

@@ -42,7 +42,7 @@ final readonly class LlamaModelHandler implements ModelClient, ResponseConverter
 
     public function convert(ResponseInterface $response, array $options = []): LlmResponse
     {
-        $data = json_decode($response->getContent(false), true);
+        $data = $response->toArray(false);
 
         if (!isset($data['message'])) {
             throw new RuntimeException('Response does not contain message');

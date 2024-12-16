@@ -33,7 +33,7 @@ final class ResponseConverter implements PlatformResponseConverter
             return $this->convertStream($response);
         }
 
-        $data = json_decode($response->getContent(false), true);
+        $data = $response->toArray(false);
 
         if (!isset($data['choices'])) {
             throw new RuntimeException('Response does not contain choices');

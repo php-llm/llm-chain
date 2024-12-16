@@ -22,7 +22,7 @@ final readonly class LlamaResponseConverter implements ResponseConverter
 
     public function convert(HttpResponse $response, array $options = []): LlmResponse
     {
-        $data = json_decode($response->getContent(false), true);
+        $data = $response->toArray(false);
 
         if (!isset($data['output'])) {
             throw new RuntimeException('Response does not contain output');
