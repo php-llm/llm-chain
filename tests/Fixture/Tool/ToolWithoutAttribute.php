@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Fixture\Tool;
 
-final class ToolWrong
+final class ToolWithoutAttribute
 {
     /**
      * @param string $text   The text given to the tool

@@ -4,26 +4,27 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain;
 
-use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBoxInterface;
+use PhpLlm\LlmChain\ChainInterface;
+use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 
 trait ChainAwareTrait
 {
-    private Chain $chain;
+    private ChainInterface $chain;
 
     private ToolBoxInterface $toolBox;
 
     /**
      * @var InputProcessor[]
      */
-    private array $inputProcessors;
+    private array $inputProcessors = [];
 
     /**
      * @var OutputProcessor[]
      */
-    private array $outputProcessors;
+    private array $outputProcessors = [];
 
-    public function setChain(Chain $chain): void
+    public function setChain(ChainInterface $chain): void
     {
         $this->chain = $chain;
     }
@@ -56,16 +57,28 @@ trait ChainAwareTrait
         return $this;
     }
 
-    public function setOutputProcessors(array $outputProcessors): self
+    public function setOutputProcessors(iterable $outputProcessors): self
     {
-        $this->outputProcessors = $outputProcessors;
+        foreach ($outputProcessors as $processor) {
+            if (!$processor instanceof OutputProcessor) {
+                throw new InvalidArgumentException(sprintf('Processor %s must implement %s interface.', $processor::class, OutputProcessor::class));
+            }
+
+            $this->addOutputProcessor($processor);
+        }
 
         return $this;
     }
 
-    public function setInputProcessors(array $inputProcessors): self
+    public function setInputProcessors(iterable $inputProcessors): self
     {
-        $this->inputProcessors = $inputProcessors;
+        foreach ($inputProcessors as $processor) {
+            if (!$processor instanceof InputProcessor) {
+                throw new InvalidArgumentException(sprintf('Processor %s must implement %s interface.', $processor::class, InputProcessor::class));
+            }
+
+            $this->addInputProcessor($processor);
+        }
 
         return $this;
     }

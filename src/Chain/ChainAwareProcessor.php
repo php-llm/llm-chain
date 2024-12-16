@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain;
 
-use PhpLlm\LlmChain\Chain;
+use PhpLlm\LlmChain\ChainInterface;
 
 interface ChainAwareProcessor
 {
-    public function setChain(Chain $chain): void;
+    public function setChain(ChainInterface $chain): void;
 
     public function addOutputProcessor(OutputProcessor $outputProcessor): self;
 

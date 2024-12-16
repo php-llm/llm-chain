@@ -28,8 +28,9 @@ final readonly class Chain implements ChainInterface
      */
     public function process(MessageBag $messages, array $options = [], ?ChainAwareProcessor $chainProcessor = null): ResponseInterface
     {
-        $input = new Input($this->llm, $messages, $options);
+        $chainProcessor?->setChain($this);
 
+        $input = new Input($this->llm, $messages, $options);
         if ($chainProcessor) {
             array_map(fn (InputProcessor $processor) => $processor->processInput($input), $chainProcessor->getInputProcessors());
         }
