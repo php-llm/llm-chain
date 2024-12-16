@@ -30,7 +30,7 @@ class ChainProcessorTest extends TestCase
         $llm = $this->createMock(LanguageModel::class);
         $llm->method('supportsToolCalling')->willReturn(true);
 
-        $chainProcessor = new ChainProcessor($toolBox);
+        $chainProcessor = (new ChainProcessor())->withToolBox($toolBox);
         $input = new Input($llm, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
@@ -47,7 +47,7 @@ class ChainProcessorTest extends TestCase
         $llm = $this->createMock(LanguageModel::class);
         $llm->method('supportsToolCalling')->willReturn(true);
 
-        $chainProcessor = new ChainProcessor($toolBox);
+        $chainProcessor = (new ChainProcessor())->withToolBox($toolBox);
         $input = new Input($llm, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
@@ -63,7 +63,7 @@ class ChainProcessorTest extends TestCase
         $llm = $this->createMock(LanguageModel::class);
         $llm->method('supportsToolCalling')->willReturn(false);
 
-        $chainProcessor = new ChainProcessor($this->createStub(ToolBoxInterface::class));
+        $chainProcessor = new ChainProcessor();
         $input = new Input($llm, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
