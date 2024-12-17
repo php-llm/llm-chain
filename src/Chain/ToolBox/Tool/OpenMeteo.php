@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\Chain\ToolBox\Tool;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[AsTool(name: 'weather', description: 'get the current weather for a location')]
+#[AsTool(name: Names::weather->value, description: 'get the current weather for a location')]
 final readonly class OpenMeteo
 {
     public function __construct(

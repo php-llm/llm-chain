@@ -10,7 +10,7 @@ use PhpLlm\LlmChain\Model\Response\ToolCall;
 final class ToolBox implements ToolBoxInterface
 {
     /**
-     * @var list<object>
+     * @var array<object>
      */
     private readonly array $tools;
 
@@ -36,8 +36,9 @@ final class ToolBox implements ToolBoxInterface
         }
 
         $map = [];
-        foreach ($this->tools as $tool) {
-            foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
+
+        foreach ($this->tools as $key => $tool) {
+            foreach ($this->toolAnalyzer->getMetadata($key, $tool::class) as $metadata) {
                 $map[] = $metadata;
             }
         }
@@ -47,12 +48,16 @@ final class ToolBox implements ToolBoxInterface
 
     public function execute(ToolCall $toolCall): string
     {
-        foreach ($this->tools as $tool) {
-            foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
+        foreach ($this->tools as $key => $tool) {
+            foreach ($this->toolAnalyzer->getMetadata($key, $tool::class) as $metadata) {
                 if ($metadata->name === $toolCall->name) {
                     return $tool->{$metadata->method}(...$toolCall->arguments);
                 }
             }
+        }
+
+        if (isset($this->tools[$toolCall->name])) {
+            return $this->tools[$toolCall->name]->call(...$toolCall->arguments);
         }
 
         throw new RuntimeException('Tool not found');

@@ -11,7 +11,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[AsTool('youtube_transcript', 'Fetches the transcript of a YouTube video')]
+#[AsTool(Names::youtube_transcript->value, 'Fetches the transcript of a YouTube video')]
 final readonly class YouTubeTranscriber
 {
     public function __construct(

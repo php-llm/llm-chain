@@ -19,7 +19,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
     use ChainAwareTrait;
 
     public function __construct(
-        private ToolBoxInterface $toolBox,
+        private readonly ToolBoxInterface $toolBox,
     ) {
     }
 
@@ -30,11 +30,12 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
         }
 
         $toolMap = $this->toolBox->getMap();
+
+        $options = $input->getOptions();
         if ([] === $toolMap) {
             return;
         }
 
-        $options = $input->getOptions();
         $options['tools'] = $toolMap;
         $input->setOptions($options);
     }
