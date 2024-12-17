@@ -15,7 +15,6 @@ final readonly class ToolAnalyzer
     }
 
     /**
-     * @param int|string $toolKey
      * @param class-string $className
      *
      * @return iterable<Metadata>
@@ -26,7 +25,7 @@ final readonly class ToolAnalyzer
         $attributes = $reflectionClass->getAttributes(AsTool::class);
 
         if (0 === \count($attributes)) {
-            if (true !== is_string($toolKey)) {
+            if (false === is_string($toolKey)) {
                 throw new InvalidToolImplementation('Use AsTool attribute to configure your tools or create your toolBox like "new ToolBox([\'toolName\' => $toolInstance]")');
             }
 
