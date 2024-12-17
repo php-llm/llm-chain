@@ -11,6 +11,7 @@ use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWithoutAttribute;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWrong;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -32,17 +33,45 @@ final class ToolAnalyzerTest extends TestCase
     }
 
     #[Test]
-    public function withoutAttribute(): void
+    public function toolWrong(): void
     {
         $this->expectException(InvalidToolImplementation::class);
-        iterator_to_array($this->toolAnalyzer->getMetadata(ToolWrong::class));
+        iterator_to_array($this->toolAnalyzer->getMetadata(0, ToolWrong::class));
+    }
+
+    #[Test]
+    public function toolWithoutAttribute(): void
+    {
+        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata('tool_without_attribute', ToolWithoutAttribute::class));
+
+        self::assertToolConfiguration(
+            metadata: $metadatas[0],
+            className: ToolWithoutAttribute::class,
+            name: 'tool_without_attribute',
+            description: 'Use "AsTool" attribute to add description',
+            method: '__invoke',
+            parameters: [
+                'type' => 'object',
+                'properties' => [
+                    'text' => [
+                        'type' => 'string',
+                        'description' => 'The text given to the tool',
+                    ],
+                    'number' => [
+                        'type' => 'integer',
+                        'description' => 'A number given to the tool',
+                    ],
+                ],
+                'required' => ['text', 'number'],
+            ],
+        );
     }
 
     #[Test]
     public function getDefinition(): void
     {
         /** @var Metadata[] $metadatas */
-        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(ToolRequiredParams::class));
+        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(0, ToolRequiredParams::class));
 
         self::assertToolConfiguration(
             metadata: $metadatas[0],
@@ -70,7 +99,7 @@ final class ToolAnalyzerTest extends TestCase
     #[Test]
     public function getDefinitionWithMultiple(): void
     {
-        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(ToolMultiple::class));
+        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(0, ToolMultiple::class));
 
         self::assertCount(2, $metadatas);
 
