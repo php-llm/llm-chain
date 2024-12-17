@@ -21,7 +21,7 @@ final class ResponseConverter implements PlatformResponseConverter
 
     public function convert(ResponseInterface $response, array $options = []): VectorResponse
     {
-        $data = $response->toArray(false);
+        $data = $response->toArray();
 
         if (!isset($data['data'])) {
             throw new RuntimeException('Response does not contain data');

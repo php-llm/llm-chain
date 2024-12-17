@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Ollama;
 
-use http\Exception\RuntimeException;
 use PhpLlm\LlmChain\Bridge\Meta\Llama;
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
@@ -42,7 +42,7 @@ final readonly class LlamaModelHandler implements ModelClient, ResponseConverter
 
     public function convert(ResponseInterface $response, array $options = []): LlmResponse
     {
-        $data = $response->toArray(false);
+        $data = $response->toArray();
 
         if (!isset($data['message'])) {
             throw new RuntimeException('Response does not contain message');
