@@ -7,8 +7,8 @@ namespace PhpLlm\LlmChain\Chain\ToolBox\Tool;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[AsTool(Names::wikipedia_search->value, description: 'Searches Wikipedia for a given query', method: 'search')]
-#[AsTool(Names::wikipedia_article->value, description: 'Retrieves a Wikipedia article by its title', method: 'article')]
+#[AsTool(name: 'wikipedia_search', description: 'Searches Wikipedia for a given query', method: 'search')]
+#[AsTool(name: 'wikipedia_article', description: 'Retrieves a Wikipedia article by its title', method: 'article')]
 final readonly class Wikipedia
 {
     public function __construct(

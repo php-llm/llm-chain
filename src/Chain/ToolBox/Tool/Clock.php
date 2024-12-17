@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\Chain\ToolBox\Tool;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use Symfony\Component\Clock\ClockInterface;
 
-#[AsTool(Names::clock->value, description: 'Provides the current date and time.')]
+#[AsTool(name: 'clock', description: 'Provides the current date and time.')]
 final readonly class Clock
 {
     public function __construct(

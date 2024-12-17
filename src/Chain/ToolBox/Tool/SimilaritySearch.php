@@ -11,7 +11,7 @@ use PhpLlm\LlmChain\Model\EmbeddingsModel;
 use PhpLlm\LlmChain\PlatformInterface;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 
-#[AsTool(Names::similarity_search->value, description: 'Searches for documents similar to a query or sentence.')]
+#[AsTool('similarity_search', description: 'Searches for documents similar to a query or sentence.')]
 final class SimilaritySearch
 {
     /**

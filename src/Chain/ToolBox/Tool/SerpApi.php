@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\Chain\ToolBox\Tool;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[AsTool(name: Names::serpapi->value, description: 'search for information on the internet')]
+#[AsTool(name: 'serpapi', description: 'search for information on the internet')]
 final readonly class SerpApi
 {
     public function __construct(
