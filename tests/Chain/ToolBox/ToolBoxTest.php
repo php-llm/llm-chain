@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
+use PhpLlm\LlmChain\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
@@ -99,6 +100,15 @@ final class ToolBoxTest extends TestCase
         ];
 
         self::assertSame(json_encode($expected), json_encode($actual));
+    }
+
+    #[Test]
+    public function executeWithUnknownTool(): void
+    {
+        self::expectException(ToolNotFoundException::class);
+        self::expectExceptionMessage('Tool not found for call: foo_bar_baz');
+
+        $this->toolBox->execute(new ToolCall('call_1234', 'foo_bar_baz'));
     }
 
     #[Test]
