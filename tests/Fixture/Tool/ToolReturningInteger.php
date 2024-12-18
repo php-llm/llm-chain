@@ -13,5 +13,4 @@ final class ToolReturningInteger
     {
         return 42;
     }
-
 }

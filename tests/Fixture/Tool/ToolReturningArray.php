@@ -13,5 +13,4 @@ final class ToolReturningArray
     {
         return ['foo' => 'bar'];
     }
-
 }

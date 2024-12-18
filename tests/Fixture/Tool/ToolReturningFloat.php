@@ -13,5 +13,4 @@ final class ToolReturningFloat
     {
         return 42.42;
     }
-
 }

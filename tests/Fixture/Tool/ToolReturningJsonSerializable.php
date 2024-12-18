@@ -9,8 +9,6 @@ use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 #[AsTool('tool_returning_json_serializable', 'A tool returning an object which implements \JsonSerializable')]
 final class ToolReturningJsonSerializable
 {
-    /**
-     */
     public function __invoke(): \JsonSerializable
     {
         return new class implements \JsonSerializable {
@@ -20,5 +18,4 @@ final class ToolReturningJsonSerializable
             }
         };
     }
-
 }
