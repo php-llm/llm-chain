@@ -50,7 +50,13 @@ final class ToolBox implements ToolBoxInterface
         foreach ($this->tools as $tool) {
             foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
                 if ($metadata->name === $toolCall->name) {
-                    return $tool->{$metadata->method}(...$toolCall->arguments);
+                    $result = $tool->{$metadata->method}(...$toolCall->arguments);
+
+                    if ($result instanceof \JsonSerializable || is_array($result)) {
+                        return json_encode($result, flags: JSON_THROW_ON_ERROR);
+                    }
+
+                    return $result;
                 }
             }
         }
