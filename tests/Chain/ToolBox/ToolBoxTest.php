@@ -15,6 +15,8 @@ use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningArray;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningFloat;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningInteger;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningJsonSerializable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -38,7 +40,9 @@ final class ToolBoxTest extends TestCase
             new ToolOptionalParam(),
             new ToolNoParams(),
             new ToolReturningArray(),
-            new ToolReturningJsonSerializable()
+            new ToolReturningJsonSerializable(),
+            new ToolReturningInteger(),
+            new ToolReturningFloat(),
         ]);
     }
 
@@ -115,6 +119,20 @@ final class ToolBoxTest extends TestCase
                     'description' => 'A tool returning an object which implements \JsonSerializable',
                 ],
             ],
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'tool_returning_integer',
+                    'description' => 'A tool returning an integer',
+                ],
+            ],
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'tool_returning_float',
+                    'description' => 'A tool returning a float',
+                ],
+            ],
         ];
 
         self::assertSame(json_encode($expected), json_encode($actual));
@@ -138,7 +156,8 @@ final class ToolBoxTest extends TestCase
             )
         );
     }
-        #[Test]
+
+    #[Test]
     public function executeWithToolReturningArray(): void
     {
         self::assertSame(
@@ -153,6 +172,24 @@ final class ToolBoxTest extends TestCase
         self::assertSame(
             '{"foo":"bar"}',
             $this->toolBox->execute(new ToolCall('call_1234', 'tool_returning_json_serializable'))
+        );
+    }
+
+    #[Test]
+    public function executeWithToolReturningInteger(): void
+    {
+        self::assertSame(
+            '42',
+            $this->toolBox->execute(new ToolCall('call_1234', 'tool_returning_integer'))
+        );
+    }
+
+    #[Test]
+    public function executeWithToolReturningFloat(): void
+    {
+        self::assertSame(
+            '42.42',
+            $this->toolBox->execute(new ToolCall('call_1234', 'tool_returning_float'))
         );
     }
 }
