@@ -173,7 +173,7 @@ final class ToolBoxTest extends TestCase
     public static function executeProvider(): iterable
     {
         yield 'tool_required_params' => [
-            'Hello 3',
+            'Hello says "3".',
             'tool_required_params',
             ['text' => 'Hello', 'number' => 3],
         ];
