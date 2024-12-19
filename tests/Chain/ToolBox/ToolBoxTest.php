@@ -147,6 +147,7 @@ final class ToolBoxTest extends TestCase
         $this->toolBox->execute(new ToolCall('call_1234', 'foo_bar_baz'));
     }
 
+    #[Test]
     public function executeWithToolReturningString(): void
     {
         self::assertSame(
