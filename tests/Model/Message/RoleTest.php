@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Model\Message;
 
-use PhpLlm\LlmChain\Model\Message\AssistantMessage;
 use PhpLlm\LlmChain\Model\Message\Role;
-use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Role::class)]
