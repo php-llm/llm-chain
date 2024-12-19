@@ -9,6 +9,7 @@ use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
+use PhpLlm\LlmChain\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
@@ -99,6 +100,15 @@ final class ToolBoxTest extends TestCase
         ];
 
         self::assertSame(json_encode($expected), json_encode($actual));
+    }
+
+    #[Test]
+    public function executeWithUnknownTool(): void
+    {
+        self::expectException(ToolNotFoundException::class);
+        self::expectExceptionMessage('Tool not found for call: foo_bar_baz');
+
+        $this->toolBox->execute(new ToolCall('call_1234', 'foo_bar_baz'));
     }
 
     #[Test]

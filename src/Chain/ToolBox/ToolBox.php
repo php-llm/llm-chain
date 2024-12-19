@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\ToolBox;
 
-use PhpLlm\LlmChain\Exception\RuntimeException;
+use PhpLlm\LlmChain\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 
 final class ToolBox implements ToolBoxInterface
@@ -55,6 +55,6 @@ final class ToolBox implements ToolBoxInterface
             }
         }
 
-        throw new RuntimeException('Tool not found');
+        throw ToolNotFoundException::forToolCall($toolCall);
     }
 }
