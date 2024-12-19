@@ -18,6 +18,7 @@ use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningArray;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningFloat;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningInteger;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningJsonSerializable;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningStringable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -43,6 +44,7 @@ final class ToolBoxTest extends TestCase
             new ToolReturningJsonSerializable(),
             new ToolReturningInteger(),
             new ToolReturningFloat(),
+            new ToolReturningStringable(),
         ]);
     }
 
@@ -133,6 +135,13 @@ final class ToolBoxTest extends TestCase
                     'description' => 'A tool returning a float',
                 ],
             ],
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'tool_returning_stringable',
+                    'description' => 'A tool returning an object which implements \Stringable',
+                ],
+            ],
         ];
 
         self::assertSame(json_encode($expected), json_encode($actual));
@@ -191,6 +200,15 @@ final class ToolBoxTest extends TestCase
         self::assertSame(
             '42.42',
             $this->toolBox->execute(new ToolCall('call_1234', 'tool_returning_float'))
+        );
+    }
+
+    #[Test]
+    public function executeWithToolReturningStringable(): void
+    {
+        self::assertSame(
+            'Hi!',
+            $this->toolBox->execute(new ToolCall('call_1234', 'tool_returning_stringable'))
         );
     }
 }

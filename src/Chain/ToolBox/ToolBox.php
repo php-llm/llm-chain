@@ -56,7 +56,7 @@ final class ToolBox implements ToolBoxInterface
                         return json_encode($result, flags: JSON_THROW_ON_ERROR);
                     }
 
-                    if (is_integer($result) || is_float($result)) {
+                    if (is_integer($result) || is_float($result) || $result instanceof \Stringable) {
                         return (string) $result;
                     }
 
