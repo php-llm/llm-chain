@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\Model\Response\ToolCall;
 
 final class ToolNotFoundException extends RuntimeException
 {
-    public static function forToolCall(ToolCall $toolCall)
+    public static function forToolCall(ToolCall $toolCall): self
     {
         return new self(sprintf('Tool not found for call: %s', $toolCall->name));
     }
