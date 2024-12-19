@@ -11,6 +11,7 @@ use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\SystemMessage;
 use PhpLlm\LlmChain\Model\Message\UserMessage;
+use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
@@ -34,6 +35,7 @@ final class MessageBagTest extends TestCase
             Message::forSystem('My amazing system prompt.'),
             Message::ofAssistant('It is time to sleep.'),
             Message::ofUser('Hello, world!'),
+            Message::ofToolCall(new ToolCall('tool', 'tool_name', ['param' => 'value']), 'Yes, go sleeping.'),
         );
 
         $systemMessage = $messageBag->getSystemMessage();
@@ -47,6 +49,7 @@ final class MessageBagTest extends TestCase
         $messageBag = new MessageBag(
             Message::ofAssistant('It is time to sleep.'),
             Message::ofUser('Hello, world!'),
+            Message::ofToolCall(new ToolCall('tool', 'tool_name', ['param' => 'value']), 'Yes, go sleeping.'),
         );
 
         self::assertNull($messageBag->getSystemMessage());
