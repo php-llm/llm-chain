@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
-use PhpLlm\LlmChain\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
+use PhpLlm\LlmChain\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
