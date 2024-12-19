@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Anthropic;
 
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
@@ -62,6 +63,14 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
         }
 
         $data = $response->toArray();
+
+        if (!isset($data['content']) || 0 === count($data['content'])) {
+            throw new RuntimeException('Response does not contain any content');
+        }
+
+        if (!isset($data['content'][0]['text'])) {
+            throw new RuntimeException('Response content does not contain any text');
+        }
 
         return new TextResponse($data['content'][0]['text']);
     }
