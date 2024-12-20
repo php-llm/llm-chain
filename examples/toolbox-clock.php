@@ -24,7 +24,7 @@ $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $llm = new GPT(GPT::GPT_4O_MINI);
 
 $clock = new Clock(new SymfonyClock());
-$toolBox = new ToolBox(new ToolAnalyzer(), [$clock]);
+$toolBox = new ToolBox(new ToolAnalyzer(), ['clock' => $clock]);
 $processor = new ChainProcessor($toolBox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 
