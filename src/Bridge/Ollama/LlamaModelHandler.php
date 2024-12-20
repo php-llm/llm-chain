@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Bridge\Ollama;
 
 use PhpLlm\LlmChain\Bridge\Meta\Llama;
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
@@ -25,7 +25,7 @@ final readonly class LlamaModelHandler implements ModelClient, ResponseConverter
 
     public function supports(Model $model, object|array|string $input): bool
     {
-        return $model instanceof Llama && $input instanceof MessageBag;
+        return $model instanceof Llama && $input instanceof MessageBagInterface;
     }
 
     public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface

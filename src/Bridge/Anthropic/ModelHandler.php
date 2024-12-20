@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\Anthropic;
 
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\StreamResponse;
@@ -33,12 +33,12 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
 
     public function supports(Model $model, array|string|object $input): bool
     {
-        return $model instanceof Claude && $input instanceof MessageBag;
+        return $model instanceof Claude && $input instanceof MessageBagInterface;
     }
 
     public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
     {
-        Assert::isInstanceOf($input, MessageBag::class);
+        Assert::isInstanceOf($input, MessageBagInterface::class);
 
         $system = $input->getSystemMessage();
         $body = array_merge($options, [
