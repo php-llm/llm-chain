@@ -6,6 +6,7 @@ namespace PhpLlm\LlmChain\Chain;
 
 use PhpLlm\LlmChain\Model\LanguageModel;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 
 final class Input
 {
@@ -14,7 +15,7 @@ final class Input
      */
     public function __construct(
         public readonly LanguageModel $llm,
-        public readonly MessageBag $messages,
+        public readonly MessageBagInterface $messages,
         private array $options,
     ) {
     }

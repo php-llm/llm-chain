@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\Model\Message;
 /**
  * @template-extends \ArrayObject<int, MessageInterface>
  */
-final class MessageBag extends \ArrayObject implements \JsonSerializable
+final class MessageBag extends \ArrayObject implements MessageBagInterface
 {
     public function __construct(MessageInterface ...$messages)
     {
@@ -33,7 +33,7 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
         return $messages;
     }
 
-    public function merge(MessageBag $messageBag): self
+    public function merge(MessageBagInterface $messageBag): self
     {
         $messages = clone $this;
         $messages->exchangeArray(array_merge($messages->getArrayCopy(), $messageBag->getArrayCopy()));
