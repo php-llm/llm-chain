@@ -8,7 +8,6 @@ use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Message\SystemMessage;
 use PhpLlm\LlmChain\Model\Message\UserMessage;

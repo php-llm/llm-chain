@@ -12,7 +12,6 @@ use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Model\LanguageModel;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;

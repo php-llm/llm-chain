@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\Replicate;
 
 use PhpLlm\LlmChain\Bridge\Meta\Llama;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;

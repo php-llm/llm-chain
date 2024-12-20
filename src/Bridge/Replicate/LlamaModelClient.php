@@ -6,7 +6,6 @@ namespace PhpLlm\LlmChain\Bridge\Replicate;
 
 use PhpLlm\LlmChain\Bridge\Meta\Llama;
 use PhpLlm\LlmChain\Bridge\Meta\LlamaPromptConverter;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Message\SystemMessage;
 use PhpLlm\LlmChain\Model\Model;
