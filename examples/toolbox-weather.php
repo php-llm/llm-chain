@@ -28,7 +28,7 @@ $toolBox = new ToolBox(new ToolAnalyzer(), [$wikipedia]);
 $processor = new ChainProcessor($toolBox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 
-$messages = new MessageBag(Message::ofUser('How is the weather currently in Berlin?'));
+$messages = new MessageBag(Message::ofUser('How is the weather currently in Berlin? And how about tomorrow?'));
 $response = $chain->call($messages);
 
 echo $response->getContent().PHP_EOL;
