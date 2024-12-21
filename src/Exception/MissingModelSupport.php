@@ -16,6 +16,11 @@ final class MissingModelSupport extends RuntimeException
         return new self($model, 'tool calling');
     }
 
+    public static function forAudioInput(string $model): self
+    {
+        return new self($model, 'audio input');
+    }
+
     public static function forImageInput(string $model): self
     {
         return new self($model, 'image input');

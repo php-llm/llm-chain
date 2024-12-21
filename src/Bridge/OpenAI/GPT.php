@@ -14,6 +14,7 @@ final class GPT implements LanguageModel
     public const GPT_4_TURBO = 'gpt-4-turbo';
     public const GPT_4O = 'gpt-4o';
     public const GPT_4O_MINI = 'gpt-4o-mini';
+    public const GPT_4O_AUDIO = 'gpt-4o-audio-preview';
     public const O1_MINI = 'o1-mini';
     public const O1_PREVIEW = 'o1-preview';
 
@@ -23,9 +24,14 @@ final class GPT implements LanguageModel
     public function __construct(
         private readonly string $version = self::GPT_4O,
         private readonly array $options = ['temperature' => 1.0],
+        private bool $supportsAudioInput = false,
         private bool $supportsImageInput = false,
         private bool $supportsStructuredOutput = false,
     ) {
+        if (false === $this->supportsAudioInput) {
+            $this->supportsAudioInput = self::GPT_4O_AUDIO === $this->version;
+        }
+
         if (false === $this->supportsImageInput) {
             $this->supportsImageInput = in_array($this->version, [self::GPT_4_TURBO, self::GPT_4O, self::GPT_4O_MINI, self::O1_MINI, self::O1_PREVIEW], true);
         }
@@ -43,6 +49,11 @@ final class GPT implements LanguageModel
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    public function supportsAudioInput(): bool
+    {
+        return $this->supportsImageInput;
     }
 
     public function supportsImageInput(): bool

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Message;
 
+use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PhpLlm\LlmChain\Model\Message\Content\Content;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
@@ -24,6 +25,17 @@ final readonly class UserMessage implements MessageInterface
     public function getRole(): Role
     {
         return Role::User;
+    }
+
+    public function hasAudioContent(): bool
+    {
+        foreach ($this->content as $content) {
+            if ($content instanceof Audio) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function hasImageContent(): bool

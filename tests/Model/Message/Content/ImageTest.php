@@ -33,9 +33,9 @@ final class ImageTest extends TestCase
     #[Test]
     public function withValidFile(): void
     {
-        $image = new Image(dirname(__DIR__, 3).'/Fixture/image.png');
+        $image = new Image(dirname(__DIR__, 3).'/Fixture/image.jpg');
 
-        self::assertStringStartsWith('data:image/png;base64,', $image->url);
+        self::assertStringStartsWith('data:image/jpg;base64,', $image->url);
     }
 
     #[Test]

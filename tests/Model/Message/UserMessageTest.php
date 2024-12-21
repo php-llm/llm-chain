@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Model\Message;
 
+use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Role;
@@ -17,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(UserMessage::class)]
 #[UsesClass(Text::class)]
+#[UsesClass(Audio::class)]
 #[UsesClass(Image::class)]
 #[UsesClass(Role::class)]
 #[Small]
@@ -37,6 +39,22 @@ final class UserMessageTest extends TestCase
         $message = new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg'));
 
         self::assertCount(2, $message->content);
+    }
+
+    #[Test]
+    public function hasAudioContentWithoutAudio(): void
+    {
+        $message = new UserMessage(new Text('foo'), new Text('bar'));
+
+        self::assertFalse($message->hasAudioContent());
+    }
+
+    #[Test]
+    public function hasAudioContentWithAudio(): void
+    {
+        $message = new UserMessage(new Text('foo'), new Audio(dirname(__DIR__, 2).'/Fixture/audio.mp3'));
+
+        self::assertTrue($message->hasAudioContent());
     }
 
     #[Test]

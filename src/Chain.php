@@ -54,6 +54,10 @@ final readonly class Chain implements ChainInterface
         $messages = $input->messages;
         $options = $input->getOptions();
 
+        if ($messages->containsAudio() && !$llm->supportsAudioInput()) {
+            throw MissingModelSupport::forAudioInput($llm::class);
+        }
+
         if ($messages->containsImage() && !$llm->supportsImageInput()) {
             throw MissingModelSupport::forImageInput($llm::class);
         }
