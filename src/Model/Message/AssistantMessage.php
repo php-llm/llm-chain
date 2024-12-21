@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Model\Message;
 
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 
-final readonly class AssistantMessage implements MessageInterface
+final readonly class AssistantMessage extends Message
 {
     /**
      * @param ?ToolCall[] $toolCalls
@@ -14,12 +14,9 @@ final readonly class AssistantMessage implements MessageInterface
     public function __construct(
         public ?string $content = null,
         public ?array $toolCalls = null,
+        Metadata $metadata = new Metadata(),
     ) {
-    }
-
-    public function getRole(): Role
-    {
-        return Role::Assistant;
+        parent::__construct(Role::Assistant, $metadata);
     }
 
     public function hasToolCalls(): bool

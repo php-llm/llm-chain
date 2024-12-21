@@ -6,17 +6,13 @@ namespace PhpLlm\LlmChain\Model\Message;
 
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 
-final readonly class ToolCallMessage implements MessageInterface
+final readonly class ToolCallMessage extends Message
 {
     public function __construct(
         public ToolCall $toolCall,
         public string $content,
     ) {
-    }
-
-    public function getRole(): Role
-    {
-        return Role::ToolCall;
+        parent::__construct(Role::ToolCall);
     }
 
     /**

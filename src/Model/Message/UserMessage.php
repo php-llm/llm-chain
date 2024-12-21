@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\Model\Message\Content\Content;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 
-final readonly class UserMessage implements MessageInterface
+final readonly class UserMessage extends Message
 {
     /**
      * @var list<Content>
@@ -19,11 +19,8 @@ final readonly class UserMessage implements MessageInterface
         Content ...$content,
     ) {
         $this->content = $content;
-    }
 
-    public function getRole(): Role
-    {
-        return Role::User;
+        parent::__construct(Role::User);
     }
 
     public function hasImageContent(): bool
