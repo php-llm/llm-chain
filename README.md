@@ -145,6 +145,69 @@ final class CompanyName
 }
 ```
 
+#### Tool Return Value
+
+In the end, the tool's response needs to be a string, but LLM Chain converts arrays and objects, that implement the
+`JsonSerializable` interface, to JSON strings for you. So you can return arrays or objects directly from your tool.
+
+#### Tool Methods
+
+You can configure the method to be called by the LLM with the `#[AsTool]` attribute and have multiple tools per class:
+
+```php
+use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
+
+
+#[AsTool(name: 'weather_current', description: 'get current weather for a location', method: 'current')]
+#[AsTool(name: 'weather_forecast', description: 'get weather forecast for a location', method: 'forecast')]
+final readonly class OpenMeteo
+{
+    public function current(float $latitude, float $longitude): array
+    {
+        // ...
+    }
+
+    public function forecast(float $latitude, float $longitude): array
+    {
+        // ...
+    }
+}
+```
+
+#### Tool Parameters
+
+LLM Chain generates a JSON Schema representation for all tools in the `ToolBox` based on the `#[AsTool]` attribute and
+method arguments and param comments in the doc block. Additionally, JSON Schema support validation rules, which are
+partially support by LLMs like GPT.
+
+To leverage this, configure the `#[ToolParameter]` attribute on the method arguments of your tool:
+```php
+use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
+
+#[AsTool('my_tool', 'Example tool with parameters requirements.')]
+final class MyTool
+{
+    /**
+     * @param string $name   The name of an object
+     * @param int    $number The number of an object
+     */
+    public function __invoke(
+        #[ToolParameter(pattern: '/([a-z0-1]){5}/')]
+        string $name,
+        #[ToolParameter(minimum: 0, maximum: 10)]   
+        int $number,
+    ): string {
+        // ...
+    }
+}
+```
+
+See attribute class [ToolParameter](src/Chain/ToolBox/Attribute/ToolParameter.php) for all available options.
+
+> [!NOTE]
+> Please be aware, that this is only converted in a JSON Schema for the LLM to respect, but not validated by LLM Chain.
+
 #### Code Examples (with built-in tools)
 
 1. **Clock Tool**: [toolbox-clock.php](examples/toolbox-clock.php)
@@ -312,37 +375,6 @@ dump($response->getContent()); // returns an array
 
 1. **Structured Output** (PHP class): [structured-output-math.php](examples/structured-output-math.php)
 1. **Structured Output** (array): [structured-output-clock.php](examples/structured-output-clock.php)
-
-### Tool Parameters
-
-LLM Chain generates a JSON Schema representation for all tools in the `ToolBox` based on the `#[AsTool]` attribute and
-method arguments and doc block. Additionally, JSON Schema support validation rules, which are partially support by
-LLMs like GPT.
-
-To leverage this, configure the `#[ToolParameter]` attribute on the method arguments of your tool:
-```php
-use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
-
-#[AsTool('my_tool', 'Example tool with parameters requirements.')]
-final class MyTool
-{
-    /**
-     * @param string $name   The name of an object
-     * @param int    $number The number of an object
-     */
-    public function __invoke(
-        #[ToolParameter(pattern: '/([a-z0-1]){5}/')]
-        string $name,
-        #[ToolParameter(minimum: 0, maximum: 10)]   
-        int $number,
-    ): string {
-        // ...
-    }
-}
-```
-> [!NOTE]
-> Please be aware, that this is only converted in a JSON Schema for the LLM to respect, but not validated by LLM Chain.
 
 ### Response Streaming
 
