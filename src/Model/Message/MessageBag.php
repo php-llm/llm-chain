@@ -51,7 +51,7 @@ final class MessageBag implements \Countable, \JsonSerializable
     public function merge(MessageBag $messageBag): self
     {
         $messages = clone $this;
-        $messages->messages = array_merge($messages->messages, $messageBag->messages);
+        $messages->messages = array_merge($messages->messages, $messageBag->getMessages());
 
         return $messages;
     }
