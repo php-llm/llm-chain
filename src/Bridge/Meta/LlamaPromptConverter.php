@@ -19,7 +19,7 @@ final class LlamaPromptConverter
         $messages = [];
 
         /** @var UserMessage|SystemMessage|AssistantMessage $message */
-        foreach ($messageBag->getIterator() as $message) {
+        foreach ($messageBag->getMessages() as $message) {
             $messages[] = self::convertMessage($message);
         }
 

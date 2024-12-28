@@ -26,7 +26,7 @@ final class LlamaPromptConverterTest extends TestCase
     {
         $messageBag = new MessageBag();
         foreach (self::provideMessages() as $message) {
-            $messageBag->append($message[1]);
+            $messageBag->add($message[1]);
         }
 
         self::assertSame(<<<EXPECTED
