@@ -70,7 +70,7 @@ final class MessageBagTest extends TestCase
         self::assertCount(3, $messageBag);
         self::assertCount(4, $newMessageBag);
 
-        $newMessageFromBag = $newMessageBag[3];
+        $newMessageFromBag = $newMessageBag->getMessages()[3];
 
         self::assertInstanceOf(AssistantMessage::class, $newMessageFromBag);
         self::assertSame('It is time to wake up.', $newMessageFromBag->content);
@@ -91,7 +91,7 @@ final class MessageBagTest extends TestCase
 
         self::assertCount(4, $messageBag);
 
-        $messageFromBag = $messageBag[3];
+        $messageFromBag = $messageBag->getMessages()[3];
 
         self::assertInstanceOf(AssistantMessage::class, $messageFromBag);
         self::assertSame('It is time to wake up.', $messageFromBag->content);
@@ -111,7 +111,7 @@ final class MessageBagTest extends TestCase
         self::assertCount(3, $messageBag);
         self::assertCount(2, $newMessageBag);
 
-        $messageFromNewBag = $newMessageBag[0];
+        $messageFromNewBag = $newMessageBag->getMessages()[0];
 
         self::assertInstanceOf(AssistantMessage::class, $messageFromNewBag);
         self::assertSame('It is time to sleep.', $messageFromNewBag->content);
@@ -131,14 +131,14 @@ final class MessageBagTest extends TestCase
         self::assertCount(2, $messageBag);
         self::assertCount(3, $newMessageBag);
 
-        $newMessageBagMessage = $newMessageBag[0];
+        $newMessageBagMessage = $newMessageBag->getMessages()[0];
 
         self::assertInstanceOf(SystemMessage::class, $newMessageBagMessage);
         self::assertSame('My amazing system prompt.', $newMessageBagMessage->content);
     }
 
     #[Test]
-    public function containsImageWithoutImage(): void
+    public function containsImageReturnsFalseWithoutImage(): void
     {
         $messageBag = new MessageBag(
             Message::ofAssistant('It is time to sleep.'),
@@ -149,7 +149,7 @@ final class MessageBagTest extends TestCase
     }
 
     #[Test]
-    public function containsImageWithImage(): void
+    public function containsImageReturnsTrueWithImage(): void
     {
         $messageBag = new MessageBag(
             Message::ofAssistant('It is time to sleep.'),

@@ -4,19 +4,34 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Message;
 
-/**
- * @template-extends \ArrayObject<int, MessageInterface>
- */
-final class MessageBag extends \ArrayObject implements \JsonSerializable
+final class MessageBag implements \Countable, \JsonSerializable
 {
+    /**
+     * @var MessageInterface[]
+     */
+    private array $messages;
+
     public function __construct(MessageInterface ...$messages)
     {
-        parent::__construct(array_values($messages));
+        $this->messages = array_values($messages);
+    }
+
+    public function add(MessageInterface $message): void
+    {
+        $this->messages[] = $message;
+    }
+
+    /**
+     * @return MessageInterface[]
+     */
+    public function getMessages(): array
+    {
+        return $this->messages;
     }
 
     public function getSystemMessage(): ?SystemMessage
     {
-        foreach ($this as $message) {
+        foreach ($this->messages as $message) {
             if ($message instanceof SystemMessage) {
                 return $message;
             }
@@ -28,7 +43,7 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
     public function with(MessageInterface $message): self
     {
         $messages = clone $this;
-        $messages->append($message);
+        $messages->add($message);
 
         return $messages;
     }
@@ -36,7 +51,7 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
     public function merge(MessageBag $messageBag): self
     {
         $messages = clone $this;
-        $messages->exchangeArray(array_merge($messages->getArrayCopy(), $messageBag->getArrayCopy()));
+        $messages->messages = array_merge($messages->messages, $messageBag->messages);
 
         return $messages;
     }
@@ -44,12 +59,10 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
     public function withoutSystemMessage(): self
     {
         $messages = clone $this;
-        $messages->exchangeArray(
-            array_values(array_filter(
-                $messages->getArrayCopy(),
-                static fn (MessageInterface $message) => !$message instanceof SystemMessage,
-            ))
-        );
+        $messages->messages = array_values(array_filter(
+            $messages->messages,
+            static fn (MessageInterface $message) => !$message instanceof SystemMessage,
+        ));
 
         return $messages;
     }
@@ -57,14 +70,14 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
     public function prepend(MessageInterface $message): self
     {
         $messages = clone $this;
-        $messages->exchangeArray(array_merge([$message], $messages->getArrayCopy()));
+        $messages->messages = array_merge([$message], $messages->messages);
 
         return $messages;
     }
 
     public function containsImage(): bool
     {
-        foreach ($this as $message) {
+        foreach ($this->messages as $message) {
             if ($message instanceof UserMessage && $message->hasImageContent()) {
                 return true;
             }
@@ -73,11 +86,16 @@ final class MessageBag extends \ArrayObject implements \JsonSerializable
         return false;
     }
 
+    public function count(): int
+    {
+        return count($this->messages);
+    }
+
     /**
      * @return MessageInterface[]
      */
     public function jsonSerialize(): array
     {
-        return $this->getArrayCopy();
+        return $this->messages;
     }
 }

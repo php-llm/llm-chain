@@ -45,11 +45,11 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
 
         while ($output->response instanceof ToolCallResponse) {
             $toolCalls = $output->response->getContent();
-            $messages[] = Message::ofAssistant(toolCalls: $toolCalls);
+            $messages->add(Message::ofAssistant(toolCalls: $toolCalls));
 
             foreach ($toolCalls as $toolCall) {
                 $result = $this->toolBox->execute($toolCall);
-                $messages[] = Message::ofToolCall($toolCall, $result);
+                $messages->add(Message::ofToolCall($toolCall, $result));
             }
 
             $output->response = $this->chain->call($messages, $output->options);
