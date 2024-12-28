@@ -47,20 +47,31 @@ final readonly class Chain implements ChainInterface
      */
     public function call(MessageBag $messages, array $options = []): ResponseInterface
     {
-        $input = new Input($this->llm, $messages, $options);
-        array_map(fn (InputProcessor $processor) => $processor->processInput($input), $this->inputProcessor);
+        $llm = $this->llm;
 
-        if ($messages->containsImage() && !$this->llm->supportsImageInput()) {
-            throw MissingModelSupport::forImageInput($this->llm::class);
+        if (array_key_exists('llm', $options)) {
+            if (!$options['llm'] instanceof LanguageModel) {
+                throw new InvalidArgumentException(sprintf('Option "llm" must be an instance of %s.', LanguageModel::class));
+            }
+
+            $llm = $options['llm'];
+            unset($options['llm']);
         }
 
-        $response = $this->platform->request($this->llm, $messages, $options = $input->getOptions());
+        $input = new Input($llm, $messages, $options);
+        array_map(fn (InputProcessor $processor) => $processor->processInput($input), $this->inputProcessor);
+
+        if ($messages->containsImage() && !$llm->supportsImageInput()) {
+            throw MissingModelSupport::forImageInput($llm::class);
+        }
+
+        $response = $this->platform->request($llm, $messages, $options = $input->getOptions());
 
         if ($response instanceof AsyncResponse) {
             $response = $response->unwrap();
         }
 
-        $output = new Output($this->llm, $response, $messages, $options);
+        $output = new Output($llm, $response, $messages, $options);
         array_map(fn (OutputProcessor $processor) => $processor->processOutput($output), $this->outputProcessor);
 
         return $output->response;
