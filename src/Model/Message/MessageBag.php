@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Message;
 
-final class MessageBag implements \Countable, \JsonSerializable
+final class MessageBag implements MessageBagInterface
 {
     /**
-     * @var MessageInterface[]
+     * @var list<MessageInterface>
      */
     private array $messages;
 
@@ -22,7 +22,7 @@ final class MessageBag implements \Countable, \JsonSerializable
     }
 
     /**
-     * @return MessageInterface[]
+     * @return list<MessageInterface>
      */
     public function getMessages(): array
     {
@@ -48,7 +48,7 @@ final class MessageBag implements \Countable, \JsonSerializable
         return $messages;
     }
 
-    public function merge(MessageBag $messageBag): self
+    public function merge(MessageBagInterface $messageBag): self
     {
         $messages = clone $this;
         $messages->messages = array_merge($messages->messages, $messageBag->getMessages());

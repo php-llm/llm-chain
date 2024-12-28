@@ -12,7 +12,7 @@ use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Model\LanguageModel;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 
@@ -45,7 +45,7 @@ final readonly class Chain implements ChainInterface
     /**
      * @param array<string, mixed> $options
      */
-    public function call(MessageBag $messages, array $options = []): ResponseInterface
+    public function call(MessageBagInterface $messages, array $options = []): ResponseInterface
     {
         $llm = $this->llm;
 
