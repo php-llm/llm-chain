@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain;
 
-use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 use PhpLlm\LlmChain\Platform\ModelClient;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 final readonly class Platform implements PlatformInterface
@@ -41,17 +38,9 @@ final readonly class Platform implements PlatformInterface
     {
         $options = array_merge($model->getOptions(), $options);
 
-        try {
-            $response = $this->doRequest($model, $input, $options);
+        $response = $this->doRequest($model, $input, $options);
 
-            return $this->convertResponse($model, $input, $response, $options);
-        } catch (ClientExceptionInterface $e) {
-            $message = $e->getMessage();
-
-            throw new InvalidArgumentException('' === $message ? 'Invalid request to model or platform' : $message, 0, $e);
-        } catch (HttpExceptionInterface $e) {
-            throw new RuntimeException('Failed to request model', 0, $e);
-        }
+        return $this->convertResponse($model, $input, $response, $options);
     }
 
     /**
