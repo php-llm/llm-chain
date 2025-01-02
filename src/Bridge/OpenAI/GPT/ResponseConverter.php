@@ -59,9 +59,9 @@ final class ResponseConverter implements PlatformResponseConverter
 
         if ($this->streamIsToolCall($stream)) {
             return new ToolCallResponse(...$this->convertStreamToToolCalls($stream));
-        } else {
-            return new StreamResponse($this->convertStreamContent($stream));
         }
+
+        return new StreamResponse($this->convertStreamContent($stream));
     }
 
     private function streamResponse(HttpResponse $response): \Generator
