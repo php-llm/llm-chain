@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Message;
 
-final class MessageBag implements MessageBagInterface
+/**
+ * @final
+ */
+class MessageBag implements MessageBagInterface
 {
     /**
      * @var list<MessageInterface>
