@@ -119,6 +119,7 @@ final class MessageBagTest extends TestCase
 
         $userMessage = $newMessageBag->getMessages()[1];
         self::assertInstanceOf(UserMessage::class, $userMessage);
+        self::assertInstanceOf(Text::class, $userMessage->content[0]);
         self::assertSame('Hello, world!', $userMessage->content[0]->text);
     }
 
