@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Tests\Bridge\OpenAI\DallE;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\DallE;
 use PhpLlm\LlmChain\Bridge\OpenAI\DallE\Base64Image;
-use PhpLlm\LlmChain\Bridge\OpenAI\DallE\GeneratedImagesResponse;
+use PhpLlm\LlmChain\Bridge\OpenAI\DallE\ImagesResponse;
 use PhpLlm\LlmChain\Bridge\OpenAI\DallE\ModelClient;
 use PhpLlm\LlmChain\Bridge\OpenAI\DallE\UrlImage;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -25,7 +25,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 #[UsesClass(HttpClientInterface::class)]
 #[UsesClass(UrlImage::class)]
 #[UsesClass(Base64Image::class)]
-#[UsesClass(GeneratedImagesResponse::class)]
+#[UsesClass(ImagesResponse::class)]
 #[Small]
 final class ModelClientTest extends TestCase
 {
@@ -86,7 +86,7 @@ final class ModelClientTest extends TestCase
         $modelClient = new ModelClient(new MockHttpClient(), 'sk-api-key');
         $response = $modelClient->convert($httpResponse, ['response_format' => 'b64_json']);
 
-        self::assertInstanceOf(GeneratedImagesResponse::class, $response);
+        self::assertInstanceOf(ImagesResponse::class, $response);
         self::assertCount(1, $response->getContent());
         self::assertInstanceOf(Base64Image::class, $response->getContent()[0]);
         self::assertSame($emptyPixel, $response->getContent()[0]->encodedImage);

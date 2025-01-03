@@ -1,7 +1,7 @@
 <?php
 
 use PhpLlm\LlmChain\Bridge\OpenAI\DallE;
-use PhpLlm\LlmChain\Bridge\OpenAI\DallE\GeneratedImagesResponse;
+use PhpLlm\LlmChain\Bridge\OpenAI\DallE\ImagesResponse;
 use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use Symfony\Component\Dotenv\Dotenv;
@@ -27,7 +27,7 @@ if ($response instanceof AsyncResponse) {
     $response = $response->unwrap();
 }
 
-assert($response instanceof GeneratedImagesResponse);
+assert($response instanceof ImagesResponse);
 
 echo 'Revised Prompt: '.$response->revisedPrompt.PHP_EOL.PHP_EOL;
 

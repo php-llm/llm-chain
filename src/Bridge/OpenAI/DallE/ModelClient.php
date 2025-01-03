@@ -61,6 +61,6 @@ final readonly class ModelClient implements PlatformResponseFactory, PlatformRes
             $images[] = new Base64Image($image['b64_json']);
         }
 
-        return new GeneratedImagesResponse($image['revised_prompt'] ?? null, ...$images);
+        return new ImagesResponse($image['revised_prompt'] ?? null, ...$images);
     }
 }
