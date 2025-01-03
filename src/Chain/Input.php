@@ -13,8 +13,8 @@ final class Input
      * @param array<string, mixed> $options
      */
     public function __construct(
-        public readonly LanguageModel $llm,
-        public readonly MessageBagInterface $messages,
+        public LanguageModel $llm,
+        public MessageBagInterface $messages,
         private array $options,
     ) {
     }
