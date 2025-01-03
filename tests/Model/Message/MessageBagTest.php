@@ -103,18 +103,24 @@ final class MessageBagTest extends TestCase
         $messageBag = new MessageBag(
             Message::forSystem('My amazing system prompt.'),
             Message::ofAssistant('It is time to sleep.'),
+            Message::forSystem('A system prompt in the middle.'),
             Message::ofUser('Hello, world!'),
+            Message::forSystem('Another system prompt at the end'),
         );
 
         $newMessageBag = $messageBag->withoutSystemMessage();
 
-        self::assertCount(3, $messageBag);
+        self::assertCount(5, $messageBag);
         self::assertCount(2, $newMessageBag);
 
-        $messageFromNewBag = $newMessageBag->getMessages()[0];
+        $assistantMessage = $newMessageBag->getMessages()[0];
+        self::assertInstanceOf(AssistantMessage::class, $assistantMessage);
+        self::assertSame('It is time to sleep.', $assistantMessage->content);
 
-        self::assertInstanceOf(AssistantMessage::class, $messageFromNewBag);
-        self::assertSame('It is time to sleep.', $messageFromNewBag->content);
+        $userMessage = $newMessageBag->getMessages()[1];
+        self::assertInstanceOf(UserMessage::class, $userMessage);
+        self::assertInstanceOf(Text::class, $userMessage->content[0]);
+        self::assertSame('Hello, world!', $userMessage->content[0]->text);
     }
 
     #[Test]
