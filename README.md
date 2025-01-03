@@ -97,6 +97,24 @@ echo $response->getContent(); // "I'm fine, thank you. How can I help you today?
 
 The `MessageInterface` and `Content` interface help to customize this process if needed, e.g. additional state handling.
 
+#### Options
+
+The second parameter of the `call` method is an array of options, which can be used to configure the behavior of the
+chain, like `stream`, `output_structure`, or `response_format`. This behavior is a combination of features provided by
+the underlying model and platform, or additional features provided by processors registered to the chain.
+
+Options design for additional features provided by LLM Chain can be found in this documentation. For model and platform
+specific options, please refer to the respective documentation.
+
+```php
+// Chain and MessageBag instantiation
+
+$response = $chain->call($messages, [
+    'temperature' => 0.5, // example option controlling the randomness of the response, e.g. GPT and Claude
+    'n' => 3,             // example option controlling the number of responses generated, e.g. GPT
+]);
+```
+
 #### Code Examples
 
 1. **Anthropic's Claude**: [chat-claude-anthropic.php](examples/chat-claude-anthropic.php)
