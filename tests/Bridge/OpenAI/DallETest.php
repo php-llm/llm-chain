@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(DallE::class)]
 #[Small]
-class DallETest extends TestCase
+final class DallETest extends TestCase
 {
     #[Test]
     public function itCreatesDallEWithDefaultSettings(): void

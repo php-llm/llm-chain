@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Base64Image::class)]
 #[Small]
-class Base64ImageTest extends TestCase
+final class Base64ImageTest extends TestCase
 {
     #[Test]
     public function itCreatesBase64Image(): void

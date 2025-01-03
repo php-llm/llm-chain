@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(UrlImage::class)]
 #[Small]
-class UrlImageTest extends TestCase
+final class UrlImageTest extends TestCase
 {
     #[Test]
     public function itCreatesUrlImage(): void

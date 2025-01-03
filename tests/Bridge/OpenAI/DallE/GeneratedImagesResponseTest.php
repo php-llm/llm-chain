@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Base64Image::class)]
 #[UsesClass(UrlImage::class)]
 #[Small]
-class GeneratedImagesResponseTest extends TestCase
+final class GeneratedImagesResponseTest extends TestCase
 {
     #[Test]
     public function itCreatesGeneratedImagesResponse(): void

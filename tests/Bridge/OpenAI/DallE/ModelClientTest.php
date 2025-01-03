@@ -14,6 +14,8 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
@@ -25,12 +27,12 @@ use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 #[UsesClass(Base64Image::class)]
 #[UsesClass(GeneratedImagesResponse::class)]
 #[Small]
-class ModelClientTest extends TestCase
+final class ModelClientTest extends TestCase
 {
     #[Test]
     public function itIsSupportingTheCorrectModel(): void
     {
-        $modelClient = new ModelClient(self::createStub(HttpClientInterface::class), 'sk-api-key');
+        $modelClient = new ModelClient(new MockHttpClient(), 'sk-api-key');
 
         self::assertTrue($modelClient->supports(new DallE(), 'foo'));
     }
@@ -38,19 +40,15 @@ class ModelClientTest extends TestCase
     #[Test]
     public function itIsExecutingTheCorrectRequest(): void
     {
-        $httpClient = $this->createMock(HttpClientInterface::class);
-        $httpClient->expects(self::once())
-            ->method('request')
-            ->with('POST', 'https://api.openai.com/v1/images/generations', [
-                'auth_bearer' => 'sk-api-key',
-                'json' => [
-                    'model' => DallE::DALL_E_2,
-                    'prompt' => 'foo',
-                    'n' => 1,
-                    'response_format' => 'url',
-                ],
-            ]);
+        $responseCallback = static function (string $method, string $url, array $options): HttpResponse {
+            self::assertSame('POST', $method);
+            self::assertSame('https://api.openai.com/v1/images/generations', $url);
+            self::assertSame('Authorization: Bearer sk-api-key', $options['normalized_headers']['authorization'][0]);
+            self::assertSame('{"n":1,"response_format":"url","model":"dall-e-2","prompt":"foo"}', $options['body']);
 
+            return new MockResponse();
+        };
+        $httpClient = new MockHttpClient([$responseCallback]);
         $modelClient = new ModelClient($httpClient, 'sk-api-key');
         $modelClient->request(new DallE(), 'foo', ['n' => 1, 'response_format' => 'url']);
     }
@@ -65,7 +63,7 @@ class ModelClientTest extends TestCase
             ],
         ]);
 
-        $modelClient = new ModelClient(self::createStub(HttpClientInterface::class), 'sk-api-key');
+        $modelClient = new ModelClient(new MockHttpClient(), 'sk-api-key');
         $response = $modelClient->convert($httpResponse, ['response_format' => 'url']);
 
         self::assertCount(1, $response->getContent());
@@ -85,7 +83,7 @@ class ModelClientTest extends TestCase
             ],
         ]);
 
-        $modelClient = new ModelClient(self::createStub(HttpClientInterface::class), 'sk-api-key');
+        $modelClient = new ModelClient(new MockHttpClient(), 'sk-api-key');
         $response = $modelClient->convert($httpResponse, ['response_format' => 'b64_json']);
 
         self::assertInstanceOf(GeneratedImagesResponse::class, $response);
