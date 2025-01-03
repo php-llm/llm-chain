@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\OpenAI;
 
+use PhpLlm\LlmChain\Bridge\OpenAI\DallE\ModelClient as DallEModelClient;
 use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ModelClient as EmbeddingsModelClient;
 use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ResponseConverter as EmbeddingsResponseConverter;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ModelClient as GPTModelClient;
@@ -21,9 +22,19 @@ final readonly class PlatformFactory
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
 
+        $dallEModelClient = new DallEModelClient($httpClient, $apiKey);
+
         return new Platform(
-            [new GPTModelClient($httpClient, $apiKey), new EmbeddingsModelClient($httpClient, $apiKey)],
-            [new GPTResponseConverter(), new EmbeddingsResponseConverter()],
+            [
+                new GPTModelClient($httpClient, $apiKey),
+                new EmbeddingsModelClient($httpClient, $apiKey),
+                $dallEModelClient,
+            ],
+            [
+                new GPTResponseConverter(),
+                new EmbeddingsResponseConverter(),
+                $dallEModelClient,
+            ],
         );
     }
 }
