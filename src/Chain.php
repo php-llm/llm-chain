@@ -47,25 +47,18 @@ final readonly class Chain implements ChainInterface
      */
     public function call(MessageBagInterface $messages, array $options = []): ResponseInterface
     {
-        $llm = $this->llm;
-
-        if (array_key_exists('llm', $options)) {
-            if (!$options['llm'] instanceof LanguageModel) {
-                throw new InvalidArgumentException(sprintf('Option "llm" must be an instance of %s.', LanguageModel::class));
-            }
-
-            $llm = $options['llm'];
-            unset($options['llm']);
-        }
-
-        $input = new Input($llm, $messages, $options);
+        $input = new Input($this->llm, $messages, $options);
         array_map(fn (InputProcessor $processor) => $processor->processInput($input), $this->inputProcessor);
+
+        $llm = $input->llm;
+        $messages = $input->messages;
+        $options = $input->getOptions();
 
         if ($messages->containsImage() && !$llm->supportsImageInput()) {
             throw MissingModelSupport::forImageInput($llm::class);
         }
 
-        $response = $this->platform->request($llm, $messages, $options = $input->getOptions());
+        $response = $this->platform->request($llm, $messages, $options);
 
         if ($response instanceof AsyncResponse) {
             $response = $response->unwrap();
