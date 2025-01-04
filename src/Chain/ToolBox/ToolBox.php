@@ -45,7 +45,7 @@ final class ToolBox implements ToolBoxInterface
         return $this->map = $map;
     }
 
-    public function execute(ToolCall $toolCall): string
+    public function execute(ToolCall $toolCall): mixed
     {
         foreach ($this->tools as $tool) {
             foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
@@ -57,14 +57,6 @@ final class ToolBox implements ToolBoxInterface
                     $result = $tool->{$metadata->method}(...$toolCall->arguments);
                 } catch (\Throwable $e) {
                     throw ToolBoxException::executionFailed($toolCall, $e);
-                }
-
-                if ($result instanceof \JsonSerializable || is_array($result)) {
-                    return json_encode($result, flags: JSON_THROW_ON_ERROR);
-                }
-
-                if (is_integer($result) || is_float($result) || $result instanceof \Stringable) {
-                    return (string) $result;
                 }
 
                 return $result;
