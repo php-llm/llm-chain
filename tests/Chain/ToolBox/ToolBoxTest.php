@@ -9,8 +9,10 @@ use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
-use PhpLlm\LlmChain\Exception\ToolNotFoundException;
+use PhpLlm\LlmChain\Exception\ToolBoxException;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolException;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
@@ -46,6 +48,7 @@ final class ToolBoxTest extends TestCase
             new ToolReturningInteger(),
             new ToolReturningFloat(),
             new ToolReturningStringable(),
+            new ToolException(),
         ]);
     }
 
@@ -143,6 +146,13 @@ final class ToolBoxTest extends TestCase
                     'description' => 'A tool returning an object which implements \Stringable',
                 ],
             ],
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'tool_exception',
+                    'description' => 'This tool is broken',
+                ],
+            ],
         ];
 
         self::assertSame(json_encode($expected), json_encode($actual));
@@ -151,10 +161,30 @@ final class ToolBoxTest extends TestCase
     #[Test]
     public function executeWithUnknownTool(): void
     {
-        self::expectException(ToolNotFoundException::class);
+        self::expectException(ToolBoxException::class);
         self::expectExceptionMessage('Tool not found for call: foo_bar_baz');
 
         $this->toolBox->execute(new ToolCall('call_1234', 'foo_bar_baz'));
+    }
+
+    #[Test]
+    public function executeWithMisconfiguredTool(): void
+    {
+        self::expectException(ToolBoxException::class);
+        self::expectExceptionMessage('Method "foo" not found in tool "PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured".');
+
+        $toolBox = new ToolBox(new ToolAnalyzer(), [new ToolMisconfigured()]);
+
+        $toolBox->execute(new ToolCall('call_1234', 'tool_misconfigured'));
+    }
+
+    #[Test]
+    public function executeWithException(): void
+    {
+        self::expectException(ToolBoxException::class);
+        self::expectExceptionMessage('Execution of tool "tool_exception" failed with error: Tool error.');
+
+        $this->toolBox->execute(new ToolCall('call_1234', 'tool_exception'));
     }
 
     #[Test]
