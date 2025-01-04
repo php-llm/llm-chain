@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests\Chain;
+namespace PhpLlm\LlmChain\Tests\Chain\InputProcessor;
 
 use PhpLlm\LlmChain\Bridge\Anthropic\Claude;
 use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\LlmOverrideInputProcessor;
+use PhpLlm\LlmChain\Chain\InputProcessor\LlmOverrideInputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PHPUnit\Framework\Attributes\CoversClass;

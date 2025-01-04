@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Chain;
+namespace PhpLlm\LlmChain\Chain\InputProcessor;
 
+use PhpLlm\LlmChain\Chain\Input;
+use PhpLlm\LlmChain\Chain\InputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Model\LanguageModel;
 

@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\Model\Response\ToolCall;
 
 final class ToolBoxException extends RuntimeException
 {
-    public ?ToolCall $toolCall;
+    public ?ToolCall $toolCall = null;
 
     public static function notFoundForToolCall(ToolCall $toolCall): self
     {
