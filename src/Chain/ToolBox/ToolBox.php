@@ -6,6 +6,8 @@ namespace PhpLlm\LlmChain\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Exception\ToolBoxException;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 final class ToolBox implements ToolBoxInterface
 {
@@ -25,6 +27,7 @@ final class ToolBox implements ToolBoxInterface
     public function __construct(
         private readonly ToolAnalyzer $toolAnalyzer,
         iterable $tools,
+        private readonly LoggerInterface $logger = new NullLogger(),
     ) {
         $this->tools = $tools instanceof \Traversable ? iterator_to_array($tools) : $tools;
     }
@@ -54,8 +57,10 @@ final class ToolBox implements ToolBoxInterface
                 }
 
                 try {
+                    $this->logger->debug(sprintf('Executing tool "%s".', $metadata->name), $toolCall->arguments);
                     $result = $tool->{$metadata->method}(...$toolCall->arguments);
                 } catch (\Throwable $e) {
+                    $this->logger->warning(sprintf('Failed to execute tool "%s".', $metadata->name), ['exception' => $e]);
                     throw ToolBoxException::executionFailed($toolCall, $e);
                 }
 
