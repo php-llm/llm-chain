@@ -26,26 +26,26 @@ final readonly class Chain implements ChainInterface
     /**
      * @var InputProcessor[]
      */
-    private array $inputProcessor;
+    private array $inputProcessors;
 
     /**
      * @var OutputProcessor[]
      */
-    private array $outputProcessor;
+    private array $outputProcessors;
 
     /**
-     * @param InputProcessor[]  $inputProcessor
-     * @param OutputProcessor[] $outputProcessor
+     * @param InputProcessor[]  $inputProcessors
+     * @param OutputProcessor[] $outputProcessors
      */
     public function __construct(
         private PlatformInterface $platform,
         private LanguageModel $llm,
-        iterable $inputProcessor = [],
-        iterable $outputProcessor = [],
+        iterable $inputProcessors = [],
+        iterable $outputProcessors = [],
         private LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->inputProcessor = $this->initializeProcessors($inputProcessor, InputProcessor::class);
-        $this->outputProcessor = $this->initializeProcessors($outputProcessor, OutputProcessor::class);
+        $this->inputProcessors = $this->initializeProcessors($inputProcessors, InputProcessor::class);
+        $this->outputProcessors = $this->initializeProcessors($outputProcessors, OutputProcessor::class);
     }
 
     /**
@@ -54,7 +54,7 @@ final readonly class Chain implements ChainInterface
     public function call(MessageBagInterface $messages, array $options = []): ResponseInterface
     {
         $input = new Input($this->llm, $messages, $options);
-        array_map(fn (InputProcessor $processor) => $processor->processInput($input), $this->inputProcessor);
+        array_map(fn (InputProcessor $processor) => $processor->processInput($input), $this->inputProcessors);
 
         $llm = $input->llm;
         $messages = $input->messages;
@@ -82,13 +82,14 @@ final readonly class Chain implements ChainInterface
         }
 
         $output = new Output($llm, $response, $messages, $options);
-        array_map(fn (OutputProcessor $processor) => $processor->processOutput($output), $this->outputProcessor);
+        array_map(fn (OutputProcessor $processor) => $processor->processOutput($output), $this->outputProcessors);
 
         return $output->response;
     }
 
     /**
      * @param InputProcessor[]|OutputProcessor[] $processors
+     * @param class-string                       $interface
      *
      * @return InputProcessor[]|OutputProcessor[]
      */
