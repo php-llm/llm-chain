@@ -13,5 +13,5 @@ interface ToolBoxInterface
      */
     public function getMap(): array;
 
-    public function execute(ToolCall $toolCall): string;
+    public function execute(ToolCall $toolCall): mixed;
 }

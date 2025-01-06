@@ -97,6 +97,24 @@ echo $response->getContent(); // "I'm fine, thank you. How can I help you today?
 
 The `MessageInterface` and `Content` interface help to customize this process if needed, e.g. additional state handling.
 
+#### Options
+
+The second parameter of the `call` method is an array of options, which can be used to configure the behavior of the
+chain, like `stream`, `output_structure`, or `response_format`. This behavior is a combination of features provided by
+the underlying model and platform, or additional features provided by processors registered to the chain.
+
+Options design for additional features provided by LLM Chain can be found in this documentation. For model and platform
+specific options, please refer to the respective documentation.
+
+```php
+// Chain and MessageBag instantiation
+
+$response = $chain->call($messages, [
+    'temperature' => 0.5, // example option controlling the randomness of the response, e.g. GPT and Claude
+    'n' => 3,             // example option controlling the number of responses generated, e.g. GPT
+]);
+```
+
 #### Code Examples
 
 1. **Anthropic's Claude**: [chat-claude-anthropic.php](examples/chat-claude-anthropic.php)
@@ -208,11 +226,27 @@ See attribute class [ToolParameter](src/Chain/ToolBox/Attribute/ToolParameter.ph
 > [!NOTE]
 > Please be aware, that this is only converted in a JSON Schema for the LLM to respect, but not validated by LLM Chain.
 
+#### Tool Result Interception
+
+To react to the result of a tool, you can implement an EventListener or EventSubscriber, that listens to the
+`ToolCallsExecuted` event. This event is dispatched after the `ToolBox` executed all current tool calls and enables
+you to skip the next LLM call by setting a response yourself:
+
+```php
+$eventDispatcher->addListener(ToolCallsExecuted::class, function (ToolCallsExecuted $event): void {
+    foreach ($event->toolCallResults as $toolCallResult) {
+        if (str_starts_with($toolCallResult->toolCall->name, 'weather_')) {
+            $event->response = new StructuredResponse($toolCallResult->result);
+        }
+    }
+});
+```
+
 #### Code Examples (with built-in tools)
 
 1. **Clock Tool**: [toolbox-clock.php](examples/toolbox-clock.php)
 1. **SerpAPI Tool**: [toolbox-serpapi.php](examples/toolbox-serpapi.php)
-1. **Weather Tool**: [toolbox-weather.php](examples/toolbox-weather.php)
+1. **Weather Tool with Event Listener**: [toolbox-weather-event.php](examples/toolbox-weather-event.php)
 1. **Wikipedia Tool**: [toolbox-wikipedia.php](examples/toolbox-wikipedia.php)
 1. **YouTube Transcriber Tool**: [toolbox-youtube.php](examples/toolbox-youtube.php) (with streaming)
 

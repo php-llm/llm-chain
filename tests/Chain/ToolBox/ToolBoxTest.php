@@ -9,16 +9,13 @@ use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
-use PhpLlm\LlmChain\Exception\ToolNotFoundException;
+use PhpLlm\LlmChain\Exception\ToolBoxException;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolException;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
-use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningArray;
-use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningFloat;
-use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningInteger;
-use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningJsonSerializable;
-use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolReturningStringable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -41,11 +38,7 @@ final class ToolBoxTest extends TestCase
             new ToolRequiredParams(),
             new ToolOptionalParam(),
             new ToolNoParams(),
-            new ToolReturningArray(),
-            new ToolReturningJsonSerializable(),
-            new ToolReturningInteger(),
-            new ToolReturningFloat(),
-            new ToolReturningStringable(),
+            new ToolException(),
         ]);
     }
 
@@ -111,36 +104,8 @@ final class ToolBoxTest extends TestCase
             [
                 'type' => 'function',
                 'function' => [
-                    'name' => 'tool_returning_array',
-                    'description' => 'A tool returning an array',
-                ],
-            ],
-            [
-                'type' => 'function',
-                'function' => [
-                    'name' => 'tool_returning_json_serializable',
-                    'description' => 'A tool returning an object which implements \JsonSerializable',
-                ],
-            ],
-            [
-                'type' => 'function',
-                'function' => [
-                    'name' => 'tool_returning_integer',
-                    'description' => 'A tool returning an integer',
-                ],
-            ],
-            [
-                'type' => 'function',
-                'function' => [
-                    'name' => 'tool_returning_float',
-                    'description' => 'A tool returning a float',
-                ],
-            ],
-            [
-                'type' => 'function',
-                'function' => [
-                    'name' => 'tool_returning_stringable',
-                    'description' => 'A tool returning an object which implements \Stringable',
+                    'name' => 'tool_exception',
+                    'description' => 'This tool is broken',
                 ],
             ],
         ];
@@ -151,10 +116,30 @@ final class ToolBoxTest extends TestCase
     #[Test]
     public function executeWithUnknownTool(): void
     {
-        self::expectException(ToolNotFoundException::class);
+        self::expectException(ToolBoxException::class);
         self::expectExceptionMessage('Tool not found for call: foo_bar_baz');
 
         $this->toolBox->execute(new ToolCall('call_1234', 'foo_bar_baz'));
+    }
+
+    #[Test]
+    public function executeWithMisconfiguredTool(): void
+    {
+        self::expectException(ToolBoxException::class);
+        self::expectExceptionMessage('Method "foo" not found in tool "PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured".');
+
+        $toolBox = new ToolBox(new ToolAnalyzer(), [new ToolMisconfigured()]);
+
+        $toolBox->execute(new ToolCall('call_1234', 'tool_misconfigured'));
+    }
+
+    #[Test]
+    public function executeWithException(): void
+    {
+        self::expectException(ToolBoxException::class);
+        self::expectExceptionMessage('Execution of tool "tool_exception" failed with error: Tool error.');
+
+        $this->toolBox->execute(new ToolCall('call_1234', 'tool_exception'));
     }
 
     #[Test]
@@ -176,31 +161,6 @@ final class ToolBoxTest extends TestCase
             'Hello says "3".',
             'tool_required_params',
             ['text' => 'Hello', 'number' => 3],
-        ];
-
-        yield 'tool_returning_array' => [
-            '{"foo":"bar"}',
-            'tool_returning_array',
-        ];
-
-        yield 'tool_returning_json_serializable' => [
-            '{"foo":"bar"}',
-            'tool_returning_json_serializable',
-        ];
-
-        yield 'tool_returning_integer' => [
-            '42',
-            'tool_returning_integer',
-        ];
-
-        yield 'tool_returning_float' => [
-            '42.42',
-            'tool_returning_float',
-        ];
-
-        yield 'tool_returning_stringable' => [
-            'Hi!',
-            'tool_returning_stringable',
         ];
     }
 }

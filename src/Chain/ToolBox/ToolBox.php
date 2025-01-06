@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\ToolBox;
 
-use PhpLlm\LlmChain\Exception\ToolNotFoundException;
+use PhpLlm\LlmChain\Exception\ToolBoxException;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 final class ToolBox implements ToolBoxInterface
 {
@@ -25,6 +27,7 @@ final class ToolBox implements ToolBoxInterface
     public function __construct(
         private readonly ToolAnalyzer $toolAnalyzer,
         iterable $tools,
+        private readonly LoggerInterface $logger = new NullLogger(),
     ) {
         $this->tools = $tools instanceof \Traversable ? iterator_to_array($tools) : $tools;
     }
@@ -45,26 +48,26 @@ final class ToolBox implements ToolBoxInterface
         return $this->map = $map;
     }
 
-    public function execute(ToolCall $toolCall): string
+    public function execute(ToolCall $toolCall): mixed
     {
         foreach ($this->tools as $tool) {
             foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
-                if ($metadata->name === $toolCall->name) {
-                    $result = $tool->{$metadata->method}(...$toolCall->arguments);
-
-                    if ($result instanceof \JsonSerializable || is_array($result)) {
-                        return json_encode($result, flags: JSON_THROW_ON_ERROR);
-                    }
-
-                    if (is_integer($result) || is_float($result) || $result instanceof \Stringable) {
-                        return (string) $result;
-                    }
-
-                    return $result;
+                if ($metadata->name !== $toolCall->name) {
+                    continue;
                 }
+
+                try {
+                    $this->logger->debug(sprintf('Executing tool "%s".', $metadata->name), $toolCall->arguments);
+                    $result = $tool->{$metadata->method}(...$toolCall->arguments);
+                } catch (\Throwable $e) {
+                    $this->logger->warning(sprintf('Failed to execute tool "%s".', $metadata->name), ['exception' => $e]);
+                    throw ToolBoxException::executionFailed($toolCall, $e);
+                }
+
+                return $result;
             }
         }
 
-        throw ToolNotFoundException::forToolCall($toolCall);
+        throw ToolBoxException::notFoundForToolCall($toolCall);
     }
 }
