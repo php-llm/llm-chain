@@ -76,9 +76,9 @@ final readonly class Chain implements ChainInterface
 
             $this->logger->debug($message, $content);
 
-            throw new InvalidArgumentException('' === $message ? 'Invalid request to model or platform' : $message, 0, $e);
+            throw new InvalidArgumentException('' === $message ? 'Invalid request to model or platform' : $message, previous: $e);
         } catch (HttpExceptionInterface $e) {
-            throw new RuntimeException('Failed to request model', 0, $e);
+            throw new RuntimeException('Failed to request model', previous: $e);
         }
 
         $output = new Output($llm, $response, $messages, $options);
