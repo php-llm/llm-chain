@@ -33,7 +33,17 @@ final class ResponseConverter implements PlatformResponseConverter
             return $this->convertStream($response);
         }
 
-        $data = $response->toArray();
+        try {
+            $data = $response->toArray();
+        } catch (\Throwable $e) {
+            $data = $response->toArray(throw: false);
+
+            if (isset($data['error']['code']) && 'content_filter' === $data['error']['code']) {
+                throw new ContentFilterViolaftionException(message: $data['error']['message'], previous: $e);
+            }
+
+            throw $e;
+        }
 
         if (!isset($data['choices'])) {
             throw new RuntimeException('Response does not contain choices');
