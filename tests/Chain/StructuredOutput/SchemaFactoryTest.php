@@ -41,7 +41,7 @@ final class SchemaFactoryTest extends TestCase
                 'isActive' => ['type' => 'boolean'],
                 'age' => ['type' => ['integer', 'null']],
             ],
-            'required' => ['id', 'name', 'createdAt', 'isActive', 'age'],
+            'required' => ['id', 'name', 'createdAt', 'isActive'],
             'additionalProperties' => false,
         ];
 
