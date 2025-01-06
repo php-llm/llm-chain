@@ -78,6 +78,17 @@ class MessageBag implements MessageBagInterface
         return $messages;
     }
 
+    public function containsAudio(): bool
+    {
+        foreach ($this->messages as $message) {
+            if ($message instanceof UserMessage && $message->hasAudioContent()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function containsImage(): bool
     {
         foreach ($this->messages as $message) {

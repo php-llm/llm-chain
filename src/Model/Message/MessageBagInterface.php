@@ -23,5 +23,7 @@ interface MessageBagInterface extends \JsonSerializable, \Countable
 
     public function prepend(MessageInterface $message): self;
 
+    public function containsAudio(): bool;
+
     public function containsImage(): bool;
 }

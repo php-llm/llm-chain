@@ -6,6 +6,8 @@ namespace PhpLlm\LlmChain\Model;
 
 interface LanguageModel extends Model
 {
+    public function supportsAudioInput(): bool;
+
     public function supportsImageInput(): bool;
 
     public function supportsStreaming(): bool;

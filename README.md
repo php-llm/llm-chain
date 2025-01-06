@@ -73,7 +73,7 @@ The core feature of LLM Chain is to interact with language models via messages. 
 a **MessageBag** to a **Chain**, which takes care of LLM invocation and response handling.
 
 Messages can be of different types, most importantly `UserMessage`, `SystemMessage`, or `AssistantMessage`, and can also
-have different content types, like `Text` or `Image`.
+have different content types, like `Text`, `Image` or `Audio`.
 
 #### Example Chain call with messages
 
@@ -453,13 +453,13 @@ use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 
-// Initialize Platoform, LLM & Chain
+// Initialize Platform, LLM & Chain
 
 $messages = new MessageBag(
     Message::forSystem('You are an image analyzer bot that helps identify the content of images.'),
     Message::ofUser(
         'Describe the image as a comedian would do it.',
-        new Image(dirname(__DIR__).'/tests/Fixture/image.png'), // Path to an image file
+        new Image(dirname(__DIR__).'/tests/Fixture/image.jpg'), // Path to an image file
         new Image('https://foo.com/bar.png'), // URL to an image
         new Image('data:image/png;base64,...'), // Data URL of an image
     ),
@@ -471,6 +471,30 @@ $response = $chain->call($messages);
 
 1. **Image Description**: [image-describer-binary.php](examples/image-describer-binary.php) (with binary file)
 1. **Image Description**: [image-describer-url.php](examples/image-describer-url.php) (with URL)
+
+### Audio Processing
+
+Similar to images, some LLMs also support audio as input, which is just another `Content` type within the `UserMessage`:
+
+```php
+use PhpLlm\LlmChain\Model\Message\Content\Audio;
+use PhpLlm\LlmChain\Model\Message\Message;
+use PhpLlm\LlmChain\Model\Message\MessageBag;
+
+// Initialize Platform, LLM & Chain
+
+$messages = new MessageBag(
+    Message::ofUser(
+        'What is this recording about?',
+        new Audio(dirname(__DIR__).'/tests/Fixture/audio.mp3'), // Path to an audio file
+    ),
+);
+$response = $chain->call($messages);
+```
+
+#### Code Examples
+
+1. **Audio Description**: [audio-describer.php](examples/audio-describer.php)
 
 ### Embeddings
 
@@ -617,3 +641,10 @@ Contributions are always welcome, so feel free to join the development of this l
 [![LLM Chain Contributors](https://contrib.rocks/image?repo=php-llm/llm-chain 'LLM Chain Contributors')](https://github.com/php-llm/llm-chain/graphs/contributors)
 
 Made with [contrib.rocks](https://contrib.rocks).
+
+### Fixture Licenses
+
+For testing multi-modal features, the repository contains binary media content, with the following owners and licenses:
+
+* `tests/Fixture/image.jpg`: Chris F., Creative Commons, see [pexels.com](https://www.pexels.com/photo/blauer-und-gruner-elefant-mit-licht-1680755/)
+* `tests/Fixture/audio.mp3`: davidbain, Creative Commons, see [freesound.org](https://freesound.org/people/davidbain/sounds/136777/)

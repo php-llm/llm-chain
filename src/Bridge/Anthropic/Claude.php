@@ -32,6 +32,11 @@ final readonly class Claude implements LanguageModel
         return $this->options;
     }
 
+    public function supportsAudioInput(): bool
+    {
+        return false;
+    }
+
     public function supportsImageInput(): bool
     {
         return false; // it does, but implementation here is still open.
