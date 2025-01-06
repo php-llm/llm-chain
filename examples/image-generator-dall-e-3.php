@@ -1,7 +1,7 @@
 <?php
 
 use PhpLlm\LlmChain\Bridge\OpenAI\DallE;
-use PhpLlm\LlmChain\Bridge\OpenAI\DallE\ImagesResponse;
+use PhpLlm\LlmChain\Bridge\OpenAI\DallE\ImageResponse;
 use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use Symfony\Component\Dotenv\Dotenv;
@@ -15,19 +15,20 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new DallE(DallE::DALL_E_3);
 
 $response = $platform->request(
-    model: $llm,
+    model: new DallE(),
     input: 'A cartoon-style elephant with a long trunk and large ears.',
-    options: ['response_format' => 'url', 'n' => 1],
+    options: [
+        'version' => DallE::DALL_E_3, // Utilize Dall-E 3 version
+    ],
 );
 
 if ($response instanceof AsyncResponse) {
     $response = $response->unwrap();
 }
 
-assert($response instanceof ImagesResponse);
+assert($response instanceof ImageResponse);
 
 echo 'Revised Prompt: '.$response->revisedPrompt.PHP_EOL.PHP_EOL;
 

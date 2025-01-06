@@ -20,7 +20,7 @@ final class DallETest extends TestCase
         $dallE = new DallE();
 
         self::assertSame(DallE::DALL_E_2, $dallE->getVersion());
-        self::assertSame(['response_format' => 'url', 'n' => 1], $dallE->getOptions());
+        self::assertSame([], $dallE->getOptions());
     }
 
     #[Test]

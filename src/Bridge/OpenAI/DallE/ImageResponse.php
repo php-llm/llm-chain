@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Bridge\OpenAI\DallE;
 
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 
-class ImagesResponse implements ResponseInterface
+class ImageResponse implements ResponseInterface
 {
     /** @var list<Base64Image|UrlImage> */
     private readonly array $images;

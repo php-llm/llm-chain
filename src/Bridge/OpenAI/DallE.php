@@ -14,10 +14,7 @@ final readonly class DallE implements Model
     /** @param array<string, mixed> $options The default options for the model usage */
     public function __construct(
         private string $version = self::DALL_E_2,
-        private array $options = [
-            'response_format' => 'url',
-            'n' => 1,
-        ],
+        private array $options = [],
     ) {
     }
 
