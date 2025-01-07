@@ -66,11 +66,7 @@ final class SchemaFactory
 
             // Add property schema to main schema
             $schema['properties'][$propertyName] = $propertySchema;
-
-            // If the property does not allow null, mark it as required
-            if (!$type->isNullable()) {
-                $schema['required'][] = $propertyName;
-            }
+            $schema['required'][] = $propertyName;
         }
 
         return $schema;
