@@ -15,10 +15,9 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 
 $response = $platform->request(
-    model: new DallE(),
+    model: new DallE(), // Utilize Dall-E 2 version in default
     input: 'A cartoon-style elephant with a long trunk and large ears.',
     options: [
-        'version' => DallE::DALL_E_2, // Utilize Dall-E 2 version
         'response_format' => 'url', // Generate response as URL
         'n' => 2, // Generate multiple images for example
     ],
