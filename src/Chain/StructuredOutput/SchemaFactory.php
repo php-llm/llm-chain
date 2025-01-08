@@ -59,6 +59,10 @@ final class SchemaFactory
             $type = $types[0];
             $propertySchema = $this->getTypeSchema($type);
 
+            if (!is_array($propertySchema['type']) && $type->isNullable()) {
+                $propertySchema['type'] = [$propertySchema['type'], 'null'];
+            }
+
             // Add description if available
             if ($description) {
                 $propertySchema['description'] = $description;
@@ -83,24 +87,13 @@ final class SchemaFactory
     {
         switch ($type->getBuiltinType()) {
             case Type::BUILTIN_TYPE_INT:
-                if ($type->isNullable()) {
-                    return ['type' => ['integer', 'null']];
-                }
-
                 return ['type' => 'integer'];
 
             case Type::BUILTIN_TYPE_FLOAT:
-                if ($type->isNullable()) {
-                    return ['type' => ['number', 'null']];
-                }
 
                 return ['type' => 'number'];
 
             case Type::BUILTIN_TYPE_BOOL:
-                if ($type->isNullable()) {
-                    return ['type' => ['boolean', 'null']];
-                }
-
                 return ['type' => 'boolean'];
 
             case Type::BUILTIN_TYPE_ARRAY:
@@ -123,10 +116,6 @@ final class SchemaFactory
 
             case Type::BUILTIN_TYPE_OBJECT:
                 if (\DateTimeInterface::class === $type->getClassName()) {
-                    if ($type->isNullable()) {
-                        return ['type' => ['string', 'null'], 'format' => 'date-time'];
-                    }
-
                     return ['type' => 'string', 'format' => 'date-time'];
                 } else {
                     // Recursively build the schema for an object type
@@ -137,10 +126,6 @@ final class SchemaFactory
             case Type::BUILTIN_TYPE_STRING:
             default:
                 // Fallback to string for any unhandled types
-                if ($type->isNullable()) {
-                    return ['type' => ['string', 'null']];
-                }
-
                 return ['type' => 'string'];
         }
     }
