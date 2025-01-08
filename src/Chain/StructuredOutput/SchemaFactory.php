@@ -91,7 +91,6 @@ final class SchemaFactory
                 return ['type' => 'integer'];
 
             case Type::BUILTIN_TYPE_FLOAT:
-
                 return ['type' => 'number'];
 
             case Type::BUILTIN_TYPE_BOOL:
