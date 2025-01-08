@@ -13,4 +13,5 @@ final class User
     public string $name;
     public \DateTimeInterface $createdAt;
     public bool $isActive;
+    public ?int $age = null;
 }

@@ -59,6 +59,11 @@ final class SchemaFactory
             $type = $types[0];
             $propertySchema = $this->getTypeSchema($type);
 
+            // Handle nullable types
+            if (!is_array($propertySchema['type']) && $type->isNullable()) {
+                $propertySchema['type'] = [$propertySchema['type'], 'null'];
+            }
+
             // Add description if available
             if ($description) {
                 $propertySchema['description'] = $description;
