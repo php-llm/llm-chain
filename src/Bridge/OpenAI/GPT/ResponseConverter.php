@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
+use PhpLlm\LlmChain\Exception\ContentFilterViolationException;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\Choice;
@@ -39,7 +40,7 @@ final class ResponseConverter implements PlatformResponseConverter
             $data = $response->toArray(throw: false);
 
             if (isset($data['error']['code']) && 'content_filter' === $data['error']['code']) {
-                throw new ContentFilterViolaftionException(message: $data['error']['message'], previous: $e);
+                throw new ContentFilterViolationException(message: $data['error']['message'], previous: $e);
             }
 
             throw $e;
