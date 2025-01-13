@@ -19,6 +19,7 @@ use PhpLlm\LlmChain\Platform\ResponseConverter as PlatformResponseConverter;
 use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Component\HttpClient\Exception\JsonException;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 final class ResponseConverter implements PlatformResponseConverter
@@ -36,7 +37,7 @@ final class ResponseConverter implements PlatformResponseConverter
 
         try {
             $data = $response->toArray();
-        } catch (\Throwable $e) {
+        } catch (ClientExceptionInterface $e) {
             $data = $response->toArray(throw: false);
 
             if (isset($data['error']['code']) && 'content_filter' === $data['error']['code']) {
