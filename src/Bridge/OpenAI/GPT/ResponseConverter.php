@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
+use PhpLlm\LlmChain\Exception\ContentFilterException;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\Choice;
@@ -18,6 +19,7 @@ use PhpLlm\LlmChain\Platform\ResponseConverter as PlatformResponseConverter;
 use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Component\HttpClient\Exception\JsonException;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 final class ResponseConverter implements PlatformResponseConverter
@@ -33,7 +35,17 @@ final class ResponseConverter implements PlatformResponseConverter
             return $this->convertStream($response);
         }
 
-        $data = $response->toArray();
+        try {
+            $data = $response->toArray();
+        } catch (ClientExceptionInterface $e) {
+            $data = $response->toArray(throw: false);
+
+            if (isset($data['error']['code']) && 'content_filter' === $data['error']['code']) {
+                throw new ContentFilterException(message: $data['error']['message'], previous: $e);
+            }
+
+            throw $e;
+        }
 
         if (!isset($data['choices'])) {
             throw new RuntimeException('Response does not contain choices');
