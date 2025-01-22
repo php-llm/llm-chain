@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Tests\Chain\InputProcessor;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessor\SystemPromptInputProcessor;
+use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\SystemMessage;
@@ -21,6 +22,10 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(GPT::class)]
 #[UsesClass(Message::class)]
 #[UsesClass(MessageBag::class)]
+#[UsesClass(Input::class)]
+#[UsesClass(SystemMessage::class)]
+#[UsesClass(UserMessage::class)]
+#[UsesClass(Text::class)]
 #[Small]
 final class SystemPromptInputProcessorTest extends TestCase
 {

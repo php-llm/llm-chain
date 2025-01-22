@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Claude::class)]
 #[UsesClass(Input::class)]
 #[UsesClass(MessageBag::class)]
+#[UsesClass(Embeddings::class)]
 #[Small]
 final class LlmOverrideInputProcessorTest extends TestCase
 {

@@ -5,14 +5,19 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Bridge\OpenAI\Embeddings;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ResponseConverter;
+use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Model\Response\VectorResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 #[CoversClass(ResponseConverter::class)]
 #[Small]
+#[UsesClass(Vector::class)]
+#[UsesClass(VectorResponse::class)]
 class ResponseConverterTest extends TestCase
 {
     #[Test]

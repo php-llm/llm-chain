@@ -30,6 +30,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[UsesClass(MessageBag::class)]
 #[UsesClass(Choice::class)]
 #[UsesClass(MissingModelSupport::class)]
+#[UsesClass(TextResponse::class)]
+#[UsesClass(StructuredResponse::class)]
 final class ChainProcessorTest extends TestCase
 {
     #[Test]
