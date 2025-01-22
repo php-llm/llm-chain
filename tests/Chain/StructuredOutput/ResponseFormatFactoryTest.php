@@ -37,6 +37,7 @@ final class ResponseFormatFactoryTest extends TestCase
                             'format' => 'date-time',
                         ],
                         'isActive' => ['type' => 'boolean'],
+                        'age' => ['type' => ['integer', 'null']],
                     ],
                     'required' => ['id', 'name', 'createdAt', 'isActive'],
                     'additionalProperties' => false,
