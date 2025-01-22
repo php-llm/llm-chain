@@ -27,6 +27,8 @@ for API keys or deployment configurations or create a `.env.local` based on `.en
 
 To run all examples, use `make run-all-examples` or `php example`.
 
+For a more sophisticated demo, see the [Symfony Demo Application](https://github.com/php-llm/symfony-demo).
+
 ## Basic Concepts & Usage
 
 ### Models & Platforms
