@@ -16,13 +16,10 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 #[CoversClass(ModelClient::class)]
 #[UsesClass(DallE::class)]
-#[UsesClass(HttpResponse::class)]
-#[UsesClass(HttpClientInterface::class)]
 #[UsesClass(UrlImage::class)]
 #[UsesClass(Base64Image::class)]
 #[UsesClass(ImageResponse::class)]

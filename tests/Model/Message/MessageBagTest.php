@@ -10,6 +10,7 @@ use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\SystemMessage;
+use PhpLlm\LlmChain\Model\Message\ToolCallMessage;
 use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(AssistantMessage::class)]
 #[UsesClass(Image::class)]
 #[UsesClass(Text::class)]
+#[UsesClass(ToolCall::class)]
+#[UsesClass(ToolCallMessage::class)]
 #[Small]
 final class MessageBagTest extends TestCase
 {

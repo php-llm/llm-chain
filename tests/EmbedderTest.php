@@ -10,10 +10,15 @@ use PhpLlm\LlmChain\Document\TextDocument;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Document\VectorDocument;
 use PhpLlm\LlmChain\Embedder;
+use PhpLlm\LlmChain\Model\Message\ToolCallMessage;
+use PhpLlm\LlmChain\Model\Response\AsyncResponse;
+use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Model\Response\VectorResponse;
+use PhpLlm\LlmChain\Platform;
 use PhpLlm\LlmChain\Tests\Double\PlatformTestHandler;
 use PhpLlm\LlmChain\Tests\Double\TestStore;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -22,9 +27,16 @@ use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Embedder::class)]
+#[Medium]
 #[UsesClass(TextDocument::class)]
 #[UsesClass(Vector::class)]
 #[UsesClass(VectorDocument::class)]
+#[UsesClass(ToolCallMessage::class)]
+#[UsesClass(ToolCall::class)]
+#[UsesClass(Embeddings::class)]
+#[UsesClass(Platform::class)]
+#[UsesClass(AsyncResponse::class)]
+#[UsesClass(VectorResponse::class)]
 final class EmbedderTest extends TestCase
 {
     #[Test]

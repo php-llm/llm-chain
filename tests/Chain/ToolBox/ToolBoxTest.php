@@ -28,6 +28,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Metadata::class)]
 #[UsesClass(ParameterAnalyzer::class)]
 #[UsesClass(ToolAnalyzer::class)]
+#[UsesClass(ToolBoxException::class)]
 final class ToolBoxTest extends TestCase
 {
     private ToolBox $toolBox;
