@@ -53,7 +53,7 @@ final class GPT implements LanguageModel
 
     public function supportsAudioInput(): bool
     {
-        return $this->supportsImageInput;
+        return $this->supportsAudioInput;
     }
 
     public function supportsImageInput(): bool
