@@ -2,9 +2,9 @@
 <?php
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleSectionOutput;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\SingleCommandApplication;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
@@ -15,7 +15,7 @@ require_once __DIR__.'/vendor/autoload.php';
 
 $app = (new SingleCommandApplication('LLM Chain Example Runner'))
     ->setDescription('Runs all LLM Chain examples in folder examples/')
-    ->setCode(function (InputInterface $input, OutputInterface $output) {
+    ->setCode(function (InputInterface $input, ConsoleOutput $output) {
         $io = new SymfonyStyle($input, $output);
         $io->title('LLM Chain Examples');
 
@@ -25,43 +25,51 @@ $app = (new SingleCommandApplication('LLM Chain Example Runner'))
             ->sortByName()
             ->files();
 
-        /** @var array{example: SplFileInfo, section: ConsoleSectionOutput, process: Process, state: 'running'|'finished'} $exampleRuns */
+        /** @var array{example: SplFileInfo, process: Process} $exampleRuns */
         $exampleRuns = [];
         foreach ($examples as $example) {
             $exampleRuns[] = [
                 'example' => $example,
-                'section' => $section = $output->section(),
                 'process' => $process = new Process(['php', $example->getRealPath()]),
-                'state' => 'running',
             ];
-
             $process->start();
-            $section->writeln(sprintf('Example %s: <comment>Running</comment>', $example->getFilename()));
         }
 
         $examplesRunning = fn () => array_reduce($exampleRuns, fn ($running, $example) => $running || $example['process']->isRunning(), false);
         $examplesSuccessful = fn () => array_reduce($exampleRuns, fn ($successful, $example) => $successful && $example['process']->isSuccessful(), true);
 
-        while ($examplesRunning()) {
-            sleep(1);
+        $section = $output->section();
+        $renderTable = function () use ($exampleRuns, $section) {
+            $section->clear();
+            $table = new Table($section);
+            $table->setHeaders(['Example', 'State', 'Output']);
             foreach ($exampleRuns as $run) {
-                if ('running' === $run['state'] && !$run['process']->isRunning()) {
-                    $emptyOutput = 0 === strlen(trim($run['process']->getOutput()));
-                    $success = $run['process']->isSuccessful() && !$emptyOutput;
-                    $result = $success ? '<info>Finished</info>'
+                /** @var SplFileInfo $example */
+                /** @var Process $process */
+                ['example' => $example, 'process' => $process] = $run;
+
+                $output = str_replace(PHP_EOL, ' ', $process->getOutput());
+                $output = strlen($output) <= 100 ? $output : substr($output, 0, 100).'...';
+                $emptyOutput = 0 === strlen(trim($output));
+
+                $state = 'Running';
+                if ($process->isTerminated()) {
+                    $success = $process->isSuccessful() && !$emptyOutput;
+                    $state = $success ? '<info>Finished</info>'
                         : (1 === $run['process']->getExitCode() || $emptyOutput ? '<error>Failed</error>' : '<comment>Skipped</comment>');
-                    $run['section']->overwrite(sprintf('Example %s: %s', $run['example']->getFilename(), $result));
-                    $run['state'] = 'finished';
-                    if ($output->isVerbose()) {
-                        $exampleOutput = $emptyOutput ? 'Output was empty' : $run['process']->getOutput();
-                        $exampleOutput = strlen($exampleOutput) <= 100 ? $exampleOutput : substr($exampleOutput, 0, 100).'...';
-                        $run['section']->writeln(
-                            sprintf('<%s>%s</>', $success ? 'fg=#999999' : 'fg=red', trim($exampleOutput))
-                        );
-                    }
                 }
+
+                $table->addRow([$example->getFilename(), $state, $output]);
             }
+            $table->render();
+        };
+
+        while ($examplesRunning()) {
+            $renderTable();
+            sleep(1);
         }
+
+        $renderTable();
 
         $io->newLine();
         if (!$examplesSuccessful()) {
