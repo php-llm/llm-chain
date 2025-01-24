@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\StructuredOutput;
 
-use Fixture\StructuredOutput\UserWithAtParamAnnotation;
 use PhpLlm\LlmChain\Chain\StructuredOutput\ResponseFormatFactory;
 use PhpLlm\LlmChain\Chain\StructuredOutput\SchemaFactory;
 use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\User;
+use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\UserWithAtParamAnnotation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;

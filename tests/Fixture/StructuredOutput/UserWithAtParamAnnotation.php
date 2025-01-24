@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fixture\StructuredOutput;
+namespace PhpLlm\LlmChain\Tests\Fixture\StructuredOutput;
 
 final class UserWithAtParamAnnotation
 {
