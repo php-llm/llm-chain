@@ -63,6 +63,8 @@ $embeddings = new Embeddings();
   * [OpenAI's GPT](https://platform.openai.com/docs/models/overview) with [OpenAI](https://platform.openai.com/docs/overview) and [Azure](https://learn.microsoft.com/azure/ai-services/openai/concepts/models) as Platform
   * [Anthropic's Claude](https://www.anthropic.com/claude) with [Anthropic](https://www.anthropic.com/) as Platform
   * [Meta's Llama](https://www.llama.com/) with [Ollama](https://ollama.com/) and [Replicate](https://replicate.com/) as Platform
+  * [Google's Gemini](https://gemini.google.com/) with [OpenRouter](https://www.openrouter.com/) as Platform
+  * [DeepSeek's R1](https://www.deepseek.com/) with [OpenRouter](https://www.openrouter.com/) as Platform
 * Embeddings Models
   * [OpenAI's Text Embeddings](https://platform.openai.com/docs/guides/embeddings/embedding-models) with [OpenAI](https://platform.openai.com/docs/overview) and [Azure](https://learn.microsoft.com/azure/ai-services/openai/concepts/models) as Platform
   * [Voyage's Embeddings](https://docs.voyageai.com/docs/embeddings) with [Voyage](https://www.voyageai.com/) as Platform
@@ -125,6 +127,7 @@ $response = $chain->call($messages, [
 1. **OpenAI's o1**: [chat-o1-openai.php](examples/chat-o1-openai.php)
 1. **Meta's Llama with Ollama**: [chat-llama-ollama.php](examples/chat-llama-ollama.php)
 1. **Meta's Llama with Replicate**: [chat-llama-replicate.php](examples/chat-llama-replicate.php)
+1. **Google's Gemini with OpenRouter**: [chat-gemini-openrouter.php](examples/chat-gemini-openrouter.php)
 
 ### Tools
 
