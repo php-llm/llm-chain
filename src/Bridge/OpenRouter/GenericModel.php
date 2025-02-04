@@ -9,7 +9,6 @@ use PhpLlm\LlmChain\Model\LanguageModel;
 
 final readonly class GenericModel implements LanguageModel
 {
-
     /**
      * @param array<string, mixed> $options
      */

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\OpenRouter;
 
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
+use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
+use PhpLlm\LlmChain\Model\Response\TextResponse;
 use PhpLlm\LlmChain\Platform\ModelClient;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
-use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
-use PhpLlm\LlmChain\Model\Response\TextResponse;
-use PhpLlm\LlmChain\Exception\RuntimeException;
 
 final readonly class Client implements ModelClient, ResponseConverter
 {
@@ -45,20 +45,18 @@ final readonly class Client implements ModelClient, ResponseConverter
         ]);
     }
 
-	
-	public function convert(ResponseInterface $response, array $options = []): LlmResponse
-	{
-		$data = $response->toArray();
+    public function convert(ResponseInterface $response, array $options = []): LlmResponse
+    {
+        $data = $response->toArray();
 
-		if (!isset($data['choices'][0]['message'])) {
-			throw new RuntimeException('Response does not contain message');
-		}
+        if (!isset($data['choices'][0]['message'])) {
+            throw new RuntimeException('Response does not contain message');
+        }
 
-		if (!isset($data['choices'][0]['message']['content'])) {
-			throw new RuntimeException('Message does not contain content');
-		}
+        if (!isset($data['choices'][0]['message']['content'])) {
+            throw new RuntimeException('Message does not contain content');
+        }
 
-		return new TextResponse($data['choices'][0]['message']['content']);
-	}
-
+        return new TextResponse($data['choices'][0]['message']['content']);
+    }
 }

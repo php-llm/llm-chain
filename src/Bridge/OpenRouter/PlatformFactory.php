@@ -16,7 +16,7 @@ final class PlatformFactory
         ?HttpClientInterface $httpClient = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
-		$handler = new Client($httpClient, $apiKey);
+        $handler = new Client($httpClient, $apiKey);
 
         return new Platform([$handler], [$handler]);
     }
