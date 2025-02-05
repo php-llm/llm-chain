@@ -251,6 +251,7 @@ $eventDispatcher->addListener(ToolCallsExecuted::class, function (ToolCallsExecu
 
 1. **Clock Tool**: [toolbox-clock.php](examples/toolbox-clock.php)
 1. **SerpAPI Tool**: [toolbox-serpapi.php](examples/toolbox-serpapi.php)
+1. **Tavily Tool**: [toolbox-tavily.php](examples/toolbox-tavily.php)
 1. **Weather Tool with Event Listener**: [toolbox-weather-event.php](examples/toolbox-weather-event.php)
 1. **Wikipedia Tool**: [toolbox-wikipedia.php](examples/toolbox-wikipedia.php)
 1. **YouTube Transcriber Tool**: [toolbox-youtube.php](examples/toolbox-youtube.php) (with streaming)
