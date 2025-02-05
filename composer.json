@@ -43,8 +43,7 @@
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
     "conflict": {
-        "mongodb/mongodb": "<1.20",
-        "phpdocumentor/reflection-docblock": ">=5.6"
+        "mongodb/mongodb": "<1.20"
     },
     "suggest": {
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
