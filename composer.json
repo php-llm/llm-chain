@@ -18,7 +18,6 @@
         "oskarstark/enum-helper": "^1.5",
         "phpdocumentor/reflection-docblock": "^5.4",
         "phpstan/phpdoc-parser": "^2.1",
-        "psr/cache": "^3.0",
         "psr/log": "^3.0",
         "symfony/clock": "^6.4 || ^7.1",
         "symfony/http-client": "^6.4 || ^7.1",
@@ -38,12 +37,14 @@
         "phpunit/phpunit": "^11.5",
         "probots-io/pinecone-php": "^1.0",
         "rector/rector": "^2.0",
+        "symfony/cache": "^6.4 || ^7.1",
         "symfony/console": "^6.4 || ^7.1",
         "symfony/css-selector": "^6.4 || ^7.1",
         "symfony/dom-crawler": "^6.4 || ^7.1",
         "symfony/dotenv": "^6.4 || ^7.1",
         "symfony/event-dispatcher": "^6.4 || ^7.1",
         "symfony/finder": "^6.4 || ^7.1",
+        "symfony/http-foundation": "^6.4 || ^7.1",
         "symfony/process": "^6.4 || ^7.1",
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
@@ -55,7 +56,9 @@
         "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
         "symfony/css-selector": "For using the YouTube transcription tool.",
-        "symfony/dom-crawler": "For using the YouTube transcription tool."
+        "symfony/dom-crawler": "For using the YouTube transcription tool.",
+        "symfony/http-foundation": "For using the SessionStore as message store.",
+        "psr/cache": "For using the CacheStore as message store."
     },
     "autoload": {
         "psr-4": {
