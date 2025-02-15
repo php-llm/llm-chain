@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Fixture\Tool;
 
+use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\With;
 
 #[AsTool('tool_with_ToolParameter_attribute', 'A tool which has a parameter with described with #[ToolParameter] attribute')]
 final class ToolWithToolParameterAttribute
@@ -18,7 +18,7 @@ final class ToolWithToolParameterAttribute
      * @param string $text             The text given to the tool
      * @param int    $number           The number given to the tool
      * @param array  $products         The products given to the tool
-     * @param object $shippingAddress  The shipping address given to the tool
+     * @param string $shippingAddress  The shipping address given to the tool
      */
     public function __invoke(
         #[With(enum: ['dog', 'cat', 'bird'])]
@@ -57,7 +57,7 @@ final class ToolWithToolParameterAttribute
             maxProperties: 10,
             dependentRequired: true,
         )]
-        object $shippingAddress,
+        string $shippingAddress,
     ): string {
         return 'Hello, World!';
     }

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\StructuredOutput;
 
+use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
+
 use function Symfony\Component\String\u;
 
 final readonly class ResponseFormatFactory implements ResponseFormatFactoryInterface
 {
     public function __construct(
-        private SchemaFactory $schemaFactory = new SchemaFactory(),
+        private Factory $schemaFactory = new Factory(),
     ) {
     }
 
@@ -19,7 +21,7 @@ final readonly class ResponseFormatFactory implements ResponseFormatFactoryInter
             'type' => 'json_schema',
             'json_schema' => [
                 'name' => u($responseClass)->afterLast('\\')->toString(),
-                'schema' => $this->schemaFactory->buildSchema($responseClass),
+                'schema' => $this->schemaFactory->buildProperties($responseClass),
                 'strict' => true,
             ],
         ];

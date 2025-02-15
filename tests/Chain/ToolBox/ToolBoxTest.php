@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
+use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
+use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
-use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
@@ -28,8 +29,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ToolCall::class)]
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
-#[UsesClass(ParameterAnalyzer::class)]
 #[UsesClass(ToolAnalyzer::class)]
+#[UsesClass(Factory::class)]
+#[UsesClass(DescriptionParser::class)]
 #[UsesClass(ToolConfigurationException::class)]
 #[UsesClass(ToolNotFoundException::class)]
 #[UsesClass(ToolExecutionException::class)]
@@ -69,10 +71,8 @@ final class ToolBoxTest extends TestCase
                                 'description' => 'A number given to the tool',
                             ],
                         ],
-                        'required' => [
-                            'text',
-                            'number',
-                        ],
+                        'required' => ['text', 'number'],
+                        'additionalProperties' => false,
                     ],
                 ],
             ],
@@ -93,9 +93,8 @@ final class ToolBoxTest extends TestCase
                                 'description' => 'A number given to the tool',
                             ],
                         ],
-                        'required' => [
-                            'text',
-                        ],
+                        'required' => ['text', 'number'],
+                        'additionalProperties' => false,
                     ],
                 ],
             ],
