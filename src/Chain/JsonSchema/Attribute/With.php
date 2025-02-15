@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Chain\ToolBox\Attribute;
+namespace PhpLlm\LlmChain\Chain\JsonSchema\Attribute;
 
 use Webmozart\Assert\Assert;
 
 #[\Attribute(\Attribute::TARGET_PARAMETER)]
-final readonly class ToolParameter
+final readonly class With
 {
     /**
      * @param string[]|null            $enum

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\ToolBox;
 
+use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 
 final readonly class ToolAnalyzer
 {
     public function __construct(
-        private ParameterAnalyzer $parameterAnalyzer = new ParameterAnalyzer(),
+        private Factory $factory = new Factory(),
     ) {
     }
 
@@ -35,12 +36,16 @@ final readonly class ToolAnalyzer
 
     private function convertAttribute(string $className, AsTool $attribute): Metadata
     {
-        return new Metadata(
-            $className,
-            $attribute->name,
-            $attribute->description,
-            $attribute->method,
-            $this->parameterAnalyzer->getDefinition($className, $attribute->method)
-        );
+        try {
+            return new Metadata(
+                $className,
+                $attribute->name,
+                $attribute->description,
+                $attribute->method,
+                $this->factory->buildParameters($className, $attribute->method)
+            );
+        } catch (\ReflectionException) {
+            throw ToolConfigurationException::invalidMethod($className, $attribute->method);
+        }
     }
 }
