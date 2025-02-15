@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
-use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWrong;
@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
 #[UsesClass(ParameterAnalyzer::class)]
-#[UsesClass(InvalidToolImplementation::class)]
+#[UsesClass(ToolConfigurationException::class)]
 final class ToolAnalyzerTest extends TestCase
 {
     private ToolAnalyzer $toolAnalyzer;
@@ -34,7 +34,7 @@ final class ToolAnalyzerTest extends TestCase
     #[Test]
     public function withoutAttribute(): void
     {
-        $this->expectException(InvalidToolImplementation::class);
+        $this->expectException(ToolConfigurationException::class);
         iterator_to_array($this->toolAnalyzer->getMetadata(ToolWrong::class));
     }
 

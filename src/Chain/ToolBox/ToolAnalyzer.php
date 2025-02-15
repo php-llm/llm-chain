@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\Exception\InvalidToolImplementation;
+use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 
 final readonly class ToolAnalyzer
 {
@@ -25,7 +25,7 @@ final readonly class ToolAnalyzer
         $attributes = $reflectionClass->getAttributes(AsTool::class);
 
         if (0 === count($attributes)) {
-            throw InvalidToolImplementation::missingAttribute($className);
+            throw ToolConfigurationException::missingAttribute($className);
         }
 
         foreach ($attributes as $attribute) {
