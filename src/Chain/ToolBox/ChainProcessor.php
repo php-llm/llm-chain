@@ -11,8 +11,11 @@ use PhpLlm\LlmChain\Chain\InputProcessor;
 use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Chain\ToolBox\Event\ToolCallsExecuted;
+use PhpLlm\LlmChain\Chain\ToolBox\StreamResponse as ToolboxStreamResponse;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Model\Message\Message;
+use PhpLlm\LlmChain\Model\Response\ResponseInterface;
+use PhpLlm\LlmChain\Model\Response\StreamResponse as GenericStreamResponse;
 use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -45,23 +48,44 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
 
     public function processOutput(Output $output): void
     {
-        $messages = clone $output->messages;
+        if ($output->response instanceof GenericStreamResponse) {
+            $output->response = new ToolboxStreamResponse(
+                $output->response->getContent(),
+                $this->handleToolCallsCallback($output),
+            );
 
-        while ($output->response instanceof ToolCallResponse) {
-            $toolCalls = $output->response->getContent();
-            $messages->add(Message::ofAssistant(toolCalls: $toolCalls));
-
-            $results = [];
-            foreach ($toolCalls as $toolCall) {
-                $result = $this->toolBox->execute($toolCall);
-                $results[] = new ToolCallResult($toolCall, $result);
-                $messages->add(Message::ofToolCall($toolCall, $this->resultConverter->convert($result)));
-            }
-
-            $event = new ToolCallsExecuted(...$results);
-            $this->eventDispatcher?->dispatch($event);
-
-            $output->response = $event->hasResponse() ? $event->response : $this->chain->call($messages, $output->options);
+            return;
         }
+
+        if (!$output->response instanceof ToolCallResponse) {
+            return;
+        }
+
+        $output->response = $this->handleToolCallsCallback($output)($output->response);
+    }
+
+    private function handleToolCallsCallback(Output $output): \Closure
+    {
+        return function (ToolCallResponse $response) use ($output): ResponseInterface {
+            $messages = clone $output->messages;
+            do {
+                $toolCalls = $response->getContent();
+                $messages->add(Message::ofAssistant(toolCalls: $toolCalls));
+
+                $results = [];
+                foreach ($toolCalls as $toolCall) {
+                    $result = $this->toolBox->execute($toolCall);
+                    $results[] = new ToolCallResult($toolCall, $result);
+                    $messages->add(Message::ofToolCall($toolCall, $this->resultConverter->convert($result)));
+                }
+
+                $event = new ToolCallsExecuted(...$results);
+                $this->eventDispatcher?->dispatch($event);
+
+                $response = $event->hasResponse() ? $response : $this->chain->call($messages, $output->options);
+            } while ($response instanceof ToolCallResponse);
+
+            return $response;
+        };
     }
 }

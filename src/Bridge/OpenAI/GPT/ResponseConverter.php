@@ -52,7 +52,7 @@ final class ResponseConverter implements PlatformResponseConverter
         }
 
         /** @var Choice[] $choices */
-        $choices = array_map([$this, 'convertChoice'], $data['choices']);
+        $choices = \array_map([$this, 'convertChoice'], $data['choices']);
 
         if (1 !== count($choices)) {
             return new ChoiceResponse(...$choices);
@@ -65,13 +65,9 @@ final class ResponseConverter implements PlatformResponseConverter
         return new TextResponse($choices[0]->getContent());
     }
 
-    private function convertStream(HttpResponse $response): ToolCallResponse|StreamResponse
+    private function convertStream(HttpResponse $response): StreamResponse
     {
         $stream = $this->streamResponse($response);
-
-        if ($this->streamIsToolCall($stream)) {
-            return new ToolCallResponse(...$this->convertStreamToToolCalls($stream));
-        }
 
         return new StreamResponse($this->convertStreamContent($stream));
     }
@@ -84,7 +80,9 @@ final class ResponseConverter implements PlatformResponseConverter
             }
 
             try {
-                yield $chunk->getArrayData();
+                $data = $chunk->getArrayData();
+
+                yield $data;
             } catch (JsonException) {
                 // try catch only needed for Symfony 6.4
                 continue;
@@ -100,43 +98,60 @@ final class ResponseConverter implements PlatformResponseConverter
     }
 
     /**
-     * @return ToolCall[]
+     * @param array<string, mixed> $toolCalls
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
      */
-    private function convertStreamToToolCalls(\Generator $response): array
+    private function convertStreamToToolCalls(array $toolCalls, array $data): array
     {
-        $toolCalls = [];
-        foreach ($response as $data) {
-            if (!isset($data['choices'][0]['delta']['tool_calls'])) {
+        if (!isset($data['choices'][0]['delta']['tool_calls'])) {
+            return $toolCalls;
+        }
+
+        foreach ($data['choices'][0]['delta']['tool_calls'] as $i => $toolCall) {
+            if (isset($toolCall['id'])) {
+                // initialize tool call
+                $toolCalls[$i] = [
+                    'id' => $toolCall['id'],
+                    'function' => $toolCall['function'],
+                ];
                 continue;
             }
 
-            foreach ($data['choices'][0]['delta']['tool_calls'] as $i => $toolCall) {
-                if (isset($toolCall['id'])) {
-                    // initialize tool call
-                    $toolCalls[$i] = [
-                        'id' => $toolCall['id'],
-                        'function' => $toolCall['function'],
-                    ];
-                    continue;
-                }
-
-                // add arguments delta to tool call
-                $toolCalls[$i]['function']['arguments'] .= $toolCall['function']['arguments'];
-            }
+            // add arguments delta to tool call
+            $toolCalls[$i]['function']['arguments'] .= $toolCall['function']['arguments'];
         }
 
-        return array_map([$this, 'convertToolCall'], $toolCalls);
+        return $toolCalls;
     }
 
     private function convertStreamContent(\Generator $generator): \Generator
     {
+        $toolCalls = [];
         foreach ($generator as $data) {
+            if ($this->streamIsToolCall($generator)) {
+                $toolCalls = $this->convertStreamToToolCalls($toolCalls, $data);
+            }
+
+            if ([] !== $toolCalls && $this->isToolCallsStreamFinished($data)) {
+                yield new ToolCallResponse(...\array_map([$this, 'convertToolCall'], $toolCalls));
+            }
+
             if (!isset($data['choices'][0]['delta']['content'])) {
                 continue;
             }
 
             yield $data['choices'][0]['delta']['content'];
         }
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function isToolCallsStreamFinished(array $data): bool
+    {
+        return isset($data['choices'][0]['finish_reason']) && 'tool_calls' === $data['choices'][0]['finish_reason'];
     }
 
     /**
@@ -162,7 +177,7 @@ final class ResponseConverter implements PlatformResponseConverter
     private function convertChoice(array $choice): Choice
     {
         if ('tool_calls' === $choice['finish_reason']) {
-            return new Choice(toolCalls: array_map([$this, 'convertToolCall'], $choice['message']['tool_calls']));
+            return new Choice(toolCalls: \array_map([$this, 'convertToolCall'], $choice['message']['tool_calls']));
         }
 
         if ('stop' === $choice['finish_reason']) {
