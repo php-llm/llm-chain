@@ -18,4 +18,9 @@ final readonly class Text implements Content
     {
         return ['type' => 'text', 'text' => $this->text];
     }
+
+    public function accept(ContentVisitor $visitor): array
+    {
+        return $visitor->visitText($this);
+    }
 }

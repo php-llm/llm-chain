@@ -34,4 +34,9 @@ final readonly class ToolCallMessage implements MessageInterface
             'tool_call_id' => $this->toolCall->id,
         ];
     }
+
+    public function accept(MessageVisitor $visitor): array
+    {
+        return $visitor->visitToolCallMessage($this);
+    }
 }
