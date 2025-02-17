@@ -90,7 +90,7 @@ final class GoogleRequestBodyProducer implements RequestBodyProducer, MessageVis
         return [];
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->createBody();
     }

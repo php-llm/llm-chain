@@ -49,7 +49,10 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
 
         $body = new GoogleRequestBodyProducer($input);
 
-        return $this->httpClient->request('POST', sprintf('https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s', $model->getVersion(), $this->apiKey), [
+        return $this->httpClient->request('POST', sprintf('https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent', $model->getVersion()), [
+            'headers' => [
+                'x-goog-api-key' => $this->apiKey,
+            ],
             'json' => $body,
         ]);
     }
