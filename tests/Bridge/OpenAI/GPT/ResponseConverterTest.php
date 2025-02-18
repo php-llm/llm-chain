@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Bridge\OpenAI\GPT;
 
-use Exception;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ResponseConverter;
 use PhpLlm\LlmChain\Exception\ContentFilterException;
 use PhpLlm\LlmChain\Exception\RuntimeException;
@@ -120,13 +119,14 @@ class ResponseConverterTest extends TestCase
             ->method('toArray')
             ->willReturnCallback(function ($throw = true) {
                 if ($throw) {
-                    throw new class extends Exception implements ClientExceptionInterface {
+                    throw new class extends \Exception implements ClientExceptionInterface {
                         public function getResponse(): ResponseInterface
                         {
                             throw new RuntimeException('Not implemented');
                         }
                     };
                 }
+
                 return [
                     'error' => [
                         'code' => 'content_filter',
