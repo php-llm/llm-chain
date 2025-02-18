@@ -38,8 +38,8 @@ class ResponseConverterTest extends TestCase
 
         $response = $converter->convert($httpResponse);
 
-        $this->assertInstanceOf(TextResponse::class, $response);
-        $this->assertEquals('Hello world', $response->getContent());
+        self::assertInstanceOf(TextResponse::class, $response);
+        self::assertSame('Hello world', $response->getContent());
     }
 
     public function testConvertToolCallResponse(): void
@@ -70,12 +70,12 @@ class ResponseConverterTest extends TestCase
 
         $response = $converter->convert($httpResponse);
 
-        $this->assertInstanceOf(ToolCallResponse::class, $response);
+        self::assertInstanceOf(ToolCallResponse::class, $response);
         $toolCalls = $response->getContent();
-        $this->assertCount(1, $toolCalls);
-        $this->assertEquals('call_123', $toolCalls[0]->id);
-        $this->assertEquals('test_function', $toolCalls[0]->name);
-        $this->assertEquals(['arg1' => 'value1'], $toolCalls[0]->arguments);
+        self::assertCount(1, $toolCalls);
+        self::assertSame('call_123', $toolCalls[0]->id);
+        self::assertSame('test_function', $toolCalls[0]->name);
+        self::assertSame(['arg1' => 'value1'], $toolCalls[0]->arguments);
     }
 
     public function testConvertMultipleChoices(): void
@@ -103,11 +103,11 @@ class ResponseConverterTest extends TestCase
 
         $response = $converter->convert($httpResponse);
 
-        $this->assertInstanceOf(ChoiceResponse::class, $response);
+        self::assertInstanceOf(ChoiceResponse::class, $response);
         $choices = $response->getContent();
-        $this->assertCount(2, $choices);
-        $this->assertEquals('Choice 1', $choices[0]->getContent());
-        $this->assertEquals('Choice 2', $choices[1]->getContent());
+        self::assertCount(2, $choices);
+        self::assertSame('Choice 1', $choices[0]->getContent());
+        self::assertSame('Choice 2', $choices[1]->getContent());
     }
 
     public function testContentFilterException(): void

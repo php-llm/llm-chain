@@ -62,7 +62,7 @@ jobs:
         run: vendor/bin/php-cs-fixer fix --dry-run
 
       - name: Rector
-        run: vendor/bin/rector
+        run: vendor/bin/rector --dry-run
 
       - name: PHPStan
         run: vendor/bin/phpstan analyse
