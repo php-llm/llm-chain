@@ -1,11 +1,11 @@
 <?php
 
+use PhpLlm\LlmChain\Bridge\Google\GoogleModel;
+use PhpLlm\LlmChain\Bridge\Google\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Symfony\Component\Dotenv\Dotenv;
-use \PhpLlm\LlmChain\Bridge\Google\GoogleModel;
-use \PhpLlm\LlmChain\Bridge\Google\PlatformFactory;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
