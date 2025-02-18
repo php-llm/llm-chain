@@ -13,6 +13,7 @@ use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Chain\ToolBox\Event\ToolCallsExecuted;
 use PhpLlm\LlmChain\Chain\ToolBox\StreamResponse as ToolboxStreamResponse;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
+use PhpLlm\LlmChain\Model\Message\AssistantMessage;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 use PhpLlm\LlmChain\Model\Response\StreamResponse as GenericStreamResponse;
@@ -66,8 +67,13 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
 
     private function handleToolCallsCallback(Output $output): \Closure
     {
-        return function (ToolCallResponse $response) use ($output): ResponseInterface {
+        return function (ToolCallResponse $response, ?AssistantMessage $streamedAssistantResponse = null) use ($output): ResponseInterface {
             $messages = clone $output->messages;
+
+            if (null !== $streamedAssistantResponse && '' !== $streamedAssistantResponse->content) {
+                $messages->add($streamedAssistantResponse);
+            }
+
             do {
                 $toolCalls = $response->getContent();
                 $messages->add(Message::ofAssistant(toolCalls: $toolCalls));
@@ -82,7 +88,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
                 $event = new ToolCallsExecuted(...$results);
                 $this->eventDispatcher?->dispatch($event);
 
-                $response = $event->hasResponse() ? $response : $this->chain->call($messages, $output->options);
+                $response = $event->hasResponse() ? $event->response : $this->chain->call($messages, $output->options);
             } while ($response instanceof ToolCallResponse);
 
             return $response;

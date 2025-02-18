@@ -29,7 +29,7 @@ $processor = new ChainProcessor($toolBox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 $messages = new MessageBag(Message::ofUser(<<<TXT
     First, define unicorn in 30 words.
-    Then lookup at Wikipedia what the irish history looks like.
+    Then lookup at Wikipedia what the irish history looks like in 2 sentences.
     Please tell me before you call tools.
 TXT));
 $response = $chain->call($messages, [
@@ -39,4 +39,5 @@ $response = $chain->call($messages, [
 foreach ($response->getContent() as $word) {
     echo $word;
 }
+
 echo PHP_EOL;
