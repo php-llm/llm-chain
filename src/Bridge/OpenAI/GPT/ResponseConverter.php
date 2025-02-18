@@ -165,7 +165,7 @@ final class ResponseConverter implements PlatformResponseConverter
             return new Choice(toolCalls: array_map([$this, 'convertToolCall'], $choice['message']['tool_calls']));
         }
 
-        if ('stop' === $choice['finish_reason']) {
+        if (in_array($choice['finish_reason'], ['stop', 'length'], true)) {
             return new Choice($choice['message']['content']);
         }
 
