@@ -32,7 +32,7 @@ final class ResponseConverter implements PlatformResponseConverter
     public function convert(HttpResponse $response, array $options = []): LlmResponse
     {
         if ($options['stream'] ?? false) {
-            return $this->convertStream($response);
+            return new StreamResponse($this->convertStream($response));
         }
 
         try {
@@ -52,7 +52,7 @@ final class ResponseConverter implements PlatformResponseConverter
         }
 
         /** @var Choice[] $choices */
-        $choices = \array_map([$this, 'convertChoice'], $data['choices']);
+        $choices = \array_map($this->convertChoice(...), $data['choices']);
 
         if (1 !== count($choices)) {
             return new ChoiceResponse(...$choices);
@@ -65,15 +65,9 @@ final class ResponseConverter implements PlatformResponseConverter
         return new TextResponse($choices[0]->getContent());
     }
 
-    private function convertStream(HttpResponse $response): StreamResponse
+    private function convertStream(HttpResponse $response): \Generator
     {
-        $stream = $this->streamResponse($response);
-
-        return new StreamResponse($this->convertStreamContent($stream));
-    }
-
-    private function streamResponse(HttpResponse $response): \Generator
-    {
+        $toolCalls = [];
         foreach ((new EventSourceHttpClient())->stream($response) as $chunk) {
             if (!$chunk instanceof ServerSentEvent || '[DONE]' === $chunk->getData()) {
                 continue;
@@ -81,20 +75,25 @@ final class ResponseConverter implements PlatformResponseConverter
 
             try {
                 $data = $chunk->getArrayData();
-
-                yield $data;
             } catch (JsonException) {
                 // try catch only needed for Symfony 6.4
                 continue;
             }
+
+            if ($this->streamIsToolCall($data)) {
+                $toolCalls = $this->convertStreamToToolCalls($toolCalls, $data);
+            }
+
+            if ([] !== $toolCalls && $this->isToolCallsStreamFinished($data)) {
+                yield new ToolCallResponse(...\array_map($this->convertToolCall(...), $toolCalls));
+            }
+
+            if (!isset($data['choices'][0]['delta']['content'])) {
+                continue;
+            }
+
+            yield $data['choices'][0]['delta']['content'];
         }
-    }
-
-    private function streamIsToolCall(\Generator $response): bool
-    {
-        $data = $response->current();
-
-        return isset($data['choices'][0]['delta']['tool_calls']);
     }
 
     /**
@@ -126,24 +125,12 @@ final class ResponseConverter implements PlatformResponseConverter
         return $toolCalls;
     }
 
-    private function convertStreamContent(\Generator $generator): \Generator
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function streamIsToolCall(array $data): bool
     {
-        $toolCalls = [];
-        foreach ($generator as $data) {
-            if ($this->streamIsToolCall($generator)) {
-                $toolCalls = $this->convertStreamToToolCalls($toolCalls, $data);
-            }
-
-            if ([] !== $toolCalls && $this->isToolCallsStreamFinished($data)) {
-                yield new ToolCallResponse(...\array_map([$this, 'convertToolCall'], $toolCalls));
-            }
-
-            if (!isset($data['choices'][0]['delta']['content'])) {
-                continue;
-            }
-
-            yield $data['choices'][0]['delta']['content'];
-        }
+        return isset($data['choices'][0]['delta']['tool_calls']);
     }
 
     /**
