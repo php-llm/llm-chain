@@ -38,7 +38,7 @@ LLM Chain categorizes two main types of models: **Language Models** and **Embedd
 Language Models, like GPT, Claude and Llama, as essential centerpiece of LLM applications
 and Embeddings Models as supporting models to provide vector representations of text.
 
-Those models are provided by different **platforms**, like OpenAI, Azure, Replicate, and others.
+Those models are provided by different **platforms**, like OpenAI, Azure, Google, Replicate, and others.
 
 #### Example Instantiation
 
@@ -63,6 +63,7 @@ $embeddings = new Embeddings();
   * [OpenAI's GPT](https://platform.openai.com/docs/models/overview) with [OpenAI](https://platform.openai.com/docs/overview) and [Azure](https://learn.microsoft.com/azure/ai-services/openai/concepts/models) as Platform
   * [Anthropic's Claude](https://www.anthropic.com/claude) with [Anthropic](https://www.anthropic.com/) as Platform
   * [Meta's Llama](https://www.llama.com/) with [Ollama](https://ollama.com/) and [Replicate](https://replicate.com/) as Platform
+  * [Google's Gemini](https://gemini.google.com/) with [Google](https://ai.google.dev/) as Platform
   * [Google's Gemini](https://gemini.google.com/) with [OpenRouter](https://www.openrouter.com/) as Platform
   * [DeepSeek's R1](https://www.deepseek.com/) with [OpenRouter](https://www.openrouter.com/) as Platform
 * Embeddings Models
