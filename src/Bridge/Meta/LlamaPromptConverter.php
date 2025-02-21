@@ -32,10 +32,10 @@ final class LlamaPromptConverter
     {
         if ($message instanceof SystemMessage) {
             return trim(<<<SYSTEM
-<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+                <|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
-{$message->content}<|eot_id|>
-SYSTEM);
+                {$message->content}<|eot_id|>
+                SYSTEM);
         }
 
         if ($message instanceof AssistantMessage) {
@@ -44,10 +44,10 @@ SYSTEM);
             }
 
             return trim(<<<ASSISTANT
-<|start_header_id|>{$message->getRole()->value}<|end_header_id|>
+                <|start_header_id|>{$message->getRole()->value}<|end_header_id|>
 
-{$message->content}<|eot_id|>
-ASSISTANT);
+                {$message->content}<|eot_id|>
+                ASSISTANT);
         }
 
         if ($message instanceof UserMessage) {
@@ -80,10 +80,10 @@ ASSISTANT);
             $content = implode(PHP_EOL, $contentParts);
 
             return trim(<<<USER
-<|start_header_id|>{$message->getRole()->value}<|end_header_id|>
+                <|start_header_id|>{$message->getRole()->value}<|end_header_id|>
 
-{$content}<|eot_id|>
-USER);
+                {$content}<|eot_id|>
+                USER);
         }
 
         throw new RuntimeException('Unsupported message type.'); // @phpstan-ignore-line
