@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\ToolBox;
 
-use PhpLlm\LlmChain\Exception\ToolBoxException;
+use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolExecutionException;
+use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -61,13 +62,13 @@ final class ToolBox implements ToolBoxInterface
                     $result = $tool->{$metadata->method}(...$toolCall->arguments);
                 } catch (\Throwable $e) {
                     $this->logger->warning(sprintf('Failed to execute tool "%s".', $metadata->name), ['exception' => $e]);
-                    throw ToolBoxException::executionFailed($toolCall, $e);
+                    throw ToolExecutionException::executionFailed($toolCall, $e);
                 }
 
                 return $result;
             }
         }
 
-        throw ToolBoxException::notFoundForToolCall($toolCall);
+        throw ToolNotFoundException::notFoundForToolCall($toolCall);
     }
 }

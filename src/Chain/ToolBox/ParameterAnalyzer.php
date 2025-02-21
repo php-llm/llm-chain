@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
-use PhpLlm\LlmChain\Exception\ToolBoxException;
+use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 
 /**
  * @phpstan-type ParameterDefinition array{
@@ -46,7 +46,7 @@ final class ParameterAnalyzer
         try {
             $reflection = new \ReflectionMethod($className, $methodName);
         } catch (\ReflectionException) {
-            throw ToolBoxException::invalidMethod($className, $methodName);
+            throw ToolConfigurationException::invalidMethod($className, $methodName);
         }
         $parameters = $reflection->getParameters();
 

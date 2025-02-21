@@ -139,9 +139,6 @@ Tool calling can be enabled by registering the processors in the chain:
 use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 // Platform & LLM instantiation
 
@@ -179,7 +176,6 @@ You can configure the method to be called by the LLM with the `#[AsTool]` attrib
 
 ```php
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
-
 
 #[AsTool(name: 'weather_current', description: 'get current weather for a location', method: 'current')]
 #[AsTool(name: 'weather_forecast', description: 'get weather forecast for a location', method: 'forecast')]
@@ -230,6 +226,24 @@ See attribute class [ToolParameter](src/Chain/ToolBox/Attribute/ToolParameter.ph
 
 > [!NOTE]
 > Please be aware, that this is only converted in a JSON Schema for the LLM to respect, but not validated by LLM Chain.
+
+#### Fault Tolerance
+
+To gracefully handle errors that occur during tool calling, e.g. wrong tool names or runtime errors, you can use the
+`FaultTolerantToolBox` as a decorator for the `ToolBox`. It will catch the exceptions and return readable error messages
+to the LLM.
+
+```php
+use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\ToolBox\FaultTolerantToolBox;
+
+// Platform, LLM & ToolBox instantiation
+
+$toolBox = new FaultTolerantToolBox($innerToolBox);
+$toolProcessor = new ChainProcessor($toolBox);
+
+$chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
+```
 
 #### Tool Result Interception
 

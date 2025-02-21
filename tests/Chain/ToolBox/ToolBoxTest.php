@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
+use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolExecutionException;
+use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
-use PhpLlm\LlmChain\Exception\ToolBoxException;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolException;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured;
@@ -28,7 +30,6 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Metadata::class)]
 #[UsesClass(ParameterAnalyzer::class)]
 #[UsesClass(ToolAnalyzer::class)]
-#[UsesClass(ToolBoxException::class)]
 final class ToolBoxTest extends TestCase
 {
     private ToolBox $toolBox;
@@ -117,7 +118,7 @@ final class ToolBoxTest extends TestCase
     #[Test]
     public function executeWithUnknownTool(): void
     {
-        self::expectException(ToolBoxException::class);
+        self::expectException(ToolNotFoundException::class);
         self::expectExceptionMessage('Tool not found for call: foo_bar_baz');
 
         $this->toolBox->execute(new ToolCall('call_1234', 'foo_bar_baz'));
@@ -126,7 +127,7 @@ final class ToolBoxTest extends TestCase
     #[Test]
     public function executeWithMisconfiguredTool(): void
     {
-        self::expectException(ToolBoxException::class);
+        self::expectException(ToolConfigurationException::class);
         self::expectExceptionMessage('Method "foo" not found in tool "PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured".');
 
         $toolBox = new ToolBox(new ToolAnalyzer(), [new ToolMisconfigured()]);
@@ -137,7 +138,7 @@ final class ToolBoxTest extends TestCase
     #[Test]
     public function executeWithException(): void
     {
-        self::expectException(ToolBoxException::class);
+        self::expectException(ToolExecutionException::class);
         self::expectExceptionMessage('Execution of tool "tool_exception" failed with error: Tool error.');
 
         $this->toolBox->execute(new ToolCall('call_1234', 'tool_exception'));
