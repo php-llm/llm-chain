@@ -3,6 +3,7 @@
 use PhpLlm\LlmChain\Bridge\Google\Gemini;
 use PhpLlm\LlmChain\Bridge\Google\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
+use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Symfony\Component\Dotenv\Dotenv;
@@ -16,12 +17,15 @@ if (empty($_ENV['GOOGLE_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['GOOGLE_API_KEY']);
-$llm = new Gemini(Gemini::GEMINI_2_FLASH);
+$llm = new Gemini(Gemini::GEMINI_1_5_FLASH);
 
 $chain = new Chain($platform, $llm);
 $messages = new MessageBag(
-    Message::forSystem('You are a pirate and you write funny.'),
-    Message::ofUser('What is the Symfony framework?'),
+    Message::forSystem('You are an image analyzer bot that helps identify the content of images.'),
+    Message::ofUser(
+        'Describe the image as a comedian would do it.',
+        new Image(dirname(__DIR__).'/tests/Fixture/image.jpg'),
+    ),
 );
 $response = $chain->call($messages);
 

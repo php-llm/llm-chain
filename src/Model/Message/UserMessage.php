@@ -68,9 +68,4 @@ final readonly class UserMessage implements MessageInterface
 
         return $array;
     }
-
-    public function accept(MessageVisitor $visitor): array
-    {
-        return $visitor->visitUserMessage($this);
-    }
 }

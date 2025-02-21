@@ -50,9 +50,4 @@ final readonly class AssistantMessage implements MessageInterface
 
         return $array;
     }
-
-    public function accept(MessageVisitor $visitor): array
-    {
-        return $visitor->visitAssistantMessage($this);
-    }
 }

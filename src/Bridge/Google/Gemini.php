@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Bridge\Google;
 
 use PhpLlm\LlmChain\Model\LanguageModel;
 
-final readonly class GoogleModel implements LanguageModel
+final readonly class Gemini implements LanguageModel
 {
     public const GEMINI_2_FLASH = 'gemini-2.0-flash';
     public const GEMINI_2_PRO = 'gemini-2.0-pro-exp-02-05';
@@ -35,12 +35,12 @@ final readonly class GoogleModel implements LanguageModel
 
     public function supportsAudioInput(): bool
     {
-        return false; // it does, but implementation here is still open; in_array($this->version, [self::GEMINI_2_FLASH, self::GEMINI_2_PRO, self::GEMINI_1_5_FLASH], true);
+        return false; // it does, but implementation here is still open
     }
 
     public function supportsImageInput(): bool
     {
-        return false; // it does, but implementation here is still open;in_array($this->version, [self::GEMINI_2_FLASH, self::GEMINI_2_PRO, self::GEMINI_2_FLASH_LITE, self::GEMINI_2_FLASH_THINKING, self::GEMINI_1_5_FLASH], true);
+        return true;
     }
 
     public function supportsStreaming(): bool
@@ -50,11 +50,11 @@ final readonly class GoogleModel implements LanguageModel
 
     public function supportsStructuredOutput(): bool
     {
-        return false;
+        return false; // it does, but implementation here is still open
     }
 
     public function supportsToolCalling(): bool
     {
-        return false;
+        return false; // it does, but implementation here is still open
     }
 }

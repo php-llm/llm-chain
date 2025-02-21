@@ -12,9 +12,7 @@ use PhpLlm\LlmChain\Model\Response\StreamResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
 use PhpLlm\LlmChain\Platform\ModelClient;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
-use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
-use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -31,13 +29,14 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
     public function __construct(
         HttpClientInterface $httpClient,
         #[\SensitiveParameter] private string $apiKey,
+        private GooglePromptConverter $promptConverter = new GooglePromptConverter(),
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
     }
 
     public function supports(Model $model, array|string|object $input): bool
     {
-        return $model instanceof GoogleModel && $input instanceof MessageBagInterface;
+        return $model instanceof Gemini && $input instanceof MessageBagInterface;
     }
 
     /**
@@ -47,13 +46,20 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
     {
         Assert::isInstanceOf($input, MessageBagInterface::class);
 
-        $body = new GoogleRequestBodyProducer($input);
+        $url = sprintf(
+            'https://generativelanguage.googleapis.com/v1beta/models/%s:%s',
+            $model->getVersion(),
+            $options['stream'] ?? false ? 'streamGenerateContent' : 'generateContent',
+        );
 
-        return $this->httpClient->request('POST', sprintf('https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent', $model->getVersion()), [
+        $generationConfig = ['generationConfig' => $options];
+        unset($generationConfig['generationConfig']['stream']);
+
+        return $this->httpClient->request('POST', $url, [
             'headers' => [
                 'x-goog-api-key' => $this->apiKey,
             ],
-            'json' => $body,
+            'json' => array_merge($generationConfig, $this->promptConverter->convertToPrompt($input)),
         ]);
     }
 
@@ -82,22 +88,41 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
     private function convertStream(ResponseInterface $response): \Generator
     {
         foreach ((new EventSourceHttpClient())->stream($response) as $chunk) {
-            if (!$chunk instanceof ServerSentEvent || '[DONE]' === $chunk->getData()) {
+            if ($chunk->isFirst() || $chunk->isLast()) {
                 continue;
             }
 
-            try {
-                $data = $chunk->getArrayData();
-            } catch (JsonException) {
-                // try catch only needed for Symfony 6.4
-                continue;
+            $jsonDelta = trim($chunk->getContent());
+
+            // Remove leading/trailing brackets
+            if (str_starts_with($jsonDelta, '[') || str_starts_with($jsonDelta, ',')) {
+                $jsonDelta = substr($jsonDelta, 1);
+            }
+            if (str_ends_with($jsonDelta, ']')) {
+                $jsonDelta = substr($jsonDelta, 0, -1);
             }
 
-            if (!isset($data['candidates'][0]['content']['parts'][0]['text'])) {
-                continue;
-            }
+            // Split in case of multiple JSON objects
+            $deltas = explode(",\r\n", $jsonDelta);
 
-            yield $data['candidates'][0]['content']['parts'][0]['text'];
+            foreach ($deltas as $delta) {
+                if ('' === $delta) {
+                    continue;
+                }
+
+                try {
+                    $data = json_decode($delta, true, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException $e) {
+                    dump($delta);
+                    throw new RuntimeException('Failed to decode JSON response', 0, $e);
+                }
+
+                if (!isset($data['candidates'][0]['content']['parts'][0]['text'])) {
+                    continue;
+                }
+
+                yield $data['candidates'][0]['content']['parts'][0]['text'];
+            }
         }
     }
 }

@@ -41,9 +41,4 @@ final readonly class Image implements Content
 
         return sprintf('data:image/%s;base64,%s', $type, base64_encode($data));
     }
-
-    public function accept(ContentVisitor $visitor): array
-    {
-        return $visitor->visitImage($this);
-    }
 }

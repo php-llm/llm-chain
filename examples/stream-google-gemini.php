@@ -20,9 +20,14 @@ $llm = new Gemini(Gemini::GEMINI_2_FLASH);
 
 $chain = new Chain($platform, $llm);
 $messages = new MessageBag(
-    Message::forSystem('You are a pirate and you write funny.'),
-    Message::ofUser('What is the Symfony framework?'),
+    Message::forSystem('You are a funny clown that entertains people.'),
+    Message::ofUser('What is the purpose of an ant?'),
 );
-$response = $chain->call($messages);
+$response = $chain->call($messages, [
+    'stream' => true, // enable streaming of response text
+]);
 
-echo $response->getContent().PHP_EOL;
+foreach ($response->getContent() as $word) {
+    echo $word;
+}
+echo PHP_EOL;
