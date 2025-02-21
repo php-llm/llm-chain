@@ -17,7 +17,7 @@ final readonly class LlamaModelClient implements ModelClient
 {
     public function __construct(
         private Client $client,
-        private LlamaPromptConverter $promptConverter,
+        private LlamaPromptConverter $promptConverter = new LlamaPromptConverter(),
     ) {
     }
 
