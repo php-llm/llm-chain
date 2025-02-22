@@ -14,9 +14,14 @@ use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FaultTolerantToolBox::class)]
+#[UsesClass(ToolCall::class)]
+#[UsesClass(Metadata::class)]
+#[UsesClass(ToolNotFoundException::class)]
+#[UsesClass(ToolExecutionException::class)]
 final class FaultTolerantToolBoxTest extends TestCase
 {
     #[Test]

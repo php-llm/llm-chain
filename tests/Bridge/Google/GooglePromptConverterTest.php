@@ -5,17 +5,23 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Bridge\Google;
 
 use PhpLlm\LlmChain\Bridge\Google\GooglePromptConverter;
+use PhpLlm\LlmChain\Model\Message\AssistantMessage;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[Small]
 #[CoversClass(GooglePromptConverter::class)]
+#[UsesClass(UserMessage::class)]
+#[UsesClass(AssistantMessage::class)]
+#[UsesClass(MessageBag::class)]
 final class GooglePromptConverterTest extends TestCase
 {
     #[Test]

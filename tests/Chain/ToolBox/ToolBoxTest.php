@@ -30,6 +30,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Metadata::class)]
 #[UsesClass(ParameterAnalyzer::class)]
 #[UsesClass(ToolAnalyzer::class)]
+#[UsesClass(ToolConfigurationException::class)]
+#[UsesClass(ToolNotFoundException::class)]
+#[UsesClass(ToolExecutionException::class)]
 final class ToolBoxTest extends TestCase
 {
     private ToolBox $toolBox;
