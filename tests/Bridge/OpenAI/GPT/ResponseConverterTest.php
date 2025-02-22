@@ -7,17 +7,25 @@ namespace PhpLlm\LlmChain\Tests\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ResponseConverter;
 use PhpLlm\LlmChain\Exception\ContentFilterException;
 use PhpLlm\LlmChain\Exception\RuntimeException;
+use PhpLlm\LlmChain\Model\Response\Choice;
 use PhpLlm\LlmChain\Model\Response\ChoiceResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
+use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 #[CoversClass(ResponseConverter::class)]
 #[Small]
+#[UsesClass(Choice::class)]
+#[UsesClass(ChoiceResponse::class)]
+#[UsesClass(TextResponse::class)]
+#[UsesClass(ToolCall::class)]
+#[UsesClass(ToolCallResponse::class)]
 class ResponseConverterTest extends TestCase
 {
     public function testConvertTextResponse(): void
