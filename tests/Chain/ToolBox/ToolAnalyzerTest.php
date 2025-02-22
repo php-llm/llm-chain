@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
+use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
+use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
+use PhpLlm\LlmChain\Chain\JsonSchema\TypeSchemaExtractor;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
-use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
@@ -20,7 +22,9 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ToolAnalyzer::class)]
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
-#[UsesClass(ParameterAnalyzer::class)]
+#[UsesClass(Factory::class)]
+#[UsesClass(DescriptionParser::class)]
+#[UsesClass(TypeSchemaExtractor::class)]
 #[UsesClass(ToolConfigurationException::class)]
 final class ToolAnalyzerTest extends TestCase
 {
@@ -63,6 +67,7 @@ final class ToolAnalyzerTest extends TestCase
                     ],
                 ],
                 'required' => ['text', 'number'],
+                'additionalProperties' => false,
             ],
         );
     }
@@ -91,6 +96,7 @@ final class ToolAnalyzerTest extends TestCase
                     ],
                 ],
                 'required' => ['world'],
+                'additionalProperties' => false,
             ],
         );
 
@@ -113,6 +119,7 @@ final class ToolAnalyzerTest extends TestCase
                     ],
                 ],
                 'required' => ['text', 'number'],
+                'additionalProperties' => false,
             ],
         );
     }
