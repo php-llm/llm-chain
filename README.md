@@ -84,16 +84,15 @@ have different content types, like `Text`, `Image` or `Audio`.
 
 ```php
 use PhpLlm\LlmChain\Chain;
+use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
-use PhpLlm\LlmChain\Model\Message\SystemMessage;
-use PhpLlm\LlmChain\Model\Message\UserMessage;
 
 // Platform & LLM instantiation
 
 $chain = new Chain($platform, $llm);
 $messages = new MessageBag(
-    new SystemMessage('You are a helpful chatbot answering questions about LLM Chain.'),
-    new UserMessage('Hello, how are you?'),
+    Message::forSystem('You are a helpful chatbot answering questions about LLM Chain.'),
+    Message::ofUser('Hello, how are you?'),
 );
 $response = $chain->call($messages);
 
