@@ -245,6 +245,15 @@ $toolProcessor = new ChainProcessor($toolBox);
 $chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
 ```
 
+#### Tool Filtering
+
+To limit the tools provided to the LLM in a specific chain call to a subset of the configured tools, you can use the
+`tools` option with a list of tool names:
+
+```php
+$this->chain->call($messages, ['tools' => ['tavily_search']]);
+```
+
 #### Tool Result Interception
 
 To react to the result of a tool, you can implement an EventListener or EventSubscriber, that listens to the

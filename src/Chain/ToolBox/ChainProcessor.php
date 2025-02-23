@@ -43,6 +43,10 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
         }
 
         $options = $input->getOptions();
+        if (isset($options['tools'])) {
+            $toolMap = array_filter($toolMap, fn (string $tool) => in_array($tool, $options['tools'], true), ARRAY_FILTER_USE_KEY);
+        }
+
         $options['tools'] = $toolMap;
         $input->setOptions($options);
     }

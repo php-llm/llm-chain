@@ -56,6 +56,23 @@ class ChainProcessorTest extends TestCase
     }
 
     #[Test]
+    public function processInputWithRegisteredToolsButToolOverride(): void
+    {
+        $toolBox = $this->createStub(ToolBoxInterface::class);
+        $toolBox->method('getMap')->willReturn(['tool1' => 'tool1-metadata', 'tool2' => 'tool2-metadata']);
+
+        $llm = $this->createMock(LanguageModel::class);
+        $llm->method('supportsToolCalling')->willReturn(true);
+
+        $chainProcessor = new ChainProcessor($toolBox);
+        $input = new Input($llm, new MessageBag(), ['tools' => ['tool2']]);
+
+        $chainProcessor->processInput($input);
+
+        self::assertSame(['tools' => ['tool2' => 'tool2-metadata']], $input->getOptions());
+    }
+
+    #[Test]
     public function processInputWithUnsupportedToolCallingWillThrowException(): void
     {
         $this->expectException(MissingModelSupport::class);
