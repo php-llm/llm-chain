@@ -43,8 +43,9 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
         }
 
         $options = $input->getOptions();
-        if (isset($options['tools'])) {
-            $toolMap = array_filter($toolMap, fn (string $tool) => in_array($tool, $options['tools'], true), ARRAY_FILTER_USE_KEY);
+        // only filter tool map if list of strings is provided as option
+        if (isset($options['tools']) && is_array($options['tools']) && is_string($options['tools'][0])) {
+            $toolMap = array_values(array_filter($toolMap, fn (Metadata $tool) => in_array($tool->name, $options['tools'], true)));
         }
 
         $options['tools'] = $toolMap;

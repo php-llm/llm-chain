@@ -6,6 +6,7 @@ namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBoxInterface;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Model\LanguageModel;
@@ -42,7 +43,9 @@ class ChainProcessorTest extends TestCase
     public function processInputWithRegisteredToolsWillResultInOptionChange(): void
     {
         $toolBox = $this->createStub(ToolBoxInterface::class);
-        $toolBox->method('getMap')->willReturn(['tool1' => 'tool1', 'tool2' => 'tool2']);
+        $tool1 = new Metadata('ClassTool1', 'tool1', 'description1', 'method1', null);
+        $tool2 = new Metadata('ClassTool2', 'tool2', 'description2', 'method2', null);
+        $toolBox->method('getMap')->willReturn([$tool1, $tool2]);
 
         $llm = $this->createMock(LanguageModel::class);
         $llm->method('supportsToolCalling')->willReturn(true);
@@ -52,14 +55,16 @@ class ChainProcessorTest extends TestCase
 
         $chainProcessor->processInput($input);
 
-        self::assertSame(['tools' => ['tool1' => 'tool1', 'tool2' => 'tool2']], $input->getOptions());
+        self::assertSame(['tools' => [$tool1, $tool2]], $input->getOptions());
     }
 
     #[Test]
     public function processInputWithRegisteredToolsButToolOverride(): void
     {
         $toolBox = $this->createStub(ToolBoxInterface::class);
-        $toolBox->method('getMap')->willReturn(['tool1' => 'tool1-metadata', 'tool2' => 'tool2-metadata']);
+        $tool1 = new Metadata('ClassTool1', 'tool1', 'description1', 'method1', null);
+        $tool2 = new Metadata('ClassTool2', 'tool2', 'description2', 'method2', null);
+        $toolBox->method('getMap')->willReturn([$tool1, $tool2]);
 
         $llm = $this->createMock(LanguageModel::class);
         $llm->method('supportsToolCalling')->willReturn(true);
@@ -69,7 +74,7 @@ class ChainProcessorTest extends TestCase
 
         $chainProcessor->processInput($input);
 
-        self::assertSame(['tools' => ['tool2' => 'tool2-metadata']], $input->getOptions());
+        self::assertSame(['tools' => [$tool2]], $input->getOptions());
     }
 
     #[Test]
