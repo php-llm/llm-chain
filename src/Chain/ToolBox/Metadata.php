@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\ToolBox;
 
+use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
+
 /**
- * @phpstan-import-type ParameterDefinition from ParameterAnalyzer
+ * @phpstan-import-type JsonSchema from Factory
  */
 final readonly class Metadata implements \JsonSerializable
 {
     /**
-     * @param ParameterDefinition|null $parameters
+     * @param JsonSchema|null $parameters
      */
     public function __construct(
         public string $className,
@@ -27,7 +29,7 @@ final readonly class Metadata implements \JsonSerializable
      *     function: array{
      *         name: string,
      *         description: string,
-     *         parameters?: ParameterDefinition
+     *         parameters?: JsonSchema
      *     }
      * }
      */

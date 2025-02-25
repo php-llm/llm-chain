@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Fixture\Tool;
 
+use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
 
 #[AsTool('tool_with_ToolParameter_attribute', 'A tool which has a parameter with described with #[ToolParameter] attribute')]
 final class ToolWithToolParameterAttribute
@@ -21,29 +21,29 @@ final class ToolWithToolParameterAttribute
      * @param object $shippingAddress  The shipping address given to the tool
      */
     public function __invoke(
-        #[ToolParameter(
+        #[With(
             enum: ['dog', 'cat', 'bird'],
         )]
         string $animal,
-        #[ToolParameter(
+        #[With(
             const: 42,
         )]
         int $numberOfArticles,
-        #[ToolParameter(
+        #[With(
             const: 'info@example.de',
         )]
         string $infoEmail,
-        #[ToolParameter(
+        #[With(
             const: ['de', 'en'],
         )]
         string $locales,
-        #[ToolParameter(
+        #[With(
             pattern: '^[a-zA-Z]+$',
             minLength: 1,
             maxLength: 10,
         )]
         string $text,
-        #[ToolParameter(
+        #[With(
             minimum: 1,
             maximum: 10,
             multipleOf: 2,
@@ -51,7 +51,7 @@ final class ToolWithToolParameterAttribute
             exclusiveMaximum: 10,
         )]
         int $number,
-        #[ToolParameter(
+        #[With(
             minItems: 1,
             maxItems: 10,
             uniqueItems: true,
@@ -59,7 +59,7 @@ final class ToolWithToolParameterAttribute
             maxContains: 10,
         )]
         array $products,
-        #[ToolParameter(
+        #[With(
             required: true,
             minProperties: 1,
             maxProperties: 10,
