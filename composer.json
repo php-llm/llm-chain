@@ -27,10 +27,10 @@
     "require-dev": {
         "codewithkyrian/chromadb-php": "^0.2.1",
         "mongodb/mongodb": "^1.20",
-        "php-cs-fixer/shim": "^3.64",
+        "php-cs-fixer/shim": "^3.70",
         "phpstan/phpstan": "^1.12",
         "phpstan/phpstan-webmozart-assert": "^1.2",
-        "phpunit/phpunit": "^11.3",
+        "phpunit/phpunit": "^11.5",
         "probots-io/pinecone-php": "^1.0",
         "rector/rector": "^1.2",
         "symfony/console": "^6.4 || ^7.1",
