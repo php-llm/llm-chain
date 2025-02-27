@@ -26,7 +26,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
 
     public function __construct(
         private readonly ToolBoxInterface $toolBox,
-        private ToolResultConverter $resultConverter = new ToolResultConverter(),
+        private readonly ToolResultConverter $resultConverter = new ToolResultConverter(),
         private readonly ?EventDispatcherInterface $eventDispatcher = null,
     ) {
     }
@@ -44,7 +44,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
 
         $options = $input->getOptions();
         // only filter tool map if list of strings is provided as option
-        if (isset($options['tools']) && is_array($options['tools']) && is_string($options['tools'][0])) {
+        if (isset($options['tools']) && $this->isFlatStringArray($options['tools'])) {
             $toolMap = array_values(array_filter($toolMap, fn (Metadata $tool) => in_array($tool->name, $options['tools'], true)));
         }
 
@@ -68,6 +68,14 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
         }
 
         $output->response = $this->handleToolCallsCallback($output)($output->response);
+    }
+
+    /**
+     * @param array<mixed> $tools
+     */
+    private function isFlatStringArray(array $tools): bool
+    {
+        return array_reduce($tools, fn (bool $carry, mixed $item) => $carry && is_string($item), true);
     }
 
     private function handleToolCallsCallback(Output $output): \Closure
