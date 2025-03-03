@@ -174,7 +174,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
 
     private function getCollection(): Collection
     {
-        return $this->client->selectCollection($this->databaseName, $this->collectionName);
+        return $this->client->getCollection($this->databaseName, $this->collectionName);
     }
 
     private function toBinary(Uuid $uuid): Binary
