@@ -10,7 +10,7 @@ use Webmozart\Assert\Assert;
 final readonly class ToolParameter
 {
     /**
-     * @param string[]|null            $enum
+     * @param list<int|string>|null    $enum
      * @param string|int|string[]|null $const
      */
     public function __construct(

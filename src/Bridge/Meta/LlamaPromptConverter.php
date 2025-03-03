@@ -50,22 +50,12 @@ final class LlamaPromptConverter
                 ASSISTANT);
         }
 
-        if ($message instanceof UserMessage) {
-            $count = count($message->content);
+        // Handling of UserMessage
+        $count = count($message->content);
 
-            $contentParts = [];
-            if ($count > 1) {
-                foreach ($message->content as $value) {
-                    if ($value instanceof Text) {
-                        $contentParts[] = $value->text;
-                    }
-
-                    if ($value instanceof Image) {
-                        $contentParts[] = $value->url;
-                    }
-                }
-            } elseif (1 === $count) {
-                $value = $message->content[0];
+        $contentParts = [];
+        if ($count > 1) {
+            foreach ($message->content as $value) {
                 if ($value instanceof Text) {
                     $contentParts[] = $value->text;
                 }
@@ -73,19 +63,26 @@ final class LlamaPromptConverter
                 if ($value instanceof Image) {
                     $contentParts[] = $value->url;
                 }
-            } else {
-                throw new RuntimeException('Unsupported message type.');
+            }
+        } elseif (1 === $count) {
+            $value = $message->content[0];
+            if ($value instanceof Text) {
+                $contentParts[] = $value->text;
             }
 
-            $content = implode(PHP_EOL, $contentParts);
-
-            return trim(<<<USER
-                <|start_header_id|>{$message->getRole()->value}<|end_header_id|>
-
-                {$content}<|eot_id|>
-                USER);
+            if ($value instanceof Image) {
+                $contentParts[] = $value->url;
+            }
+        } else {
+            throw new RuntimeException('Unsupported message type.');
         }
 
-        throw new RuntimeException('Unsupported message type.'); // @phpstan-ignore-line
+        $content = implode(PHP_EOL, $contentParts);
+
+        return trim(<<<USER
+            <|start_header_id|>{$message->getRole()->value}<|end_header_id|>
+
+            {$content}<|eot_id|>
+            USER);
     }
 }

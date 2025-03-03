@@ -31,7 +31,6 @@ class ResponseConverterTest extends TestCase
         $vectorResponse = (new ResponseConverter())->convert($response);
         $convertedContent = $vectorResponse->getContent();
 
-        self::assertIsArray($convertedContent);
         self::assertCount(2, $convertedContent);
 
         self::assertSame([0.3, 0.4, 0.4], $convertedContent[0]->getData());
