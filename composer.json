@@ -25,7 +25,7 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "codewithkyrian/chromadb-php": "^0.2.1",
+        "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3",
         "mongodb/mongodb": "^1.20",
         "php-cs-fixer/shim": "^3.70",
         "phpstan/phpstan": "^1.12",
