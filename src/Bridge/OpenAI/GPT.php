@@ -36,11 +36,11 @@ final class GPT implements LanguageModel
         }
 
         if (false === $this->supportsImageInput) {
-            $this->supportsImageInput = in_array($this->version, [self::GPT_4_TURBO, self::GPT_4O, self::GPT_4O_MINI, self::O1_MINI, self::O1_PREVIEW, self::O3_MINI], true);
+            $this->supportsImageInput = in_array($this->version, [self::GPT_4_TURBO, self::GPT_4O, self::GPT_4O_MINI, self::O1_MINI, self::O1_PREVIEW, self::O3_MINI, self::GPT_45_PREVIEW], true);
         }
 
         if (false === $this->supportsStructuredOutput) {
-            $this->supportsStructuredOutput = in_array($this->version, [self::GPT_4O, self::GPT_4O_MINI, self::O3_MINI], true);
+            $this->supportsStructuredOutput = in_array($this->version, [self::GPT_4O, self::GPT_4O_MINI, self::O3_MINI, self::GPT_45_PREVIEW], true);
         }
     }
 
