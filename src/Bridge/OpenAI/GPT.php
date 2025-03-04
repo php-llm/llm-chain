@@ -19,6 +19,7 @@ final class GPT implements LanguageModel
     public const O1_PREVIEW = 'o1-preview';
     public const O3_MINI = 'o3-mini';
     public const O3_MINI_HIGH = 'o3-mini-high';
+    public const GPT_45_PREVIEW = 'gpt-4.5-preview';
 
     /**
      * @param array<mixed> $options The default options for the model usage
