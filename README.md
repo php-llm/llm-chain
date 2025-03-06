@@ -199,10 +199,10 @@ LLM Chain generates a JSON Schema representation for all tools in the `ToolBox` 
 method arguments and param comments in the doc block. Additionally, JSON Schema support validation rules, which are
 partially support by LLMs like GPT.
 
-To leverage this, configure the `#[ToolParameter]` attribute on the method arguments of your tool:
+To leverage this, configure the `#[With]` attribute on the method arguments of your tool:
 ```php
-use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\ToolBox\Attribute\ToolParameter;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
 
 #[AsTool('my_tool', 'Example tool with parameters requirements.')]
 final class MyTool
@@ -212,9 +212,9 @@ final class MyTool
      * @param int    $number The number of an object
      */
     public function __invoke(
-        #[ToolParameter(pattern: '/([a-z0-1]){5}/')]
+        #[With(pattern: '/([a-z0-1]){5}/')]
         string $name,
-        #[ToolParameter(minimum: 0, maximum: 10)]   
+        #[With(minimum: 0, maximum: 10)]   
         int $number,
     ): string {
         // ...
@@ -222,7 +222,7 @@ final class MyTool
 }
 ```
 
-See attribute class [ToolParameter](src/Chain/ToolBox/Attribute/ToolParameter.php) for all available options.
+See attribute class [With](src/Chain/ToolBox/Attribute/With.php) for all available options.
 
 > [!NOTE]
 > Please be aware, that this is only converted in a JSON Schema for the LLM to respect, but not validated by LLM Chain.

@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\ToolBox\Attribute;
 
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\With;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
-#[CoversClass(ToolParameter::class)]
+#[CoversClass(With::class)]
 final class ToolParameterTest extends TestCase
 {
     #[Test]
     public function validEnum(): void
     {
         $enum = ['value1', 'value2'];
-        $toolParameter = new ToolParameter(enum: $enum);
+        $toolParameter = new With(enum: $enum);
         self::assertSame($enum, $toolParameter->enum);
     }
 
@@ -26,14 +26,14 @@ final class ToolParameterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $enum = ['value1', 2];
-        new ToolParameter(enum: $enum);
+        new With(enum: $enum);
     }
 
     #[Test]
     public function validConstString(): void
     {
         $const = 'constant value';
-        $toolParameter = new ToolParameter(const: $const);
+        $toolParameter = new With(const: $const);
         self::assertSame($const, $toolParameter->const);
     }
 
@@ -42,14 +42,14 @@ final class ToolParameterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $const = '   ';
-        new ToolParameter(const: $const);
+        new With(const: $const);
     }
 
     #[Test]
     public function validPattern(): void
     {
         $pattern = '/^[a-z]+$/';
-        $toolParameter = new ToolParameter(pattern: $pattern);
+        $toolParameter = new With(pattern: $pattern);
         self::assertSame($pattern, $toolParameter->pattern);
     }
 
@@ -58,14 +58,14 @@ final class ToolParameterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $pattern = '   ';
-        new ToolParameter(pattern: $pattern);
+        new With(pattern: $pattern);
     }
 
     #[Test]
     public function validMinLength(): void
     {
         $minLength = 5;
-        $toolParameter = new ToolParameter(minLength: $minLength);
+        $toolParameter = new With(minLength: $minLength);
         self::assertSame($minLength, $toolParameter->minLength);
     }
 
@@ -73,7 +73,7 @@ final class ToolParameterTest extends TestCase
     public function invalidMinLengthNegative(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(minLength: -1);
+        new With(minLength: -1);
     }
 
     #[Test]
@@ -81,7 +81,7 @@ final class ToolParameterTest extends TestCase
     {
         $minLength = 5;
         $maxLength = 10;
-        $toolParameter = new ToolParameter(minLength: $minLength, maxLength: $maxLength);
+        $toolParameter = new With(minLength: $minLength, maxLength: $maxLength);
         self::assertSame($minLength, $toolParameter->minLength);
         self::assertSame($maxLength, $toolParameter->maxLength);
     }
@@ -90,14 +90,14 @@ final class ToolParameterTest extends TestCase
     public function invalidMaxLengthLessThanMinLength(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(minLength: 10, maxLength: 5);
+        new With(minLength: 10, maxLength: 5);
     }
 
     #[Test]
     public function validMinimum(): void
     {
         $minimum = 0;
-        $toolParameter = new ToolParameter(minimum: $minimum);
+        $toolParameter = new With(minimum: $minimum);
         self::assertSame($minimum, $toolParameter->minimum);
     }
 
@@ -105,14 +105,14 @@ final class ToolParameterTest extends TestCase
     public function invalidMinimumNegative(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(minimum: -1);
+        new With(minimum: -1);
     }
 
     #[Test]
     public function validMultipleOf(): void
     {
         $multipleOf = 5;
-        $toolParameter = new ToolParameter(multipleOf: $multipleOf);
+        $toolParameter = new With(multipleOf: $multipleOf);
         self::assertSame($multipleOf, $toolParameter->multipleOf);
     }
 
@@ -120,7 +120,7 @@ final class ToolParameterTest extends TestCase
     public function invalidMultipleOfNegative(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(multipleOf: -5);
+        new With(multipleOf: -5);
     }
 
     #[Test]
@@ -128,7 +128,7 @@ final class ToolParameterTest extends TestCase
     {
         $exclusiveMinimum = 1;
         $exclusiveMaximum = 10;
-        $toolParameter = new ToolParameter(exclusiveMinimum: $exclusiveMinimum, exclusiveMaximum: $exclusiveMaximum);
+        $toolParameter = new With(exclusiveMinimum: $exclusiveMinimum, exclusiveMaximum: $exclusiveMaximum);
         self::assertSame($exclusiveMinimum, $toolParameter->exclusiveMinimum);
         self::assertSame($exclusiveMaximum, $toolParameter->exclusiveMaximum);
     }
@@ -137,7 +137,7 @@ final class ToolParameterTest extends TestCase
     public function invalidExclusiveMaximumLessThanExclusiveMinimum(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(exclusiveMinimum: 10, exclusiveMaximum: 5);
+        new With(exclusiveMinimum: 10, exclusiveMaximum: 5);
     }
 
     #[Test]
@@ -145,7 +145,7 @@ final class ToolParameterTest extends TestCase
     {
         $minItems = 1;
         $maxItems = 5;
-        $toolParameter = new ToolParameter(minItems: $minItems, maxItems: $maxItems);
+        $toolParameter = new With(minItems: $minItems, maxItems: $maxItems);
         self::assertSame($minItems, $toolParameter->minItems);
         self::assertSame($maxItems, $toolParameter->maxItems);
     }
@@ -154,13 +154,13 @@ final class ToolParameterTest extends TestCase
     public function invalidMaxItemsLessThanMinItems(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(minItems: 5, maxItems: 1);
+        new With(minItems: 5, maxItems: 1);
     }
 
     #[Test]
     public function validUniqueItemsTrue(): void
     {
-        $toolParameter = new ToolParameter(uniqueItems: true);
+        $toolParameter = new With(uniqueItems: true);
         self::assertTrue($toolParameter->uniqueItems);
     }
 
@@ -168,7 +168,7 @@ final class ToolParameterTest extends TestCase
     public function invalidUniqueItemsFalse(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(uniqueItems: false);
+        new With(uniqueItems: false);
     }
 
     #[Test]
@@ -176,7 +176,7 @@ final class ToolParameterTest extends TestCase
     {
         $minContains = 1;
         $maxContains = 3;
-        $toolParameter = new ToolParameter(minContains: $minContains, maxContains: $maxContains);
+        $toolParameter = new With(minContains: $minContains, maxContains: $maxContains);
         self::assertSame($minContains, $toolParameter->minContains);
         self::assertSame($maxContains, $toolParameter->maxContains);
     }
@@ -185,13 +185,13 @@ final class ToolParameterTest extends TestCase
     public function invalidMaxContainsLessThanMinContains(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(minContains: 3, maxContains: 1);
+        new With(minContains: 3, maxContains: 1);
     }
 
     #[Test]
     public function validRequired(): void
     {
-        $toolParameter = new ToolParameter(required: true);
+        $toolParameter = new With(required: true);
         self::assertTrue($toolParameter->required);
     }
 
@@ -200,7 +200,7 @@ final class ToolParameterTest extends TestCase
     {
         $minProperties = 1;
         $maxProperties = 5;
-        $toolParameter = new ToolParameter(minProperties: $minProperties, maxProperties: $maxProperties);
+        $toolParameter = new With(minProperties: $minProperties, maxProperties: $maxProperties);
         self::assertSame($minProperties, $toolParameter->minProperties);
         self::assertSame($maxProperties, $toolParameter->maxProperties);
     }
@@ -209,20 +209,20 @@ final class ToolParameterTest extends TestCase
     public function invalidMaxPropertiesLessThanMinProperties(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(minProperties: 5, maxProperties: 1);
+        new With(minProperties: 5, maxProperties: 1);
     }
 
     #[Test]
     public function validDependentRequired(): void
     {
-        $toolParameter = new ToolParameter(dependentRequired: true);
+        $toolParameter = new With(dependentRequired: true);
         self::assertTrue($toolParameter->dependentRequired);
     }
 
     #[Test]
     public function validCombination(): void
     {
-        $toolParameter = new ToolParameter(
+        $toolParameter = new With(
             enum: ['value1', 'value2'],
             const: 'constant',
             pattern: '/^[a-z]+$/',
@@ -244,13 +244,13 @@ final class ToolParameterTest extends TestCase
             dependentRequired: true
         );
 
-        self::assertInstanceOf(ToolParameter::class, $toolParameter);
+        self::assertInstanceOf(With::class, $toolParameter);
     }
 
     #[Test]
     public function invalidCombination(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ToolParameter(minLength: -1, maxLength: -2);
+        new With(minLength: -1, maxLength: -2);
     }
 }

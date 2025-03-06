@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\With;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
 #[UsesClass(ParameterAnalyzer::class)]
-#[UsesClass(ToolParameter::class)]
+#[UsesClass(With::class)]
 final class ParameterAnalyzerTest extends TestCase
 {
     private ParameterAnalyzer $analyzer;

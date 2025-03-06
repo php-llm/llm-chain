@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\Chain\ToolBox\Attribute;
 use Webmozart\Assert\Assert;
 
 #[\Attribute(\Attribute::TARGET_PARAMETER)]
-final readonly class ToolParameter
+final readonly class With
 {
     /**
      * @param list<int|string>|null    $enum
