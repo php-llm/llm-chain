@@ -9,5 +9,8 @@ $finder = (new Finder())
 
 return (new Config())
     ->setParallelConfig(ParallelConfigFactory::detect())
-    ->setRules(['@Symfony' => true])
+    ->setRules([
+        '@Symfony' => true,
+        'heredoc_indentation' => ['indentation' => 'start_plus_one'],
+    ])
     ->setFinder($finder);

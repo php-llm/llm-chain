@@ -24,13 +24,13 @@ $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $llm = new GPT(GPT::O1_PREVIEW);
 
 $prompt = <<<PROMPT
-I want to build a Symfony app in PHP 8.2 that takes user questions and looks them
-up in a database where they are mapped to answers. If there is close match, it
-retrieves the matched answer. If there isn't, it asks the user to provide an answer
-and stores the question/answer pair in the database. Make a plan for the directory 
-structure you'll need, then return each file in full. Only supply your reasoning 
-at the beginning and end, not throughout the code.
-PROMPT;
+    I want to build a Symfony app in PHP 8.2 that takes user questions and looks them
+    up in a database where they are mapped to answers. If there is close match, it
+    retrieves the matched answer. If there isn't, it asks the user to provide an answer
+    and stores the question/answer pair in the database. Make a plan for the directory 
+    structure you'll need, then return each file in full. Only supply your reasoning 
+    at the beginning and end, not throughout the code.
+    PROMPT;
 
 $response = (new Chain($platform, $llm))->call(new MessageBag(Message::ofUser($prompt)));
 

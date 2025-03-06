@@ -28,10 +28,10 @@ $toolBox = new ToolBox(new ToolAnalyzer(), [$wikipedia]);
 $processor = new ChainProcessor($toolBox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 $messages = new MessageBag(Message::ofUser(<<<TXT
-    First, define unicorn in 30 words.
-    Then lookup at Wikipedia what the irish history looks like in 2 sentences.
-    Please tell me before you call tools.
-TXT));
+        First, define unicorn in 30 words.
+        Then lookup at Wikipedia what the irish history looks like in 2 sentences.
+        Please tell me before you call tools.
+    TXT));
 $response = $chain->call($messages, [
     'stream' => true, // enable streaming of response text
 ]);
