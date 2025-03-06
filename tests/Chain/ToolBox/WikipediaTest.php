@@ -24,20 +24,20 @@ final class WikipediaTest extends TestCase
 
         $actual = $wikipedia->search('current secretary of the united nations');
         $expected = <<<EOT
-            Articles with the following titles were found on Wikipedia:
-             - Under-Secretary-General of the United Nations
-             - United Nations secretary-general selection
-             - List of current permanent representatives to the United Nations
-             - United Nations
-             - United Nations Secretariat
-             - Flag of the United Nations
-             - List of current members of the United States House of Representatives
-             - Member states of the United Nations
-             - Official languages of the United Nations
-             - United States Secretary of State
+        Articles with the following titles were found on Wikipedia:
+         - Under-Secretary-General of the United Nations
+         - United Nations secretary-general selection
+         - List of current permanent representatives to the United Nations
+         - United Nations
+         - United Nations Secretariat
+         - Flag of the United Nations
+         - List of current members of the United States House of Representatives
+         - Member states of the United Nations
+         - Official languages of the United Nations
+         - United States Secretary of State
             
-            Use the title of the article with tool "wikipedia_article" to load the content.
-            EOT;
+        Use the title of the article with tool "wikipedia_article" to load the content.
+        EOT;
 
         static::assertSame($expected, $actual);
     }
@@ -66,9 +66,9 @@ final class WikipediaTest extends TestCase
 
         $actual = $wikipedia->article('Secretary-General of the United Nations');
         $expected = <<<EOT
-            This is the content of article "Secretary-General of the United Nations":
-            The secretary-general of the United Nations (UNSG or UNSECGEN) is the chief administrative officer of the United Nations and head of the United Nations Secretariat, one of the six principal organs of the United Nations. And so on.
-            EOT;
+        This is the content of article "Secretary-General of the United Nations":
+        The secretary-general of the United Nations (UNSG or UNSECGEN) is the chief administrative officer of the United Nations and head of the United Nations Secretariat, one of the six principal organs of the United Nations. And so on.
+        EOT;
 
         static::assertSame($expected, $actual);
     }
@@ -83,11 +83,11 @@ final class WikipediaTest extends TestCase
 
         $actual = $wikipedia->article('United Nations secretary-general');
         $expected = <<<EOT
-            The article "United Nations secretary-general" redirects to article "Secretary-General of the United Nations".
+        The article "United Nations secretary-general" redirects to article "Secretary-General of the United Nations".
             
-            This is the content of article "Secretary-General of the United Nations":
-            The secretary-general of the United Nations (UNSG or UNSECGEN) is the chief administrative officer of the United Nations and head of the United Nations Secretariat, one of the six principal organs of the United Nations. And so on.
-            EOT;
+        This is the content of article "Secretary-General of the United Nations":
+        The secretary-general of the United Nations (UNSG or UNSECGEN) is the chief administrative officer of the United Nations and head of the United Nations Secretariat, one of the six principal organs of the United Nations. And so on.
+        EOT;
 
         static::assertSame($expected, $actual);
     }
