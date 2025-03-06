@@ -216,30 +216,30 @@ final class ParameterAnalyzerTest extends TestCase
 
         yield 'multi line doc block with description and other tags' => [
             'docComment' => <<<'TEXT'
-                /**
-                 * @param string $myParam The description
-                 * @return void
-                 */
-            TEXT,
+                    /**
+                     * @param string $myParam The description
+                     * @return void
+                     */
+                TEXT,
             'expectedResult' => 'The description',
         ];
 
         yield 'multi line doc block with multiple parameters' => [
             'docComment' => <<<'TEXT'
-                /**
-                 * @param string $myParam The description
-                 * @param string $anotherParam The wrong description
-                 */
-            TEXT,
+                    /**
+                     * @param string $myParam The description
+                     * @param string $anotherParam The wrong description
+                     */
+                TEXT,
             'expectedResult' => 'The description',
         ];
 
         yield 'multi line doc block with parameter that is not searched for' => [
             'docComment' => <<<'TEXT'
-                /**
-                 * @param string $unknownParam The description
-                 */
-            TEXT,
+                    /**
+                     * @param string $unknownParam The description
+                     */
+                TEXT,
             'expectedResult' => '',
         ];
     }

@@ -40,21 +40,21 @@ class ResponseConverterTest extends TestCase
     private function getEmbeddingStub(): string
     {
         return <<<'JSON'
-        {
-          "object": "list",
-          "data": [
             {
-              "object": "embedding",
-              "index": 0,
-              "embedding": [0.3, 0.4, 0.4]
-            },
-            {
-              "object": "embedding",
-              "index": 1,
-              "embedding": [0.0, 0.0, 0.2]
+              "object": "list",
+              "data": [
+                {
+                  "object": "embedding",
+                  "index": 0,
+                  "embedding": [0.3, 0.4, 0.4]
+                },
+                {
+                  "object": "embedding",
+                  "index": 1,
+                  "embedding": [0.0, 0.0, 0.2]
+                }
+              ]
             }
-          ]
-        }
-        JSON;
+            JSON;
     }
 }
