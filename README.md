@@ -25,7 +25,7 @@ See [examples](examples) folder to run example implementations using this librar
 Depending on the example you need to export different environment variables
 for API keys or deployment configurations or create a `.env.local` based on `.env` file.
 
-To run all examples, use `make run-all-examples` or `php example`.
+To run all examples, use `make run-examples` or `php example`.
 
 For a more sophisticated demo, see the [Symfony Demo Application](https://github.com/php-llm/symfony-demo).
 
