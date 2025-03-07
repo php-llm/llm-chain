@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Chain\ToolBox\Tool;
 
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\With;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsTool(name: 'weather_current', description: 'get current weather for a location', method: 'current')]
@@ -94,7 +94,7 @@ final readonly class OpenMeteo
     public function forecast(
         float $latitude,
         float $longitude,
-        #[ToolParameter(minimum: 1, maximum: 16)]
+        #[With(minimum: 1, maximum: 16)]
         int $days = 7,
     ): array {
         $response = $this->httpClient->request('GET', 'https://api.open-meteo.com/v1/forecast', [

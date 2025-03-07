@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\ToolBox;
 
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
+use PhpLlm\LlmChain\Chain\ToolBox\Attribute\With;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 
 /**
@@ -81,7 +81,7 @@ final class ParameterAnalyzer
             ];
 
             // Check for ToolParameter attributes
-            $attributes = $parameter->getAttributes(ToolParameter::class);
+            $attributes = $parameter->getAttributes(With::class);
             if (count($attributes) > 0) {
                 $attributeState = array_filter((array) $attributes[0]->newInstance(), fn ($value) => null !== $value);
                 $property = array_merge($property, $attributeState);
