@@ -671,7 +671,8 @@ final class MyProcessor implements OutputProcessor, ChainAwareProcessor
 
 ## Contributions
 
-Contributions are always welcome, so feel free to join the development of this library.
+Contributions are always welcome, so feel free to join the development of this library. To get started, please read the
+[contribution guidelines](CONTRIBUTING.md).
 
 ### Current Contributors
 
