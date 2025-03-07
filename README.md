@@ -352,7 +352,7 @@ $messages = new MessageBag(
     Message::forSystem(<<<PROMPT
         Please answer all user questions only using the similary_search tool. Do not add information and if you cannot
         find an answer, say so.
-        PROMPT>>>),
+        PROMPT),
     Message::ofUser('...') // The user's question.
 );
 $response = $chain->call($messages);
