@@ -177,8 +177,16 @@ You can configure the method to be called by the LLM with the `#[AsTool]` attrib
 ```php
 use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
 
-#[AsTool(name: 'weather_current', description: 'get current weather for a location', method: 'current')]
-#[AsTool(name: 'weather_forecast', description: 'get weather forecast for a location', method: 'forecast')]
+#[AsTool(
+    name: 'weather_current',
+    description: 'get current weather for a location',
+    method: 'current',
+)]
+#[AsTool(
+    name: 'weather_forecast',
+    description: 'get weather forecast for a location',
+    method: 'forecast',
+)]
 final readonly class OpenMeteo
 {
     public function current(float $latitude, float $longitude): array
