@@ -34,8 +34,8 @@ check if your code is following the coding standards and if all tests are passin
 can use the following commands:
 
 ```bash
-make qa
-make qa-lowest
+make ci-stable # execute all checks with stable dependencies
+make ci-lowest # execute all checks with lowest dependencies
 ``` 
 
 Commit messages should follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
