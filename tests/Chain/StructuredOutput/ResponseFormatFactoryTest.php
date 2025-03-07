@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\StructuredOutput;
 
+use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
+use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\StructuredOutput\ResponseFormatFactory;
-use PhpLlm\LlmChain\Chain\StructuredOutput\SchemaFactory;
 use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -13,7 +14,8 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ResponseFormatFactory::class)]
-#[UsesClass(SchemaFactory::class)]
+#[UsesClass(DescriptionParser::class)]
+#[UsesClass(Factory::class)]
 final class ResponseFormatFactoryTest extends TestCase
 {
     #[Test]
@@ -24,7 +26,6 @@ final class ResponseFormatFactoryTest extends TestCase
             'json_schema' => [
                 'name' => 'User',
                 'schema' => [
-                    'title' => 'User',
                     'type' => 'object',
                     'properties' => [
                         'id' => ['type' => 'integer'],

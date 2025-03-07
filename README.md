@@ -209,8 +209,8 @@ partially support by LLMs like GPT.
 
 To leverage this, configure the `#[With]` attribute on the method arguments of your tool:
 ```php
+use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\ToolParameter;
 
 #[AsTool('my_tool', 'Example tool with parameters requirements.')]
 final class MyTool
@@ -230,7 +230,7 @@ final class MyTool
 }
 ```
 
-See attribute class [With](src/Chain/ToolBox/Attribute/With.php) for all available options.
+See attribute class [With](src/Chain/JsonSchema/Attribute/With.php) for all available options.
 
 > [!NOTE]
 > Please be aware, that this is only converted in a JSON Schema for the LLM to respect, but not validated by LLM Chain.

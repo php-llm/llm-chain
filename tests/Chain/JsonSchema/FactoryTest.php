@@ -2,40 +2,44 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
+namespace PhpLlm\LlmChain\Tests\Chain\JsonSchema;
 
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\With;
-use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
-use PhpLlm\LlmChain\Chain\ToolBox\ParameterAnalyzer;
+use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
+use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
+use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
+use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\MathReasoning;
+use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\Step;
+use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\User;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWithToolParameterAttribute;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ParameterAnalyzer::class)]
-#[UsesClass(AsTool::class)]
-#[UsesClass(Metadata::class)]
-#[UsesClass(ParameterAnalyzer::class)]
+#[CoversClass(Factory::class)]
 #[UsesClass(With::class)]
-final class ParameterAnalyzerTest extends TestCase
+#[UsesClass(DescriptionParser::class)]
+final class FactoryTest extends TestCase
 {
-    private ParameterAnalyzer $analyzer;
+    private Factory $factory;
 
     protected function setUp(): void
     {
-        $this->analyzer = new ParameterAnalyzer();
+        $this->factory = new Factory();
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->factory);
     }
 
     #[Test]
-    public function detectParameterDefinitionRequired(): void
+    public function buildParametersDefinitionRequired(): void
     {
-        $actual = $this->analyzer->getDefinition(ToolRequiredParams::class, 'bar');
+        $actual = $this->factory->buildParameters(ToolRequiredParams::class, 'bar');
         $expected = [
             'type' => 'object',
             'properties' => [
@@ -48,19 +52,17 @@ final class ParameterAnalyzerTest extends TestCase
                     'description' => 'A number given to the tool',
                 ],
             ],
-            'required' => [
-                'text',
-                'number',
-            ],
+            'required' => ['text', 'number'],
+            'additionalProperties' => false,
         ];
 
         self::assertSame($expected, $actual);
     }
 
     #[Test]
-    public function detectParameterDefinitionRequiredWithAdditionalToolParameterAttribute(): void
+    public function buildParametersDefinitionRequiredWithAdditionalToolParameterAttribute(): void
     {
-        $actual = $this->analyzer->getDefinition(ToolWithToolParameterAttribute::class, '__invoke');
+        $actual = $this->factory->buildParameters(ToolWithToolParameterAttribute::class, '__invoke');
         $expected = [
             'type' => 'object',
             'properties' => [
@@ -102,6 +104,7 @@ final class ParameterAnalyzerTest extends TestCase
                 ],
                 'products' => [
                     'type' => 'array',
+                    'items' => ['type' => 'string'],
                     'description' => 'The products given to the tool',
                     'minItems' => 1,
                     'maxItems' => 10,
@@ -110,7 +113,7 @@ final class ParameterAnalyzerTest extends TestCase
                     'maxContains' => 10,
                 ],
                 'shippingAddress' => [
-                    'type' => 'object',
+                    'type' => 'string',
                     'description' => 'The shipping address given to the tool',
                     'required' => true,
                     'minProperties' => 1,
@@ -128,15 +131,16 @@ final class ParameterAnalyzerTest extends TestCase
                 'products',
                 'shippingAddress',
             ],
+            'additionalProperties' => false,
         ];
 
         self::assertSame($expected, $actual);
     }
 
     #[Test]
-    public function detectParameterDefinitionOptional(): void
+    public function buildParametersDefinitionOptional(): void
     {
-        $actual = $this->analyzer->getDefinition(ToolOptionalParam::class, 'bar');
+        $actual = $this->factory->buildParameters(ToolOptionalParam::class, 'bar');
         $expected = [
             'type' => 'object',
             'properties' => [
@@ -149,98 +153,92 @@ final class ParameterAnalyzerTest extends TestCase
                     'description' => 'A number given to the tool',
                 ],
             ],
-            'required' => [
-                'text',
-            ],
+            'required' => ['text', 'number'],
+            'additionalProperties' => false,
         ];
 
         self::assertSame($expected, $actual);
     }
 
     #[Test]
-    public function detectParameterDefinitionNone(): void
+    public function buildParametersDefinitionNone(): void
     {
-        $actual = $this->analyzer->getDefinition(ToolNoParams::class, '__invoke');
+        $actual = $this->factory->buildParameters(ToolNoParams::class, '__invoke');
 
         self::assertNull($actual);
     }
 
     #[Test]
-    public function getParameterDescriptionWithoutDocBlock(): void
+    public function buildPropertiesForUserClass(): void
     {
-        $targetMethod = self::createStub(\ReflectionMethod::class);
-        $targetMethod->method('getDocComment')->willReturn(false);
+        $expected = [
+            'type' => 'object',
+            'properties' => [
+                'id' => ['type' => 'integer'],
+                'name' => [
+                    'type' => 'string',
+                    'description' => 'The name of the user in lowercase',
+                ],
+                'createdAt' => [
+                    'type' => 'string',
+                    'format' => 'date-time',
+                ],
+                'isActive' => ['type' => 'boolean'],
+                'age' => ['type' => ['integer', 'null']],
+            ],
+            'required' => ['id', 'name', 'createdAt', 'isActive'],
+            'additionalProperties' => false,
+        ];
 
-        $methodToTest = new \ReflectionMethod(ParameterAnalyzer::class, 'getParameterDescription');
+        $actual = $this->factory->buildProperties(User::class);
 
-        self::assertSame(
-            '',
-            $methodToTest->invoke(
-                $this->analyzer,
-                $targetMethod,
-                'myParam',
-            )
-        );
+        self::assertSame($expected, $actual);
     }
 
     #[Test]
-    #[DataProvider('provideGetParameterDescriptionCases')]
-    public function getParameterDescriptionWithDocs(string $docComment, string $expectedResult): void
+    public function buildPropertiesForMathReasoningClass(): void
     {
-        $targetMethod = self::createStub(\ReflectionMethod::class);
-        $targetMethod->method('getDocComment')->willReturn($docComment);
+        $expected = [
+            'type' => 'object',
+            'properties' => [
+                'steps' => [
+                    'type' => 'array',
+                    'items' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'explanation' => ['type' => 'string'],
+                            'output' => ['type' => 'string'],
+                        ],
+                        'required' => ['explanation', 'output'],
+                        'additionalProperties' => false,
+                    ],
+                ],
+                'finalAnswer' => ['type' => 'string'],
+            ],
+            'required' => ['steps', 'finalAnswer'],
+            'additionalProperties' => false,
+        ];
 
-        $methodToTest = new \ReflectionMethod(ParameterAnalyzer::class, 'getParameterDescription');
+        $actual = $this->factory->buildProperties(MathReasoning::class);
 
-        self::assertSame(
-            $expectedResult,
-            $methodToTest->invoke(
-                $this->analyzer,
-                $targetMethod,
-                'myParam',
-            )
-        );
+        self::assertSame($expected, $actual);
     }
 
-    public static function provideGetParameterDescriptionCases(): \Generator
+    #[Test]
+    public function buildPropertiesForStepClass(): void
     {
-        yield 'empty doc block' => [
-            'docComment' => '',
-            'expectedResult' => '',
+        $expected = [
+            'type' => 'object',
+            'properties' => [
+                'explanation' => ['type' => 'string'],
+                'output' => ['type' => 'string'],
+            ],
+            'required' => ['explanation', 'output'],
+            'additionalProperties' => false,
         ];
 
-        yield 'single line doc block with description' => [
-            'docComment' => '/** @param string $myParam The description */',
-            'expectedResult' => 'The description',
-        ];
+        $actual = $this->factory->buildProperties(Step::class);
 
-        yield 'multi line doc block with description and other tags' => [
-            'docComment' => <<<'TEXT'
-                    /**
-                     * @param string $myParam The description
-                     * @return void
-                     */
-                TEXT,
-            'expectedResult' => 'The description',
-        ];
-
-        yield 'multi line doc block with multiple parameters' => [
-            'docComment' => <<<'TEXT'
-                    /**
-                     * @param string $myParam The description
-                     * @param string $anotherParam The wrong description
-                     */
-                TEXT,
-            'expectedResult' => 'The description',
-        ];
-
-        yield 'multi line doc block with parameter that is not searched for' => [
-            'docComment' => <<<'TEXT'
-                    /**
-                     * @param string $unknownParam The description
-                     */
-                TEXT,
-            'expectedResult' => '',
-        ];
+        self::assertSame($expected, $actual);
     }
 }

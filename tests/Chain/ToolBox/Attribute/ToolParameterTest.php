@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\ToolBox\Attribute;
 
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\With;
+use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

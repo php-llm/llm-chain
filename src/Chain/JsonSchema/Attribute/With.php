@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Chain\ToolBox\Attribute;
+namespace PhpLlm\LlmChain\Chain\JsonSchema\Attribute;
 
 use Webmozart\Assert\Assert;
 
