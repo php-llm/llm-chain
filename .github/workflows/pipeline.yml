@@ -51,7 +51,7 @@ jobs:
         with:
           task_types: '["feat", "fix", "docs", "test", "ci", "style", "refactor", "perf", "chore", "revert"]'
           add_label: 'true'
-          custom_labels: '{"feat": "feature", "fix": "fix", "docs": "documentation", "test": "test", "ci": "CI/CD", "style": "codestyle", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert"}'
+          custom_labels: '{"feat": "feature", "fix": "bug", "docs": "documentation", "test": "test", "ci": "CI/CD", "style": "codestyle", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert"}'
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
