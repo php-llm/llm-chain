@@ -11,7 +11,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * Tool integration of tavily.com.
  */
 #[AsTool('tavily_search', description: 'search for information on the internet', method: 'search')]
-#[AsTool('tavily_extract', description: 'fetch content from a website', method: 'extract')]
+#[AsTool('tavily_extract', description: 'fetch content from websites', method: 'extract')]
 final readonly class Tavily
 {
     /**
@@ -40,15 +40,13 @@ final readonly class Tavily
     }
 
     /**
-     * TODO: Support list of URLs.
-     *
-     * @param string $url URL to fetch information from
+     * @param string[] $urls URLs to fetch information from
      */
-    public function extract(string $url): string
+    public function extract(array $urls): string
     {
         $response = $this->httpClient->request('POST', 'https://api.tavily.com/extract', [
             'json' => [
-                'urls' => [$url],
+                'urls' => $urls,
                 'api_key' => $this->apiKey,
             ],
         ]);
