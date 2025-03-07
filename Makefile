@@ -13,7 +13,7 @@ rector:
 	vendor/bin/rector
 
 phpstan:
-	vendor/bin/phpstan
+	vendor/bin/phpstan --memory-limit=-1
 
 tests:
 	vendor/bin/phpunit
