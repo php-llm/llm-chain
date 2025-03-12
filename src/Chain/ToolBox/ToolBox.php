@@ -6,6 +6,7 @@ namespace PhpLlm\LlmChain\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolNotFoundException;
+use PhpLlm\LlmChain\Chain\ToolBox\MetadataFactory\ReflectionFactory;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -13,7 +14,7 @@ use Psr\Log\NullLogger;
 final class ToolBox implements ToolBoxInterface
 {
     /**
-     * @var list<object>
+     * @var list<mixed>
      */
     private readonly array $tools;
 
@@ -23,10 +24,10 @@ final class ToolBox implements ToolBoxInterface
     private array $map;
 
     /**
-     * @param iterable<object> $tools
+     * @param iterable<mixed> $tools
      */
     public function __construct(
-        private readonly ToolAnalyzer $toolAnalyzer,
+        private readonly MetadataFactory $metadataFactory,
         iterable $tools,
         private readonly LoggerInterface $logger = new NullLogger(),
     ) {
@@ -35,7 +36,7 @@ final class ToolBox implements ToolBoxInterface
 
     public static function create(object ...$tools): self
     {
-        return new self(new ToolAnalyzer(), $tools);
+        return new self(new ReflectionFactory(), $tools);
     }
 
     public function getMap(): array
@@ -46,7 +47,7 @@ final class ToolBox implements ToolBoxInterface
 
         $map = [];
         foreach ($this->tools as $tool) {
-            foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
+            foreach ($this->metadataFactory->getMetadata($tool::class) as $metadata) {
                 $map[] = $metadata;
             }
         }
@@ -57,7 +58,7 @@ final class ToolBox implements ToolBoxInterface
     public function execute(ToolCall $toolCall): mixed
     {
         foreach ($this->tools as $tool) {
-            foreach ($this->toolAnalyzer->getMetadata($tool::class) as $metadata) {
+            foreach ($this->metadataFactory->getMetadata($tool) as $metadata) {
                 if ($metadata->name !== $toolCall->name) {
                     continue;
                 }
