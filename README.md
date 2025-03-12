@@ -137,14 +137,13 @@ Tools are services that can be called by the LLM to provide additional features 
 Tool calling can be enabled by registering the processors in the chain:
 ```php
 use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 
 // Platform & LLM instantiation
 
 $yourTool = new YourTool();
 
-$toolBox = new ToolBox(new ToolAnalyzer(), [$yourTool]);
+$toolBox = ToolBox::create($yourTool);
 $toolProcessor = new ChainProcessor($toolBox);
 
 $chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
@@ -338,13 +337,12 @@ use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\ToolBox\Tool\SimilaritySearch;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 
 // Initialize Platform & Models
 
 $similaritySearch = new SimilaritySearch($embeddings, $store);
-$toolBox = new ToolBox(new ToolAnalyzer(), [$similaritySearch]);
+$toolBox = ToolBox::create($similaritySearch);
 $processor = new ChainProcessor($toolBox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 

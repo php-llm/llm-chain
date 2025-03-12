@@ -8,7 +8,6 @@ use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\ToolBox\Tool\SimilaritySearch;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\TextDocument;
@@ -62,7 +61,7 @@ $store->initialize();
 $llm = new GPT(GPT::GPT_4O_MINI);
 
 $similaritySearch = new SimilaritySearch($platform, $embeddings, $store);
-$toolBox = new ToolBox(new ToolAnalyzer(), [$similaritySearch]);
+$toolBox = ToolBox::create($similaritySearch);
 $processor = new ChainProcessor($toolBox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 

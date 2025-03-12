@@ -5,7 +5,6 @@ use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\ToolBox\Tool\Tavily;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
@@ -23,7 +22,7 @@ $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $llm = new GPT(GPT::GPT_4O_MINI);
 
 $tavily = new Tavily(HttpClient::create(), $_ENV['TAVILY_API_KEY']);
-$toolBox = new ToolBox(new ToolAnalyzer(), [$tavily]);
+$toolBox = ToolBox::create($tavily);
 $processor = new ChainProcessor($toolBox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 

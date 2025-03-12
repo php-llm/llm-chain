@@ -5,7 +5,6 @@ use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\ToolBox\Tool\Wikipedia;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
@@ -24,7 +23,7 @@ $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $llm = new GPT(GPT::GPT_4O_MINI);
 
 $wikipedia = new Wikipedia(HttpClient::create());
-$toolBox = new ToolBox(new ToolAnalyzer(), [$wikipedia]);
+$toolBox = ToolBox::create($wikipedia);
 $processor = new ChainProcessor($toolBox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 $messages = new MessageBag(Message::ofUser(<<<TXT
