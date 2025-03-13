@@ -23,7 +23,7 @@ $chain = new Chain($platform, $llm);
 $messages = new MessageBag(
     Message::ofUser(
         'What is this recording about?',
-        new Audio(dirname(__DIR__).'/tests/Fixture/audio.mp3'),
+        Audio::fromFile(dirname(__DIR__).'/tests/Fixture/audio.mp3'),
     ),
 );
 $response = $chain->call($messages);
