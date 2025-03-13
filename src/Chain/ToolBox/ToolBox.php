@@ -33,6 +33,11 @@ final class ToolBox implements ToolBoxInterface
         $this->tools = $tools instanceof \Traversable ? iterator_to_array($tools) : $tools;
     }
 
+    public static function create(object ...$tools): self
+    {
+        return new self(new ToolAnalyzer(), $tools);
+    }
+
     public function getMap(): array
     {
         if (isset($this->map)) {

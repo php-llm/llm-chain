@@ -7,7 +7,6 @@ use PhpLlm\LlmChain\Chain\StructuredOutput\ChainProcessor as StructuredOutputPro
 use PhpLlm\LlmChain\Chain\StructuredOutput\ResponseFormatFactory;
 use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor as ToolProcessor;
 use PhpLlm\LlmChain\Chain\ToolBox\Tool\Clock;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
@@ -29,7 +28,7 @@ $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $llm = new GPT(GPT::GPT_4O_MINI);
 
 $clock = new Clock(new SymfonyClock());
-$toolBox = new ToolBox(new ToolAnalyzer(), [$clock]);
+$toolBox = ToolBox::create($clock);
 $toolProcessor = new ToolProcessor($toolBox);
 $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 $structuredOutputProcessor = new StructuredOutputProcessor(new ResponseFormatFactory(), $serializer);
