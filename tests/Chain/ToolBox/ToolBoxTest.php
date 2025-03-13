@@ -11,7 +11,7 @@ use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
+use PhpLlm\LlmChain\Chain\ToolBox\MetadataFactory\ReflectionFactory;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolException;
@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ToolCall::class)]
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
-#[UsesClass(ToolAnalyzer::class)]
+#[UsesClass(ReflectionFactory::class)]
 #[UsesClass(Factory::class)]
 #[UsesClass(DescriptionParser::class)]
 #[UsesClass(ToolConfigurationException::class)]
@@ -41,7 +41,7 @@ final class ToolBoxTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->toolBox = new ToolBox(new ToolAnalyzer(), [
+        $this->toolBox = new ToolBox(new ReflectionFactory(), [
             new ToolRequiredParams(),
             new ToolOptionalParam(),
             new ToolNoParams(),
@@ -132,7 +132,7 @@ final class ToolBoxTest extends TestCase
         self::expectException(ToolConfigurationException::class);
         self::expectExceptionMessage('Method "foo" not found in tool "PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured".');
 
-        $toolBox = new ToolBox(new ToolAnalyzer(), [new ToolMisconfigured()]);
+        $toolBox = new ToolBox(new ReflectionFactory(), [new ToolMisconfigured()]);
 
         $toolBox->execute(new ToolCall('call_1234', 'tool_misconfigured'));
     }

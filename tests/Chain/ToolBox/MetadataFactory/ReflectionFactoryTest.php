@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
+namespace PhpLlm\LlmChain\Tests\Chain\ToolBox\MetadataFactory;
 
 use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
 use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolAnalyzer;
+use PhpLlm\LlmChain\Chain\ToolBox\MetadataFactory\ReflectionFactory;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWrong;
@@ -18,33 +18,54 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ToolAnalyzer::class)]
+#[CoversClass(ReflectionFactory::class)]
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
 #[UsesClass(Factory::class)]
 #[UsesClass(DescriptionParser::class)]
 #[UsesClass(ToolConfigurationException::class)]
-final class ToolAnalyzerTest extends TestCase
+final class ReflectionFactoryTest extends TestCase
 {
-    private ToolAnalyzer $toolAnalyzer;
+    private ReflectionFactory $factory;
 
     protected function setUp(): void
     {
-        $this->toolAnalyzer = new ToolAnalyzer();
+        $this->factory = new ReflectionFactory();
+    }
+
+    #[Test]
+    public function invalidReferenceNonExistingClass(): void
+    {
+        $this->expectException(ToolConfigurationException::class);
+        iterator_to_array($this->factory->getMetadata('invalid'));
+    }
+
+    #[Test]
+    public function invalidReferenceNonInteger(): void
+    {
+        $this->expectException(ToolConfigurationException::class);
+        iterator_to_array($this->factory->getMetadata(1234));
+    }
+
+    #[Test]
+    public function invalidReferenceCallable(): void
+    {
+        $this->expectException(ToolConfigurationException::class);
+        iterator_to_array($this->factory->getMetadata(fn () => null));
     }
 
     #[Test]
     public function withoutAttribute(): void
     {
         $this->expectException(ToolConfigurationException::class);
-        iterator_to_array($this->toolAnalyzer->getMetadata(ToolWrong::class));
+        iterator_to_array($this->factory->getMetadata(ToolWrong::class));
     }
 
     #[Test]
     public function getDefinition(): void
     {
         /** @var Metadata[] $metadatas */
-        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(ToolRequiredParams::class));
+        $metadatas = iterator_to_array($this->factory->getMetadata(ToolRequiredParams::class));
 
         self::assertToolConfiguration(
             metadata: $metadatas[0],
@@ -73,7 +94,7 @@ final class ToolAnalyzerTest extends TestCase
     #[Test]
     public function getDefinitionWithMultiple(): void
     {
-        $metadatas = iterator_to_array($this->toolAnalyzer->getMetadata(ToolMultiple::class));
+        $metadatas = iterator_to_array($this->factory->getMetadata(ToolMultiple::class));
 
         self::assertCount(2, $metadatas);
 
