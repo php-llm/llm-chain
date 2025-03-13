@@ -16,45 +16,85 @@ use PHPUnit\Framework\TestCase;
 final class AudioTest extends TestCase
 {
     #[Test]
-    public function constructWithValidPath(): void
+    public function constructWithValidData(): void
     {
-        $audio = new Audio(dirname(__DIR__, 3).'/Fixture/audio.mp3');
+        $audio = new Audio('base64data', 'mp3');
 
-        self::assertSame(dirname(__DIR__, 3).'/Fixture/audio.mp3', $audio->path);
+        self::assertSame('base64data', $audio->data);
+        self::assertSame('mp3', $audio->format);
     }
 
     #[Test]
-    #[DataProvider('provideValidPaths')]
-    public function jsonSerializeWithValid(string $path, array $expected): void
+    public function fromDataUrlWithValidUrl(): void
     {
-        $audio = new Audio($path);
+        $dataUrl = 'data:audio/mp3;base64,SUQzBAAAAAAAfVREUkMAAAAMAAADMj';
+        $audio = Audio::fromDataUrl($dataUrl);
 
-        $expected = [
-            'type' => 'input_audio',
-            'input_audio' => $expected,
-        ];
+        self::assertSame('SUQzBAAAAAAAfVREUkMAAAAMAAADMj', $audio->data);
+        self::assertSame('mp3', $audio->format);
+    }
 
+    #[Test]
+    public function fromDataUrlWithInvalidUrl(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid audio data URL format.');
+
+        Audio::fromDataUrl('invalid-url');
+    }
+
+    #[Test]
+    public function fromFileWithValidPath(): void
+    {
+        $audio = Audio::fromFile(dirname(__DIR__, 3).'/Fixture/audio.mp3');
+
+        self::assertSame('mp3', $audio->format);
+        self::assertNotEmpty($audio->data);
+    }
+
+    #[Test]
+    public function fromFileWithInvalidPath(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The file "foo.mp3" does not exist or is not readable.');
+
+        Audio::fromFile('foo.mp3');
+    }
+
+    #[Test]
+    #[DataProvider('provideAudioData')]
+    public function jsonSerializeReturnsCorrectFormat(string $data, string $format, array $expected): void
+    {
+        $audio = new Audio($data, $format);
         $actual = $audio->jsonSerialize();
-
-        // shortening the base64 data
-        $actual['input_audio']['data'] = substr($actual['input_audio']['data'], 0, 30);
 
         self::assertSame($expected, $actual);
     }
 
-    public static function provideValidPaths(): \Generator
+    public static function provideAudioData(): \Generator
     {
-        yield 'mp3' => [dirname(__DIR__, 3).'/Fixture/audio.mp3', [
-            'data' => 'SUQzBAAAAAAAfVREUkMAAAAMAAADMj', // shortened
-            'format' => 'mp3',
-        ]];
-    }
+        yield 'mp3 data' => [
+            'SUQzBAAAAAAAfVREUkMAAAAMAAADMj',
+            'mp3',
+            [
+                'type' => 'input_audio',
+                'input_audio' => [
+                    'data' => 'SUQzBAAAAAAAfVREUkMAAAAMAAADMj',
+                    'format' => 'mp3',
+                ],
+            ],
+        ];
 
-    #[Test]
-    public function constructWithInvalidPath(): void
-    {
-        $this->expectExceptionMessage('The file "foo.mp3" does not exist or is not readable.');
-
-        new Audio('foo.mp3');
+        yield 'wav data' => [
+            'UklGRiQAAABXQVZFZm10IBA=',
+            'wav',
+            [
+                'type' => 'input_audio',
+                'input_audio' => [
+                    'data' => 'UklGRiQAAABXQVZFZm10IBA=',
+                    'format' => 'wav',
+                ],
+            ],
+        ];
     }
 }

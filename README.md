@@ -521,7 +521,7 @@ use PhpLlm\LlmChain\Model\Message\MessageBag;
 $messages = new MessageBag(
     Message::ofUser(
         'What is this recording about?',
-        new Audio(dirname(__DIR__).'/tests/Fixture/audio.mp3'), // Path to an audio file
+        Audio:fromFile(dirname(__DIR__).'/tests/Fixture/audio.mp3'), // Path to an audio file
     ),
 );
 $response = $chain->call($messages);

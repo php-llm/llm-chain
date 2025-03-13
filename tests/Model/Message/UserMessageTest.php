@@ -52,7 +52,7 @@ final class UserMessageTest extends TestCase
     #[Test]
     public function hasAudioContentWithAudio(): void
     {
-        $message = new UserMessage(new Text('foo'), new Audio(dirname(__DIR__, 2).'/Fixture/audio.mp3'));
+        $message = new UserMessage(new Text('foo'), Audio::fromFile(dirname(__DIR__, 2).'/Fixture/audio.mp3'));
 
         self::assertTrue($message->hasAudioContent());
     }
