@@ -31,6 +31,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(SystemMessage::class)]
 #[UsesClass(UserMessage::class)]
 #[UsesClass(Text::class)]
+#[UsesClass(Metadata::class)]
 #[Small]
 final class SystemPromptInputProcessorTest extends TestCase
 {
