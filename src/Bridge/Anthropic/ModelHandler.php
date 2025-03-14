@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Anthropic;
 
+use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Exception\RuntimeException;
+use PhpLlm\LlmChain\Model\Message\AssistantMessage;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
+use PhpLlm\LlmChain\Model\Message\MessageInterface;
+use PhpLlm\LlmChain\Model\Message\ToolCallMessage;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\StreamResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
+use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
 use PhpLlm\LlmChain\Platform\ModelClient;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
 use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
@@ -40,12 +46,57 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
     {
         Assert::isInstanceOf($input, MessageBagInterface::class);
 
+        if (isset($options['tools'])) {
+            $tools = $options['tools'];
+            $options['tools'] = [];
+            /** @var Metadata $tool */
+            foreach ($tools as $tool) {
+                $toolDefinition = [
+                    'name' => $tool->name,
+                    'description' => $tool->description,
+                    'input_schema' => $tool->parameters ?? ['type' => 'object'],
+                ];
+                $options['tools'][] = $toolDefinition;
+            }
+            $options['tool_choice'] = ['type' => 'auto'];
+        }
+
         $system = $input->getSystemMessage();
         $body = array_merge($options, [
             'model' => $model->getVersion(),
             'system' => $system->content,
-            'messages' => $input->withoutSystemMessage(),
+            'messages' => $input->withoutSystemMessage()->jsonSerialize(),
         ]);
+
+        $body['messages'] = array_map(static function (MessageInterface $message) {
+            if ($message instanceof ToolCallMessage) {
+                return [
+                    'role' => 'user',
+                    'content' => [
+                        [
+                            'type' => 'tool_result',
+                            'tool_use_id' => $message->toolCall->id,
+                            'content' => $message->content,
+                        ],
+                    ],
+                ];
+            }
+            if ($message instanceof AssistantMessage && $message->hasToolCalls()) {
+                return [
+                    'role' => 'assistant',
+                    'content' => array_map(static function (ToolCall $toolCall) {
+                        return [
+                            'type' => 'tool_use',
+                            'id' => $toolCall->id,
+                            'name' => $toolCall->name,
+                            'input' => empty($toolCall->arguments) ? new \stdClass() : $toolCall->arguments,
+                        ];
+                    }, $message->toolCalls),
+                ];
+            }
+
+            return $message;
+        }, $body['messages']);
 
         return $this->httpClient->request('POST', 'https://api.anthropic.com/v1/messages', [
             'headers' => [
@@ -70,6 +121,16 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
 
         if (!isset($data['content'][0]['text'])) {
             throw new RuntimeException('Response content does not contain any text');
+        }
+
+        $toolCalls = [];
+        foreach ($data['content'] as $content) {
+            if ('tool_use' === $content['type']) {
+                $toolCalls[] = new ToolCall($content['id'], $content['name'], $content['input']);
+            }
+        }
+        if (!empty($toolCalls)) {
+            return new ToolCallResponse(...$toolCalls);
         }
 
         return new TextResponse($data['content'][0]['text']);
