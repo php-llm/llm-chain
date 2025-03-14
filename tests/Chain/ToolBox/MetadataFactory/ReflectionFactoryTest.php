@@ -69,7 +69,6 @@ final class ReflectionFactoryTest extends TestCase
 
         self::assertToolConfiguration(
             metadata: $metadatas[0],
-            className: ToolRequiredParams::class,
             name: 'tool_required_params',
             description: 'A tool with required parameters',
             method: 'bar',
@@ -102,7 +101,6 @@ final class ReflectionFactoryTest extends TestCase
 
         self::assertToolConfiguration(
             metadata: $first,
-            className: ToolMultiple::class,
             name: 'tool_hello_world',
             description: 'Function to say hello',
             method: 'hello',
@@ -121,7 +119,6 @@ final class ReflectionFactoryTest extends TestCase
 
         self::assertToolConfiguration(
             metadata: $second,
-            className: ToolMultiple::class,
             name: 'tool_required_params',
             description: 'Function to say a number',
             method: 'bar',
@@ -143,9 +140,8 @@ final class ReflectionFactoryTest extends TestCase
         );
     }
 
-    private function assertToolConfiguration(Metadata $metadata, string $className, string $name, string $description, string $method, array $parameters): void
+    private function assertToolConfiguration(Metadata $metadata, string $name, string $description, string $method, array $parameters): void
     {
-        self::assertSame($className, $metadata->className);
         self::assertSame($name, $metadata->name);
         self::assertSame($description, $metadata->description);
         self::assertSame($method, $metadata->method);

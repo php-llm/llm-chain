@@ -10,8 +10,6 @@ use PhpLlm\LlmChain\Chain\ToolBox\FaultTolerantToolBox;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBoxInterface;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
-use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
-use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -69,8 +67,8 @@ final class FaultTolerantToolBoxTest extends TestCase
             public function getMap(): array
             {
                 return [
-                    new Metadata(ToolNoParams::class, 'tool_no_params', 'A tool without parameters', '__invoke', null),
-                    new Metadata(ToolRequiredParams::class, 'tool_required_params', 'A tool with required parameters', 'bar', null),
+                    new Metadata('tool_no_params', 'A tool without parameters', '__invoke', null),
+                    new Metadata('tool_required_params', 'A tool with required parameters', 'bar', null),
                 ];
             }
 

@@ -45,7 +45,6 @@ final readonly class ReflectionFactory implements MetadataFactory
     {
         try {
             return new Metadata(
-                $className,
                 $attribute->name,
                 $attribute->description,
                 $attribute->method,

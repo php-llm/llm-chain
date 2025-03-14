@@ -15,8 +15,6 @@ use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\SystemMessage;
 use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
-use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
-use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
@@ -105,9 +103,8 @@ final class SystemPromptInputProcessorTest extends TestCase
                 public function getMap(): array
                 {
                     return [
-                        new Metadata(ToolNoParams::class, 'tool_no_params', 'A tool without parameters', '__invoke', null),
+                        new Metadata('tool_no_params', 'A tool without parameters', '__invoke', null),
                         new Metadata(
-                            ToolRequiredParams::class,
                             'tool_required_params',
                             <<<DESCRIPTION
                                 A tool with required parameters
