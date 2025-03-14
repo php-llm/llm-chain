@@ -11,11 +11,14 @@ use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
+use PhpLlm\LlmChain\Chain\ToolBox\MetadataFactory\ChainFactory;
+use PhpLlm\LlmChain\Chain\ToolBox\MetadataFactory\MemoryFactory;
 use PhpLlm\LlmChain\Chain\ToolBox\MetadataFactory\ReflectionFactory;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolException;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoAttribute1;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolOptionalParam;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
@@ -30,6 +33,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
 #[UsesClass(ReflectionFactory::class)]
+#[UsesClass(MemoryFactory::class)]
 #[UsesClass(Factory::class)]
 #[UsesClass(DescriptionParser::class)]
 #[UsesClass(ToolConfigurationException::class)]
@@ -166,5 +170,89 @@ final class ToolBoxTest extends TestCase
             'tool_required_params',
             ['text' => 'Hello', 'number' => 3],
         ];
+    }
+
+    #[Test]
+    public function toolBoxMapWithMemoryFactory(): void
+    {
+        $memoryFactory = (new MemoryFactory())
+            ->addTool(ToolNoAttribute1::class, 'happy_birthday', 'Generates birthday message');
+
+        $toolBox = new ToolBox($memoryFactory, [new ToolNoAttribute1()]);
+        $expected = [
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'happy_birthday',
+                    'description' => 'Generates birthday message',
+                    'parameters' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'name' => [
+                                'type' => 'string',
+                                'description' => 'the name of the person',
+                            ],
+                            'years' => [
+                                'type' => 'integer',
+                                'description' => 'the age of the person',
+                            ],
+                        ],
+                        'required' => ['name', 'years'],
+                        'additionalProperties' => false,
+                    ],
+                ],
+            ],
+        ];
+
+        self::assertSame(json_encode($expected), json_encode($toolBox->getMap()));
+    }
+
+    #[Test]
+    public function toolBoxExecutionWithMemoryFactory(): void
+    {
+        $memoryFactory = (new MemoryFactory())
+            ->addTool(ToolNoAttribute1::class, 'happy_birthday', 'Generates birthday message');
+
+        $toolBox = new ToolBox($memoryFactory, [new ToolNoAttribute1()]);
+        $response = $toolBox->execute(new ToolCall('call_1234', 'happy_birthday', ['name' => 'John', 'years' => 30]));
+
+        self::assertSame('Happy Birthday, John! You are 30 years old.', $response);
+    }
+
+    #[Test]
+    public function toolBoxMapWithOverrideViaChain(): void
+    {
+        $factory1 = (new MemoryFactory())
+            ->addTool(ToolOptionalParam::class, 'optional_param', 'Tool with optional param', 'bar');
+        $factory2 = new ReflectionFactory();
+
+        $toolBox = new ToolBox(new ChainFactory([$factory1, $factory2]), [new ToolOptionalParam()]);
+
+        $expected = [
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'optional_param',
+                    'description' => 'Tool with optional param',
+                    'parameters' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'text' => [
+                                'type' => 'string',
+                                'description' => 'The text given to the tool',
+                            ],
+                            'number' => [
+                                'type' => 'integer',
+                                'description' => 'A number given to the tool',
+                            ],
+                        ],
+                        'required' => ['text', 'number'],
+                        'additionalProperties' => false,
+                    ],
+                ],
+            ],
+        ];
+
+        self::assertSame(json_encode($expected), json_encode($toolBox->getMap()));
     }
 }
