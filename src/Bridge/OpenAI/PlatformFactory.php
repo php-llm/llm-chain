@@ -10,6 +10,7 @@ use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ResponseConverter as EmbeddingsResp
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ModelClient as GPTModelClient;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ResponseConverter as GPTResponseConverter;
 use PhpLlm\LlmChain\Bridge\OpenAI\Whisper\ModelClient as WhisperModelClient;
+use PhpLlm\LlmChain\Bridge\OpenAI\Whisper\ResponseConverter as WhisperResponseConverter;
 use PhpLlm\LlmChain\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -24,20 +25,19 @@ final readonly class PlatformFactory
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
 
         $dallEModelClient = new DallEModelClient($httpClient, $apiKey);
-        $whisperModelClient = new WhisperModelClient($httpClient, $apiKey);
 
         return new Platform(
             [
                 new GPTModelClient($httpClient, $apiKey),
                 new EmbeddingsModelClient($httpClient, $apiKey),
                 $dallEModelClient,
-                $whisperModelClient,
+                new WhisperModelClient($httpClient, $apiKey),
             ],
             [
                 new GPTResponseConverter(),
                 new EmbeddingsResponseConverter(),
                 $dallEModelClient,
-                $whisperModelClient,
+                new WhisperResponseConverter(),
             ],
         );
     }
