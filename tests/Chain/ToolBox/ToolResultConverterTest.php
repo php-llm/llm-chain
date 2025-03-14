@@ -15,7 +15,7 @@ final class ToolResultConverterTest extends TestCase
 {
     #[Test]
     #[DataProvider('provideResults')]
-    public function testConvert(mixed $result, string $expected): void
+    public function testConvert(mixed $result, ?string $expected): void
     {
         $converter = new ToolResultConverter();
 
@@ -24,6 +24,8 @@ final class ToolResultConverterTest extends TestCase
 
     public static function provideResults(): \Generator
     {
+        yield 'null' => [null, null];
+
         yield 'integer' => [42, '42'];
 
         yield 'float' => [42.42, '42.42'];

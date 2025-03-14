@@ -6,13 +6,20 @@ namespace PhpLlm\LlmChain\Chain\ToolBox;
 
 final readonly class ToolResultConverter
 {
-    public function convert(mixed $result): string
+    /**
+     * @param \JsonSerializable|\Stringable|array<int|string, mixed>|float|string|null $result
+     */
+    public function convert(\JsonSerializable|\Stringable|array|float|string|null $result): ?string
     {
+        if (null === $result) {
+            return null;
+        }
+
         if ($result instanceof \JsonSerializable || is_array($result)) {
             return json_encode($result, flags: JSON_THROW_ON_ERROR);
         }
 
-        if (is_integer($result) || is_float($result) || $result instanceof \Stringable) {
+        if (is_float($result) || $result instanceof \Stringable) {
             return (string) $result;
         }
 
