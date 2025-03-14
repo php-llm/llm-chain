@@ -58,7 +58,7 @@ final class ToolBox implements ToolBoxInterface
     public function execute(ToolCall $toolCall): mixed
     {
         foreach ($this->tools as $tool) {
-            foreach ($this->metadataFactory->getMetadata($tool) as $metadata) {
+            foreach ($this->metadataFactory->getMetadata($tool::class) as $metadata) {
                 if ($metadata->name !== $toolCall->name) {
                     continue;
                 }

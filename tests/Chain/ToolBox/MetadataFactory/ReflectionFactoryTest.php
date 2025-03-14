@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
 use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
+use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolMetadataException;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\MetadataFactory\ReflectionFactory;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
@@ -24,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Factory::class)]
 #[UsesClass(DescriptionParser::class)]
 #[UsesClass(ToolConfigurationException::class)]
+#[UsesClass(ToolMetadataException::class)]
 final class ReflectionFactoryTest extends TestCase
 {
     private ReflectionFactory $factory;
@@ -36,28 +38,20 @@ final class ReflectionFactoryTest extends TestCase
     #[Test]
     public function invalidReferenceNonExistingClass(): void
     {
-        $this->expectException(ToolConfigurationException::class);
-        iterator_to_array($this->factory->getMetadata('invalid'));
-    }
+        $this->expectException(ToolMetadataException::class);
+        $this->expectExceptionMessage('The reference "invalid" is not a valid as tool.');
 
-    #[Test]
-    public function invalidReferenceNonInteger(): void
-    {
-        $this->expectException(ToolConfigurationException::class);
-        iterator_to_array($this->factory->getMetadata(1234));
-    }
-
-    #[Test]
-    public function invalidReferenceCallable(): void
-    {
-        $this->expectException(ToolConfigurationException::class);
-        iterator_to_array($this->factory->getMetadata(fn () => null));
+        iterator_to_array($this->factory->getMetadata('invalid')); // @phpstan-ignore-line Yes, this class does not exist
     }
 
     #[Test]
     public function withoutAttribute(): void
     {
-        $this->expectException(ToolConfigurationException::class);
+        $this->expectException(ToolMetadataException::class);
+        $this->expectExceptionMessage(
+            sprintf('The class "%s" is not a tool, please add %s attribute.', ToolWrong::class, AsTool::class)
+        );
+
         iterator_to_array($this->factory->getMetadata(ToolWrong::class));
     }
 
