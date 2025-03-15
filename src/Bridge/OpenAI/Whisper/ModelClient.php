@@ -6,15 +6,12 @@ namespace PhpLlm\LlmChain\Bridge\OpenAI\Whisper;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\Whisper;
 use PhpLlm\LlmChain\Model\Model;
-use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
-use PhpLlm\LlmChain\Model\Response\TextResponse;
-use PhpLlm\LlmChain\Platform\ModelClient as PlatformResponseFactory;
-use PhpLlm\LlmChain\Platform\ResponseConverter as PlatformResponseConverter;
+use PhpLlm\LlmChain\Platform\ModelClient as BaseModelClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
-final readonly class ModelClient implements PlatformResponseFactory, PlatformResponseConverter
+final readonly class ModelClient implements BaseModelClient
 {
     public function __construct(
         private HttpClientInterface $httpClient,
@@ -41,12 +38,5 @@ final readonly class ModelClient implements PlatformResponseFactory, PlatformRes
                 'file' => fopen($input->path, 'r'),
             ]),
         ]);
-    }
-
-    public function convert(ResponseInterface $response, array $options = []): LlmResponse
-    {
-        $data = $response->toArray();
-
-        return new TextResponse($data['text']);
     }
 }
