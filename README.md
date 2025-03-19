@@ -239,6 +239,42 @@ See attribute class [With](src/Chain/JsonSchema/Attribute/With.php) for all avai
 > [!NOTE]
 > Please be aware, that this is only converted in a JSON Schema for the LLM to respect, but not validated by LLM Chain.
 
+#### Third-Party Tools
+
+In some cases you might want to use third-party tools, which are not part of your application. Adding the `#[AsTool]`
+attribute to the class is not possible in those cases, but you can explicitly register the tool in the `MemoryFactory`:
+
+```php
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
+use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
+use Symfony\Component\Clock\Clock;
+
+$metadataFactory = (new MemoryFactory())
+    ->addTool(Clock::class, 'clock', 'Get the current date and time', 'now');
+$toolbox = new Toolbox($metadataFactory, [new Clock()]);
+```
+
+> [!NOTE]
+> Please be aware that not all return types are supported by the toolbox, so a decorator might still be needed.
+
+This can be combined with the `ChainFactory` which enables you to use explicitly registered tools and `#[AsTool]` tagged
+tools in the same chain - which even enables you to overwrite the pre-existing configuration of a tool:
+
+```php
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
+use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ChainFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ReflectionFactory;
+
+$reflectionFactory = new ReflectionFactory(); // Register tools with #[AsTool] attribute
+$metadataFactory = (new MemoryFactory())      // Register or overwrite tools explicitly
+    ->addTool(...);
+$toolbox = new Toolbox(new ChainFactory($metadataFactory, $reflectionFactory), [...]);
+```
+
+> [!NOTE]
+> The order of the factories in the `ChainFactory` matters, as the first factory has the highest priority.
+
 #### Fault Tolerance
 
 To gracefully handle errors that occur during tool calling, e.g. wrong tool names or runtime errors, you can use the
