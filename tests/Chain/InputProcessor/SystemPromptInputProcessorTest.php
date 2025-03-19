@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Tests\Chain\InputProcessor;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessor\SystemPromptInputProcessor;
+use PhpLlm\LlmChain\Chain\ToolBox\ExecutionReference;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBoxInterface;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
@@ -106,15 +107,14 @@ final class SystemPromptInputProcessorTest extends TestCase
                 public function getMap(): array
                 {
                     return [
-                        new Metadata(ToolNoParams::class, 'tool_no_params', 'A tool without parameters', '__invoke', null),
+                        new Metadata(new ExecutionReference(ToolNoParams::class), 'tool_no_params', 'A tool without parameters', null),
                         new Metadata(
-                            ToolRequiredParams::class,
+                            new ExecutionReference(ToolRequiredParams::class, 'bar'),
                             'tool_required_params',
                             <<<DESCRIPTION
                                 A tool with required parameters
                                 or not
                                 DESCRIPTION,
-                            'bar',
                             null
                         ),
                     ];

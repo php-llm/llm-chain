@@ -145,10 +145,10 @@ final class ReflectionFactoryTest extends TestCase
 
     private function assertToolConfiguration(Metadata $metadata, string $className, string $name, string $description, string $method, array $parameters): void
     {
-        self::assertSame($className, $metadata->className);
+        self::assertSame($className, $metadata->reference->class);
+        self::assertSame($method, $metadata->reference->method);
         self::assertSame($name, $metadata->name);
         self::assertSame($description, $metadata->description);
-        self::assertSame($method, $metadata->method);
         self::assertSame($parameters, $metadata->parameters);
     }
 }

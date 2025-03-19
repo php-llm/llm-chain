@@ -6,6 +6,7 @@ namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\ToolBox\ExecutionReference;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBoxInterface;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
@@ -44,8 +45,8 @@ class ChainProcessorTest extends TestCase
     public function processInputWithRegisteredToolsWillResultInOptionChange(): void
     {
         $toolBox = $this->createStub(ToolBoxInterface::class);
-        $tool1 = new Metadata('ClassTool1', 'tool1', 'description1', 'method1', null);
-        $tool2 = new Metadata('ClassTool2', 'tool2', 'description2', 'method2', null);
+        $tool1 = new Metadata(new ExecutionReference('ClassTool1', 'method1'), 'tool1', 'description1', null);
+        $tool2 = new Metadata(new ExecutionReference('ClassTool2', 'method1'), 'tool2', 'description2', null);
         $toolBox->method('getMap')->willReturn([$tool1, $tool2]);
 
         $llm = $this->createMock(LanguageModel::class);
@@ -63,8 +64,8 @@ class ChainProcessorTest extends TestCase
     public function processInputWithRegisteredToolsButToolOverride(): void
     {
         $toolBox = $this->createStub(ToolBoxInterface::class);
-        $tool1 = new Metadata('ClassTool1', 'tool1', 'description1', 'method1', null);
-        $tool2 = new Metadata('ClassTool2', 'tool2', 'description2', 'method2', null);
+        $tool1 = new Metadata(new ExecutionReference('ClassTool1', 'method1'), 'tool1', 'description1', null);
+        $tool2 = new Metadata(new ExecutionReference('ClassTool2', 'method1'), 'tool2', 'description2', null);
         $toolBox->method('getMap')->willReturn([$tool1, $tool2]);
 
         $llm = $this->createMock(LanguageModel::class);

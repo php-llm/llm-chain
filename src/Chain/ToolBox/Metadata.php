@@ -15,10 +15,9 @@ final readonly class Metadata implements \JsonSerializable
      * @param JsonSchema|null $parameters
      */
     public function __construct(
-        public string $className,
+        public ExecutionReference $reference,
         public string $name,
         public string $description,
-        public string $method,
         public ?array $parameters,
     ) {
     }
