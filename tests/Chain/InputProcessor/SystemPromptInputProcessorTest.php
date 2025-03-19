@@ -157,7 +157,7 @@ final class SystemPromptInputProcessorTest extends TestCase
                 public function getMap(): array
                 {
                     return [
-                        new Metadata(ToolNoParams::class, 'tool_no_params', 'A tool without parameters', '__invoke', null),
+                        new Metadata(new ExecutionReference(ToolNoParams::class), 'tool_no_params', 'A tool without parameters', null),
                     ];
                 }
 
