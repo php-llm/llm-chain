@@ -147,4 +147,41 @@ final class SystemPromptInputProcessorTest extends TestCase
             or not
             PROMPT, $messages[0]->content);
     }
+
+    #[Test]
+    public function withStringableSystemPrompt(): void
+    {
+        $processor = new SystemPromptInputProcessor(
+            new SystemPromptService(),
+            new class implements ToolBoxInterface {
+                public function getMap(): array
+                {
+                    return [
+                        new Metadata(ToolNoParams::class, 'tool_no_params', 'A tool without parameters', '__invoke', null),
+                    ];
+                }
+
+                public function execute(ToolCall $toolCall): mixed
+                {
+                    return null;
+                }
+            }
+        );
+
+        $input = new Input(new GPT(), new MessageBag(Message::ofUser('This is a user message')), []);
+        $processor->processInput($input);
+
+        $messages = $input->messages->getMessages();
+        self::assertCount(2, $messages);
+        self::assertInstanceOf(SystemMessage::class, $messages[0]);
+        self::assertInstanceOf(UserMessage::class, $messages[1]);
+        self::assertSame(<<<PROMPT
+            My dynamic system prompt.
+            
+            # Available tools
+            
+            ## tool_no_params
+            A tool without parameters
+            PROMPT, $messages[0]->content);
+    }
 }

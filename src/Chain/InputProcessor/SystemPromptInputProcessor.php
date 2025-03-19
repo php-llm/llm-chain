@@ -15,11 +15,11 @@ use Psr\Log\NullLogger;
 final readonly class SystemPromptInputProcessor implements InputProcessor
 {
     /**
-     * @param string                $systemPrompt the system prompt to prepend to the input messages
+     * @param \Stringable|string    $systemPrompt the system prompt to prepend to the input messages
      * @param ToolBoxInterface|null $toolBox      the tool box to be used to append the tool definitions to the system prompt
      */
     public function __construct(
-        private string $systemPrompt,
+        private \Stringable|string $systemPrompt,
         private ?ToolBoxInterface $toolBox = null,
         private LoggerInterface $logger = new NullLogger(),
     ) {
@@ -35,7 +35,7 @@ final readonly class SystemPromptInputProcessor implements InputProcessor
             return;
         }
 
-        $message = $this->systemPrompt;
+        $message = (string) $this->systemPrompt;
 
         if ($this->toolBox instanceof ToolBoxInterface
             && [] !== $this->toolBox->getMap()
