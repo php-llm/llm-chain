@@ -5,9 +5,9 @@ use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Bridge\Pinecone\Store;
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
-use PhpLlm\LlmChain\Chain\ToolBox\Tool\SimilaritySearch;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
+use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\Toolbox\Tool\SimilaritySearch;
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\TextDocument;
 use PhpLlm\LlmChain\Embedder;
@@ -52,8 +52,8 @@ $embedder->embed($documents);
 $llm = new GPT(GPT::GPT_4O_MINI);
 
 $similaritySearch = new SimilaritySearch($platform, $embeddings, $store);
-$toolBox = ToolBox::create($similaritySearch);
-$processor = new ChainProcessor($toolBox);
+$toolbox = Toolbox::create($similaritySearch);
+$processor = new ChainProcessor($toolbox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 
 $messages = new MessageBag(

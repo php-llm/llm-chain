@@ -7,9 +7,9 @@ namespace PhpLlm\LlmChain\Tests\Chain\InputProcessor;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessor\SystemPromptInputProcessor;
-use PhpLlm\LlmChain\Chain\ToolBox\ExecutionReference;
-use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolBoxInterface;
+use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
+use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolboxInterface;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
@@ -75,7 +75,7 @@ final class SystemPromptInputProcessorTest extends TestCase
     {
         $processor = new SystemPromptInputProcessor(
             'This is a system prompt',
-            new class implements ToolBoxInterface {
+            new class implements ToolboxInterface {
                 public function getMap(): array
                 {
                     return [];
@@ -103,7 +103,7 @@ final class SystemPromptInputProcessorTest extends TestCase
     {
         $processor = new SystemPromptInputProcessor(
             'This is a system prompt',
-            new class implements ToolBoxInterface {
+            new class implements ToolboxInterface {
                 public function getMap(): array
                 {
                     return [
@@ -153,7 +153,7 @@ final class SystemPromptInputProcessorTest extends TestCase
     {
         $processor = new SystemPromptInputProcessor(
             new SystemPromptService(),
-            new class implements ToolBoxInterface {
+            new class implements ToolboxInterface {
                 public function getMap(): array
                 {
                     return [
