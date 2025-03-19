@@ -34,6 +34,8 @@ final class ToolResultConverterTest extends TestCase
 
         yield 'string' => ['plain string', 'plain string'];
 
+        yield 'datetime' => [new \DateTimeImmutable('2021-07-31 12:34:56'), '2021-07-31T12:34:56+00:00'];
+
         yield 'stringable' => [
             new class implements \Stringable {
                 public function __toString(): string

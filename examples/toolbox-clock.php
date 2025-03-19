@@ -4,10 +4,11 @@ use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
-use PhpLlm\LlmChain\Chain\Toolbox\Tool\Clock;
+use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
+use Symfony\Component\Clock\Clock;
 use Symfony\Component\Dotenv\Dotenv;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
@@ -21,8 +22,9 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $llm = new GPT(GPT::GPT_4O_MINI);
 
-$clock = new Clock();
-$toolbox = Toolbox::create($clock);
+$metadataFactory = (new MemoryFactory())
+    ->addTool(Clock::class, 'clock', 'Get the current date and time', 'now');
+$toolbox = new Toolbox($metadataFactory, [new Clock()]);
 $processor = new ChainProcessor($toolbox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 
