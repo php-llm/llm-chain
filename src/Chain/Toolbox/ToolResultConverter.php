@@ -9,7 +9,7 @@ final readonly class ToolResultConverter
     /**
      * @param \JsonSerializable|\Stringable|array<int|string, mixed>|float|string|null $result
      */
-    public function convert(\JsonSerializable|\Stringable|array|float|string|null $result): ?string
+    public function convert(\JsonSerializable|\Stringable|array|float|string|\DateTimeInterface|null $result): ?string
     {
         if (null === $result) {
             return null;
@@ -21,6 +21,10 @@ final readonly class ToolResultConverter
 
         if (is_float($result) || $result instanceof \Stringable) {
             return (string) $result;
+        }
+
+        if ($result instanceof \DateTimeInterface) {
+            return $result->format(DATE_ATOM);
         }
 
         return $result;
