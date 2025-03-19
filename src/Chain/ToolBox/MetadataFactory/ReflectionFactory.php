@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Chain\ToolBox\MetadataFactory;
 use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolConfigurationException;
+use PhpLlm\LlmChain\Chain\ToolBox\ExecutionReference;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\MetadataFactory;
 
@@ -45,10 +46,9 @@ final readonly class ReflectionFactory implements MetadataFactory
     {
         try {
             return new Metadata(
-                $className,
+                new ExecutionReference($className, $attribute->method),
                 $attribute->name,
                 $attribute->description,
-                $attribute->method,
                 $this->factory->buildParameters($className, $attribute->method)
             );
         } catch (\ReflectionException) {

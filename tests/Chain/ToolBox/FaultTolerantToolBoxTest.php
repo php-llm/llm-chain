@@ -6,6 +6,7 @@ namespace PhpLlm\LlmChain\Tests\Chain\ToolBox;
 
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\ToolBox\Exception\ToolNotFoundException;
+use PhpLlm\LlmChain\Chain\ToolBox\ExecutionReference;
 use PhpLlm\LlmChain\Chain\ToolBox\FaultTolerantToolBox;
 use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
 use PhpLlm\LlmChain\Chain\ToolBox\ToolBoxInterface;
@@ -69,8 +70,8 @@ final class FaultTolerantToolBoxTest extends TestCase
             public function getMap(): array
             {
                 return [
-                    new Metadata(ToolNoParams::class, 'tool_no_params', 'A tool without parameters', '__invoke', null),
-                    new Metadata(ToolRequiredParams::class, 'tool_required_params', 'A tool with required parameters', 'bar', null),
+                    new Metadata(new ExecutionReference(ToolNoParams::class), 'tool_no_params', 'A tool without parameters', null),
+                    new Metadata(new ExecutionReference(ToolRequiredParams::class, 'bar'), 'tool_required_params', 'A tool with required parameters', null),
                 ];
             }
 

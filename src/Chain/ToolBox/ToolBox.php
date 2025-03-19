@@ -57,24 +57,39 @@ final class ToolBox implements ToolBoxInterface
 
     public function execute(ToolCall $toolCall): mixed
     {
-        foreach ($this->tools as $tool) {
-            foreach ($this->metadataFactory->getMetadata($tool) as $metadata) {
-                if ($metadata->name !== $toolCall->name) {
-                    continue;
-                }
+        $metadata = $this->getMetadata($toolCall);
+        $tool = $this->getTool($metadata);
 
-                try {
-                    $this->logger->debug(sprintf('Executing tool "%s".', $metadata->name), $toolCall->arguments);
-                    $result = $tool->{$metadata->method}(...$toolCall->arguments);
-                } catch (\Throwable $e) {
-                    $this->logger->warning(sprintf('Failed to execute tool "%s".', $metadata->name), ['exception' => $e]);
-                    throw ToolExecutionException::executionFailed($toolCall, $e);
-                }
+        try {
+            $this->logger->debug(sprintf('Executing tool "%s".', $toolCall->name), $toolCall->arguments);
+            $result = $tool->{$metadata->reference->method}(...$toolCall->arguments);
+        } catch (\Throwable $e) {
+            $this->logger->warning(sprintf('Failed to execute tool "%s".', $toolCall->name), ['exception' => $e]);
+            throw ToolExecutionException::executionFailed($toolCall, $e);
+        }
 
-                return $result;
+        return $result;
+    }
+
+    private function getMetadata(ToolCall $toolCall): Metadata
+    {
+        foreach ($this->getMap() as $metadata) {
+            if ($metadata->name === $toolCall->name) {
+                return $metadata;
             }
         }
 
         throw ToolNotFoundException::notFoundForToolCall($toolCall);
+    }
+
+    private function getTool(Metadata $metadata): object
+    {
+        foreach ($this->tools as $tool) {
+            if ($tool instanceof $metadata->reference->class) {
+                return $tool;
+            }
+        }
+
+        throw ToolNotFoundException::notFoundForReference($metadata->reference);
     }
 }
