@@ -9,6 +9,7 @@ use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolConfigurationException;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolMetadataException;
+use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
 use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ReflectionFactory;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
@@ -22,6 +23,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ReflectionFactory::class)]
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
+#[UsesClass(ExecutionReference::class)]
 #[UsesClass(Factory::class)]
 #[UsesClass(DescriptionParser::class)]
 #[UsesClass(ToolConfigurationException::class)]

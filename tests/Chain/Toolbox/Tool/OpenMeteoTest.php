@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests\Chain\Toolbox;
+namespace PhpLlm\LlmChain\Tests\Chain\Toolbox\Tool;
 
 use PhpLlm\LlmChain\Chain\Toolbox\Tool\OpenMeteo;
 use PHPUnit\Framework\Attributes\CoversClass;

@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
 use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolMetadataException;
+use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
 use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoAttribute1;
@@ -20,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(MemoryFactory::class)]
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
+#[UsesClass(ExecutionReference::class)]
 #[UsesClass(ToolMetadataException::class)]
 #[UsesClass(Factory::class)]
 #[UsesClass(DescriptionParser::class)]

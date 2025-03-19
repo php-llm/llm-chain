@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests\Chain\Toolbox\Attribute;
+namespace PhpLlm\LlmChain\Tests\Chain\JsonSchema\Attribute;
 
 use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
 use PHPUnit\Framework\Attributes\CoversClass;

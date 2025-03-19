@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(FaultTolerantToolbox::class)]
 #[UsesClass(ToolCall::class)]
 #[UsesClass(Metadata::class)]
+#[UsesClass(ExecutionReference::class)]
 #[UsesClass(ToolNotFoundException::class)]
 #[UsesClass(ToolExecutionException::class)]
 final class FaultTolerantToolboxTest extends TestCase
