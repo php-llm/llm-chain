@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chain\Toolbox\MetadataFactory;
+namespace PhpLlm\LlmChain\Tests\Chain\Toolbox\MetadataFactory;
 
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolConfigurationException;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolMetadataException;

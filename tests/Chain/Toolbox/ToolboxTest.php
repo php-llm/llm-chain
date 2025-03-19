@@ -10,6 +10,7 @@ use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolConfigurationException;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolNotFoundException;
+use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
 use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ChainFactory;
 use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
@@ -32,8 +33,10 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ToolCall::class)]
 #[UsesClass(AsTool::class)]
 #[UsesClass(Metadata::class)]
+#[UsesClass(ExecutionReference::class)]
 #[UsesClass(ReflectionFactory::class)]
 #[UsesClass(MemoryFactory::class)]
+#[UsesClass(ChainFactory::class)]
 #[UsesClass(Factory::class)]
 #[UsesClass(DescriptionParser::class)]
 #[UsesClass(ToolConfigurationException::class)]

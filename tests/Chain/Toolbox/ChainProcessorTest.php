@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ChainProcessor::class)]
 #[UsesClass(Input::class)]
 #[UsesClass(Metadata::class)]
+#[UsesClass(ExecutionReference::class)]
 #[UsesClass(MessageBag::class)]
 #[UsesClass(MissingModelSupport::class)]
 class ChainProcessorTest extends TestCase
