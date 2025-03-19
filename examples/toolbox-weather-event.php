@@ -3,10 +3,10 @@
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
-use PhpLlm\LlmChain\Chain\ToolBox\Event\ToolCallsExecuted;
-use PhpLlm\LlmChain\Chain\ToolBox\Tool\OpenMeteo;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
+use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\Toolbox\Event\ToolCallsExecuted;
+use PhpLlm\LlmChain\Chain\Toolbox\Tool\OpenMeteo;
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Response\StructuredResponse;
@@ -26,9 +26,9 @@ $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $llm = new GPT(GPT::GPT_4O_MINI);
 
 $openMeteo = new OpenMeteo(HttpClient::create());
-$toolBox = ToolBox::create($openMeteo);
+$toolbox = Toolbox::create($openMeteo);
 $eventDispatcher = new EventDispatcher();
-$processor = new ChainProcessor($toolBox, eventDispatcher: $eventDispatcher);
+$processor = new ChainProcessor($toolbox, eventDispatcher: $eventDispatcher);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 
 // Add tool call result listener to enforce chain exits direct with structured response for weather tools

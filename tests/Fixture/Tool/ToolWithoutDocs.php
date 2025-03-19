@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Fixture\Tool;
 
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 
 #[AsTool('tool_without_docs', 'A tool with required parameters', method: 'bar')]
 final class ToolWithoutDocs

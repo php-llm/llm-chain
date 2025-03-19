@@ -3,9 +3,9 @@
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
-use PhpLlm\LlmChain\Chain\ToolBox\Tool\Tavily;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
+use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\Toolbox\Tool\Tavily;
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Symfony\Component\Dotenv\Dotenv;
@@ -22,8 +22,8 @@ $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $llm = new GPT(GPT::GPT_4O_MINI);
 
 $tavily = new Tavily(HttpClient::create(), $_ENV['TAVILY_API_KEY']);
-$toolBox = ToolBox::create($tavily);
-$processor = new ChainProcessor($toolBox);
+$toolbox = Toolbox::create($tavily);
+$processor = new ChainProcessor($toolbox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 
 $messages = new MessageBag(Message::ofUser('What was the latest game result of Dallas Cowboys?'));

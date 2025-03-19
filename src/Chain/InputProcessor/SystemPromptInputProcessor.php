@@ -6,8 +6,8 @@ namespace PhpLlm\LlmChain\Chain\InputProcessor;
 
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessor;
-use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolBoxInterface;
+use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolboxInterface;
 use PhpLlm\LlmChain\Model\Message\Message;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -16,11 +16,11 @@ final readonly class SystemPromptInputProcessor implements InputProcessor
 {
     /**
      * @param \Stringable|string    $systemPrompt the system prompt to prepend to the input messages
-     * @param ToolBoxInterface|null $toolBox      the tool box to be used to append the tool definitions to the system prompt
+     * @param ToolboxInterface|null $toolbox      the tool box to be used to append the tool definitions to the system prompt
      */
     public function __construct(
         private \Stringable|string $systemPrompt,
-        private ?ToolBoxInterface $toolBox = null,
+        private ?ToolboxInterface $toolbox = null,
         private LoggerInterface $logger = new NullLogger(),
     ) {
     }
@@ -37,8 +37,8 @@ final readonly class SystemPromptInputProcessor implements InputProcessor
 
         $message = (string) $this->systemPrompt;
 
-        if ($this->toolBox instanceof ToolBoxInterface
-            && [] !== $this->toolBox->getMap()
+        if ($this->toolbox instanceof ToolboxInterface
+            && [] !== $this->toolbox->getMap()
         ) {
             $this->logger->debug('Append tool definitions to system prompt.');
 
@@ -47,7 +47,7 @@ final readonly class SystemPromptInputProcessor implements InputProcessor
                     ## {$tool->name}
                     {$tool->description}
                     TOOL,
-                $this->toolBox->getMap()
+                $this->toolbox->getMap()
             ));
 
             $message = <<<PROMPT

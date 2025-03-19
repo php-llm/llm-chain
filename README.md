@@ -138,16 +138,17 @@ To integrate LLMs with your application, LLM Chain supports [tool calling](https
 Tools are services that can be called by the LLM to provide additional features or process data.
 
 Tool calling can be enabled by registering the processors in the chain:
+
 ```php
-use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
+use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 
 // Platform & LLM instantiation
 
 $yourTool = new YourTool();
 
-$toolBox = ToolBox::create($yourTool);
-$toolProcessor = new ChainProcessor($toolBox);
+$toolbox = Toolbox::create($yourTool);
+$toolProcessor = new ChainProcessor($toolbox);
 
 $chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
 ```
@@ -155,7 +156,7 @@ $chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProc
 Custom tools can basically be any class, but must configure by the `#[AsTool]` attribute.
 
 ```php
-use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Toolbox\Attribute\AsTool;
 
 #[AsTool('company_name', 'Provides the name of your company')]
 final class CompanyName
@@ -177,7 +178,7 @@ In the end, the tool's response needs to be a string, but LLM Chain converts arr
 You can configure the method to be called by the LLM with the `#[AsTool]` attribute and have multiple tools per class:
 
 ```php
-use PhpLlm\LlmChain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Toolbox\Attribute\AsTool;
 
 #[AsTool(
     name: 'weather_current',
@@ -205,14 +206,15 @@ final readonly class OpenMeteo
 
 #### Tool Parameters
 
-LLM Chain generates a JSON Schema representation for all tools in the `ToolBox` based on the `#[AsTool]` attribute and
+LLM Chain generates a JSON Schema representation for all tools in the `Toolbox` based on the `#[AsTool]` attribute and
 method arguments and param comments in the doc block. Additionally, JSON Schema support validation rules, which are
 partially support by LLMs like GPT.
 
 To leverage this, configure the `#[With]` attribute on the method arguments of your tool:
+
 ```php
 use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
-use PhpLlm\LlmChain\Chain\ToolBox\Attribute\AsTool;
+use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 
 #[AsTool('my_tool', 'Example tool with parameters requirements.')]
 final class MyTool
@@ -240,17 +242,17 @@ See attribute class [With](src/Chain/JsonSchema/Attribute/With.php) for all avai
 #### Fault Tolerance
 
 To gracefully handle errors that occur during tool calling, e.g. wrong tool names or runtime errors, you can use the
-`FaultTolerantToolBox` as a decorator for the `ToolBox`. It will catch the exceptions and return readable error messages
+`FaultTolerantToolbox` as a decorator for the `Toolbox`. It will catch the exceptions and return readable error messages
 to the LLM.
 
 ```php
-use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
-use PhpLlm\LlmChain\Chain\ToolBox\FaultTolerantToolBox;
+use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\Toolbox\FaultTolerantToolbox;
 
-// Platform, LLM & ToolBox instantiation
+// Platform, LLM & Toolbox instantiation
 
-$toolBox = new FaultTolerantToolBox($innerToolBox);
-$toolProcessor = new ChainProcessor($toolBox);
+$toolbox = new FaultTolerantToolbox($innerToolbox);
+$toolProcessor = new ChainProcessor($toolbox);
 
 $chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
 ```
@@ -267,7 +269,7 @@ $this->chain->call($messages, ['tools' => ['tavily_search']]);
 #### Tool Result Interception
 
 To react to the result of a tool, you can implement an EventListener or EventSubscriber, that listens to the
-`ToolCallsExecuted` event. This event is dispatched after the `ToolBox` executed all current tool calls and enables
+`ToolCallsExecuted` event. This event is dispatched after the `Toolbox` executed all current tool calls and enables
 you to skip the next LLM call by setting a response yourself:
 
 ```php
@@ -338,15 +340,15 @@ In the end the chain is used in combination with a retrieval tool on top of the 
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
-use PhpLlm\LlmChain\Chain\ToolBox\ChainProcessor;
-use PhpLlm\LlmChain\Chain\ToolBox\Tool\SimilaritySearch;
-use PhpLlm\LlmChain\Chain\ToolBox\ToolBox;
+use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\Toolbox\Tool\SimilaritySearch;
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 
 // Initialize Platform & Models
 
 $similaritySearch = new SimilaritySearch($embeddings, $store);
-$toolBox = ToolBox::create($similaritySearch);
-$processor = new ChainProcessor($toolBox);
+$toolbox = Toolbox::create($similaritySearch);
+$processor = new ChainProcessor($toolbox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 
 $messages = new MessageBag(
