@@ -14,8 +14,9 @@ final class MemoryFactory extends AbstractFactory
      */
     private array $tools = [];
 
-    public function addTool(string $className, string $name, string $description, string $method = '__invoke'): self
+    public function addTool(string|object $class, string $name, string $description, string $method = '__invoke'): self
     {
+        $className = is_object($class) ? $class::class : $class;
         $this->tools[$className][] = new AsTool($name, $description, $method);
 
         return $this;
