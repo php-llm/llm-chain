@@ -275,6 +275,24 @@ $toolbox = new Toolbox(new ChainFactory($metadataFactory, $reflectionFactory), [
 > [!NOTE]
 > The order of the factories in the `ChainFactory` matters, as the first factory has the highest priority.
 
+#### Chain in Chain 🤯
+
+Similar to third-party tools, you can also use a chain as a tool in another chain. This can be useful to encapsulate
+complex logic or to reuse a chain in multiple places or hide sub-chains from the LLM.
+
+```php
+use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
+use PhpLlm\LlmChain\Chain\Toolbox\Tool\Chain;
+
+// Chain was initialized before
+
+$chainTool = new Chain($chain);
+$metadataFactory = (new MemoryFactory())
+    ->addTool($chainTool, 'research_agent', 'Meaningful description for sub-chain');
+$toolbox = new Toolbox($metadataFactory, [$chainTool]);
+```
+
 #### Fault Tolerance
 
 To gracefully handle errors that occur during tool calling, e.g. wrong tool names or runtime errors, you can use the
