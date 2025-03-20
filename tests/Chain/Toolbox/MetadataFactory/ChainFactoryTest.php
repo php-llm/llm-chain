@@ -43,7 +43,7 @@ final class ChainFactoryTest extends TestCase
     public function testGetMetadataNotExistingClass(): void
     {
         $this->expectException(ToolMetadataException::class);
-        $this->expectExceptionMessage('The reference "NoClass" is not a valid as tool.');
+        $this->expectExceptionMessage('The reference "NoClass" is not a valid tool.');
 
         iterator_to_array($this->factory->getMetadata('NoClass'));
     }
