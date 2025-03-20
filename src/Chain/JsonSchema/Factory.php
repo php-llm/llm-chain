@@ -162,7 +162,7 @@ final readonly class Factory
                     return ['type' => 'string', 'format' => 'date-time'];
                 } else {
                     // Recursively build the schema for an object type
-                    return $this->buildProperties($type->getClassName());
+                    return $this->buildProperties($type->getClassName()) ?? ['type' => 'object'];
                 }
 
                 // no break
