@@ -11,7 +11,7 @@ final class ToolMetadataException extends InvalidArgumentException implements Ex
 {
     public static function invalidReference(mixed $reference): self
     {
-        return new self(sprintf('The reference "%s" is not a valid as tool.', $reference));
+        return new self(sprintf('The reference "%s" is not a valid tool.', $reference));
     }
 
     public static function missingAttribute(string $className): self

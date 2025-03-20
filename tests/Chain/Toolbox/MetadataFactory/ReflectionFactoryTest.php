@@ -41,7 +41,7 @@ final class ReflectionFactoryTest extends TestCase
     public function invalidReferenceNonExistingClass(): void
     {
         $this->expectException(ToolMetadataException::class);
-        $this->expectExceptionMessage('The reference "invalid" is not a valid as tool.');
+        $this->expectExceptionMessage('The reference "invalid" is not a valid tool.');
 
         iterator_to_array($this->factory->getMetadata('invalid')); // @phpstan-ignore-line Yes, this class does not exist
     }
