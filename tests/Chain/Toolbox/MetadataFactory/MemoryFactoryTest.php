@@ -42,7 +42,7 @@ final class MemoryFactoryTest extends TestCase
     {
         $factory = (new MemoryFactory())
             ->addTool(ToolNoAttribute1::class, 'happy_birthday', 'Generates birthday message')
-            ->addTool(ToolNoAttribute2::class, 'checkout', 'Buys a number of items per product', 'buy');
+            ->addTool(new ToolNoAttribute2(), 'checkout', 'Buys a number of items per product', 'buy');
 
         $metadata = iterator_to_array($factory->getMetadata(ToolNoAttribute1::class));
 
