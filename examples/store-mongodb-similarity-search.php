@@ -11,7 +11,7 @@ use PhpLlm\LlmChain\Chain\Toolbox\Tool\SimilaritySearch;
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 use PhpLlm\LlmChain\Document\Metadata;
 use PhpLlm\LlmChain\Document\TextDocument;
-use PhpLlm\LlmChain\Embedder;
+use PhpLlm\LlmChain\EmbeddingProvider;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Symfony\Component\Dotenv\Dotenv;
@@ -52,8 +52,8 @@ foreach ($movies as $movie) {
 
 // create embeddings for documents
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$embedder = new Embedder($platform, $embeddings = new Embeddings(), $store);
-$embedder->embed($documents);
+$embeddingProvider = new EmbeddingProvider($platform, $embeddings = new Embeddings(), $store);
+$embeddingProvider->embed($documents);
 
 // initialize the index
 $store->initialize();
