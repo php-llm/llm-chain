@@ -54,6 +54,6 @@ final readonly class Claude implements LanguageModel
 
     public function supportsToolCalling(): bool
     {
-        return false; // it does, but implementation here is still open.
+        return true;
     }
 }
