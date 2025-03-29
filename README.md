@@ -350,7 +350,7 @@ $eventDispatcher->addListener(ToolCallsExecuted::class, function (ToolCallsExecu
 LLM Chain supports document embedding and similarity search using vector stores like ChromaDB, Azure AI Search, MongoDB
 Atlas Search, or Pinecone.
 
-For populating a vector store, LLM Chain provides the service `DocumentEmbedder`, which requires an instance of an
+For populating a vector store, LLM Chain provides the service `Embedder`, which requires an instance of an
 `EmbeddingsModel` and one of `StoreInterface`, and works with a collection of `Document` objects as input:
 
 ```php
