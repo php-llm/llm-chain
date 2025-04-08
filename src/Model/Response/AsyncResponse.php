@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\Model\Response;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
-final class AsyncResponse implements ResponseInterface
+final class AsyncResponse implements ResponseInterface, HttpResponseAwareResponse
 {
     private bool $isConverted = false;
     private ResponseInterface $convertedResponse;
@@ -25,6 +25,11 @@ final class AsyncResponse implements ResponseInterface
     public function getContent(): string|iterable|object|null
     {
         return $this->unwrap()->getContent();
+    }
+
+    public function getHttpResponse(): HttpResponse
+    {
+        return $this->response;
     }
 
     public function unwrap(): ResponseInterface
