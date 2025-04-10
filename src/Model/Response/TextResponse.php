@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Response;
 
-final readonly class TextResponse implements ResponseInterface
+use PhpLlm\LlmChain\Model\Response\Metadata\ContainsMetadataInterface;
+use PhpLlm\LlmChain\Model\Response\Metadata\MetadataTrait;
+
+final class TextResponse implements ResponseInterface, ContainsMetadataInterface
 {
+    use MetadataTrait;
+
     public function __construct(
-        private string $content,
+        private readonly string $content,
     ) {
     }
 

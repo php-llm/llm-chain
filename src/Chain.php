@@ -15,6 +15,7 @@ use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\LanguageModel;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Response\AsyncResponse;
+use PhpLlm\LlmChain\Model\Response\HttpResponseAwareResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -71,6 +72,11 @@ final readonly class Chain implements ChainInterface
         try {
             $response = $this->platform->request($llm, $messages, $options);
 
+            $httpResponse = null;
+            if ($response instanceof HttpResponseAwareResponse) {
+                $httpResponse = $response->getHttpResponse();
+            }
+
             if ($response instanceof AsyncResponse) {
                 $response = $response->unwrap();
             }
@@ -85,7 +91,7 @@ final readonly class Chain implements ChainInterface
             throw new RuntimeException('Failed to request model', previous: $e);
         }
 
-        $output = new Output($llm, $response, $messages, $options);
+        $output = new Output($llm, $response, $messages, $options, $httpResponse);
         array_map(fn (OutputProcessor $processor) => $processor->processOutput($output), $this->outputProcessors);
 
         return $output->response;

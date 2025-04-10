@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Model\LanguageModel;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 final class Output
 {
@@ -18,6 +19,7 @@ final class Output
         public ResponseInterface $response,
         public readonly MessageBagInterface $messages,
         public readonly array $options,
+        public readonly ?HttpResponse $httpResponse = null,
     ) {
     }
 }
