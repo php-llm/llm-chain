@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\Model\LanguageModel;
 
 final readonly class Llama implements LanguageModel
 {
+    public const LLAMA_3_3_70B_INSTRUCT = 'llama-3.3-70B-Instruct';
     public const LLAMA_3_2_90B_VISION_INSTRUCT = 'llama-3.2-90b-vision-instruct';
     public const LLAMA_3_2_11B_VISION_INSTRUCT = 'llama-3.2-11b-vision-instruct';
     public const LLAMA_3_2_3B = 'llama-3.2-3b';
