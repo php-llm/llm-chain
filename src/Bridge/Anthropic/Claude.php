@@ -9,8 +9,11 @@ use PhpLlm\LlmChain\Model\LanguageModel;
 final readonly class Claude implements LanguageModel
 {
     public const VERSION_3_HAIKU = 'claude-3-haiku-20240307';
+    public const VERSION_35_HAIKU = 'claude-3-5-haiku-20241022';
     public const VERSION_3_SONNET = 'claude-3-sonnet-20240229';
     public const VERSION_35_SONNET = 'claude-3-5-sonnet-20240620';
+    public const VERSION_35_SONNET_V2 = 'claude-3-5-sonnet-20241022';
+    public const VERSION_37_SONNET = 'claude-3-7-sonnet-20250219';
     public const VERSION_3_OPUS = 'claude-3-opus-20240229';
 
     /**
