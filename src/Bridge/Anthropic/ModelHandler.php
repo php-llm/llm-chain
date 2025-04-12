@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Anthropic;
 
-use PhpLlm\LlmChain\Chain\ToolBox\Metadata;
+use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
