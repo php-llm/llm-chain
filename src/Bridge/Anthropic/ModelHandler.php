@@ -61,12 +61,10 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
             $options['tool_choice'] = ['type' => 'auto'];
         }
 
-        $system = $input->getSystemMessage();
-        $body = array_merge($options, [
+        $body = [
             'model' => $model->getVersion(),
-            'system' => $system->content,
             'messages' => $input->withoutSystemMessage()->jsonSerialize(),
-        ]);
+        ];
 
         $body['messages'] = array_map(static function (MessageInterface $message) {
             if ($message instanceof ToolCallMessage) {
@@ -98,12 +96,16 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
             return $message;
         }, $body['messages']);
 
+        if ($system = $input->getSystemMessage()) {
+            $body['system'] = $system->content;
+        }
+
         return $this->httpClient->request('POST', 'https://api.anthropic.com/v1/messages', [
             'headers' => [
                 'x-api-key' => $this->apiKey,
                 'anthropic-version' => $this->version,
             ],
-            'json' => $body,
+            'json' => array_merge($options, $body),
         ]);
     }
 
