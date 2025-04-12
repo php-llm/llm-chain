@@ -1,7 +1,7 @@
 <?php
 
-use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
-use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
+use PhpLlm\LlmChain\Bridge\Anthropic\Claude;
+use PhpLlm\LlmChain\Bridge\Anthropic\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\Toolbox\Tool\Wikipedia;
@@ -14,13 +14,13 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 
-if (empty($_ENV['OPENAI_API_KEY'])) {
-    echo 'Please set the OPENAI_API_KEY environment variable.'.PHP_EOL;
+if (empty($_ENV['ANTHROPIC_API_KEY'])) {
+    echo 'Please set the ANTHROPIC_API_KEY environment variable.'.PHP_EOL;
     exit(1);
 }
 
-$platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI);
+$platform = PlatformFactory::create($_ENV['ANTHROPIC_API_KEY']);
+$llm = new Claude();
 
 $wikipedia = new Wikipedia(HttpClient::create());
 $toolbox = Toolbox::create($wikipedia);
