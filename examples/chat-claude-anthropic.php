@@ -16,7 +16,7 @@ if (empty($_ENV['ANTHROPIC_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['ANTHROPIC_API_KEY']);
-$llm = new Claude(Claude::VERSION_37_SONNET);
+$llm = new Claude(Claude::SONNET_37);
 
 $chain = new Chain($platform, $llm);
 $messages = new MessageBag(

@@ -37,7 +37,7 @@ final readonly class ModelClient implements PlatformResponseFactory, PlatformRes
         return $this->httpClient->request('POST', 'https://api.openai.com/v1/images/generations', [
             'auth_bearer' => $this->apiKey,
             'json' => \array_merge($options, [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'prompt' => $input,
             ]),
         ]);

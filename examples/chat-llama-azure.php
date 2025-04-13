@@ -16,7 +16,7 @@ if (empty($_ENV['AZURE_LLAMA_BASEURL']) || empty($_ENV['AZURE_LLAMA_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['AZURE_LLAMA_BASEURL'], $_ENV['AZURE_LLAMA_KEY']);
-$llm = new Llama(Llama::LLAMA_3_3_70B_INSTRUCT);
+$llm = new Llama(Llama::V3_3_70B_INSTRUCT);
 
 $chain = new Chain($platform, $llm);
 $messages = new MessageBag(Message::ofUser('I am going to Paris, what should I see?'));

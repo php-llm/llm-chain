@@ -13,14 +13,14 @@ final readonly class DallE implements Model
 
     /** @param array<string, mixed> $options The default options for the model usage */
     public function __construct(
-        private string $version = self::DALL_E_2,
+        private string $name = self::DALL_E_2,
         private array $options = [],
     ) {
     }
 
-    public function getVersion(): string
+    public function getName(): string
     {
-        return $this->version;
+        return $this->name;
     }
 
     /** @return array<string, mixed> */

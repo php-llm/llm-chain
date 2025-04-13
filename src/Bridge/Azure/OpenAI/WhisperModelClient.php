@@ -50,7 +50,7 @@ final readonly class WhisperModelClient implements ModelClient
             ],
             'query' => ['api-version' => $this->apiVersion],
             'body' => array_merge($options, $model->getOptions(), [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'file' => fopen($input->path, 'r'),
             ]),
         ]);

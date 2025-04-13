@@ -35,7 +35,7 @@ final readonly class ModelClient implements PlatformResponseFactory
         return $this->httpClient->request('POST', 'https://api.openai.com/v1/chat/completions', [
             'auth_bearer' => $this->apiKey,
             'json' => array_merge($options, [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'messages' => $input,
             ]),
         ]);

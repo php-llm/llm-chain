@@ -33,7 +33,7 @@ final readonly class LlamaModelHandler implements ModelClient, ResponseConverter
         return $this->httpClient->request('POST', sprintf('%s/api/chat', $this->hostUrl), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'messages' => $input,
                 'stream' => false,
             ],

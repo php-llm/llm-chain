@@ -34,7 +34,7 @@ final readonly class ModelClient implements BaseModelClient
             'auth_bearer' => $this->apiKey,
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'body' => array_merge($options, $model->getOptions(), [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'file' => fopen($input->path, 'r'),
             ]),
         ]);

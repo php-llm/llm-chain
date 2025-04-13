@@ -32,7 +32,7 @@ final readonly class ModelClient implements PlatformResponseFactory
         return $this->httpClient->request('POST', 'https://api.openai.com/v1/embeddings', [
             'auth_bearer' => $this->apiKey,
             'json' => array_merge($model->getOptions(), $options, [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'input' => $input,
             ]),
         ]);

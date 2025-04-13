@@ -8,26 +8,26 @@ use PhpLlm\LlmChain\Model\LanguageModel;
 
 final readonly class Claude implements LanguageModel
 {
-    public const VERSION_3_HAIKU = 'claude-3-haiku-20240307';
-    public const VERSION_35_HAIKU = 'claude-3-5-haiku-20241022';
-    public const VERSION_3_SONNET = 'claude-3-sonnet-20240229';
-    public const VERSION_35_SONNET = 'claude-3-5-sonnet-20240620';
-    public const VERSION_35_SONNET_V2 = 'claude-3-5-sonnet-20241022';
-    public const VERSION_37_SONNET = 'claude-3-7-sonnet-20250219';
-    public const VERSION_3_OPUS = 'claude-3-opus-20240229';
+    public const HAIKU_3 = 'claude-3-haiku-20240307';
+    public const HAIKU_35 = 'claude-3-5-haiku-20241022';
+    public const SONNET_3 = 'claude-3-sonnet-20240229';
+    public const SONNET_35 = 'claude-3-5-sonnet-20240620';
+    public const SONNET_35_V2 = 'claude-3-5-sonnet-20241022';
+    public const SONNET_37 = 'claude-3-7-sonnet-20250219';
+    public const OPUS_3 = 'claude-3-opus-20240229';
 
     /**
      * @param array<string, mixed> $options The default options for the model usage
      */
     public function __construct(
-        private string $version = self::VERSION_35_SONNET,
+        private string $name = self::SONNET_37,
         private array $options = ['temperature' => 1.0, 'max_tokens' => 1000],
     ) {
     }
 
-    public function getVersion(): string
+    public function getName(): string
     {
-        return $this->version;
+        return $this->name;
     }
 
     public function getOptions(): array

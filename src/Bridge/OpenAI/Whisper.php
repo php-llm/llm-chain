@@ -14,14 +14,14 @@ final readonly class Whisper implements Model
      * @param array<string, mixed> $options
      */
     public function __construct(
-        private string $version = self::WHISPER_1,
+        private string $name = self::WHISPER_1,
         private array $options = [],
     ) {
     }
 
-    public function getVersion(): string
+    public function getName(): string
     {
-        return $this->version;
+        return $this->name;
     }
 
     public function getOptions(): array

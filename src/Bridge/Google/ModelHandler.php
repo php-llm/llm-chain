@@ -48,7 +48,7 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
 
         $url = sprintf(
             'https://generativelanguage.googleapis.com/v1beta/models/%s:%s',
-            $model->getVersion(),
+            $model->getName(),
             $options['stream'] ?? false ? 'streamGenerateContent' : 'generateContent',
         );
 

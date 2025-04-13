@@ -46,7 +46,7 @@ final readonly class EmbeddingsModelClient implements ModelClient
             ],
             'query' => ['api-version' => $this->apiVersion],
             'json' => array_merge($options, [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'input' => $input,
             ]),
         ]);

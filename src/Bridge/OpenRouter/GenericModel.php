@@ -13,14 +13,14 @@ final readonly class GenericModel implements LanguageModel
      * @param array<string, mixed> $options
      */
     public function __construct(
-        private string $version = Llama::LLAMA_3_2_90B_VISION_INSTRUCT,
+        private string $name = Llama::V3_2_90B_VISION_INSTRUCT,
         private array $options = [],
     ) {
     }
 
-    public function getVersion(): string
+    public function getName(): string
     {
-        return $this->version;
+        return $this->name;
     }
 
     public function getOptions(): array

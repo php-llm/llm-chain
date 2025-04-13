@@ -39,7 +39,7 @@ final readonly class Client implements ModelClient, ResponseConverter
         return $this->httpClient->request('POST', 'https://openrouter.ai/api/v1/chat/completions', [
             'auth_bearer' => $this->apiKey,
             'json' => array_merge($options, [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'messages' => $input,
             ]),
         ]);

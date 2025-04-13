@@ -62,7 +62,7 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
         }
 
         $body = [
-            'model' => $model->getVersion(),
+            'model' => $model->getName(),
             'messages' => $input->withoutSystemMessage()->jsonSerialize(),
         ];
 
