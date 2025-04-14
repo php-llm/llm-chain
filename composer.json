@@ -32,6 +32,7 @@
     },
     "require-dev": {
         "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3",
+        "codewithkyrian/transformers": "^0.5.3",
         "mongodb/mongodb": "^1.21",
         "php-cs-fixer/shim": "^3.70",
         "phpstan/phpstan": "^2.0",
@@ -53,6 +54,7 @@
     },
     "suggest": {
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
+        "codewithkyrian/transformers": "For using the TransformersPHP with FFI to run models in PHP.",
         "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
         "symfony/css-selector": "For using the YouTube transcription tool.",
@@ -69,6 +71,9 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "codewithkyrian/transformers-libsloader": true
+        }
     }
 }
