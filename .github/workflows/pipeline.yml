@@ -1,9 +1,6 @@
 name: pipeline
 on: pull_request
 
-env:
-  REQUIRED_PHP_EXTENSIONS: 'mongodb'
-
 permissions:
   contents: read
   pull-requests: write
@@ -24,18 +21,12 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: "none"
-          extensions: "${{ env.REQUIRED_PHP_EXTENSIONS }}"
 
       - name: Install Composer
         uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-
-      - name: Composer Validation
-        run: composer validate --strict
-
-      - name: Install PHP Dependencies
-        run: composer install --no-scripts
+          composer-options: "--ignore-platform-req=ext-mongodb"
 
       - name: Tests
         run: vendor/bin/phpunit
@@ -55,12 +46,11 @@ jobs:
 
       - name: Install Composer
         uses: "ramsey/composer-install@v3"
+        with:
+          composer-options: "--ignore-platform-req=ext-mongodb"
 
       - name: Composer Validation
         run: composer validate --strict
-
-      - name: Install PHP Dependencies
-        run: composer install --no-scripts
 
       - name: Code Style PHP
         run: vendor/bin/php-cs-fixer fix --dry-run
