@@ -31,7 +31,7 @@ final readonly class LlamaModelClient implements ModelClient
         Assert::isInstanceOf($model, Llama::class);
         Assert::isInstanceOf($input, MessageBagInterface::class);
 
-        return $this->client->request(sprintf('meta/meta-%s', $model->getVersion()), 'predictions', [
+        return $this->client->request(sprintf('meta/meta-%s', $model->getName()), 'predictions', [
             'system' => $this->promptConverter->convertMessage($input->getSystemMessage() ?? new SystemMessage('')),
             'prompt' => $this->promptConverter->convertToPrompt($input->withoutSystemMessage()),
         ]);

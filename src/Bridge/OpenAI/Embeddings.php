@@ -16,14 +16,14 @@ final readonly class Embeddings implements EmbeddingsModel
      * @param array<string, mixed> $options
      */
     public function __construct(
-        private string $version = self::TEXT_3_SMALL,
+        private string $name = self::TEXT_3_SMALL,
         private array $options = [],
     ) {
     }
 
-    public function getVersion(): string
+    public function getName(): string
     {
-        return $this->version;
+        return $this->name;
     }
 
     public function getOptions(): array

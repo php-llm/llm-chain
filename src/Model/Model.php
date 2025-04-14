@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Model;
 
 interface Model
 {
-    public function getVersion(): string;
+    public function getName(): string;
 
     /**
      * @return array<string, mixed>

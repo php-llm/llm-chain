@@ -17,7 +17,7 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 
 $response = $platform->request(
-    model: new DallE(version: DallE::DALL_E_3),
+    model: new DallE(name: DallE::DALL_E_3),
     input: 'A cartoon-style elephant with a long trunk and large ears.',
     options: [
         'response_format' => 'url', // Generate response as URL

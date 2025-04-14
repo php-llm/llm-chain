@@ -32,7 +32,7 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
         return $this->httpClient->request('POST', 'https://api.voyageai.com/v1/embeddings', [
             'auth_bearer' => $this->apiKey,
             'json' => [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'input' => $input,
             ],
         ]);

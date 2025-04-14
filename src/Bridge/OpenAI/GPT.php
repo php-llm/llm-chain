@@ -25,28 +25,28 @@ final class GPT implements LanguageModel
      * @param array<mixed> $options The default options for the model usage
      */
     public function __construct(
-        private readonly string $version = self::GPT_4O,
+        private readonly string $name = self::GPT_4O,
         private readonly array $options = ['temperature' => 1.0],
         private bool $supportsAudioInput = false,
         private bool $supportsImageInput = false,
         private bool $supportsStructuredOutput = false,
     ) {
         if (false === $this->supportsAudioInput) {
-            $this->supportsAudioInput = self::GPT_4O_AUDIO === $this->version;
+            $this->supportsAudioInput = self::GPT_4O_AUDIO === $this->name;
         }
 
         if (false === $this->supportsImageInput) {
-            $this->supportsImageInput = in_array($this->version, [self::GPT_4_TURBO, self::GPT_4O, self::GPT_4O_MINI, self::O1_MINI, self::O1_PREVIEW, self::O3_MINI, self::GPT_45_PREVIEW], true);
+            $this->supportsImageInput = in_array($this->name, [self::GPT_4_TURBO, self::GPT_4O, self::GPT_4O_MINI, self::O1_MINI, self::O1_PREVIEW, self::O3_MINI, self::GPT_45_PREVIEW], true);
         }
 
         if (false === $this->supportsStructuredOutput) {
-            $this->supportsStructuredOutput = in_array($this->version, [self::GPT_4O, self::GPT_4O_MINI, self::O3_MINI, self::GPT_45_PREVIEW], true);
+            $this->supportsStructuredOutput = in_array($this->name, [self::GPT_4O, self::GPT_4O_MINI, self::O3_MINI, self::GPT_45_PREVIEW], true);
         }
     }
 
-    public function getVersion(): string
+    public function getName(): string
     {
-        return $this->version;
+        return $this->name;
     }
 
     public function getOptions(): array

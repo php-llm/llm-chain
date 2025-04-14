@@ -18,14 +18,14 @@ final readonly class Gemini implements LanguageModel
      * @param array<string, mixed> $options The default options for the model usage
      */
     public function __construct(
-        private string $version = self::GEMINI_2_PRO,
+        private string $name = self::GEMINI_2_PRO,
         private array $options = ['temperature' => 1.0],
     ) {
     }
 
-    public function getVersion(): string
+    public function getName(): string
     {
-        return $this->version;
+        return $this->name;
     }
 
     public function getOptions(): array

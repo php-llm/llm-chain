@@ -41,7 +41,7 @@ final readonly class LlamaHandler implements ModelClient, ResponseConverter
                 'Authorization' => $this->apiKey,
             ],
             'json' => array_merge($options, [
-                'model' => $model->getVersion(),
+                'model' => $model->getName(),
                 'messages' => $input,
             ]),
         ]);
