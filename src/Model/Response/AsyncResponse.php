@@ -36,4 +36,17 @@ final class AsyncResponse implements ResponseInterface
 
         return $this->convertedResponse;
     }
+
+    /**
+     * @param array<int, mixed> $arguments
+     */
+    public function __call(string $name, array $arguments): mixed
+    {
+        return $this->unwrap()->{$name}(...$arguments);
+    }
+
+    public function __get(string $name): mixed
+    {
+        return $this->unwrap()->{$name};
+    }
 }
