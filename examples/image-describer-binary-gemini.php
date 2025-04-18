@@ -24,7 +24,7 @@ $messages = new MessageBag(
     Message::forSystem('You are an image analyzer bot that helps identify the content of images.'),
     Message::ofUser(
         'Describe the image as a comedian would do it.',
-        new Image(dirname(__DIR__).'/tests/Fixture/image.jpg'),
+        Image::fromFile(dirname(__DIR__).'/tests/Fixture/image.jpg'),
     ),
 );
 $response = $chain->call($messages);

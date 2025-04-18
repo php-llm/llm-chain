@@ -12,8 +12,6 @@ use PhpLlm\LlmChain\Model\Message\MessageInterface;
 use PhpLlm\LlmChain\Model\Message\Role;
 use PhpLlm\LlmChain\Model\Message\UserMessage;
 
-use function Symfony\Component\String\u;
-
 final class GooglePromptConverter
 {
     /**
@@ -63,8 +61,8 @@ final class GooglePromptConverter
                 }
                 if ($content instanceof Image) {
                     $parts[] = ['inline_data' => [
-                        'mime_type' => u($content->url)->after('data:')->before(';')->toString(),
-                        'data' => u($content->url)->after('base64,')->toString(),
+                        'mime_type' => $content->getFormat(),
+                        'data' => $content->asBase64(),
                     ]];
                 }
             }

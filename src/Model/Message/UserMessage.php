@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Model\Message;
 use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PhpLlm\LlmChain\Model\Message\Content\Content;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Model\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 
 final readonly class UserMessage implements MessageInterface
@@ -41,7 +42,7 @@ final readonly class UserMessage implements MessageInterface
     public function hasImageContent(): bool
     {
         foreach ($this->content as $content) {
-            if ($content instanceof Image) {
+            if ($content instanceof Image || $content instanceof ImageUrl) {
                 return true;
             }
         }
