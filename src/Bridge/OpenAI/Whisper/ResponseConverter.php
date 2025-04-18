@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\OpenAI\Whisper;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\Whisper;
+use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
@@ -15,7 +16,7 @@ final class ResponseConverter implements BaseResponseConverter
 {
     public function supports(Model $model, object|array|string $input): bool
     {
-        return $model instanceof Whisper && $input instanceof File;
+        return $model instanceof Whisper && $input instanceof Audio;
     }
 
     public function convert(HttpResponse $response, array $options = []): LlmResponse

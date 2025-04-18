@@ -552,9 +552,9 @@ $messages = new MessageBag(
     Message::forSystem('You are an image analyzer bot that helps identify the content of images.'),
     Message::ofUser(
         'Describe the image as a comedian would do it.',
-        new Image(dirname(__DIR__).'/tests/Fixture/image.jpg'), // Path to an image file
-        new Image('https://foo.com/bar.png'), // URL to an image
-        new Image('data:image/png;base64,...'), // Data URL of an image
+        Image::fromFile(dirname(__DIR__).'/tests/Fixture/image.jpg'), // Path to an image file
+        Image::fromDataUrl('data:image/png;base64,...'), // Data URL of an image
+        new ImageUrl('https://foo.com/bar.png'), // URL to an image
     ),
 );
 $response = $chain->call($messages);
@@ -579,7 +579,7 @@ use PhpLlm\LlmChain\Model\Message\MessageBag;
 $messages = new MessageBag(
     Message::ofUser(
         'What is this recording about?',
-        Audio:fromFile(dirname(__DIR__).'/tests/Fixture/audio.mp3'), // Path to an audio file
+        Audio::fromFile(dirname(__DIR__).'/tests/Fixture/audio.mp3'), // Path to an audio file
     ),
 );
 $response = $chain->call($messages);

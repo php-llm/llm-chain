@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Model\Message;
 
 use PhpLlm\LlmChain\Model\Message\Content\Audio;
-use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Model\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Role;
 use PhpLlm\LlmChain\Model\Message\UserMessage;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(UserMessage::class)]
 #[UsesClass(Text::class)]
 #[UsesClass(Audio::class)]
-#[UsesClass(Image::class)]
+#[UsesClass(ImageUrl::class)]
 #[UsesClass(Role::class)]
 #[Small]
 final class UserMessageTest extends TestCase
@@ -36,7 +36,7 @@ final class UserMessageTest extends TestCase
     #[Test]
     public function constructionIsPossibleWithMultipleContent(): void
     {
-        $message = new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg'));
+        $message = new UserMessage(new Text('foo'), new ImageUrl('https://foo.com/bar.jpg'));
 
         self::assertCount(2, $message->content);
     }
@@ -68,7 +68,7 @@ final class UserMessageTest extends TestCase
     #[Test]
     public function hasImageContentWithImage(): void
     {
-        $message = new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg'));
+        $message = new UserMessage(new Text('foo'), new ImageUrl('https://foo.com/bar.jpg'));
 
         self::assertTrue($message->hasImageContent());
     }
@@ -88,7 +88,7 @@ final class UserMessageTest extends TestCase
         ];
 
         yield 'With single image' => [
-            new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg')),
+            new UserMessage(new Text('foo'), new ImageUrl('https://foo.com/bar.jpg')),
             [
                 'role' => Role::User,
                 'content' => [
@@ -99,7 +99,7 @@ final class UserMessageTest extends TestCase
         ];
 
         yield 'With single multiple images' => [
-            new UserMessage(new Text('foo'), new Image('https://foo.com/bar.jpg'), new Image('https://foo.com/baz.jpg')),
+            new UserMessage(new Text('foo'), new ImageUrl('https://foo.com/bar.jpg'), new ImageUrl('https://foo.com/baz.jpg')),
             [
                 'role' => Role::User,
                 'content' => [

@@ -2,7 +2,7 @@
 
 use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Bridge\OpenAI\Whisper;
-use PhpLlm\LlmChain\Bridge\OpenAI\Whisper\File;
+use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use Symfony\Component\Dotenv\Dotenv;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
@@ -15,7 +15,7 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $model = new Whisper();
-$file = new File(dirname(__DIR__).'/tests/Fixture/audio.mp3');
+$file = Audio::fromFile(dirname(__DIR__).'/tests/Fixture/audio.mp3');
 
 $response = $platform->request($model, $file);
 
