@@ -1,9 +1,9 @@
 # LLM Chain
 
-PHP library for building LLM-based features and applications.
+PHP library for building LLM-based and AI-based features and applications.
 
-This library is not a stable yet, but still rather experimental. Feel free to try it out, give feedback, ask questions, contribute or share your use cases.
-Abstractions, concepts and interfaces are not final and potentially subject of change.
+This library is not a stable yet, but still rather experimental. Feel free to try it out, give feedback, ask questions,
+contribute or share your use cases. Abstractions, concepts and interfaces are not final and potentially subject of change.
 
 ## Requirements
 
@@ -25,7 +25,7 @@ See [examples](examples) folder to run example implementations using this librar
 Depending on the example you need to export different environment variables
 for API keys or deployment configurations or create a `.env.local` based on `.env` file.
 
-To run all examples, use `make run-examples` or `php example`.
+To run all examples, use `make run-examples` or `php example` and `php huggingface` for all HuggingFace related examples.
 
 For a more sophisticated demo, see the [Symfony Demo Application](https://github.com/php-llm/symfony-demo).
 
@@ -33,7 +33,8 @@ For a more sophisticated demo, see the [Symfony Demo Application](https://github
 
 ### Models & Platforms
 
-LLM Chain categorizes two main types of models: **Language Models** and **Embeddings Models**.
+LLM Chain categorizes two main types of models: **Language Models** and **Embeddings Models**. On top of that, there are
+other models, like text-to-speech, image generation or classification models that are also supported.
 
 Language Models, like GPT, Claude and Llama, as essential centerpiece of LLM applications
 and Embeddings Models as supporting models to provide vector representations of text.
@@ -71,6 +72,8 @@ $embeddings = new Embeddings();
 * Other Models
   * [OpenAI's Dall·E](https://platform.openai.com/docs/guides/image-generation) with [OpenAI](https://platform.openai.com/docs/overview) as Platform
   * [OpenAI's Whisper](https://platform.openai.com/docs/guides/speech-to-text) with [OpenAI](https://platform.openai.com/docs/overview) and [Azure](https://learn.microsoft.com/azure/ai-services/openai/concepts/models) as Platform
+  * All models provided by [HuggingFace](https://huggingface.co/) can be listed with `make huggingface-models`
+    And more filtered with `php examples/huggingface/_model-listing.php --provider=hf-inference --task=object-detection`
 
 See [issue #28](https://github.com/php-llm/llm-chain/issues/28) for planned support of other models and platforms.
 
@@ -724,6 +727,51 @@ final class MyProcessor implements OutputProcessor, ChainAwareProcessor
     }
 }
 ```
+
+## HuggingFace
+
+LLM Chain comes out of the box with an integration for [HuggingFace](https://huggingface.co/)  which is a platform for
+hosting and sharing all kind of models, including LLMs, embeddings, image generation and classification models.
+
+You can just instantiate the Platform with the corresponding HuggingFace bridge and use it with the `task` option:
+```php
+use PhpLlm\LlmChain\Bridge\HuggingFace\Model;
+use PhpLlm\LlmChain\Bridge\HuggingFace\PlatformFactory;
+use PhpLlm\LlmChain\Bridge\HuggingFace\Task;
+use PhpLlm\LlmChain\Model\Message\Content\Image;
+
+$platform = PlatformFactory::create($apiKey);
+$model = new Model('facebook/detr-resnet-50');
+
+$image = Image::fromFile(dirname(__DIR__, 2).'/tests/Fixture/image.jpg');
+$response = $platform->request($model, $image, [
+    'task' => Task::OBJECT_DETECTION, // defining a task is mandatory for internal request & response handling
+]);
+
+dump($response->getContent());
+```
+
+#### Code Examples
+
+1. [Audio Classification](examples/huggingface/audio-classification.php)
+1. [Automatic Speech Recognition](examples/huggingface/automatic-speech-recognition.php)
+1. [Chat Completion](examples/huggingface/chat-completion.php)
+1. [Feature Extraction (Embeddings)](examples/huggingface/feature-extraction.php)
+1. [Fill Mask](examples/huggingface/fill-mask.php)
+1. [Image Classification](examples/huggingface/image-classification.php)
+1. [Image Segmentation.php](examples/huggingface/image-segmentation.php)
+1. [Image-to-Text](examples/huggingface/image-to-text.php)
+1. [Object Detection](examples/huggingface/object-detection.php)
+1. [Question Answering](examples/huggingface/question-answering.php)
+1. [Sentence Similarity](examples/huggingface/sentence-similarity.php)
+1. [Summarization](examples/huggingface/summarization.php)
+1. [Table Question Answering](examples/huggingface/table-question-answering.php)
+1. [Text Classification](examples/huggingface/text-classification.php)
+1. [Text Generation](examples/huggingface/text-generation.php)
+1. [Text-to-Image](examples/huggingface/text-to-image.php)
+1. [Token Classification](examples/huggingface/token-classification.php)
+1. [Translation](examples/huggingface/translation.php)
+1. [Zero-shot Classification](examples/huggingface/zero-shot-classification.php)
 
 ## Contributions
 
