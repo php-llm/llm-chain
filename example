@@ -35,9 +35,6 @@ $app = (new SingleCommandApplication('LLM Chain Example Runner'))
             $process->start();
         }
 
-        $examplesRunning = fn () => array_reduce($exampleRuns, fn ($running, $example) => $running || $example['process']->isRunning(), false);
-        $examplesSuccessful = fn () => array_reduce($exampleRuns, fn ($successful, $example) => $successful && $example['process']->isSuccessful(), true);
-
         $section = $output->section();
         $renderTable = function () use ($exampleRuns, $section) {
             $section->clear();
@@ -64,21 +61,37 @@ $app = (new SingleCommandApplication('LLM Chain Example Runner'))
             $table->render();
         };
 
+        $examplesRunning = fn () => array_reduce($exampleRuns, fn ($running, $example) => $running || $example['process']->isRunning(), false);
         while ($examplesRunning()) {
             $renderTable();
             sleep(1);
         }
 
         $renderTable();
-
         $io->newLine();
-        if (!$examplesSuccessful()) {
-            $io->error('Some examples failed or were skipped!');
 
-            return Command::FAILURE;
+        $successCount = array_reduce($exampleRuns, function ($count, $example) {
+            if ($example['process']->isSuccessful() && strlen(trim($example['process']->getOutput())) > 0) {
+                return $count + 1;
+            }
+            return $count;
+        }, 0);
+
+        $totalCount = count($exampleRuns);
+
+        if ($successCount < $totalCount) {
+            $io->warning(sprintf('%d out of %d examples ran successfully.', $successCount, $totalCount));
+        } else {
+            $io->success(sprintf('All %d examples ran successfully!', $totalCount));
         }
 
-        $io->success('All examples ran successfully!');
+        foreach ($exampleRuns as $run) {
+            if (!$run['process']->isSuccessful()) {
+                $io->section('Error in ' . $run['example']->getFilename());
+                $io->text($run['process']->getOutput());
+                $io->text($run['process']->getErrorOutput());
+            }
+        }
 
         return Command::SUCCESS;
     })
