@@ -1,8 +1,14 @@
 {
     "name": "php-llm/llm-chain",
-    "description": "A slim PHP component with tooling around LLMs.",
-    "license": "MIT",
     "type": "library",
+    "description": "PHP library for building LLM-based and AI-based features and applications.",
+    "keywords": [
+        "ai",
+        "llm",
+        "huggingface",
+        "transformers"
+    ],
+    "license": "MIT",
     "authors": [
         {
             "name": "Christopher Hertel",
@@ -30,6 +36,9 @@
         "symfony/uid": "^6.4 || ^7.1",
         "webmozart/assert": "^1.11"
     },
+    "conflict": {
+        "mongodb/mongodb": "<1.21"
+    },
     "require-dev": {
         "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3",
         "codewithkyrian/transformers": "^0.5.3",
@@ -49,9 +58,6 @@
         "symfony/process": "^6.4 || ^7.1",
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
-    "conflict": {
-        "mongodb/mongodb": "<1.21"
-    },
     "suggest": {
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
         "codewithkyrian/transformers": "For using the TransformersPHP with FFI to run models in PHP.",
@@ -59,6 +65,12 @@
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
         "symfony/css-selector": "For using the YouTube transcription tool.",
         "symfony/dom-crawler": "For using the YouTube transcription tool."
+    },
+    "config": {
+        "allow-plugins": {
+            "codewithkyrian/transformers-libsloader": true
+        },
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
@@ -68,12 +80,6 @@
     "autoload-dev": {
         "psr-4": {
             "PhpLlm\\LlmChain\\Tests\\": "tests/"
-        }
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "codewithkyrian/transformers-libsloader": true
         }
     }
 }
