@@ -3,7 +3,6 @@
 use PhpLlm\LlmChain\Bridge\OpenAI\DallE;
 use PhpLlm\LlmChain\Bridge\OpenAI\DallE\ImageResponse;
 use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
-use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use Symfony\Component\Dotenv\Dotenv;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
@@ -23,10 +22,6 @@ $response = $platform->request(
         'response_format' => 'url', // Generate response as URL
     ],
 );
-
-if ($response instanceof AsyncResponse) {
-    $response = $response->unwrap();
-}
 
 assert($response instanceof ImageResponse);
 
