@@ -773,6 +773,33 @@ dump($response->getContent());
 1. [Translation](examples/huggingface/translation.php)
 1. [Zero-shot Classification](examples/huggingface/zero-shot-classification.php)
 
+## TransformerPHP
+
+With installing the library `codewithkyrian/transformers` it is possible to run [ONNX](https://onnx.ai/) models locally
+without the need of an extra tool like Ollama or a cloud service. This requires [FFI](https://www.php.net/manual/en/book.ffi.php)
+and comes with an extra setup, see [TransformersPHP's Getting Starter](https://transformers.codewithkyrian.com/getting-started).
+
+The usage with LLM Chain is similar to the HuggingFace integration, and also requires the `task` option to be set:
+
+```php
+use Codewithkyrian\Transformers\Pipelines\Task;
+use PhpLlm\LlmChain\Bridge\TransformersPHP\Model;
+use PhpLlm\LlmChain\Bridge\TransformersPHP\PlatformFactory;
+
+$platform = PlatformFactory::create();
+$model = new Model('Xenova/LaMini-Flan-T5-783M');
+
+$response = $platform->request($model, 'How many continents are there in the world?', [
+    'task' => Task::Text2TextGeneration,
+]);
+
+echo $response->getContent().PHP_EOL;
+```
+
+#### Code Examples
+
+1. [Text Generation with TransformersPHP](examples/transformers-text-generation.php)
+
 ## Contributions
 
 Contributions are always welcome, so feel free to join the development of this library. To get started, please read the
