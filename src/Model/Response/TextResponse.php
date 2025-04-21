@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Response;
 
-final readonly class TextResponse implements ResponseInterface
+final class TextResponse extends BaseResponse
 {
     public function __construct(
-        private string $content,
+        private readonly string $content,
     ) {
     }
 

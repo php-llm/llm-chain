@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Response;
 
+use PhpLlm\LlmChain\Model\Response\Exception\RawResponseAlreadySet;
+use PhpLlm\LlmChain\Model\Response\Metadata\MetadataAwareTrait;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 final class AsyncResponse implements ResponseInterface
 {
+    use MetadataAwareTrait;
+
     private bool $isConverted = false;
     private ResponseInterface $convertedResponse;
 
@@ -27,10 +31,27 @@ final class AsyncResponse implements ResponseInterface
         return $this->unwrap()->getContent();
     }
 
+    public function getRawResponse(): HttpResponse
+    {
+        return $this->response;
+    }
+
+    public function setRawResponse(HttpResponse $rawResponse): void
+    {
+        // Empty by design as the raw response is already set in the constructor and must only be set once
+        throw new RawResponseAlreadySet();
+    }
+
     public function unwrap(): ResponseInterface
     {
         if (!$this->isConverted) {
             $this->convertedResponse = $this->responseConverter->convert($this->response, $this->options);
+
+            if (null === $this->convertedResponse->getRawResponse()) {
+                // Fallback to set the raw response when it was not handled by the response converter itself
+                $this->convertedResponse->setRawResponse($this->response);
+            }
+
             $this->isConverted = true;
         }
 
