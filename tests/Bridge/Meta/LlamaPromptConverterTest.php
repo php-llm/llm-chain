@@ -6,7 +6,6 @@ namespace PhpLlm\LlmChain\Tests\Bridge\Meta;
 
 use PhpLlm\LlmChain\Bridge\Meta\LlamaPromptConverter;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
-use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Message;
@@ -23,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(LlamaPromptConverter::class)]
 #[Small]
 #[UsesClass(AssistantMessage::class)]
-#[UsesClass(Image::class)]
+#[UsesClass(ImageUrl::class)]
 #[UsesClass(Text::class)]
 #[UsesClass(Message::class)]
 #[UsesClass(MessageBag::class)]

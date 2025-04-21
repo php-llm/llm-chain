@@ -14,10 +14,14 @@ use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PhpLlm\LlmChain\Model\Model as BaseModel;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 #[CoversClass(ModelClient::class)]
+#[Small]
+#[UsesClass(Model::class)]
 final class ModelClientTest extends TestCase
 {
     public function testSupportsWithHuggingFaceModel(): void
