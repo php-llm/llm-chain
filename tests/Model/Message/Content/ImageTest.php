@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Model\Message\Content;
+namespace PhpLlm\LlmChain\Tests\Model\Message\Content;
 
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PHPUnit\Framework\Attributes\CoversClass;

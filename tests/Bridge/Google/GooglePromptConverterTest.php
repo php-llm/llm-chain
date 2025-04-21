@@ -6,6 +6,7 @@ namespace PhpLlm\LlmChain\Tests\Bridge\Google;
 
 use PhpLlm\LlmChain\Bridge\Google\GooglePromptConverter;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
+use PhpLlm\LlmChain\Model\Message\Content\File;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
@@ -22,6 +23,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(UserMessage::class)]
 #[UsesClass(AssistantMessage::class)]
 #[UsesClass(MessageBag::class)]
+#[UsesClass(File::class)]
 final class GooglePromptConverterTest extends TestCase
 {
     #[Test]
