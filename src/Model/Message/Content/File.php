@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Model\Message\Content;
 
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
+use PhpLlm\LlmChain\Exception\RuntimeException;
 
 use function Symfony\Component\String\u;
 
@@ -32,7 +33,7 @@ readonly class File
     public static function fromFile(string $path): static
     {
         if (!is_readable($path)) {
-            throw new \InvalidArgumentException(sprintf('The file "%s" does not exist or is not readable.', $path));
+            throw new InvalidArgumentException(sprintf('The file "%s" does not exist or is not readable.', $path));
         }
 
         return new static(
@@ -68,7 +69,7 @@ readonly class File
     public function asResource()
     {
         if (null === $this->path) {
-            throw new \RuntimeException('You can only get a resource after creating fromFile.');
+            throw new RuntimeException('You can only get a resource after creating fromFile.');
         }
 
         return fopen($this->path, 'r');
