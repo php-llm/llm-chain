@@ -10,10 +10,6 @@ trait MetadataAwareTrait
 
     public function getMetadata(): Metadata
     {
-        if (null === $this->metadata) {
-            $this->metadata = new Metadata();
-        }
-
-        return $this->metadata;
+        return $this->metadata ??= new Metadata();
     }
 }
