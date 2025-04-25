@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Chain\Toolbox\Tool;
 
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -15,7 +16,7 @@ final readonly class Crawler
         private HttpClientInterface $httpClient,
     ) {
         if (!class_exists(DomCrawler::class)) {
-            throw new \RuntimeException('The DomCrawler component is not installed. Please install it using "composer require symfony/dom-crawler".');
+            throw new RuntimeException('The DomCrawler component is not installed. Please install it using "composer require symfony/dom-crawler".');
         }
     }
 

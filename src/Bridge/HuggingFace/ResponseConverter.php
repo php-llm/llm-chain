@@ -14,6 +14,8 @@ use PhpLlm\LlmChain\Bridge\HuggingFace\Output\TableQuestionAnsweringResult;
 use PhpLlm\LlmChain\Bridge\HuggingFace\Output\TokenClassificationResult;
 use PhpLlm\LlmChain\Bridge\HuggingFace\Output\ZeroShotClassificationResult;
 use PhpLlm\LlmChain\Document\Vector;
+use PhpLlm\LlmChain\Exception\InvalidArgumentException;
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Model as BaseModel;
 use PhpLlm\LlmChain\Model\Response\BinaryResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
@@ -33,11 +35,11 @@ final readonly class ResponseConverter implements PlatformResponseConverter
     public function convert(ResponseInterface $response, array $options = []): LlmResponse
     {
         if (503 === $response->getStatusCode()) {
-            return throw new \RuntimeException('Service unavailable.');
+            return throw new RuntimeException('Service unavailable.');
         }
 
         if (404 === $response->getStatusCode()) {
-            return throw new \InvalidArgumentException('Model, provider or task not found (404).');
+            return throw new InvalidArgumentException('Model, provider or task not found (404).');
         }
 
         $headers = $response->getHeaders(false);
@@ -48,11 +50,11 @@ final readonly class ResponseConverter implements PlatformResponseConverter
             $message = is_string($content) ? $content :
                 (is_array($content['error']) ? $content['error'][0] : $content['error']);
 
-            throw new \InvalidArgumentException(sprintf('API Client Error (%d): %s', $response->getStatusCode(), $message));
+            throw new InvalidArgumentException(sprintf('API Client Error (%d): %s', $response->getStatusCode(), $message));
         }
 
         if (200 !== $response->getStatusCode()) {
-            throw new \RuntimeException('Unhandled response code: '.$response->getStatusCode());
+            throw new RuntimeException('Unhandled response code: '.$response->getStatusCode());
         }
 
         $task = $options['task'] ?? null;
@@ -78,7 +80,7 @@ final readonly class ResponseConverter implements PlatformResponseConverter
             Task::TRANSLATION => new TextResponse($content[0]['translation_text'] ?? ''),
             Task::ZERO_SHOT_CLASSIFICATION => new StructuredResponse(ZeroShotClassificationResult::fromArray($content)),
 
-            default => throw new \RuntimeException(sprintf('Unsupported task: %s', $task)),
+            default => throw new RuntimeException(sprintf('Unsupported task: %s', $task)),
         };
     }
 }

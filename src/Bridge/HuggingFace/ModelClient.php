@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\HuggingFace;
 
+use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
@@ -99,6 +100,6 @@ final readonly class ModelClient implements PlatformModelClient
             return $payload;
         }
 
-        throw new \InvalidArgumentException('Unsupported input type: '.get_debug_type($input));
+        throw new InvalidArgumentException('Unsupported input type: '.get_debug_type($input));
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Response;
 
+use PhpLlm\LlmChain\Exception\RuntimeException;
+
 final class BinaryResponse extends BaseResponse
 {
     public function __construct(
@@ -25,7 +27,7 @@ final class BinaryResponse extends BaseResponse
     public function toDataUri(): string
     {
         if (null === $this->mimeType) {
-            throw new \RuntimeException('Mime type is not set.');
+            throw new RuntimeException('Mime type is not set.');
         }
 
         return 'data:'.$this->mimeType.';base64,'.$this->toBase64();

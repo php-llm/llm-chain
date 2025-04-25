@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\TransformersPHP;
 
 use Codewithkyrian\Transformers\Pipelines\Pipeline;
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class PipelineResponse implements ResponseInterface
@@ -35,7 +36,7 @@ final class PipelineResponse implements ResponseInterface
 
     public function getContent(bool $throw = true): string
     {
-        throw new \RuntimeException('Not implemented');
+        throw new RuntimeException('Not implemented');
     }
 
     /**
@@ -48,11 +49,11 @@ final class PipelineResponse implements ResponseInterface
 
     public function cancel(): void
     {
-        throw new \RuntimeException('Not implemented');
+        throw new RuntimeException('Not implemented');
     }
 
     public function getInfo(?string $type = null): mixed
     {
-        throw new \RuntimeException('Not implemented');
+        throw new RuntimeException('Not implemented');
     }
 }
