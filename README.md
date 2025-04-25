@@ -340,7 +340,9 @@ $eventDispatcher->addListener(ToolCallsExecuted::class, function (ToolCallsExecu
 
 #### Code Examples (with built-in tools)
 
+1. **Brave Tool**: [toolbox-brave.php](examples/toolbox-brave.php)
 1. **Clock Tool**: [toolbox-clock.php](examples/toolbox-clock.php)
+1. **Crawler Tool**: [toolbox-brave.php](examples/toolbox-brave.php)
 1. **SerpAPI Tool**: [toolbox-serpapi.php](examples/toolbox-serpapi.php)
 1. **Tavily Tool**: [toolbox-tavily.php](examples/toolbox-tavily.php)
 1. **Weather Tool with Event Listener**: [toolbox-weather-event.php](examples/toolbox-weather-event.php)
