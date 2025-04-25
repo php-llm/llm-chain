@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Response;
 
-final readonly class StructuredResponse implements ResponseInterface
+final class StructuredResponse extends BaseResponse
 {
     /**
      * @param object|array<string, mixed> $structuredOutput
      */
     public function __construct(
-        private object|array $structuredOutput,
+        private readonly object|array $structuredOutput,
     ) {
     }
 

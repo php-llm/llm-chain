@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\OpenAI\DallE;
 
-use PhpLlm\LlmChain\Model\Response\ResponseInterface;
+use PhpLlm\LlmChain\Model\Response\BaseResponse;
 
-class ImageResponse implements ResponseInterface
+class ImageResponse extends BaseResponse
 {
     /** @var list<Base64Image|UrlImage> */
     private readonly array $images;

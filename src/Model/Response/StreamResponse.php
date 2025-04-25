@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Response;
 
-final readonly class StreamResponse implements ResponseInterface
+final class StreamResponse extends BaseResponse
 {
     public function __construct(
-        private \Generator $generator,
+        private readonly \Generator $generator,
     ) {
     }
 
