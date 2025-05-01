@@ -31,8 +31,8 @@ final class BinaryTest extends TestCase
     #[Test]
     public function throwsExceptionForInvalidDataUrl(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid audio data URL format.');
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid audio data URL format.');
 
         File::fromDataUrl('invalid-data-url');
     }
@@ -76,7 +76,7 @@ final class BinaryTest extends TestCase
     #[Test]
     public function throwsExceptionForNonExistentFile(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
 
         File::fromFile('/non/existent/file.jpg');
     }

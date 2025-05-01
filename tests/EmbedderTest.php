@@ -63,8 +63,8 @@ final class EmbedderTest extends TestCase
     #[Test]
     public function embedEmptyDocumentList(): void
     {
-        $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())->method('debug')->with('No documents to embed');
+        $logger = self::createMock(LoggerInterface::class);
+        $logger->expects(self::once())->method('debug')->with('No documents to embed');
 
         $embedder = new Embedder(
             PlatformTestHandler::createPlatform(),

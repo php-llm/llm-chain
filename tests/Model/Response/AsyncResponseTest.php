@@ -31,8 +31,8 @@ final class AsyncResponseTest extends TestCase
         $httpResponse = $this->createStub(SymfonyHttpResponse::class);
         $textResponse = new TextResponse('test content');
 
-        $responseConverter = $this->createMock(ResponseConverter::class);
-        $responseConverter->expects($this->once())
+        $responseConverter = self::createMock(ResponseConverter::class);
+        $responseConverter->expects(self::once())
             ->method('convert')
             ->with($httpResponse, [])
             ->willReturn($textResponse);
@@ -48,8 +48,8 @@ final class AsyncResponseTest extends TestCase
         $httpResponse = $this->createStub(SymfonyHttpResponse::class);
         $textResponse = new TextResponse('test content');
 
-        $responseConverter = $this->createMock(ResponseConverter::class);
-        $responseConverter->expects($this->once())
+        $responseConverter = self::createMock(ResponseConverter::class);
+        $responseConverter->expects(self::once())
             ->method('convert')
             ->with($httpResponse, [])
             ->willReturn($textResponse);
@@ -76,7 +76,7 @@ final class AsyncResponseTest extends TestCase
     #[Test]
     public function itThrowsExceptionWhenSettingRawResponse(): void
     {
-        $this->expectException(RawResponseAlreadySet::class);
+        self::expectException(RawResponseAlreadySet::class);
 
         $httpResponse = $this->createStub(SymfonyHttpResponse::class);
         $responseConverter = $this->createStub(ResponseConverter::class);
@@ -150,8 +150,8 @@ final class AsyncResponseTest extends TestCase
         $httpResponse = $this->createStub(SymfonyHttpResponse::class);
         $options = ['option1' => 'value1', 'option2' => 'value2'];
 
-        $responseConverter = $this->createMock(ResponseConverter::class);
-        $responseConverter->expects($this->once())
+        $responseConverter = self::createMock(ResponseConverter::class);
+        $responseConverter->expects(self::once())
             ->method('convert')
             ->with($httpResponse, $options)
             ->willReturn($this->createResponse(null));

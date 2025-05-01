@@ -20,7 +20,7 @@ final class RawResponseAwareTraitTest extends TestCase
     public function itCanBeEnrichedWithARawResponse(): void
     {
         $response = $this->createTestClass();
-        $rawResponse = $this->createMock(SymfonyHttpResponse::class);
+        $rawResponse = self::createMock(SymfonyHttpResponse::class);
 
         $response->setRawResponse($rawResponse);
         self::assertSame($rawResponse, $response->getRawResponse());
@@ -29,10 +29,10 @@ final class RawResponseAwareTraitTest extends TestCase
     #[Test]
     public function itThrowsAnExceptionWhenSettingARawResponseTwice(): void
     {
-        $this->expectException(RawResponseAlreadySet::class);
+        self::expectException(RawResponseAlreadySet::class);
 
         $response = $this->createTestClass();
-        $rawResponse = $this->createMock(SymfonyHttpResponse::class);
+        $rawResponse = self::createMock(SymfonyHttpResponse::class);
 
         $response->setRawResponse($rawResponse);
         $response->setRawResponse($rawResponse);

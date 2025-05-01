@@ -37,7 +37,7 @@ final class ModelClientTest extends TestCase
     {
         $httpClient = new MockHttpClient();
         $modelClient = new ModelClient($httpClient, 'test-provider', 'test-api-key');
-        $model = $this->createMock(BaseModel::class);
+        $model = self::createMock(BaseModel::class);
 
         self::assertFalse($modelClient->supports($model, 'test-input'));
     }
@@ -48,8 +48,8 @@ final class ModelClientTest extends TestCase
         $modelClient = new ModelClient($httpClient, 'test-provider', 'test-api-key');
         $model = new Model('test-model');
 
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unsupported input type: stdClass');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Unsupported input type: stdClass');
 
         $modelClient->request($model, new \stdClass());
     }
@@ -58,9 +58,9 @@ final class ModelClientTest extends TestCase
     {
         $httpClient = new MockHttpClient();
         $modelClient = new ModelClient($httpClient, 'test-provider', 'test-api-key');
-        $model = $this->createMock(BaseModel::class);
+        $model = self::createMock(BaseModel::class);
 
-        $this->expectException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
 
         $modelClient->request($model, 'test input');
     }

@@ -23,7 +23,7 @@ final class NullVectorTest extends TestCase
     #[Test]
     public function getDataThrowsOnAccess(): void
     {
-        $this->expectException(RuntimeException::class);
+        self::expectException(RuntimeException::class);
 
         (new NullVector())->getData();
     }
@@ -31,7 +31,7 @@ final class NullVectorTest extends TestCase
     #[Test]
     public function getDimensionsThrowsOnAccess(): void
     {
-        $this->expectException(RuntimeException::class);
+        self::expectException(RuntimeException::class);
 
         (new NullVector())->getDimensions();
     }
