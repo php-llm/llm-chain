@@ -2,8 +2,8 @@
 
 PHP library for building LLM-based and AI-based features and applications.
 
-This library is not a stable yet, but still rather experimental. Feel free to try it out, give feedback, ask questions,
-contribute or share your use cases. Abstractions, concepts and interfaces are not final and potentially subject of change.
+This library is not stable yet, but still rather experimental. Feel free to try it out, give feedback, ask questions,
+contribute, or share your use cases. Abstractions, concepts, and interfaces are not final and potentially subject of change.
 
 ## Requirements
 
@@ -21,7 +21,7 @@ When using Symfony Framework, check out the integration bundle [php-llm/llm-chai
 
 ## Examples
 
-See [examples](examples) folder to run example implementations using this library.
+See [the examples folder](examples) to run example implementations using this library.
 Depending on the example you need to export different environment variables
 for API keys or deployment configurations or create a `.env.local` based on `.env` file.
 
@@ -34,10 +34,10 @@ For a more sophisticated demo, see the [Symfony Demo Application](https://github
 ### Models & Platforms
 
 LLM Chain categorizes two main types of models: **Language Models** and **Embeddings Models**. On top of that, there are
-other models, like text-to-speech, image generation or classification models that are also supported.
+other models, like text-to-speech, image generation, or classification models that are also supported.
 
-Language Models, like GPT, Claude and Llama, as essential centerpiece of LLM applications
-and Embeddings Models as supporting models to provide vector representations of text.
+Language Models, like GPT, Claude, and Llama, as essential centerpiece of LLM applications
+and Embeddings Models as supporting models to provide vector representations of a text.
 
 Those models are provided by different **platforms**, like OpenAI, Azure, Google, Replicate, and others.
 
@@ -112,8 +112,8 @@ The second parameter of the `call` method is an array of options, which can be u
 chain, like `stream`, `output_structure`, or `response_format`. This behavior is a combination of features provided by
 the underlying model and platform, or additional features provided by processors registered to the chain.
 
-Options design for additional features provided by LLM Chain can be found in this documentation. For model and platform
-specific options, please refer to the respective documentation.
+Options designed for additional features provided by LLM Chain can be found in this documentation. For model- and
+platform-specific options, please refer to the respective documentation.
 
 ```php
 // Chain and MessageBag instantiation
@@ -126,13 +126,15 @@ $response = $chain->call($messages, [
 
 #### Code Examples
 
-1. **Anthropic's Claude**: [chat-claude-anthropic.php](examples/chat-claude-anthropic.php)
-1. **OpenAI's GPT with Azure**: [chat-gpt-azure.php](examples/chat-gpt-azure.php)
-1. **OpenAI's GPT**: [chat-gpt-openai.php](examples/chat-gpt-openai.php)
-1. **OpenAI's o1**: [chat-o1-openai.php](examples/chat-o1-openai.php)
-1. **Meta's Llama with Ollama**: [chat-llama-ollama.php](examples/chat-llama-ollama.php)
-1. **Meta's Llama with Replicate**: [chat-llama-replicate.php](examples/chat-llama-replicate.php)
-1. **Google's Gemini with OpenRouter**: [chat-gemini-openrouter.php](examples/chat-gemini-openrouter.php)
+1. [Anthropic's Claude](examples/anthropic/chat.php)
+1. [OpenAI's GPT with Azure](examples/azure/chat-gpt.php)
+1. [OpenAI's GPT](examples/openai/chat.php)
+1. [OpenAI's o1](examples/openai/chat-o1.php)
+1. [Meta's Llama with Azure](examples/azure/chat-llama.php)
+1. [Meta's Llama with Ollama](examples/ollama/chat-llama.php)
+1. [Meta's Llama with Replicate](examples/replicate/chat-llama.php)
+1. [Google's Gemini with Google](examples/google/chat.php)
+1. [Google's Gemini with OpenRouter](examples/openrouter/chat-gemini.php)
 
 ### Tools
 
@@ -340,14 +342,14 @@ $eventDispatcher->addListener(ToolCallsExecuted::class, function (ToolCallsExecu
 
 #### Code Examples (with built-in tools)
 
-1. **Brave Tool**: [toolbox-brave.php](examples/toolbox-brave.php)
-1. **Clock Tool**: [toolbox-clock.php](examples/toolbox-clock.php)
-1. **Crawler Tool**: [toolbox-brave.php](examples/toolbox-brave.php)
-1. **SerpAPI Tool**: [toolbox-serpapi.php](examples/toolbox-serpapi.php)
-1. **Tavily Tool**: [toolbox-tavily.php](examples/toolbox-tavily.php)
-1. **Weather Tool with Event Listener**: [toolbox-weather-event.php](examples/toolbox-weather-event.php)
-1. **Wikipedia Tool**: [toolbox-wikipedia.php](examples/toolbox-wikipedia.php)
-1. **YouTube Transcriber Tool**: [toolbox-youtube.php](examples/toolbox-youtube.php) (with streaming)
+1. [Brave Tool](examples/toolbox/brave.php)
+1. [Clock Tool](examples/toolbox/clock.php)
+1. [Crawler Tool](examples/toolbox/brave.php)
+1. [SerpAPI Tool](examples/toolbox/serpapi.php)
+1. [Tavily Tool](examples/toolbox/tavily.php)
+1. [Weather Tool with Event Listener](examples/toolbox/weather-event.php)
+1. [Wikipedia Tool](examples/anthropic/toolbox.php)
+1. [YouTube Transcriber Tool](examples/openai/toolbox.php) (with streaming)
 
 ### Document Embedding, Vector Stores & Similarity Search (RAG)
 
@@ -383,7 +385,7 @@ foreach ($entities as $entity) {
     $documents[] = new TextDocument(
         id: $entity->getId(),                       // UUID instance
         content: $entity->toString(),               // Text representation of relevant data for embedding
-        metadata: new Metadata($entity->toArray()), // Array representation of entity to be stored additionally
+        metadata: new Metadata($entity->toArray()), // Array representation of an entity to be stored additionally
     );
 }
 ```
@@ -421,8 +423,8 @@ $response = $chain->call($messages);
 
 #### Code Examples
 
-1. **MongoDB Store**: [store-mongodb-similarity-search.php](examples/store-mongodb-similarity-search.php)
-1. **Pinecone Store**: [store-pinecone-similarity-search.php](examples/store-pinecone-similarity-search.php)
+1. [MongoDB Store](examples/store-mongodb-similarity-search.php)
+1. [Pinecone Store](examples/store-pinecone-similarity-search.php)
 
 #### Supported Stores
 
@@ -442,7 +444,7 @@ by features like **Structured Output** or providing a **Response Format**.
 
 #### PHP Classes as Output
 
-LLM Chain support that use-case by abstracting the hustle of defining and providing schemas to the LLM and converting
+LLM Chain supports that use-case by abstracting the hustle of defining and providing schemas to the LLM and converting
 the response back to PHP objects.
 
 To achieve this, a specific chain processor needs to be registered:
@@ -505,8 +507,8 @@ dump($response->getContent()); // returns an array
 
 #### Code Examples
 
-1. **Structured Output** (PHP class): [structured-output-math.php](examples/structured-output-math.php)
-1. **Structured Output** (array): [structured-output-clock.php](examples/structured-output-clock.php)
+1. [Structured Output with PHP class)](examples/openai/structured-output-math.php)
+1. [Structured Output with array](examples/openai/structured-output-clock.php)
 
 ### Response Streaming
 
@@ -539,8 +541,8 @@ needs to be used.
 
 #### Code Examples
 
-1. **Streaming Claude**: [stream-claude-anthropic.php](examples/stream-claude-anthropic.php)
-1. **Streaming GPT**: [stream-gpt-openai.php](examples/stream-gpt-openai.php)
+1. [Streaming Claude](examples/anthropic/stream.php)
+1. [Streaming GPT](examples/openai/stream.php)
 
 ### Image Processing
 
@@ -567,8 +569,8 @@ $response = $chain->call($messages);
 
 #### Code Examples
 
-1. **Image Description**: [image-describer-binary.php](examples/image-describer-binary.php) (with binary file)
-1. **Image Description**: [image-describer-url.php](examples/image-describer-url.php) (with URL)
+1. [Binary Image Input with GPT](examples/openai/image-input-binary.php)
+1. [Image URL Input with GPT](examples/openai/image-input-url.php)
 
 ### Audio Processing
 
@@ -592,11 +594,11 @@ $response = $chain->call($messages);
 
 #### Code Examples
 
-1. **Audio Description**: [audio-describer.php](examples/audio-describer.php)
+1. [Audio Input with GPT](examples/openai/audio-input.php)
 
 ### Embeddings
 
-Creating embeddings of word, sentences or paragraphs is a typical use case around the interaction with LLMs and
+Creating embeddings of word, sentences, or paragraphs is a typical use case around the interaction with LLMs, and
 therefore LLM Chain implements a `EmbeddingsModel` interface with various models, see above.
 
 The standalone usage results in an `Vector` instance:
@@ -615,8 +617,8 @@ dump($vectors[0]->getData()); // Array of float values
 
 #### Code Examples
 
-1. **OpenAI's Emebddings**: [embeddings-openai.php](examples/embeddings-openai.php)
-1. **Voyage's Embeddings**: [embeddings-voyage.php](examples/embeddings-voyage.php)
+1. [OpenAI's Emebddings](examples/openai/embeddings.php)
+1. [Voyage's Embeddings](examples/voyage/embeddings.php)
 
 ### Parallel Platform Calls
 
@@ -639,11 +641,11 @@ foreach ($responses as $response) {
 
 #### Code Examples
 
-1. **Parallel GPT Calls**: [parallel-chat-gpt.php](examples/parallel-chat-gpt.php)
-1. **Parallel Embeddings Calls**: [parallel-embeddings.php](examples/parallel-embeddings.php)
+1. [Parallel GPT Calls](examples/parallel-chat-gpt.php)
+1. [Parallel Embeddings Calls](examples/parallel-embeddings.php)
 
 > [!NOTE]
-> Please be aware that some embeddings models also support batch processing out of the box.
+> Please be aware that some embedding models also support batch processing out of the box.
 
 ### Input & Output Processing
 
@@ -733,7 +735,7 @@ final class MyProcessor implements OutputProcessor, ChainAwareProcessor
 ## HuggingFace
 
 LLM Chain comes out of the box with an integration for [HuggingFace](https://huggingface.co/)  which is a platform for
-hosting and sharing all kind of models, including LLMs, embeddings, image generation and classification models.
+hosting and sharing all kinds of models, including LLMs, embeddings, image generation, and classification models.
 
 You can just instantiate the Platform with the corresponding HuggingFace bridge and use it with the `task` option:
 ```php
@@ -800,7 +802,7 @@ echo $response->getContent().PHP_EOL;
 
 #### Code Examples
 
-1. [Text Generation with TransformersPHP](examples/transformers-text-generation.php)
+1. [Text Generation with TransformersPHP](examples/transformers/text-generation.php)
 
 ## Contributions
 
