@@ -41,7 +41,7 @@ final class ChainProcessorTest extends TestCase
         $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
         $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsStructuredOutput')->willReturn(true);
 
         $input = new Input($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
@@ -58,7 +58,7 @@ final class ChainProcessorTest extends TestCase
         $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
         $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $input = new Input($llm, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
@@ -69,13 +69,13 @@ final class ChainProcessorTest extends TestCase
     #[Test]
     public function processInputThrowsExceptionWhenLlmDoesNotSupportStructuredOutput(): void
     {
-        $this->expectException(MissingModelSupport::class);
+        self::expectException(MissingModelSupport::class);
 
         $responseFormatFactory = new ConfigurableResponseFormatFactory();
         $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
         $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsStructuredOutput')->willReturn(false);
 
         $input = new Input($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
@@ -90,7 +90,7 @@ final class ChainProcessorTest extends TestCase
         $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
         $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsStructuredOutput')->willReturn(true);
 
         $options = ['output_structure' => SomeStructure::class];
@@ -112,10 +112,10 @@ final class ChainProcessorTest extends TestCase
     public function processOutputWithoutResponseFormat(): void
     {
         $responseFormatFactory = new ConfigurableResponseFormatFactory();
-        $serializer = $this->createMock(SerializerInterface::class);
+        $serializer = self::createMock(SerializerInterface::class);
         $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $response = new TextResponse('');
 
         $output = new Output($llm, $response, new MessageBag(), []);

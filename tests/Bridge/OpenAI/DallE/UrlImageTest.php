@@ -25,8 +25,8 @@ final class UrlImageTest extends TestCase
     #[Test]
     public function itThrowsExceptionWhenUrlIsEmpty(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The image url must be given.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('The image url must be given.');
 
         new UrlImage('');
     }

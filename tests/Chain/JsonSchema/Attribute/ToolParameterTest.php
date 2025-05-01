@@ -24,7 +24,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidEnumContainsNonString(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         $enum = ['value1', 2];
         new With(enum: $enum);
     }
@@ -40,7 +40,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidConstEmptyString(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         $const = '   ';
         new With(const: $const);
     }
@@ -56,7 +56,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidPatternEmptyString(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         $pattern = '   ';
         new With(pattern: $pattern);
     }
@@ -72,7 +72,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidMinLengthNegative(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(minLength: -1);
     }
 
@@ -89,7 +89,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidMaxLengthLessThanMinLength(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(minLength: 10, maxLength: 5);
     }
 
@@ -104,7 +104,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidMinimumNegative(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(minimum: -1);
     }
 
@@ -119,7 +119,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidMultipleOfNegative(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(multipleOf: -5);
     }
 
@@ -136,7 +136,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidExclusiveMaximumLessThanExclusiveMinimum(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(exclusiveMinimum: 10, exclusiveMaximum: 5);
     }
 
@@ -153,7 +153,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidMaxItemsLessThanMinItems(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(minItems: 5, maxItems: 1);
     }
 
@@ -167,7 +167,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidUniqueItemsFalse(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(uniqueItems: false);
     }
 
@@ -184,7 +184,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidMaxContainsLessThanMinContains(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(minContains: 3, maxContains: 1);
     }
 
@@ -208,7 +208,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidMaxPropertiesLessThanMinProperties(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(minProperties: 5, maxProperties: 1);
     }
 
@@ -250,7 +250,7 @@ final class ToolParameterTest extends TestCase
     #[Test]
     public function invalidCombination(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
         new With(minLength: -1, maxLength: -2);
     }
 }

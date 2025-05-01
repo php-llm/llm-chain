@@ -31,7 +31,7 @@ final class ImageTest extends TestCase
     #[Test]
     public function fromBinaryWithInvalidFile(): void
     {
-        $this->expectExceptionMessage('The file "foo.jpg" does not exist or is not readable.');
+        self::expectExceptionMessage('The file "foo.jpg" does not exist or is not readable.');
 
         Image::fromFile('foo.jpg');
     }

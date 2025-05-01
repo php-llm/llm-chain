@@ -35,8 +35,8 @@ final class ChoiceResponseTest extends TestCase
     #[Test]
     public function choiceResponseWithNoChoices(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Response must have at least one choice.');
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage('Response must have at least one choice.');
 
         new ChoiceResponse();
     }
