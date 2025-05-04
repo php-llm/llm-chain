@@ -348,8 +348,8 @@ $eventDispatcher->addListener(ToolCallsExecuted::class, function (ToolCallsExecu
 1. [SerpAPI Tool](examples/toolbox/serpapi.php)
 1. [Tavily Tool](examples/toolbox/tavily.php)
 1. [Weather Tool with Event Listener](examples/toolbox/weather-event.php)
-1. [Wikipedia Tool](examples/anthropic/toolbox.php)
-1. [YouTube Transcriber Tool](examples/openai/toolbox.php) (with streaming)
+1. [Wikipedia Tool](examples/anthropic/toolcall.php)
+1. [YouTube Transcriber Tool](examples/openai/toolcall.php)
 
 ### Document Embedding, Vector Stores & Similarity Search (RAG)
 

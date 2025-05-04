@@ -28,11 +28,6 @@ $processor = new ChainProcessor($toolbox);
 $chain = new Chain($platform, $llm, [$processor], [$processor]);
 
 $messages = new MessageBag(Message::ofUser('Please summarize this video for me: https://www.youtube.com/watch?v=6uXW-ulpj0s'));
-$response = $chain->call($messages, [
-    'stream' => true, // enable streaming of response text
-]);
+$response = $chain->call($messages);
 
-foreach ($response->getContent() as $word) {
-    echo $word;
-}
-echo PHP_EOL;
+echo $response->getContent().PHP_EOL;
