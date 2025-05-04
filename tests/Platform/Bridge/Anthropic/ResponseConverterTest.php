@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Platform\Bridge\Anthropic;
 
-use PhpLlm\LlmChain\Platform\Bridge\Anthropic\ModelHandler;
+use PhpLlm\LlmChain\Platform\Bridge\Anthropic\ResponseConverter;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -14,11 +14,11 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
-#[CoversClass(ModelHandler::class)]
+#[CoversClass(ResponseConverter::class)]
 #[Small]
 #[UsesClass(ToolCall::class)]
 #[UsesClass(ToolCallResponse::class)]
-final class ModelHandlerTest extends TestCase
+final class ResponseConverterTest extends TestCase
 {
     public function testConvertThrowsExceptionWhenContentIsToolUseAndLacksText(): void
     {
@@ -33,7 +33,7 @@ final class ModelHandlerTest extends TestCase
             ],
         ]));
         $httpResponse = $httpClient->request('POST', 'https://api.anthropic.com/v1/messages');
-        $handler = new ModelHandler($httpClient, 'test-api-key');
+        $handler = new ResponseConverter();
 
         $response = $handler->convert($httpResponse);
         self::assertInstanceOf(ToolCallResponse::class, $response);

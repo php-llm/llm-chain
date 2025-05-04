@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Platform\Bridge\Anthropic;
 
 use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract\AssistantMessageNormalizer;
+use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract\DocumentNormalizer;
+use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract\DocumentUrlNormalizer;
+use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract\ImageNormalizer;
+use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract\ImageUrlNormalizer;
 use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract\MessageBagNormalizer;
 use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract\ToolCallMessageNormalizer;
 use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract\ToolNormalizer;
@@ -22,13 +26,20 @@ final readonly class PlatformFactory
         ?HttpClientInterface $httpClient = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
-        $responseHandler = new ModelHandler($httpClient, $apiKey, $version);
 
-        return new Platform([$responseHandler], [$responseHandler], Contract::create(
-            new AssistantMessageNormalizer(),
-            new MessageBagNormalizer(),
-            new ToolCallMessageNormalizer(),
-            new ToolNormalizer(),
-        ));
+        return new Platform(
+            [new ModelClient($httpClient, $apiKey, $version)],
+            [new ResponseConverter()],
+            Contract::create(
+                new AssistantMessageNormalizer(),
+                new DocumentNormalizer(),
+                new DocumentUrlNormalizer(),
+                new ImageNormalizer(),
+                new ImageUrlNormalizer(),
+                new MessageBagNormalizer(),
+                new ToolCallMessageNormalizer(),
+                new ToolNormalizer(),
+            )
+        );
     }
 }
