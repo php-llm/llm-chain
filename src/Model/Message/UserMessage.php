@@ -58,7 +58,7 @@ final readonly class UserMessage implements MessageInterface
      */
     public function jsonSerialize(): array
     {
-        $array = ['role' => Role::User];
+        $array = ['role' => Role::User->value];
         if (1 === count($this->content) && $this->content[0] instanceof Text) {
             $array['content'] = $this->content[0]->text;
 
