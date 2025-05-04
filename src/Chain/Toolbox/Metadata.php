@@ -41,6 +41,9 @@ final readonly class Metadata implements \JsonSerializable
 
         if (isset($this->parameters)) {
             $function['parameters'] = $this->parameters;
+        } else {
+            // ⚠ Necessary for Mistral, but breaks OpenAI ⚠
+            $function['parameters'] = ['type' => 'object'];
         }
 
         return [
