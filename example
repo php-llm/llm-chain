@@ -3,6 +3,7 @@
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\SingleCommandApplication;
@@ -15,12 +16,23 @@ require_once __DIR__.'/vendor/autoload.php';
 
 $app = (new SingleCommandApplication('LLM Chain Example Runner'))
     ->setDescription('Runs all LLM Chain examples in folder examples/')
+    ->addArgument('subdirectory', InputArgument::OPTIONAL, 'Subdirectory to run examples from, e.g. "anthropic" or "huggingface".')
     ->setCode(function (InputInterface $input, ConsoleOutput $output) {
         $io = new SymfonyStyle($input, $output);
         $io->title('LLM Chain Examples');
 
+        $directory = __DIR__.'/examples';
+
+        if ($subdirectory = $input->getArgument('subdirectory')) {
+            $directory .= '/'.$subdirectory;
+            if (!is_dir($directory)) {
+                $io->error(sprintf('Subdirectory "%s" does not exist.', $subdirectory));
+                return Command::FAILURE;
+            }
+        }
+
         $examples = (new Finder())
-            ->in(__DIR__.'/examples')
+            ->in($directory)
             ->name('*.php')
             ->sortByName()
             ->files();
