@@ -6,7 +6,6 @@ namespace PhpLlm\LlmChain\Bridge\Replicate;
 
 use PhpLlm\LlmChain\Bridge\Meta\Llama;
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
@@ -15,9 +14,9 @@ use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 final readonly class LlamaResponseConverter implements ResponseConverter
 {
-    public function supports(Model $model, object|array|string $input): bool
+    public function supports(Model $model): bool
     {
-        return $model instanceof Llama && $input instanceof MessageBagInterface;
+        return $model instanceof Llama;
     }
 
     public function convert(HttpResponse $response, array $options = []): LlmResponse

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\Azure\OpenAI;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\Whisper;
-use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Platform\ModelClient;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
@@ -32,15 +31,13 @@ final readonly class WhisperModelClient implements ModelClient
         Assert::stringNotEmpty($apiKey, 'The API key must not be empty.');
     }
 
-    public function supports(Model $model, object|array|string $input): bool
+    public function supports(Model $model): bool
     {
-        return $model instanceof Whisper && $input instanceof Audio;
+        return $model instanceof Whisper;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
-        assert($input instanceof Audio);
-
         $url = sprintf('https://%s/openai/deployments/%s/audio/translations', $this->baseUrl, $this->deployment);
 
         return $this->httpClient->request('POST', $url, [
@@ -49,10 +46,7 @@ final readonly class WhisperModelClient implements ModelClient
                 'Content-Type' => 'multipart/form-data',
             ],
             'query' => ['api-version' => $this->apiVersion],
-            'body' => array_merge($options, $model->getOptions(), [
-                'model' => $model->getName(),
-                'file' => $input->asResource(),
-            ]),
+            'body' => array_merge($options, $payload),
         ]);
     }
 }

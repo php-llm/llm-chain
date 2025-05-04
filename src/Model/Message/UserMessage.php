@@ -8,7 +8,6 @@ use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PhpLlm\LlmChain\Model\Message\Content\Content;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Content\ImageUrl;
-use PhpLlm\LlmChain\Model\Message\Content\Text;
 
 final readonly class UserMessage implements MessageInterface
 {
@@ -48,25 +47,5 @@ final readonly class UserMessage implements MessageInterface
         }
 
         return false;
-    }
-
-    /**
-     * @return array{
-     *     role: Role::User,
-     *     content: string|list<Content>
-     * }
-     */
-    public function jsonSerialize(): array
-    {
-        $array = ['role' => Role::User];
-        if (1 === count($this->content) && $this->content[0] instanceof Text) {
-            $array['content'] = $this->content[0]->text;
-
-            return $array;
-        }
-
-        $array['content'] = $this->content;
-
-        return $array;
     }
 }

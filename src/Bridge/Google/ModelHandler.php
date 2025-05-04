@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\Google;
 
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\StreamResponse;
@@ -20,7 +19,6 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Webmozart\Assert\Assert;
 
 final readonly class ModelHandler implements ModelClient, ResponseConverter
 {
@@ -29,23 +27,20 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
     public function __construct(
         HttpClientInterface $httpClient,
         #[\SensitiveParameter] private string $apiKey,
-        private GooglePromptConverter $promptConverter = new GooglePromptConverter(),
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
     }
 
-    public function supports(Model $model, array|string|object $input): bool
+    public function supports(Model $model): bool
     {
-        return $model instanceof Gemini && $input instanceof MessageBagInterface;
+        return $model instanceof Gemini;
     }
 
     /**
      * @throws TransportExceptionInterface
      */
-    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
-        Assert::isInstanceOf($input, MessageBagInterface::class);
-
         $url = sprintf(
             'https://generativelanguage.googleapis.com/v1beta/models/%s:%s',
             $model->getName(),
@@ -59,7 +54,7 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
             'headers' => [
                 'x-goog-api-key' => $this->apiKey,
             ],
-            'json' => array_merge($generationConfig, $this->promptConverter->convertToPrompt($input)),
+            'json' => array_merge($generationConfig, $payload),
         ]);
     }
 
@@ -113,7 +108,6 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
                 try {
                     $data = json_decode($delta, true, 512, JSON_THROW_ON_ERROR);
                 } catch (\JsonException $e) {
-                    dump($delta);
                     throw new RuntimeException('Failed to decode JSON response', 0, $e);
                 }
 

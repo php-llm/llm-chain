@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Message;
 
-interface MessageBagInterface extends \JsonSerializable, \Countable
+interface MessageBagInterface extends \Countable
 {
     public function add(MessageInterface $message): void;
 

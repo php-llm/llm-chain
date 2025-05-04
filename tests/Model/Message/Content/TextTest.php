@@ -21,12 +21,4 @@ final class TextTest extends TestCase
 
         self::assertSame('foo', $obj->text);
     }
-
-    #[Test]
-    public function jsonConversionIsWorkingAsExpected(): void
-    {
-        $obj = new Text('foo');
-
-        self::assertSame(['type' => 'text', 'text' => 'foo'], $obj->jsonSerialize());
-    }
 }

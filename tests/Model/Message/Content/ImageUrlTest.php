@@ -21,12 +21,4 @@ final class ImageUrlTest extends TestCase
 
         self::assertSame('https://foo.com/test.png', $image->url);
     }
-
-    #[Test]
-    public function jsonConversionIsWorkingAsExpected(): void
-    {
-        $image = new ImageUrl('https://foo.com/test.png');
-
-        self::assertSame(['type' => 'image_url', 'image_url' => ['url' => 'https://foo.com/test.png']], $image->jsonSerialize());
-    }
 }

@@ -8,7 +8,6 @@ use PhpLlm\LlmChain\Model\Message\AssistantMessage;
 use PhpLlm\LlmChain\Model\Message\Role;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -43,28 +42,5 @@ final class AssistantMessageTest extends TestCase
         self::assertNull($message->content);
         self::assertSame([$toolCall], $message->toolCalls);
         self::assertTrue($message->hasToolCalls());
-    }
-
-    #[Test]
-    #[DataProvider('provideJsonSerializerTests')]
-    public function jsonConversionIsWorkingAsExpected(AssistantMessage $message, array $expectedResult): void
-    {
-        self::assertEqualsCanonicalizing($expectedResult, $message->jsonSerialize());
-    }
-
-    public static function provideJsonSerializerTests(): \Generator
-    {
-        yield 'Message with content' => [
-            new AssistantMessage('Foo Bar Baz'),
-            ['role' => Role::Assistant, 'content' => 'Foo Bar Baz'],
-        ];
-
-        $toolCall1 = new ToolCall('call_123456', 'my_tool', ['foo' => 'bar']);
-        $toolCall2 = new ToolCall('call_456789', 'my_faster_tool');
-
-        yield 'Message with tool calls' => [
-            new AssistantMessage(toolCalls: [$toolCall1, $toolCall2]),
-            ['role' => Role::Assistant, 'tool_calls' => [$toolCall1, $toolCall2]],
-        ];
     }
 }

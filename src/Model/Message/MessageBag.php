@@ -104,12 +104,4 @@ class MessageBag implements MessageBagInterface
     {
         return count($this->messages);
     }
-
-    /**
-     * @return MessageInterface[]
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->messages;
-    }
 }
