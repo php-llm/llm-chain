@@ -168,30 +168,4 @@ final class MessageBagTest extends TestCase
 
         self::assertTrue($messageBag->containsImage());
     }
-
-    #[Test]
-    public function jsonSerialize(): void
-    {
-        $messageBag = new MessageBag(
-            Message::forSystem('My amazing system prompt.'),
-            Message::ofAssistant('It is time to sleep.'),
-            Message::ofUser('Hello, world!'),
-            new AssistantMessage('Hello User!'),
-            Message::ofUser('My hint for how to analyze an image.', new ImageUrl('http://image-generator.local/my-fancy-image.png')),
-        );
-
-        $json = json_encode($messageBag);
-
-        self::assertJson($json);
-        self::assertJsonStringEqualsJsonString(json_encode([
-            ['role' => 'system', 'content' => 'My amazing system prompt.'],
-            ['role' => 'assistant', 'content' => 'It is time to sleep.'],
-            ['role' => 'user', 'content' => 'Hello, world!'],
-            ['role' => 'assistant', 'content' => 'Hello User!'],
-            ['role' => 'user', 'content' => [
-                ['type' => 'text', 'text' => 'My hint for how to analyze an image.'],
-                ['type' => 'image_url', 'image_url' => ['url' => 'http://image-generator.local/my-fancy-image.png']],
-            ]],
-        ]), $json);
-    }
 }

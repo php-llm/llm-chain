@@ -31,7 +31,7 @@ final class ModelClientTest extends TestCase
     {
         $modelClient = new ModelClient(new MockHttpClient(), 'sk-api-key');
 
-        self::assertTrue($modelClient->supports(new DallE(), 'foo'));
+        self::assertTrue($modelClient->supports(new DallE()));
     }
 
     #[Test]

@@ -9,7 +9,7 @@ use PhpLlm\LlmChain\Exception\RuntimeException;
 
 use function Symfony\Component\String\u;
 
-readonly class File
+readonly class File implements Content
 {
     final public function __construct(
         private string|\Closure $data,

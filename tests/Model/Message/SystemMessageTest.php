@@ -23,12 +23,4 @@ final class SystemMessageTest extends TestCase
         self::assertSame(Role::System, $message->getRole());
         self::assertSame('foo', $message->content);
     }
-
-    #[Test]
-    public function jsonConversionIsWorkingAsExpected(): void
-    {
-        $systemMessage = new SystemMessage('foo');
-
-        self::assertSame(['role' => Role::System, 'content' => 'foo'], $systemMessage->jsonSerialize());
-    }
 }

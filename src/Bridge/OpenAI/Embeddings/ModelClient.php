@@ -22,18 +22,18 @@ final readonly class ModelClient implements PlatformResponseFactory
         Assert::startsWith($apiKey, 'sk-', 'The API key must start with "sk-".');
     }
 
-    public function supports(Model $model, array|string|object $input): bool
+    public function supports(Model $model): bool
     {
         return $model instanceof Embeddings;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
         return $this->httpClient->request('POST', 'https://api.openai.com/v1/embeddings', [
             'auth_bearer' => $this->apiKey,
-            'json' => array_merge($model->getOptions(), $options, [
+            'json' => array_merge($options, [
                 'model' => $model->getName(),
-                'input' => $input,
+                'input' => $payload,
             ]),
         ]);
     }

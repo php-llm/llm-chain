@@ -27,7 +27,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final readonly class ResponseConverter implements PlatformResponseConverter
 {
-    public function supports(Model $model, array|string|object $input): bool
+    public function supports(Model $model): bool
     {
         return true;
     }
@@ -75,7 +75,7 @@ final readonly class ResponseConverter implements PlatformResponseConverter
             Task::QUESTION_ANSWERING => new StructuredResponse(QuestionAnsweringResult::fromArray($content)),
             Task::SENTENCE_SIMILARITY => new StructuredResponse(SentenceSimilarityResult::fromArray($content)),
             Task::SUMMARIZATION => new TextResponse($content[0]['summary_text']),
-            Task::TABLE_QUESTION_ANSWERING => new StructuredResponse(TableQuestionAnsweringResult::fromArray(dump($content))),
+            Task::TABLE_QUESTION_ANSWERING => new StructuredResponse(TableQuestionAnsweringResult::fromArray($content)),
             Task::TOKEN_CLASSIFICATION => new StructuredResponse(TokenClassificationResult::fromArray($content)),
             Task::TRANSLATION => new TextResponse($content[0]['translation_text'] ?? ''),
             Task::ZERO_SHOT_CLASSIFICATION => new StructuredResponse(ZeroShotClassificationResult::fromArray($content)),

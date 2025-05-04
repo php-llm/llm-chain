@@ -1,5 +1,6 @@
 includes:
     - vendor/phpstan/phpstan-webmozart-assert/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
 
 parameters:
     level: 6

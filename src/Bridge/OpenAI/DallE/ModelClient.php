@@ -28,18 +28,18 @@ final readonly class ModelClient implements PlatformResponseFactory, PlatformRes
         Assert::startsWith($apiKey, 'sk-', 'The API key must start with "sk-".');
     }
 
-    public function supports(Model $model, array|string|object $input): bool
+    public function supports(Model $model): bool
     {
         return $model instanceof DallE;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): HttpResponse
+    public function request(Model $model, array|string $payload, array $options = []): HttpResponse
     {
         return $this->httpClient->request('POST', 'https://api.openai.com/v1/images/generations', [
             'auth_bearer' => $this->apiKey,
             'json' => \array_merge($options, [
                 'model' => $model->getName(),
-                'prompt' => $input,
+                'prompt' => $payload,
             ]),
         ]);
     }

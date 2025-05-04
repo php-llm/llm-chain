@@ -24,7 +24,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 final class ResponseConverter implements PlatformResponseConverter
 {
-    public function supports(Model $model, array|string|object $input): bool
+    public function supports(Model $model): bool
     {
         return $model instanceof GPT;
     }

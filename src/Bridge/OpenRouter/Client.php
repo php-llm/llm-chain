@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\OpenRouter;
 
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
@@ -29,19 +28,16 @@ final readonly class Client implements ModelClient, ResponseConverter
         Assert::startsWith($apiKey, 'sk-', 'The API key must start with "sk-".');
     }
 
-    public function supports(Model $model, array|string|object $input): bool
+    public function supports(Model $model): bool
     {
-        return $input instanceof MessageBagInterface;
+        return true;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
         return $this->httpClient->request('POST', 'https://openrouter.ai/api/v1/chat/completions', [
             'auth_bearer' => $this->apiKey,
-            'json' => array_merge($options, [
-                'model' => $model->getName(),
-                'messages' => $input,
-            ]),
+            'json' => array_merge($options, $payload),
         ]);
     }
 

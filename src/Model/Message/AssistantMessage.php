@@ -26,28 +26,4 @@ final readonly class AssistantMessage implements MessageInterface
     {
         return null !== $this->toolCalls && 0 !== \count($this->toolCalls);
     }
-
-    /**
-     * @return array{
-     *     role: Role::Assistant,
-     *     content: ?string,
-     *     tool_calls?: ToolCall[],
-     * }
-     */
-    public function jsonSerialize(): array
-    {
-        $array = [
-            'role' => Role::Assistant,
-        ];
-
-        if (null !== $this->content) {
-            $array['content'] = $this->content;
-        }
-
-        if ($this->hasToolCalls()) {
-            $array['tool_calls'] = $this->toolCalls;
-        }
-
-        return $array;
-    }
 }

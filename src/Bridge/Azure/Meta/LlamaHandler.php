@@ -6,7 +6,6 @@ namespace PhpLlm\LlmChain\Bridge\Azure\Meta;
 
 use PhpLlm\LlmChain\Bridge\Meta\Llama;
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
@@ -14,7 +13,6 @@ use PhpLlm\LlmChain\Platform\ModelClient;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Webmozart\Assert\Assert;
 
 final readonly class LlamaHandler implements ModelClient, ResponseConverter
 {
@@ -25,14 +23,13 @@ final readonly class LlamaHandler implements ModelClient, ResponseConverter
     ) {
     }
 
-    public function supports(Model $model, object|array|string $input): bool
+    public function supports(Model $model): bool
     {
-        return $model instanceof Llama && $input instanceof MessageBagInterface;
+        return $model instanceof Llama;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
-        Assert::isInstanceOf($input, MessageBagInterface::class);
         $url = sprintf('https://%s/chat/completions', $this->baseUrl);
 
         return $this->httpClient->request('POST', $url, [
@@ -40,10 +37,7 @@ final readonly class LlamaHandler implements ModelClient, ResponseConverter
                 'Content-Type' => 'application/json',
                 'Authorization' => $this->apiKey,
             ],
-            'json' => array_merge($options, [
-                'model' => $model->getName(),
-                'messages' => $input,
-            ]),
+            'json' => array_merge($options, $payload),
         ]);
     }
 

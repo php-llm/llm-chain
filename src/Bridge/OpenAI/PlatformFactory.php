@@ -9,9 +9,11 @@ use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ModelClient as EmbeddingsModelClien
 use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings\ResponseConverter as EmbeddingsResponseConverter;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ModelClient as GPTModelClient;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT\ResponseConverter as GPTResponseConverter;
+use PhpLlm\LlmChain\Bridge\OpenAI\Whisper\AudioNormalizer;
 use PhpLlm\LlmChain\Bridge\OpenAI\Whisper\ModelClient as WhisperModelClient;
 use PhpLlm\LlmChain\Bridge\OpenAI\Whisper\ResponseConverter as WhisperResponseConverter;
 use PhpLlm\LlmChain\Platform;
+use PhpLlm\LlmChain\Platform\Contract;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -39,6 +41,7 @@ final readonly class PlatformFactory
                 $dallEModelClient,
                 new WhisperResponseConverter(),
             ],
+            Contract::create(new AudioNormalizer()),
         );
     }
 }

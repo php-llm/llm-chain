@@ -23,18 +23,6 @@ use Symfony\Component\HttpClient\MockHttpClient;
 #[UsesClass(Model::class)]
 final class ModelClientTest extends TestCase
 {
-    public function testRequestWithUnsupportedInputType(): void
-    {
-        $httpClient = new MockHttpClient();
-        $modelClient = new ModelClient($httpClient, 'test-provider', 'test-api-key');
-        $model = new Model('test-model');
-
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Unsupported input type: stdClass');
-
-        $modelClient->request($model, new \stdClass());
-    }
-
     #[DataProvider('urlTestCases')]
     public function testGetUrlForDifferentInputsAndTasks(object|array|string $input, ?string $task, string $expectedUrl): void
     {

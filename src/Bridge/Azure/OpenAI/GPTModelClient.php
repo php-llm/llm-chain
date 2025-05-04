@@ -31,12 +31,12 @@ final readonly class GPTModelClient implements ModelClient
         Assert::stringNotEmpty($apiKey, 'The API key must not be empty.');
     }
 
-    public function supports(Model $model, object|array|string $input): bool
+    public function supports(Model $model): bool
     {
         return $model instanceof GPT;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, object|array|string $payload, array $options = []): ResponseInterface
     {
         $url = sprintf('https://%s/openai/deployments/%s/chat/completions', $this->baseUrl, $this->deployment);
 
@@ -45,10 +45,7 @@ final readonly class GPTModelClient implements ModelClient
                 'api-key' => $this->apiKey,
             ],
             'query' => ['api-version' => $this->apiVersion],
-            'json' => array_merge($options, [
-                'model' => $model->getName(),
-                'messages' => $input,
-            ]),
+            'json' => array_merge($options, $payload),
         ]);
     }
 }

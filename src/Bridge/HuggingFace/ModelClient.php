@@ -27,19 +27,19 @@ final readonly class ModelClient implements PlatformModelClient
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
     }
 
-    public function supports(Model $model, object|array|string $input): bool
+    public function supports(Model $model): bool
     {
         return true;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
         $task = $options['task'] ?? null;
         unset($options['task']);
 
-        return $this->httpClient->request('POST', $this->getUrl($model, $input, $task), [
+        return $this->httpClient->request('POST', $this->getUrl($model, $payload, $task), [
             'auth_bearer' => $this->apiKey,
-            ...$this->getPayload($input, $options),
+            ...$this->getPayload($payload, $options),
         ]);
     }
 

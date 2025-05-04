@@ -6,7 +6,6 @@ namespace PhpLlm\LlmChain\Tests\Model\Message\Content;
 
 use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -59,42 +58,5 @@ final class AudioTest extends TestCase
         self::expectExceptionMessage('The file "foo.mp3" does not exist or is not readable.');
 
         Audio::fromFile('foo.mp3');
-    }
-
-    #[Test]
-    #[DataProvider('provideAudioData')]
-    public function jsonSerializeReturnsCorrectFormat(string $data, string $format, array $expected): void
-    {
-        $audio = new Audio(base64_decode($data), $format);
-        $actual = $audio->jsonSerialize();
-
-        self::assertSame($expected, $actual);
-    }
-
-    public static function provideAudioData(): \Generator
-    {
-        yield 'mp3 data' => [
-            'SUQzBAAAAAAAfVREUkMAAAAMAAADMg==',
-            'audio/mpeg',
-            [
-                'type' => 'input_audio',
-                'input_audio' => [
-                    'data' => 'SUQzBAAAAAAAfVREUkMAAAAMAAADMg==',
-                    'format' => 'mp3',
-                ],
-            ],
-        ];
-
-        yield 'wav data' => [
-            'UklGRiQAAABXQVZFZm10IBA=',
-            'audio/wav',
-            [
-                'type' => 'input_audio',
-                'input_audio' => [
-                    'data' => 'UklGRiQAAABXQVZFZm10IBA=',
-                    'format' => 'wav',
-                ],
-            ],
-        ];
     }
 }

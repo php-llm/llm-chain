@@ -10,12 +10,4 @@ final readonly class Text implements Content
         public string $text,
     ) {
     }
-
-    /**
-     * @return array{type: 'text', text: string}
-     */
-    public function jsonSerialize(): array
-    {
-        return ['type' => 'text', 'text' => $this->text];
-    }
 }

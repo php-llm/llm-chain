@@ -31,12 +31,12 @@ final class PlatformTestHandler implements ModelClient, ResponseConverter
         return new Platform([$handler], [$handler]);
     }
 
-    public function supports(Model $model, object|array|string $input): bool
+    public function supports(Model $model): bool
     {
         return true;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): HttpResponse
+    public function request(Model $model, array|string|object $payload, array $options = []): HttpResponse
     {
         ++$this->createCalls;
 

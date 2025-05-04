@@ -22,18 +22,18 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
     ) {
     }
 
-    public function supports(Model $model, array|string|object $input): bool
+    public function supports(Model $model): bool
     {
         return $model instanceof Voyage;
     }
 
-    public function request(Model $model, object|string|array $input, array $options = []): ResponseInterface
+    public function request(Model $model, object|string|array $payload, array $options = []): ResponseInterface
     {
         return $this->httpClient->request('POST', 'https://api.voyageai.com/v1/embeddings', [
             'auth_bearer' => $this->apiKey,
             'json' => [
                 'model' => $model->getName(),
-                'input' => $input,
+                'input' => $payload,
             ],
         ]);
     }
