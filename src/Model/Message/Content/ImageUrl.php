@@ -12,13 +12,16 @@ final readonly class ImageUrl implements Content
     }
 
     /**
-     * @return array{type: 'image_url', image_url: array{url: string}}
+     * @return array{type: 'image', source: array{type: 'url', url: string}}
      */
     public function jsonSerialize(): array
     {
         return [
-            'type' => 'image_url',
-            'image_url' => ['url' => $this->url],
+            'type' => 'image',
+            'source' => [
+                'type' => 'url',
+                'url' => $this->url,
+            ],
         ];
     }
 }

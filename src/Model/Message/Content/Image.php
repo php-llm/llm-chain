@@ -7,13 +7,17 @@ namespace PhpLlm\LlmChain\Model\Message\Content;
 final readonly class Image extends File implements Content
 {
     /**
-     * @return array{type: 'image_url', image_url: array{url: string}}
+     * @return array{type: 'image', image_url: array{url: string}}
      */
     public function jsonSerialize(): array
     {
         return [
-            'type' => 'image_url',
-            'image_url' => ['url' => $this->asDataUrl()],
+            'type' => 'image',
+            'source' => [
+                'type' => 'base64',
+                'media_type' => $this->getFormat(),
+                'data' => $this->asBase64(),
+            ],
         ];
     }
 }
