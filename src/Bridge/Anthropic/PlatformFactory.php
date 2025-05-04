@@ -17,8 +17,7 @@ final readonly class PlatformFactory
         ?HttpClientInterface $httpClient = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
-        $responseHandler = new ModelHandler($httpClient, $apiKey, $version);
 
-        return new Platform([$responseHandler], [$responseHandler]);
+        return new Platform([new ModelClient($httpClient, $apiKey, $version)], [new ResponseConverter()]);
     }
 }
