@@ -25,14 +25,14 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
 $clock = new Clock(new SymfonyClock());
 $toolbox = Toolbox::create($clock);
 $toolProcessor = new ToolProcessor($toolbox);
 $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 $structuredOutputProcessor = new StructuredOutputProcessor(new ResponseFormatFactory(), $serializer);
-$chain = new Chain($platform, $llm, [$toolProcessor, $structuredOutputProcessor], [$toolProcessor, $structuredOutputProcessor]);
+$chain = new Chain($platform, $model, [$toolProcessor, $structuredOutputProcessor], [$toolProcessor, $structuredOutputProcessor]);
 
 $messages = new MessageBag(Message::ofUser('What date and time is it?'));
 $response = $chain->call($messages, ['response_format' => [

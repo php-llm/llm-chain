@@ -17,11 +17,11 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
 $processor = new SystemPromptInputProcessor('You are Yoda and write like he speaks. But short.');
 
-$chain = new Chain($platform, $llm, [$processor]);
+$chain = new Chain($platform, $model, [$processor]);
 $messages = new MessageBag(Message::ofUser('What is the meaning of life?'));
 $response = $chain->call($messages);
 

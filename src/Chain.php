@@ -12,8 +12,9 @@ use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\Model\LanguageModel;
+use PhpLlm\LlmChain\Model\Capability;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
+use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -39,7 +40,7 @@ final readonly class Chain implements ChainInterface
      */
     public function __construct(
         private PlatformInterface $platform,
-        private LanguageModel $llm,
+        private Model $model,
         iterable $inputProcessors = [],
         iterable $outputProcessors = [],
         private LoggerInterface $logger = new NullLogger(),
@@ -53,23 +54,23 @@ final readonly class Chain implements ChainInterface
      */
     public function call(MessageBagInterface $messages, array $options = []): ResponseInterface
     {
-        $input = new Input($this->llm, $messages, $options);
+        $input = new Input($this->model, $messages, $options);
         array_map(fn (InputProcessor $processor) => $processor->processInput($input), $this->inputProcessors);
 
-        $llm = $input->llm;
+        $model = $input->model;
         $messages = $input->messages;
         $options = $input->getOptions();
 
-        if ($messages->containsAudio() && !$llm->supportsAudioInput()) {
-            throw MissingModelSupport::forAudioInput($llm::class);
+        if ($messages->containsAudio() && !$model->supports(Capability::INPUT_AUDIO)) {
+            throw MissingModelSupport::forAudioInput($model::class);
         }
 
-        if ($messages->containsImage() && !$llm->supportsImageInput()) {
-            throw MissingModelSupport::forImageInput($llm::class);
+        if ($messages->containsImage() && !$model->supports(Capability::INPUT_IMAGE)) {
+            throw MissingModelSupport::forImageInput($model::class);
         }
 
         try {
-            $response = $this->platform->request($llm, $messages, $options);
+            $response = $this->platform->request($model, $messages, $options);
 
             if ($response instanceof AsyncResponse) {
                 $response = $response->unwrap();
@@ -85,7 +86,7 @@ final readonly class Chain implements ChainInterface
             throw new RuntimeException('Failed to request model', previous: $e);
         }
 
-        $output = new Output($llm, $response, $messages, $options);
+        $output = new Output($model, $response, $messages, $options);
         array_map(fn (OutputProcessor $processor) => $processor->processOutput($output), $this->outputProcessors);
 
         return $output->response;
