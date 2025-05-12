@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\StructuredOutput;
 
+use PhpLlm\LlmChain\Chain\Exception\InvalidArgumentException;
+use PhpLlm\LlmChain\Chain\Exception\MissingModelSupportException;
 use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\InputProcessor;
+use PhpLlm\LlmChain\Chain\InputProcessorInterface;
 use PhpLlm\LlmChain\Chain\Output;
-use PhpLlm\LlmChain\Chain\OutputProcessor;
-use PhpLlm\LlmChain\Exception\InvalidArgumentException;
-use PhpLlm\LlmChain\Exception\MissingModelSupport;
-use PhpLlm\LlmChain\Model\Response\StructuredResponse;
+use PhpLlm\LlmChain\Chain\OutputProcessorInterface;
+use PhpLlm\LlmChain\Platform\Capability;
+use PhpLlm\LlmChain\Platform\Response\ObjectResponse;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -19,7 +20,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class ChainProcessor implements InputProcessor, OutputProcessor
+final class ChainProcessor implements InputProcessorInterface, OutputProcessorInterface
 {
     private string $outputStructure;
 
@@ -42,8 +43,8 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
             return;
         }
 
-        if (!$input->llm->supportsStructuredOutput()) {
-            throw MissingModelSupport::forStructuredOutput($input->llm::class);
+        if (!$input->model->supports(Capability::OUTPUT_STRUCTURED)) {
+            throw MissingModelSupportException::forStructuredOutput($input->model::class);
         }
 
         if (true === ($options['stream'] ?? false)) {
@@ -62,7 +63,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
     {
         $options = $output->options;
 
-        if ($output->response instanceof StructuredResponse) {
+        if ($output->response instanceof ObjectResponse) {
             return;
         }
 
@@ -71,12 +72,12 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
         }
 
         if (!isset($this->outputStructure)) {
-            $output->response = new StructuredResponse(json_decode($output->response->getContent(), true));
+            $output->response = new ObjectResponse(json_decode($output->response->getContent(), true));
 
             return;
         }
 
-        $output->response = new StructuredResponse(
+        $output->response = new ObjectResponse(
             $this->serializer->deserialize($output->response->getContent(), $this->outputStructure, 'json')
         );
     }

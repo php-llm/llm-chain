@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox\Tool;
 
+use PhpLlm\LlmChain\Chain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
-use PhpLlm\LlmChain\Exception\RuntimeException;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

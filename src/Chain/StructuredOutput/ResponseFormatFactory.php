@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\StructuredOutput;
 
-use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
+use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Factory;
 
 use function Symfony\Component\String\u;
 

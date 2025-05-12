@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox\Tool;
 
-use PhpLlm\LlmChain\ChainInterface;
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
-use PhpLlm\LlmChain\Model\Response\TextResponse;
+use PhpLlm\LlmChain\Chain\ChainInterface;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
+use PhpLlm\LlmChain\Platform\Response\TextResponse;
 
 final readonly class Chain
 {
@@ -23,7 +23,7 @@ final readonly class Chain
     {
         $response = $this->chain->call(new MessageBag(Message::ofUser($message)));
 
-        assert($response instanceof TextResponse);
+        \assert($response instanceof TextResponse);
 
         return $response->getContent();
     }

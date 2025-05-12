@@ -12,6 +12,6 @@ final class ToolWrong
      */
     public function bar(string $text, int $number): string
     {
-        return sprintf('%s says "%d".', $text, $number);
+        return \sprintf('%s says "%d".', $text, $number);
     }
 }

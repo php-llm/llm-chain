@@ -12,6 +12,6 @@ final class ToolNoAttribute1
      */
     public function __invoke(string $name, int $years): string
     {
-        return sprintf('Happy Birthday, %s! You are %d years old.', $name, $years);
+        return \sprintf('Happy Birthday, %s! You are %d years old.', $name, $years);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Double;
 
-use PhpLlm\LlmChain\Document\VectorDocument;
+use PhpLlm\LlmChain\Store\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\StoreInterface;
 
 final class TestStore implements StoreInterface

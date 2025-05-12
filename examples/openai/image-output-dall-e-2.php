@@ -1,14 +1,14 @@
 <?php
 
-use PhpLlm\LlmChain\Bridge\OpenAI\DallE;
-use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\DallE;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\PlatformFactory;
 use Symfony\Component\Dotenv\Dotenv;
 
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__, 2).'/.env');
 
 if (empty($_ENV['OPENAI_API_KEY'])) {
-    echo 'Please set the OPENAI_API_KEY environment variable.'.PHP_EOL;
+    echo 'Please set the OPENAI_API_KEY environment variable.'.\PHP_EOL;
     exit(1);
 }
 
@@ -24,5 +24,5 @@ $response = $platform->request(
 );
 
 foreach ($response->getContent() as $index => $image) {
-    echo 'Image '.$index.': '.$image->url.PHP_EOL;
+    echo 'Image '.$index.': '.$image->url.\PHP_EOL;
 }

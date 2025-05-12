@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox\Exception;
 
-use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
 
 final class ToolExecutionException extends \RuntimeException implements ExceptionInterface
 {
@@ -12,7 +12,7 @@ final class ToolExecutionException extends \RuntimeException implements Exceptio
 
     public static function executionFailed(ToolCall $toolCall, \Throwable $previous): self
     {
-        $exception = new self(sprintf('Execution of tool "%s" failed with error: %s', $toolCall->name, $previous->getMessage()), previous: $previous);
+        $exception = new self(\sprintf('Execution of tool "%s" failed with error: %s', $toolCall->name, $previous->getMessage()), previous: $previous);
         $exception->toolCall = $toolCall;
 
         return $exception;

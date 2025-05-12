@@ -1,15 +1,15 @@
 <?php
 
-use PhpLlm\LlmChain\Bridge\Voyage\PlatformFactory;
-use PhpLlm\LlmChain\Bridge\Voyage\Voyage;
-use PhpLlm\LlmChain\Model\Response\VectorResponse;
+use PhpLlm\LlmChain\Platform\Bridge\Voyage\PlatformFactory;
+use PhpLlm\LlmChain\Platform\Bridge\Voyage\Voyage;
+use PhpLlm\LlmChain\Platform\Response\VectorResponse;
 use Symfony\Component\Dotenv\Dotenv;
 
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__, 2).'/.env');
 
 if (empty($_ENV['VOYAGE_API_KEY'])) {
-    echo 'Please set the VOYAGE_API_KEY environment variable.'.PHP_EOL;
+    echo 'Please set the VOYAGE_API_KEY environment variable.'.\PHP_EOL;
     exit(1);
 }
 
@@ -24,4 +24,4 @@ $response = $platform->request($embeddings, <<<TEXT
 
 assert($response instanceof VectorResponse);
 
-echo 'Dimensions: '.$response->getContent()[0]->getDimensions().PHP_EOL;
+echo 'Dimensions: '.$response->getContent()[0]->getDimensions().\PHP_EOL;

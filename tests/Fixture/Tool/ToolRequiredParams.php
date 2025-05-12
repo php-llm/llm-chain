@@ -15,6 +15,6 @@ final class ToolRequiredParams
      */
     public function bar(string $text, int $number): string
     {
-        return sprintf('%s says "%d".', $text, $number);
+        return \sprintf('%s says "%d".', $text, $number);
     }
 }
