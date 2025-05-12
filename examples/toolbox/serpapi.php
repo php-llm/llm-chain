@@ -19,12 +19,12 @@ if (empty($_ENV['OPENAI_API_KEY']) || empty($_ENV['SERP_API_KEY'])) {
     exit(1);
 }
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
 $serpApi = new SerpApi(HttpClient::create(), $_ENV['SERP_API_KEY']);
 $toolbox = Toolbox::create($serpApi);
 $processor = new ChainProcessor($toolbox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 $messages = new MessageBag(Message::ofUser('Who is the current chancellor of Germany?'));
 $response = $chain->call($messages);

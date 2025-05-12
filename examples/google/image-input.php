@@ -17,9 +17,9 @@ if (empty($_ENV['GOOGLE_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['GOOGLE_API_KEY']);
-$llm = new Gemini(Gemini::GEMINI_1_5_FLASH);
+$model = new Gemini(Gemini::GEMINI_1_5_FLASH);
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::forSystem('You are an image analyzer bot that helps identify the content of images.'),
     Message::ofUser(

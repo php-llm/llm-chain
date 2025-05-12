@@ -8,8 +8,9 @@ use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\StructuredOutput\ChainProcessor;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
-use PhpLlm\LlmChain\Model\LanguageModel;
+use PhpLlm\LlmChain\Model\Capability;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\Choice;
 use PhpLlm\LlmChain\Model\Response\StructuredResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
@@ -38,10 +39,8 @@ final class ChainProcessorTest extends TestCase
     {
         $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory(['some' => 'format']));
 
-        $llm = self::createMock(LanguageModel::class);
-        $llm->method('supportsStructuredOutput')->willReturn(true);
-
-        $input = new Input($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
+        $model = new Model('gpt-4', [Capability::OUTPUT_STRUCTURED]);
+        $input = new Input($model, new MessageBag(), ['output_structure' => 'SomeStructure']);
 
         $chainProcessor->processInput($input);
 
@@ -53,8 +52,8 @@ final class ChainProcessorTest extends TestCase
     {
         $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory());
 
-        $llm = self::createMock(LanguageModel::class);
-        $input = new Input($llm, new MessageBag(), []);
+        $model = new Model('gpt-4', [Capability::OUTPUT_STRUCTURED]);
+        $input = new Input($model, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
 
@@ -68,10 +67,8 @@ final class ChainProcessorTest extends TestCase
 
         $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory());
 
-        $llm = self::createMock(LanguageModel::class);
-        $llm->method('supportsStructuredOutput')->willReturn(false);
-
-        $input = new Input($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
+        $model = new Model('gpt-3');
+        $input = new Input($model, new MessageBag(), ['output_structure' => 'SomeStructure']);
 
         $chainProcessor->processInput($input);
     }
@@ -81,16 +78,14 @@ final class ChainProcessorTest extends TestCase
     {
         $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory(['some' => 'format']));
 
-        $llm = self::createMock(LanguageModel::class);
-        $llm->method('supportsStructuredOutput')->willReturn(true);
-
+        $model = new Model('gpt-4', [Capability::OUTPUT_STRUCTURED]);
         $options = ['output_structure' => SomeStructure::class];
-        $input = new Input($llm, new MessageBag(), $options);
+        $input = new Input($model, new MessageBag(), $options);
         $chainProcessor->processInput($input);
 
         $response = new TextResponse('{"some": "data"}');
 
-        $output = new Output($llm, $response, new MessageBag(), $input->getOptions());
+        $output = new Output($model, $response, new MessageBag(), $input->getOptions());
 
         $chainProcessor->processOutput($output);
 
@@ -104,11 +99,9 @@ final class ChainProcessorTest extends TestCase
     {
         $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory(['some' => 'format']));
 
-        $llm = self::createMock(LanguageModel::class);
-        $llm->method('supportsStructuredOutput')->willReturn(true);
-
+        $model = new Model('gpt-4', [Capability::OUTPUT_STRUCTURED]);
         $options = ['output_structure' => MathReasoning::class];
-        $input = new Input($llm, new MessageBag(), $options);
+        $input = new Input($model, new MessageBag(), $options);
         $chainProcessor->processInput($input);
 
         $response = new TextResponse(<<<JSON
@@ -139,7 +132,7 @@ final class ChainProcessorTest extends TestCase
             }
             JSON);
 
-        $output = new Output($llm, $response, new MessageBag(), $input->getOptions());
+        $output = new Output($model, $response, new MessageBag(), $input->getOptions());
 
         $chainProcessor->processOutput($output);
 
@@ -161,10 +154,10 @@ final class ChainProcessorTest extends TestCase
         $serializer = self::createMock(SerializerInterface::class);
         $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
 
-        $llm = self::createMock(LanguageModel::class);
+        $model = self::createMock(Model::class);
         $response = new TextResponse('');
 
-        $output = new Output($llm, $response, new MessageBag(), []);
+        $output = new Output($model, $response, new MessageBag(), []);
 
         $chainProcessor->processOutput($output);
 

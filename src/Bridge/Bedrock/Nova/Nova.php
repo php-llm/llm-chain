@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Bedrock\Nova;
 
-use PhpLlm\LlmChain\Model\LanguageModel;
+use PhpLlm\LlmChain\Model\Capability;
+use PhpLlm\LlmChain\Model\Model;
 
-final readonly class Nova implements LanguageModel
+final class Nova extends Model
 {
     public const MICRO = 'nova-micro';
     public const LITE = 'nova-lite';
@@ -17,50 +18,22 @@ final readonly class Nova implements LanguageModel
      * @param array<string, mixed> $options The default options for the model usage
      */
     public function __construct(
-        private string $name = self::PRO,
-        private array $options = ['temperature' => 1.0, 'max_tokens' => 1000],
+        string $name = self::PRO,
+        array $options = ['temperature' => 1.0, 'max_tokens' => 1000],
     ) {
-    }
+        $capabilities = [
+            Capability::INPUT_MESSAGES,
+            Capability::OUTPUT_TEXT,
+            // Tool calling is supported, but:
+            // Invoke currently has some validation errors on the bedrock api side when returning tool calling results.
+            // It's encouraged to use the converse api instead.
+            // Capability::TOOL_CALLING,
+        ];
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getOptions(): array
-    {
-        return $this->options;
-    }
-
-    public function supportsAudioInput(): bool
-    {
-        return false;
-    }
-
-    public function supportsImageInput(): bool
-    {
-        if (self::MICRO === $this->name) {
-            return false;
+        if (self::MICRO !== $name) {
+            $capabilities[] = Capability::INPUT_IMAGE;
         }
 
-        return true;
-    }
-
-    public function supportsStreaming(): bool
-    {
-        return false;
-    }
-
-    public function supportsStructuredOutput(): bool
-    {
-        return false;
-    }
-
-    public function supportsToolCalling(): bool
-    {
-        // Tool calling is supported but:
-        // Invoke currently has some validation errors on the bedrock api side when returning tool calling results.
-        // Its encouraged to use the converse api instead.
-        return false;
+        parent::__construct($name, $capabilities, $options);
     }
 }

@@ -20,12 +20,12 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
 $wikipedia = new Wikipedia(HttpClient::create());
 $toolbox = Toolbox::create($wikipedia);
 $processor = new ChainProcessor($toolbox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 $messages = new MessageBag(Message::ofUser(<<<TXT
         First, define unicorn in 30 words.
         Then lookup at Wikipedia what the irish history looks like in 2 sentences.

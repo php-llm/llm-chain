@@ -21,7 +21,7 @@ if (empty($_ENV['RUN_EXPENSIVE_EXAMPLES']) || false === filter_var($_ENV['RUN_EX
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::O1_PREVIEW);
+$model = new GPT(GPT::O1_PREVIEW);
 
 $prompt = <<<PROMPT
     I want to build a Symfony app in PHP 8.2 that takes user questions and looks them
@@ -32,6 +32,6 @@ $prompt = <<<PROMPT
     at the beginning and end, not throughout the code.
     PROMPT;
 
-$response = (new Chain($platform, $llm))->call(new MessageBag(Message::ofUser($prompt)));
+$response = (new Chain($platform, $model))->call(new MessageBag(Message::ofUser($prompt)));
 
 echo $response->getContent().PHP_EOL;

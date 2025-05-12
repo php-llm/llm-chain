@@ -16,9 +16,9 @@ if (empty($_ENV['ANTHROPIC_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['ANTHROPIC_API_KEY']);
-$llm = new Claude();
+$model = new Claude();
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::forSystem('You are a thoughtful philosopher.'),
     Message::ofUser('What is the purpose of an ant?'),

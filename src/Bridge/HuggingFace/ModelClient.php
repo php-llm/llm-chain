@@ -8,12 +8,11 @@ use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
-use PhpLlm\LlmChain\Model\Model as BaseModel;
+use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Platform\ModelClient as PlatformModelClient;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Webmozart\Assert\Assert;
 
 final readonly class ModelClient implements PlatformModelClient
 {
@@ -28,14 +27,13 @@ final readonly class ModelClient implements PlatformModelClient
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
     }
 
-    public function supports(BaseModel $model, object|array|string $input): bool
+    public function supports(Model $model, object|array|string $input): bool
     {
-        return $model instanceof Model;
+        return true;
     }
 
-    public function request(BaseModel $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
     {
-        Assert::isInstanceOf($model, Model::class);
         $task = $options['task'] ?? null;
         unset($options['task']);
 

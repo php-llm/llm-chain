@@ -31,7 +31,7 @@ final readonly class Client implements ModelClient, ResponseConverter
 
     public function supports(Model $model, array|string|object $input): bool
     {
-        return $input instanceof MessageBagInterface && $model instanceof GenericModel;
+        return $input instanceof MessageBagInterface;
     }
 
     public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface

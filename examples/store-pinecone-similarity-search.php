@@ -49,12 +49,12 @@ $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 $embedder = new Embedder($platform, $embeddings = new Embeddings(), $store);
 $embedder->embed($documents);
 
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
 $similaritySearch = new SimilaritySearch($platform, $embeddings, $store);
 $toolbox = Toolbox::create($similaritySearch);
 $processor = new ChainProcessor($toolbox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 $messages = new MessageBag(
     Message::forSystem('Please answer all user questions only using SimilaritySearch function.'),

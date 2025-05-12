@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Bridge\HuggingFace;
 
-use PhpLlm\LlmChain\Bridge\HuggingFace\Model;
 use PhpLlm\LlmChain\Bridge\HuggingFace\ModelClient;
 use PhpLlm\LlmChain\Bridge\HuggingFace\Task;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\UserMessage;
-use PhpLlm\LlmChain\Model\Model as BaseModel;
+use PhpLlm\LlmChain\Model\Model;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
@@ -24,24 +23,6 @@ use Symfony\Component\HttpClient\MockHttpClient;
 #[UsesClass(Model::class)]
 final class ModelClientTest extends TestCase
 {
-    public function testSupportsWithHuggingFaceModel(): void
-    {
-        $httpClient = new MockHttpClient();
-        $modelClient = new ModelClient($httpClient, 'test-provider', 'test-api-key');
-        $model = new Model('test-model');
-
-        self::assertTrue($modelClient->supports($model, 'test-input'));
-    }
-
-    public function testSupportsWithNonHuggingFaceModel(): void
-    {
-        $httpClient = new MockHttpClient();
-        $modelClient = new ModelClient($httpClient, 'test-provider', 'test-api-key');
-        $model = self::createMock(BaseModel::class);
-
-        self::assertFalse($modelClient->supports($model, 'test-input'));
-    }
-
     public function testRequestWithUnsupportedInputType(): void
     {
         $httpClient = new MockHttpClient();
@@ -52,17 +33,6 @@ final class ModelClientTest extends TestCase
         self::expectExceptionMessage('Unsupported input type: stdClass');
 
         $modelClient->request($model, new \stdClass());
-    }
-
-    public function testRequestWithNonHuggingFaceModel(): void
-    {
-        $httpClient = new MockHttpClient();
-        $modelClient = new ModelClient($httpClient, 'test-provider', 'test-api-key');
-        $model = self::createMock(BaseModel::class);
-
-        self::expectException(\InvalidArgumentException::class);
-
-        $modelClient->request($model, 'test input');
     }
 
     #[DataProvider('urlTestCases')]

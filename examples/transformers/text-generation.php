@@ -1,8 +1,8 @@
 <?php
 
 use Codewithkyrian\Transformers\Pipelines\Task;
-use PhpLlm\LlmChain\Bridge\TransformersPHP\Model;
 use PhpLlm\LlmChain\Bridge\TransformersPHP\PlatformFactory;
+use PhpLlm\LlmChain\Model\Model;
 
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 

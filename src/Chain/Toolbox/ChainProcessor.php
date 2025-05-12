@@ -13,6 +13,7 @@ use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Chain\Toolbox\Event\ToolCallsExecuted;
 use PhpLlm\LlmChain\Chain\Toolbox\StreamResponse as ToolboxStreamResponse;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
+use PhpLlm\LlmChain\Model\Capability;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
@@ -33,8 +34,8 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
 
     public function processInput(Input $input): void
     {
-        if (!$input->llm->supportsToolCalling()) {
-            throw MissingModelSupport::forToolCalling($input->llm::class);
+        if (!$input->model->supports(Capability::TOOL_CALLING)) {
+            throw MissingModelSupport::forToolCalling($input->model::class);
         }
 
         $toolMap = $this->toolbox->getMap();

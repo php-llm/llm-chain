@@ -10,8 +10,9 @@ use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
 use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Chain\Toolbox\ToolboxInterface;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
-use PhpLlm\LlmChain\Model\LanguageModel;
+use PhpLlm\LlmChain\Model\Capability;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Model\Model;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -31,11 +32,9 @@ class ChainProcessorTest extends TestCase
         $toolbox = $this->createStub(ToolboxInterface::class);
         $toolbox->method('getMap')->willReturn([]);
 
-        $llm = self::createMock(LanguageModel::class);
-        $llm->method('supportsToolCalling')->willReturn(true);
-
+        $model = new Model('gpt-4', [Capability::TOOL_CALLING]);
         $chainProcessor = new ChainProcessor($toolbox);
-        $input = new Input($llm, new MessageBag(), []);
+        $input = new Input($model, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
 
@@ -50,11 +49,9 @@ class ChainProcessorTest extends TestCase
         $tool2 = new Metadata(new ExecutionReference('ClassTool2', 'method1'), 'tool2', 'description2', null);
         $toolbox->method('getMap')->willReturn([$tool1, $tool2]);
 
-        $llm = self::createMock(LanguageModel::class);
-        $llm->method('supportsToolCalling')->willReturn(true);
-
+        $model = new Model('gpt-4', [Capability::TOOL_CALLING]);
         $chainProcessor = new ChainProcessor($toolbox);
-        $input = new Input($llm, new MessageBag(), []);
+        $input = new Input($model, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
 
@@ -69,11 +66,9 @@ class ChainProcessorTest extends TestCase
         $tool2 = new Metadata(new ExecutionReference('ClassTool2', 'method1'), 'tool2', 'description2', null);
         $toolbox->method('getMap')->willReturn([$tool1, $tool2]);
 
-        $llm = self::createMock(LanguageModel::class);
-        $llm->method('supportsToolCalling')->willReturn(true);
-
+        $model = new Model('gpt-4', [Capability::TOOL_CALLING]);
         $chainProcessor = new ChainProcessor($toolbox);
-        $input = new Input($llm, new MessageBag(), ['tools' => ['tool2']]);
+        $input = new Input($model, new MessageBag(), ['tools' => ['tool2']]);
 
         $chainProcessor->processInput($input);
 
@@ -85,11 +80,9 @@ class ChainProcessorTest extends TestCase
     {
         self::expectException(MissingModelSupport::class);
 
-        $llm = self::createMock(LanguageModel::class);
-        $llm->method('supportsToolCalling')->willReturn(false);
-
+        $model = new Model('gpt-3');
         $chainProcessor = new ChainProcessor($this->createStub(ToolboxInterface::class));
-        $input = new Input($llm, new MessageBag(), []);
+        $input = new Input($model, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
     }

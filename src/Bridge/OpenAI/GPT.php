@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\OpenAI;
 
-use PhpLlm\LlmChain\Model\LanguageModel;
+use PhpLlm\LlmChain\Model\Capability;
+use PhpLlm\LlmChain\Model\Model;
 
-final class GPT implements LanguageModel
+class GPT extends Model
 {
     public const GPT_35_TURBO = 'gpt-3.5-turbo';
     public const GPT_35_TURBO_INSTRUCT = 'gpt-3.5-turbo-instruct';
@@ -51,57 +52,28 @@ final class GPT implements LanguageModel
      * @param array<mixed> $options The default options for the model usage
      */
     public function __construct(
-        private readonly string $name = self::GPT_4O,
-        private readonly array $options = ['temperature' => 1.0],
-        private bool $supportsAudioInput = false,
-        private bool $supportsImageInput = false,
-        private bool $supportsStructuredOutput = false,
+        string $name = self::GPT_4O,
+        array $options = ['temperature' => 1.0],
     ) {
-        if (false === $this->supportsAudioInput) {
-            $this->supportsAudioInput = self::GPT_4O_AUDIO === $this->name;
+        $capabilities = [
+            Capability::INPUT_MESSAGES,
+            Capability::OUTPUT_TEXT,
+            Capability::OUTPUT_STREAMING,
+            Capability::TOOL_CALLING,
+        ];
+
+        if (self::GPT_4O_AUDIO === $name) {
+            $capabilities[] = Capability::INPUT_AUDIO;
         }
 
-        if (false === $this->supportsImageInput) {
-            $this->supportsImageInput = in_array($this->name, self::IMAGE_SUPPORTING, true);
+        if (in_array($name, self::IMAGE_SUPPORTING, true)) {
+            $capabilities[] = Capability::INPUT_IMAGE;
         }
 
-        if (false === $this->supportsStructuredOutput) {
-            $this->supportsStructuredOutput = in_array($this->name, self::STRUCTURED_OUTPUT_SUPPORTING, true);
+        if (in_array($name, self::STRUCTURED_OUTPUT_SUPPORTING, true)) {
+            $capabilities[] = Capability::OUTPUT_STRUCTURED;
         }
-    }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getOptions(): array
-    {
-        return $this->options;
-    }
-
-    public function supportsAudioInput(): bool
-    {
-        return $this->supportsAudioInput;
-    }
-
-    public function supportsImageInput(): bool
-    {
-        return $this->supportsImageInput;
-    }
-
-    public function supportsStreaming(): bool
-    {
-        return true;
-    }
-
-    public function supportsStructuredOutput(): bool
-    {
-        return $this->supportsStructuredOutput;
-    }
-
-    public function supportsToolCalling(): bool
-    {
-        return true;
+        parent::__construct($name, $capabilities, $options);
     }
 }

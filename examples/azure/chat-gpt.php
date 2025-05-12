@@ -22,9 +22,9 @@ $platform = PlatformFactory::create(
     $_ENV['AZURE_OPENAI_GPT_API_VERSION'],
     $_ENV['AZURE_OPENAI_KEY'],
 );
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::forSystem('You are a pirate and you write funny.'),
     Message::ofUser('What is the Symfony framework?'),

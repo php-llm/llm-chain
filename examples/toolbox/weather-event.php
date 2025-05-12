@@ -23,13 +23,13 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
 $openMeteo = new OpenMeteo(HttpClient::create());
 $toolbox = Toolbox::create($openMeteo);
 $eventDispatcher = new EventDispatcher();
 $processor = new ChainProcessor($toolbox, eventDispatcher: $eventDispatcher);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 // Add tool call result listener to enforce chain exits direct with structured response for weather tools
 $eventDispatcher->addListener(ToolCallsExecuted::class, function (ToolCallsExecuted $event): void {

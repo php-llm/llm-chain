@@ -21,12 +21,12 @@ if (empty($_ENV['AWS_ACCESS_KEY_ID']) || empty($_ENV['AWS_SECRET_ACCESS_KEY']) |
 }
 
 $platform = PlatformFactory::create();
-$llm = new Claude();
+$model = new Claude();
 
 $wikipedia = new Wikipedia(HttpClient::create());
 $toolbox = Toolbox::create($wikipedia);
 $processor = new ChainProcessor($toolbox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 $messages = new MessageBag(Message::ofUser('Who is the current chancellor of Germany?'));
 $response = $chain->call($messages);

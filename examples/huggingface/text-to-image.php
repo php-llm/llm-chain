@@ -1,8 +1,8 @@
 <?php
 
-use PhpLlm\LlmChain\Bridge\HuggingFace\Model;
 use PhpLlm\LlmChain\Bridge\HuggingFace\PlatformFactory;
 use PhpLlm\LlmChain\Bridge\HuggingFace\Task;
+use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\BinaryResponse;
 use Symfony\Component\Dotenv\Dotenv;
 

@@ -96,7 +96,7 @@ use PhpLlm\LlmChain\Model\Message\MessageBag;
 
 // Platform & LLM instantiation
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::forSystem('You are a helpful chatbot answering questions about LLM Chain.'),
     Message::ofUser('Hello, how are you?'),
@@ -156,7 +156,7 @@ $yourTool = new YourTool();
 $toolbox = Toolbox::create($yourTool);
 $toolProcessor = new ChainProcessor($toolbox);
 
-$chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
+$chain = new Chain($platform, $model, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
 ```
 
 Custom tools can basically be any class, but must configure by the `#[AsTool]` attribute.
@@ -314,7 +314,7 @@ use PhpLlm\LlmChain\Chain\Toolbox\FaultTolerantToolbox;
 $toolbox = new FaultTolerantToolbox($innerToolbox);
 $toolProcessor = new ChainProcessor($toolbox);
 
-$chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
+$chain = new Chain($platform, $model, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
 ```
 
 #### Tool Filtering
@@ -411,7 +411,7 @@ use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 $similaritySearch = new SimilaritySearch($embeddings, $store);
 $toolbox = Toolbox::create($similaritySearch);
 $processor = new ChainProcessor($toolbox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 $messages = new MessageBag(
     Message::forSystem(<<<PROMPT
@@ -450,6 +450,7 @@ LLM Chain supports that use-case by abstracting the hustle of defining and provi
 the response back to PHP objects.
 
 To achieve this, a specific chain processor needs to be registered:
+
 ```php
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Model\Message\Message;
@@ -465,7 +466,7 @@ use Symfony\Component\Serializer\Serializer;
 
 $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 $processor = new ChainProcessor(new ResponseFormatFactory(), $serializer);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 $messages = new MessageBag(
     Message::forSystem('You are a helpful math tutor. Guide the user through the solution step by step.'),
@@ -524,7 +525,7 @@ use PhpLlm\LlmChain\Message\MessageBag;
 
 // Initialize Platform and LLM
 
-$chain = new Chain($llm);
+$chain = new Chain($model);
 $messages = new MessageBag(
     Message::forSystem('You are a thoughtful philosopher.'),
     Message::ofUser('What is the purpose of an ant?'),
@@ -659,7 +660,7 @@ use PhpLlm\LlmChain\Chain;
 
 // Initialize Platform, LLM and processors
 
-$chain = new Chain($platform, $llm, $inputProcessors, $outputProcessors);
+$chain = new Chain($platform, $model, $inputProcessors, $outputProcessors);
 ```
 
 #### InputProcessor

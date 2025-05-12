@@ -16,7 +16,7 @@ use PhpLlm\LlmChain\Bridge\HuggingFace\Output\ZeroShotClassificationResult;
 use PhpLlm\LlmChain\Document\Vector;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\Model\Model as BaseModel;
+use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\BinaryResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\StructuredResponse;
@@ -27,9 +27,9 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final readonly class ResponseConverter implements PlatformResponseConverter
 {
-    public function supports(BaseModel $model, array|string|object $input): bool
+    public function supports(Model $model, array|string|object $input): bool
     {
-        return $model instanceof Model;
+        return true;
     }
 
     public function convert(ResponseInterface $response, array $options = []): LlmResponse

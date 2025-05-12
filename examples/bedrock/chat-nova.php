@@ -17,9 +17,9 @@ if (empty($_ENV['AWS_ACCESS_KEY_ID']) || empty($_ENV['AWS_SECRET_ACCESS_KEY']) |
 }
 
 $platform = PlatformFactory::create();
-$llm = new Nova(Nova::PRO);
+$model = new Nova(Nova::PRO);
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::forSystem('You are a pirate and you write funny.'),
     Message::ofUser('What is the Symfony framework?'),

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Voyage;
 
-use PhpLlm\LlmChain\Model\EmbeddingsModel;
+use PhpLlm\LlmChain\Model\Capability;
+use PhpLlm\LlmChain\Model\Model;
 
-final readonly class Voyage implements EmbeddingsModel
+class Voyage extends Model
 {
     public const V3 = 'voyage-3';
     public const V3_LITE = 'voyage-3-lite';
@@ -18,24 +19,8 @@ final readonly class Voyage implements EmbeddingsModel
     /**
      * @param array<string, mixed> $options
      */
-    public function __construct(
-        private string $name = self::V3,
-        private array $options = [],
-    ) {
-    }
-
-    public function getName(): string
+    public function __construct(string $name = self::V3, array $options = [])
     {
-        return $this->name;
-    }
-
-    public function getOptions(): array
-    {
-        return $this->options;
-    }
-
-    public function supportsMultipleInputs(): bool
-    {
-        return true;
+        parent::__construct($name, [Capability::INPUT_MULTIPLE], $options);
     }
 }
