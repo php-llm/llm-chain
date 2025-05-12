@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\OpenAI;
 
-use PhpLlm\LlmChain\Model\EmbeddingsModel;
+use PhpLlm\LlmChain\Model\Model;
 
-final readonly class Embeddings implements EmbeddingsModel
+class Embeddings extends Model
 {
     public const TEXT_ADA_002 = 'text-embedding-ada-002';
     public const TEXT_3_LARGE = 'text-embedding-3-large';
@@ -15,24 +15,8 @@ final readonly class Embeddings implements EmbeddingsModel
     /**
      * @param array<string, mixed> $options
      */
-    public function __construct(
-        private string $name = self::TEXT_3_SMALL,
-        private array $options = [],
-    ) {
-    }
-
-    public function getName(): string
+    public function __construct(string $name = self::TEXT_3_SMALL, array $options = [])
     {
-        return $this->name;
-    }
-
-    public function getOptions(): array
-    {
-        return $this->options;
-    }
-
-    public function supportsMultipleInputs(): bool
-    {
-        return false;
+        parent::__construct($name, [], $options);
     }
 }

@@ -10,6 +10,7 @@ use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
+use PhpLlm\LlmChain\Model\Capability;
 use PhpLlm\LlmChain\Model\Response\StructuredResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -31,8 +32,8 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
             return;
         }
 
-        if (!$input->llm->supportsStructuredOutput()) {
-            throw MissingModelSupport::forStructuredOutput($input->llm::class);
+        if (!$input->model->supports(Capability::OUTPUT_STRUCTURED)) {
+            throw MissingModelSupport::forStructuredOutput($input->model::class);
         }
 
         if (true === ($options['stream'] ?? false)) {

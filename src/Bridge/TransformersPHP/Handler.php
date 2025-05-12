@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Bridge\TransformersPHP;
 
 use Codewithkyrian\Transformers\Pipelines\Task;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
-use PhpLlm\LlmChain\Model\Model as BaseModel;
+use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\StructuredResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
@@ -18,12 +18,12 @@ use function Codewithkyrian\Transformers\Pipelines\pipeline;
 
 final readonly class Handler implements ModelClient, ResponseConverter
 {
-    public function supports(BaseModel $model, object|array|string $input): bool
+    public function supports(Model $model, object|array|string $input): bool
     {
-        return $model instanceof Model;
+        return true;
     }
 
-    public function request(BaseModel $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
     {
         if (!isset($options['task'])) {
             throw new InvalidArgumentException('The task option is required.');

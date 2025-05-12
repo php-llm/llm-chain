@@ -8,7 +8,7 @@ use PhpLlm\LlmChain\Bridge\Anthropic\Claude;
 use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings;
 use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\InputProcessor\LlmOverrideInputProcessor;
+use PhpLlm\LlmChain\Chain\InputProcessor\ModelOverrideInputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -17,51 +17,51 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(LlmOverrideInputProcessor::class)]
+#[CoversClass(ModelOverrideInputProcessor::class)]
 #[UsesClass(GPT::class)]
 #[UsesClass(Claude::class)]
 #[UsesClass(Input::class)]
 #[UsesClass(MessageBag::class)]
 #[UsesClass(Embeddings::class)]
 #[Small]
-final class LlmOverrideInputProcessorTest extends TestCase
+final class ModelOverrideInputProcessorTest extends TestCase
 {
     #[Test]
-    public function processInputWithValidLlmOption(): void
+    public function processInputWithValidModelOption(): void
     {
         $gpt = new GPT();
         $claude = new Claude();
-        $input = new Input($gpt, new MessageBag(), ['llm' => $claude]);
+        $input = new Input($gpt, new MessageBag(), ['model' => $claude]);
 
-        $processor = new LlmOverrideInputProcessor();
+        $processor = new ModelOverrideInputProcessor();
         $processor->processInput($input);
 
-        self::assertSame($claude, $input->llm);
+        self::assertSame($claude, $input->model);
     }
 
     #[Test]
-    public function processInputWithoutLlmOption(): void
+    public function processInputWithoutModelOption(): void
     {
         $gpt = new GPT();
         $input = new Input($gpt, new MessageBag(), []);
 
-        $processor = new LlmOverrideInputProcessor();
+        $processor = new ModelOverrideInputProcessor();
         $processor->processInput($input);
 
-        self::assertSame($gpt, $input->llm);
+        self::assertSame($gpt, $input->model);
     }
 
     #[Test]
-    public function processInputWithInvalidLlmOption(): void
+    public function processInputWithInvalidModelOption(): void
     {
         self::expectException(InvalidArgumentException::class);
-        self::expectExceptionMessage('Option "llm" must be an instance of PhpLlm\LlmChain\Model\LanguageModel.');
+        self::expectExceptionMessage('Option "model" must be an instance of PhpLlm\LlmChain\Model\Model.');
 
         $gpt = new GPT();
-        $model = new Embeddings();
-        $input = new Input($gpt, new MessageBag(), ['llm' => $model]);
+        $model = new MessageBag();
+        $input = new Input($gpt, new MessageBag(), ['model' => $model]);
 
-        $processor = new LlmOverrideInputProcessor();
+        $processor = new ModelOverrideInputProcessor();
         $processor->processInput($input);
     }
 }

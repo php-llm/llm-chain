@@ -1,9 +1,9 @@
 <?php
 
-use PhpLlm\LlmChain\Bridge\HuggingFace\Model;
 use PhpLlm\LlmChain\Bridge\HuggingFace\PlatformFactory;
 use PhpLlm\LlmChain\Bridge\HuggingFace\Task;
 use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Model\Model;
 use Symfony\Component\Dotenv\Dotenv;
 
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';

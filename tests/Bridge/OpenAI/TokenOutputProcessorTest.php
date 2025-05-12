@@ -6,8 +6,8 @@ namespace PhpLlm\LlmChain\Tests\Bridge\OpenAI;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\TokenOutputProcessor;
 use PhpLlm\LlmChain\Chain\Output;
-use PhpLlm\LlmChain\Model\LanguageModel;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
+use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\Metadata\Metadata;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
 use PhpLlm\LlmChain\Model\Response\StreamResponse;
@@ -143,7 +143,7 @@ final class TokenOutputProcessorTest extends TestCase
     private function createOutput(ResponseInterface $response): Output
     {
         return new Output(
-            self::createStub(LanguageModel::class),
+            self::createStub(Model::class),
             $response,
             self::createStub(MessageBagInterface::class),
             [],
