@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Meta;
 
-use PhpLlm\LlmChain\Model\LanguageModel;
+use PhpLlm\LlmChain\Model\Capability;
+use PhpLlm\LlmChain\Model\Model;
 
-final readonly class Llama implements LanguageModel
+class Llama extends Model
 {
     public const V3_3_70B_INSTRUCT = 'llama-3.3-70B-Instruct';
     public const V3_2_90B_VISION_INSTRUCT = 'llama-3.2-90b-vision-instruct';
@@ -27,44 +28,13 @@ final readonly class Llama implements LanguageModel
     /**
      * @param array<string, mixed> $options
      */
-    public function __construct(
-        private string $name = self::V3_1_405B_INSTRUCT,
-        private array $options = [],
-    ) {
-    }
-
-    public function getName(): string
+    public function __construct(string $name = self::V3_1_405B_INSTRUCT, array $options = [])
     {
-        return $this->name;
-    }
+        $capabilities = [
+            Capability::INPUT_MESSAGES,
+            Capability::OUTPUT_TEXT,
+        ];
 
-    public function getOptions(): array
-    {
-        return $this->options;
-    }
-
-    public function supportsAudioInput(): bool
-    {
-        return false;
-    }
-
-    public function supportsImageInput(): bool
-    {
-        return false; // it does, but implementation here is still open.
-    }
-
-    public function supportsStreaming(): bool
-    {
-        return false; // it does, but implementation here is still open.
-    }
-
-    public function supportsToolCalling(): bool
-    {
-        return false; // it does, but implementation here is still open.
-    }
-
-    public function supportsStructuredOutput(): bool
-    {
-        return false;
+        parent::__construct($name, $capabilities, $options);
     }
 }

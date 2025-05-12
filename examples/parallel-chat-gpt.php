@@ -17,7 +17,7 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI, [
+$model = new GPT(GPT::GPT_4O_MINI, [
     'temperature' => 0.5, // default options for the model
 ]);
 
@@ -29,7 +29,7 @@ echo 'Initiating parallel calls to GPT on platform ...'.PHP_EOL;
 $responses = [];
 foreach (range('A', 'D') as $letter) {
     echo ' - Request for the letter '.$letter.' initiated.'.PHP_EOL;
-    $responses[] = $platform->request($llm, $messages->with(Message::ofUser($letter)));
+    $responses[] = $platform->request($model, $messages->with(Message::ofUser($letter)));
 }
 
 echo 'Waiting for the responses ...'.PHP_EOL;

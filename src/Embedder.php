@@ -6,7 +6,8 @@ namespace PhpLlm\LlmChain;
 
 use PhpLlm\LlmChain\Document\TextDocument;
 use PhpLlm\LlmChain\Document\VectorDocument;
-use PhpLlm\LlmChain\Model\EmbeddingsModel;
+use PhpLlm\LlmChain\Model\Capability;
+use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Store\StoreInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -19,7 +20,7 @@ final readonly class Embedder
 
     public function __construct(
         private PlatformInterface $platform,
-        private EmbeddingsModel $embeddings,
+        private Model $model,
         private StoreInterface $store,
         ?ClockInterface $clock = null,
         private LoggerInterface $logger = new NullLogger(),
@@ -60,14 +61,14 @@ final readonly class Embedder
      */
     private function createVectorDocuments(array $documents): array
     {
-        if ($this->embeddings->supportsMultipleInputs()) {
-            $response = $this->platform->request($this->embeddings, array_map(fn (TextDocument $document) => $document->content, $documents));
+        if ($this->model->supports(Capability::INPUT_MULTIPLE)) {
+            $response = $this->platform->request($this->model, array_map(fn (TextDocument $document) => $document->content, $documents));
 
             $vectors = $response->getContent();
         } else {
             $responses = [];
             foreach ($documents as $document) {
-                $responses[] = $this->platform->request($this->embeddings, $document->content);
+                $responses[] = $this->platform->request($this->model, $document->content);
             }
 
             $vectors = [];

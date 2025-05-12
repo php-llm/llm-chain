@@ -16,9 +16,9 @@ if (empty($_ENV['REPLICATE_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['REPLICATE_API_KEY']);
-$llm = new Llama();
+$model = new Llama();
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::forSystem('You are a helpful assistant.'),
     Message::ofUser('Tina has one brother and one sister. How many sisters do Tina\'s siblings have?'),

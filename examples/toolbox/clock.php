@@ -20,13 +20,13 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
 $metadataFactory = (new MemoryFactory())
     ->addTool(Clock::class, 'clock', 'Get the current date and time', 'now');
 $toolbox = new Toolbox($metadataFactory, [new Clock()]);
 $processor = new ChainProcessor($toolbox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 $messages = new MessageBag(Message::ofUser('What date and time is it?'));
 $response = $chain->call($messages);

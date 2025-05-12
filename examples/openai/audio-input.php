@@ -17,9 +17,9 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_AUDIO);
+$model = new GPT(GPT::GPT_4O_AUDIO);
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::ofUser(
         'What is this recording about?',
