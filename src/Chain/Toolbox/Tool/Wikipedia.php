@@ -35,12 +35,12 @@ final readonly class Wikipedia
             return 'No articles were found on Wikipedia.';
         }
 
-        $response = 'Articles with the following titles were found on Wikipedia:'.PHP_EOL;
+        $response = 'Articles with the following titles were found on Wikipedia:'.\PHP_EOL;
         foreach ($titles as $title) {
-            $response .= ' - '.$title.PHP_EOL;
+            $response .= ' - '.$title.\PHP_EOL;
         }
 
-        return $response.PHP_EOL.'Use the title of the article with tool "wikipedia_article" to load the content.';
+        return $response.\PHP_EOL.'Use the title of the article with tool "wikipedia_article" to load the content.';
     }
 
     /**
@@ -59,19 +59,19 @@ final readonly class Wikipedia
 
         $article = current($result['query']['pages']);
 
-        if (array_key_exists('missing', $article)) {
-            return sprintf('No article with title "%s" was found on Wikipedia.', $title);
+        if (\array_key_exists('missing', $article)) {
+            return \sprintf('No article with title "%s" was found on Wikipedia.', $title);
         }
 
         $response = '';
-        if (array_key_exists('redirects', $result['query'])) {
+        if (\array_key_exists('redirects', $result['query'])) {
             foreach ($result['query']['redirects'] as $redirect) {
-                $response .= sprintf('The article "%s" redirects to article "%s".', $redirect['from'], $redirect['to']).PHP_EOL;
+                $response .= \sprintf('The article "%s" redirects to article "%s".', $redirect['from'], $redirect['to']).\PHP_EOL;
             }
-            $response .= PHP_EOL;
+            $response .= \PHP_EOL;
         }
 
-        return $response.'This is the content of article "'.$article['title'].'":'.PHP_EOL.$article['extract'];
+        return $response.'This is the content of article "'.$article['title'].'":'.\PHP_EOL.$article['extract'];
     }
 
     /**
@@ -81,7 +81,7 @@ final readonly class Wikipedia
      */
     private function execute(array $query, ?string $locale = null): array
     {
-        $url = sprintf('https://%s.wikipedia.org/w/api.php', $locale ?? $this->locale);
+        $url = \sprintf('https://%s.wikipedia.org/w/api.php', $locale ?? $this->locale);
         $response = $this->httpClient->request('GET', $url, ['query' => $query]);
 
         return $response->toArray();

@@ -45,9 +45,9 @@ Those models are provided by different **platforms**, like OpenAI, Azure, Google
 #### Example Instantiation
 
 ```php
-use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings;
-use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
-use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\GPT;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\PlatformFactory;
 
 // Platform: OpenAI
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
@@ -90,13 +90,13 @@ have different content types, like `Text`, `Image` or `Audio`.
 #### Example Chain call with messages
 
 ```php
-use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Chain\Chain;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
 
 // Platform & LLM instantiation
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::forSystem('You are a helpful chatbot answering questions about LLM Chain.'),
     Message::ofUser('Hello, how are you?'),
@@ -146,6 +146,7 @@ Tools are services that can be called by the LLM to provide additional features 
 Tool calling can be enabled by registering the processors in the chain:
 
 ```php
+use PhpLlm\LlmChain\Chain\Chain;
 use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 
@@ -156,7 +157,7 @@ $yourTool = new YourTool();
 $toolbox = Toolbox::create($yourTool);
 $toolProcessor = new ChainProcessor($toolbox);
 
-$chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
+$chain = new Chain($platform, $model, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
 ```
 
 Custom tools can basically be any class, but must configure by the `#[AsTool]` attribute.
@@ -219,8 +220,8 @@ partially support by LLMs like GPT.
 To leverage this, configure the `#[With]` attribute on the method arguments of your tool:
 
 ```php
-use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
+use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Attribute\With;
 
 #[AsTool('my_tool', 'Example tool with parameters requirements.')]
 final class MyTool
@@ -252,10 +253,10 @@ attribute to the class is not possible in those cases, but you can explicitly re
 
 ```php
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\MemoryToolFactory;
 use Symfony\Component\Clock\Clock;
 
-$metadataFactory = (new MemoryFactory())
+$metadataFactory = (new MemoryToolFactory())
     ->addTool(Clock::class, 'clock', 'Get the current date and time', 'now');
 $toolbox = new Toolbox($metadataFactory, [new Clock()]);
 ```
@@ -268,12 +269,12 @@ tools in the same chain - which even enables you to overwrite the pre-existing c
 
 ```php
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ChainFactory;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ReflectionFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\ChainFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\MemoryToolFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\ReflectionToolFactory;
 
-$reflectionFactory = new ReflectionFactory(); // Register tools with #[AsTool] attribute
-$metadataFactory = (new MemoryFactory())      // Register or overwrite tools explicitly
+$reflectionFactory = new ReflectionToolFactory(); // Register tools with #[AsTool] attribute
+$metadataFactory = (new MemoryToolFactory())      // Register or overwrite tools explicitly
     ->addTool(...);
 $toolbox = new Toolbox(new ChainFactory($metadataFactory, $reflectionFactory), [...]);
 ```
@@ -287,14 +288,14 @@ Similar to third-party tools, you can also use a chain as a tool in another chai
 complex logic or to reuse a chain in multiple places or hide sub-chains from the LLM.
 
 ```php
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\MemoryToolFactory;
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 use PhpLlm\LlmChain\Chain\Toolbox\Tool\Chain;
 
 // Chain was initialized before
 
 $chainTool = new Chain($chain);
-$metadataFactory = (new MemoryFactory())
+$metadataFactory = (new MemoryToolFactory())
     ->addTool($chainTool, 'research_agent', 'Meaningful description for sub-chain');
 $toolbox = new Toolbox($metadataFactory, [$chainTool]);
 ```
@@ -306,6 +307,7 @@ To gracefully handle errors that occur during tool calling, e.g. wrong tool name
 to the LLM.
 
 ```php
+use PhpLlm\LlmChain\Chain\Chain;
 use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\Toolbox\FaultTolerantToolbox;
 
@@ -314,7 +316,7 @@ use PhpLlm\LlmChain\Chain\Toolbox\FaultTolerantToolbox;
 $toolbox = new FaultTolerantToolbox($innerToolbox);
 $toolProcessor = new ChainProcessor($toolbox);
 
-$chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
+$chain = new Chain($platform, $model, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
 ```
 
 #### Tool Filtering
@@ -362,12 +364,11 @@ For populating a vector store, LLM Chain provides the service `Embedder`, which 
 `EmbeddingsModel` and one of `StoreInterface`, and works with a collection of `Document` objects as input:
 
 ```php
-use PhpLlm\LlmChain\Embedder;
-use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings;
-use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
-use PhpLlm\LlmChain\Bridge\Pinecone\Store;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\PlatformFactory;
+use PhpLlm\LlmChain\Store\Bridge\Pinecone\Store;
+use PhpLlm\LlmChain\Store\Embedder;
 use Probots\Pinecone\Pinecone;
-use Symfony\Component\HttpClient\HttpClient;
 
 $embedder = new Embedder(
     PlatformFactory::create($_ENV['OPENAI_API_KEY']),
@@ -380,8 +381,8 @@ $embedder->embed($documents);
 The collection of `Document` instances is usually created by text input of your domain entities:
 
 ```php
-use PhpLlm\LlmChain\Document\Metadata;
-use PhpLlm\LlmChain\Document\TextDocument;
+use PhpLlm\LlmChain\Store\Document\Metadata;
+use PhpLlm\LlmChain\Store\Document\TextDocument;
 
 foreach ($entities as $entity) {
     $documents[] = new TextDocument(
@@ -399,19 +400,19 @@ In the end the chain is used in combination with a retrieval tool on top of the 
 `SimilaritySearch` tool provided by the library:
 
 ```php
-use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Chain\Chain;
 use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\Toolbox\Tool\SimilaritySearch;
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
 
 // Initialize Platform & Models
 
 $similaritySearch = new SimilaritySearch($embeddings, $store);
 $toolbox = Toolbox::create($similaritySearch);
-$processor = new ChainProcessor($toolbox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$processor = new Chain($toolbox);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 $messages = new MessageBag(
     Message::forSystem(<<<PROMPT
@@ -425,8 +426,8 @@ $response = $chain->call($messages);
 
 #### Code Examples
 
-1. [MongoDB Store](examples/store-mongodb-similarity-search.php)
-1. [Pinecone Store](examples/store-pinecone-similarity-search.php)
+1. [MongoDB Store](examples/store/mongodb-similarity-search.php)
+1. [Pinecone Store](examples/store/pinecone-similarity-search.php)
 
 #### Supported Stores
 
@@ -450,12 +451,13 @@ LLM Chain supports that use-case by abstracting the hustle of defining and provi
 the response back to PHP objects.
 
 To achieve this, a specific chain processor needs to be registered:
+
 ```php
-use PhpLlm\LlmChain\Chain;
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Chain\Chain;
 use PhpLlm\LlmChain\Chain\StructuredOutput\ChainProcessor;
 use PhpLlm\LlmChain\Chain\StructuredOutput\ResponseFormatFactory;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
 use PhpLlm\LlmChain\Tests\Chain\StructuredOutput\Data\MathReasoning;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -465,7 +467,7 @@ use Symfony\Component\Serializer\Serializer;
 
 $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 $processor = new ChainProcessor(new ResponseFormatFactory(), $serializer);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 $messages = new MessageBag(
     Message::forSystem('You are a helpful math tutor. Guide the user through the solution step by step.'),
@@ -481,8 +483,8 @@ dump($response->getContent()); // returns an instance of `MathReasoning` class
 Also PHP array structures as `response_format` are supported, which also requires the chain processor mentioned above:
 
 ```php
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
 
 // Initialize Platform, LLM and Chain with processors and Clock tool
 
@@ -518,13 +520,13 @@ Since LLMs usually generate a response word by word, most of them also support s
 Events. LLM Chain supports that by abstracting the conversion and returning a Generator as content of the response.
 
 ```php
-use PhpLlm\LlmChain\Chain;
+use PhpLlm\LlmChain\Chain\Chain;
 use PhpLlm\LlmChain\Message\Message;
 use PhpLlm\LlmChain\Message\MessageBag;
 
 // Initialize Platform and LLM
 
-$chain = new Chain($llm);
+$chain = new Chain($model);
 $messages = new MessageBag(
     Message::forSystem('You are a thoughtful philosopher.'),
     Message::ofUser('What is the purpose of an ant?'),
@@ -551,9 +553,9 @@ needs to be used.
 Some LLMs also support images as input, which LLM Chain supports as `Content` type within the `UserMessage`:
 
 ```php
-use PhpLlm\LlmChain\Model\Message\Content\Image;
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Platform\Message\Content\Image;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
 
 // Initialize Platform, LLM & Chain
 
@@ -579,9 +581,9 @@ $response = $chain->call($messages);
 Similar to images, some LLMs also support audio as input, which is just another `Content` type within the `UserMessage`:
 
 ```php
-use PhpLlm\LlmChain\Model\Message\Content\Audio;
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
+use PhpLlm\LlmChain\Platform\Message\Content\Audio;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
 
 // Initialize Platform, LLM & Chain
 
@@ -606,7 +608,7 @@ therefore LLM Chain implements a `EmbeddingsModel` interface with various models
 The standalone usage results in an `Vector` instance:
 
 ```php
-use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings;
 
 // Initialize Platform
 
@@ -655,11 +657,11 @@ The behavior of the Chain is extendable with services that implement `InputProce
 interface. They are provided while instantiating the Chain instance:
 
 ```php
-use PhpLlm\LlmChain\Chain;
+use PhpLlm\LlmChain\Chain\Chain;
 
 // Initialize Platform, LLM and processors
 
-$chain = new Chain($platform, $llm, $inputProcessors, $outputProcessors);
+$chain = new Chain($platform, $model, $inputProcessors, $outputProcessors);
 ```
 
 #### InputProcessor
@@ -669,10 +671,10 @@ able to mutate both on top of the `Input` instance provided.
 
 ```php
 use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\InputProcessor;
-use PhpLlm\LlmChain\Model\Message\AssistantMessage
+use PhpLlm\LlmChain\Chain\InputProcessorInterface;
+use PhpLlm\LlmChain\Platform\Message\AssistantMessage;
 
-final class MyProcessor implements InputProcessor
+final class MyProcessor implements InputProcessorInterface
 {
     public function processInput(Input $input): void
     {
@@ -694,10 +696,9 @@ mutate or replace the given response:
 
 ```php
 use PhpLlm\LlmChain\Chain\Output;
-use PhpLlm\LlmChain\Chain\OutputProcessor;
-use PhpLlm\LlmChain\Model\Message\AssistantMessage
+use PhpLlm\LlmChain\Chain\OutputProcessorInterface;
 
-final class MyProcessor implements OutputProcessor
+final class MyProcessor implements OutputProcessorInterface
 {
     public function processOutput(Output $out): void
     {
@@ -716,13 +717,12 @@ provided, in case the processor implemented the `ChainAwareProcessor` interface,
 `ChainAwareTrait`:
 
 ```php
-use PhpLlm\LlmChain\Chain\ChainAwareProcessor;
+use PhpLlm\LlmChain\Chain\ChainAwareInterface;
 use PhpLlm\LlmChain\Chain\ChainAwareTrait;
 use PhpLlm\LlmChain\Chain\Output;
-use PhpLlm\LlmChain\Chain\OutputProcessor;
-use PhpLlm\LlmChain\Model\Message\AssistantMessage
+use PhpLlm\LlmChain\Chain\OutputProcessorInterface;
 
-final class MyProcessor implements OutputProcessor, ChainAwareProcessor
+final class MyProcessor implements OutputProcessorInterface, ChainAwareInterface
 {
     use ChainAwareTrait;
 
@@ -740,11 +740,12 @@ LLM Chain comes out of the box with an integration for [HuggingFace](https://hug
 hosting and sharing all kinds of models, including LLMs, embeddings, image generation, and classification models.
 
 You can just instantiate the Platform with the corresponding HuggingFace bridge and use it with the `task` option:
+
 ```php
 use PhpLlm\LlmChain\Bridge\HuggingFace\Model;
-use PhpLlm\LlmChain\Bridge\HuggingFace\PlatformFactory;
-use PhpLlm\LlmChain\Bridge\HuggingFace\Task;
-use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Platform\Bridge\HuggingFace\PlatformFactory;
+use PhpLlm\LlmChain\Platform\Bridge\HuggingFace\Task;
+use PhpLlm\LlmChain\Platform\Message\Content\Image;
 
 $platform = PlatformFactory::create($apiKey);
 $model = new Model('facebook/detr-resnet-50');
@@ -790,7 +791,7 @@ The usage with LLM Chain is similar to the HuggingFace integration, and also req
 ```php
 use Codewithkyrian\Transformers\Pipelines\Task;
 use PhpLlm\LlmChain\Bridge\TransformersPHP\Model;
-use PhpLlm\LlmChain\Bridge\TransformersPHP\PlatformFactory;
+use PhpLlm\LlmChain\Platform\Bridge\TransformersPHP\PlatformFactory;
 
 $platform = PlatformFactory::create();
 $model = new Model('Xenova/LaMini-Flan-T5-783M');

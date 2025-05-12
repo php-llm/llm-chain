@@ -28,7 +28,7 @@ final readonly class SerpApi
             ],
         ]);
 
-        return sprintf('Results for "%s" are "%s".', $query, $this->extractBestResponse($response->toArray()));
+        return \sprintf('Results for "%s" are "%s".', $query, $this->extractBestResponse($response->toArray()));
     }
 
     /**

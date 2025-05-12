@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Double;
 
-use PhpLlm\LlmChain\Document\Vector;
-use PhpLlm\LlmChain\Model\Model;
-use PhpLlm\LlmChain\Model\Response\ResponseInterface;
-use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
-use PhpLlm\LlmChain\Model\Response\VectorResponse;
-use PhpLlm\LlmChain\Platform;
-use PhpLlm\LlmChain\Platform\ModelClient;
-use PhpLlm\LlmChain\Platform\ResponseConverter;
+use PhpLlm\LlmChain\Platform\Model;
+use PhpLlm\LlmChain\Platform\ModelClientInterface;
+use PhpLlm\LlmChain\Platform\Platform;
+use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
+use PhpLlm\LlmChain\Platform\Response\ResponseInterface as LlmResponse;
+use PhpLlm\LlmChain\Platform\Response\VectorResponse;
+use PhpLlm\LlmChain\Platform\ResponseConverterInterface;
+use PhpLlm\LlmChain\Platform\Vector\Vector;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
-final class PlatformTestHandler implements ModelClient, ResponseConverter
+final class PlatformTestHandler implements ModelClientInterface, ResponseConverterInterface
 {
     public int $createCalls = 0;
 
@@ -31,12 +31,12 @@ final class PlatformTestHandler implements ModelClient, ResponseConverter
         return new Platform([$handler], [$handler]);
     }
 
-    public function supports(Model $model, object|array|string $input): bool
+    public function supports(Model $model): bool
     {
         return true;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): HttpResponse
+    public function request(Model $model, array|string|object $payload, array $options = []): HttpResponse
     {
         ++$this->createCalls;
 

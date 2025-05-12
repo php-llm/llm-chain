@@ -6,7 +6,8 @@ namespace PhpLlm\LlmChain\Chain\Toolbox;
 
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolNotFoundException;
-use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Tool\Tool;
 
 /**
  * Catches exceptions thrown by the inner tool box and returns error messages for the LLM instead.
@@ -18,9 +19,9 @@ final readonly class FaultTolerantToolbox implements ToolboxInterface
     ) {
     }
 
-    public function getMap(): array
+    public function getTools(): array
     {
-        return $this->innerToolbox->getMap();
+        return $this->innerToolbox->getTools();
     }
 
     public function execute(ToolCall $toolCall): mixed
@@ -28,11 +29,11 @@ final readonly class FaultTolerantToolbox implements ToolboxInterface
         try {
             return $this->innerToolbox->execute($toolCall);
         } catch (ToolExecutionException $e) {
-            return sprintf('An error occurred while executing tool "%s".', $e->toolCall->name);
+            return \sprintf('An error occurred while executing tool "%s".', $e->toolCall->name);
         } catch (ToolNotFoundException) {
-            $names = array_map(fn (Metadata $metadata) => $metadata->name, $this->getMap());
+            $names = array_map(fn (Tool $metadata) => $metadata->name, $this->getTools());
 
-            return sprintf('Tool "%s" was not found, please use one of these: %s', $toolCall->name, implode(', ', $names));
+            return \sprintf('Tool "%s" was not found, please use one of these: %s', $toolCall->name, implode(', ', $names));
         }
     }
 }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\Toolbox\MetadataFactory;
 
-use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
-use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
-use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolMetadataException;
-use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
-use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolException;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\MemoryToolFactory;
+use PhpLlm\LlmChain\Platform\Contract\JsonSchema\DescriptionParser;
+use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Factory;
+use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
+use PhpLlm\LlmChain\Platform\Tool\Tool;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoAttribute1;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoAttribute2;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -18,11 +18,11 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(MemoryFactory::class)]
+#[CoversClass(MemoryToolFactory::class)]
 #[UsesClass(AsTool::class)]
-#[UsesClass(Metadata::class)]
+#[UsesClass(Tool::class)]
 #[UsesClass(ExecutionReference::class)]
-#[UsesClass(ToolMetadataException::class)]
+#[UsesClass(ToolException::class)]
 #[UsesClass(Factory::class)]
 #[UsesClass(DescriptionParser::class)]
 final class MemoryFactoryTest extends TestCase
@@ -30,24 +30,24 @@ final class MemoryFactoryTest extends TestCase
     #[Test]
     public function getMetadataWithoutTools(): void
     {
-        self::expectException(ToolMetadataException::class);
+        self::expectException(ToolException::class);
         self::expectExceptionMessage('The reference "SomeClass" is not a valid tool.');
 
-        $factory = new MemoryFactory();
-        iterator_to_array($factory->getMetadata('SomeClass')); // @phpstan-ignore-line Yes, this class does not exist
+        $factory = new MemoryToolFactory();
+        iterator_to_array($factory->getTool('SomeClass')); // @phpstan-ignore-line Yes, this class does not exist
     }
 
     #[Test]
     public function getMetadataWithDistinctToolPerClass(): void
     {
-        $factory = (new MemoryFactory())
+        $factory = (new MemoryToolFactory())
             ->addTool(ToolNoAttribute1::class, 'happy_birthday', 'Generates birthday message')
             ->addTool(new ToolNoAttribute2(), 'checkout', 'Buys a number of items per product', 'buy');
 
-        $metadata = iterator_to_array($factory->getMetadata(ToolNoAttribute1::class));
+        $metadata = iterator_to_array($factory->getTool(ToolNoAttribute1::class));
 
         self::assertCount(1, $metadata);
-        self::assertInstanceOf(Metadata::class, $metadata[0]);
+        self::assertInstanceOf(Tool::class, $metadata[0]);
         self::assertSame('happy_birthday', $metadata[0]->name);
         self::assertSame('Generates birthday message', $metadata[0]->description);
         self::assertSame('__invoke', $metadata[0]->reference->method);
@@ -68,14 +68,14 @@ final class MemoryFactoryTest extends TestCase
     #[Test]
     public function getMetadataWithMultipleToolsInClass(): void
     {
-        $factory = (new MemoryFactory())
+        $factory = (new MemoryToolFactory())
             ->addTool(ToolNoAttribute2::class, 'checkout', 'Buys a number of items per product', 'buy')
             ->addTool(ToolNoAttribute2::class, 'cancel', 'Cancels an order', 'cancel');
 
-        $metadata = iterator_to_array($factory->getMetadata(ToolNoAttribute2::class));
+        $metadata = iterator_to_array($factory->getTool(ToolNoAttribute2::class));
 
         self::assertCount(2, $metadata);
-        self::assertInstanceOf(Metadata::class, $metadata[0]);
+        self::assertInstanceOf(Tool::class, $metadata[0]);
         self::assertSame('checkout', $metadata[0]->name);
         self::assertSame('Buys a number of items per product', $metadata[0]->description);
         self::assertSame('buy', $metadata[0]->reference->method);
@@ -91,7 +91,7 @@ final class MemoryFactoryTest extends TestCase
         ];
         self::assertSame($expectedParams, $metadata[0]->parameters);
 
-        self::assertInstanceOf(Metadata::class, $metadata[1]);
+        self::assertInstanceOf(Tool::class, $metadata[1]);
         self::assertSame('cancel', $metadata[1]->name);
         self::assertSame('Cancels an order', $metadata[1]->description);
         self::assertSame('cancel', $metadata[1]->reference->method);

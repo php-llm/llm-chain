@@ -32,3 +32,8 @@ ci: ci-stable
 ci-stable: deps-stable rector cs phpstan tests
 
 ci-lowest: deps-low rector cs phpstan tests
+
+fix-transformers:
+	wget -P /tmp https://github.com/rindow/rindow-matlib/releases/download/1.1.1/rindow-matlib_1.1.1-24.04_amd64.deb
+	dpkg-deb -x /tmp/rindow-matlib_1.1.1-24.04_amd64.deb /tmp/librindowmatlib_extracted
+	cp /tmp/librindowmatlib_extracted/usr/lib/rindowmatlib-thread/librindowmatlib.so vendor/codewithkyrian/transformers/libs/librindowmatlib.so

@@ -6,14 +6,15 @@ namespace PhpLlm\LlmChain\Chain\Toolbox;
 
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolNotFoundException;
-use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Tool\Tool;
 
 interface ToolboxInterface
 {
     /**
-     * @return Metadata[]
+     * @return Tool[]
      */
-    public function getMap(): array;
+    public function getTools(): array;
 
     /**
      * @throws ToolExecutionException if the tool execution fails

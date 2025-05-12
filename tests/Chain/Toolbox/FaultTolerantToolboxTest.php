@@ -6,11 +6,11 @@ namespace PhpLlm\LlmChain\Tests\Chain\Toolbox;
 
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolNotFoundException;
-use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
 use PhpLlm\LlmChain\Chain\Toolbox\FaultTolerantToolbox;
-use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Chain\Toolbox\ToolboxInterface;
-use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
+use PhpLlm\LlmChain\Platform\Tool\Tool;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FaultTolerantToolbox::class)]
 #[UsesClass(ToolCall::class)]
-#[UsesClass(Metadata::class)]
+#[UsesClass(Tool::class)]
 #[UsesClass(ExecutionReference::class)]
 #[UsesClass(ToolNotFoundException::class)]
 #[UsesClass(ToolExecutionException::class)]
@@ -66,13 +66,13 @@ final class FaultTolerantToolboxTest extends TestCase
             }
 
             /**
-             * @return Metadata[]
+             * @return Tool[]
              */
-            public function getMap(): array
+            public function getTools(): array
             {
                 return [
-                    new Metadata(new ExecutionReference(ToolNoParams::class), 'tool_no_params', 'A tool without parameters', null),
-                    new Metadata(new ExecutionReference(ToolRequiredParams::class, 'bar'), 'tool_required_params', 'A tool with required parameters', null),
+                    new Tool(new ExecutionReference(ToolNoParams::class), 'tool_no_params', 'A tool without parameters', null),
+                    new Tool(new ExecutionReference(ToolRequiredParams::class, 'bar'), 'tool_required_params', 'A tool with required parameters', null),
                 ];
             }
 

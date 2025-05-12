@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox\Exception;
 
-use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
-use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
 
 final class ToolNotFoundException extends \RuntimeException implements ExceptionInterface
 {
@@ -13,7 +13,7 @@ final class ToolNotFoundException extends \RuntimeException implements Exception
 
     public static function notFoundForToolCall(ToolCall $toolCall): self
     {
-        $exception = new self(sprintf('Tool not found for call: %s.', $toolCall->name));
+        $exception = new self(\sprintf('Tool not found for call: %s.', $toolCall->name));
         $exception->toolCall = $toolCall;
 
         return $exception;
@@ -21,6 +21,6 @@ final class ToolNotFoundException extends \RuntimeException implements Exception
 
     public static function notFoundForReference(ExecutionReference $reference): self
     {
-        return new self(sprintf('Tool not found for reference: %s::%s.', $reference->class, $reference->method));
+        return new self(\sprintf('Tool not found for reference: %s::%s.', $reference->class, $reference->method));
     }
 }

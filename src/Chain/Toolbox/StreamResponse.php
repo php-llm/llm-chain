@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox;
 
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Response\BaseResponse;
-use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Response\BaseResponse;
+use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
 
 final class StreamResponse extends BaseResponse
 {
