@@ -23,9 +23,8 @@ coverage:
 
 run-examples:
 	./example
-	./huggingface
 
-make huggingface-models:
+huggingface-models:
 	php examples/huggingface/_model-listing.php
 
 ci: ci-stable

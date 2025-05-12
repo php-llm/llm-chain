@@ -25,7 +25,8 @@ See [the examples folder](examples) to run example implementations using this li
 Depending on the example you need to export different environment variables
 for API keys or deployment configurations or create a `.env.local` based on `.env` file.
 
-To run all examples, use `make run-examples` or `php example` and `php huggingface` for all HuggingFace related examples.
+To run all examples, use `make run-examples` or `php example` - to run a subgroup like all HuggingFace related examples
+use `php example huggingface`.
 
 For a more sophisticated demo, see the [Symfony Demo Application](https://github.com/php-llm/symfony-demo).
 
