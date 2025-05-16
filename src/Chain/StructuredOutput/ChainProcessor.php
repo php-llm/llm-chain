@@ -30,7 +30,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
         if (null === $this->serializer) {
             $propertyInfo = new PropertyInfoExtractor([], [new PhpDocExtractor()]);
             $normalizers = [new ObjectNormalizer(propertyTypeExtractor: $propertyInfo), new ArrayDenormalizer()];
-            $this->serializer = $serializer ?? new Serializer($normalizers, [new JsonEncoder()]);
+            $this->serializer = new Serializer($normalizers, [new JsonEncoder()]);
         }
     }
 
