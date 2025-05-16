@@ -4,7 +4,6 @@ use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Chain\StructuredOutput\ChainProcessor as StructuredOutputProcessor;
-use PhpLlm\LlmChain\Chain\StructuredOutput\ResponseFormatFactory;
 use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor as ToolProcessor;
 use PhpLlm\LlmChain\Chain\Toolbox\Tool\Clock;
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
@@ -12,9 +11,6 @@ use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use Symfony\Component\Clock\Clock as SymfonyClock;
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__, 2).'/.env');
@@ -30,8 +26,7 @@ $llm = new GPT(GPT::GPT_4O_MINI);
 $clock = new Clock(new SymfonyClock());
 $toolbox = Toolbox::create($clock);
 $toolProcessor = new ToolProcessor($toolbox);
-$serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
-$structuredOutputProcessor = new StructuredOutputProcessor(new ResponseFormatFactory(), $serializer);
+$structuredOutputProcessor = new StructuredOutputProcessor();
 $chain = new Chain($platform, $llm, [$toolProcessor, $structuredOutputProcessor], [$toolProcessor, $structuredOutputProcessor]);
 
 $messages = new MessageBag(Message::ofUser('What date and time is it?'));

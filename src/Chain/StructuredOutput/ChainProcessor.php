@@ -11,6 +11,9 @@ use PhpLlm\LlmChain\Chain\OutputProcessor;
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
 use PhpLlm\LlmChain\Model\Response\StructuredResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class ChainProcessor implements InputProcessor, OutputProcessor
@@ -18,9 +21,10 @@ final class ChainProcessor implements InputProcessor, OutputProcessor
     private string $outputStructure;
 
     public function __construct(
-        private readonly ResponseFormatFactoryInterface $responseFormatFactory,
-        private readonly SerializerInterface $serializer,
+        private readonly ResponseFormatFactoryInterface $responseFormatFactory = new ResponseFormatFactory(),
+        private ?SerializerInterface $serializer = null,
     ) {
+        $this->serializer = $serializer ?? new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
     }
 
     public function processInput(Input $input): void
