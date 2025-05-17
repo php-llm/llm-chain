@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Message\Content;
 
-final readonly class ImageUrl implements Content
+final readonly class DocumentUrl implements Content
 {
     public function __construct(
         public string $url,
@@ -12,12 +12,12 @@ final readonly class ImageUrl implements Content
     }
 
     /**
-     * @return array{type: 'image', source: array{type: 'url', url: string}}
+     * @return array{type: 'document', source: array{type: 'url', url: string}}
      */
     public function jsonSerialize(): array
     {
         return [
-            'type' => 'image',
+            'type' => 'document',
             'source' => [
                 'type' => 'url',
                 'url' => $this->url,
