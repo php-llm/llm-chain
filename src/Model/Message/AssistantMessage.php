@@ -37,7 +37,7 @@ final readonly class AssistantMessage implements MessageInterface
     public function jsonSerialize(): array
     {
         $array = [
-            'role' => Role::Assistant,
+            'role' => Role::Assistant->value,
         ];
 
         if (null !== $this->content) {

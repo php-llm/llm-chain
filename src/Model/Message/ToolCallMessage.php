@@ -29,7 +29,7 @@ final readonly class ToolCallMessage implements MessageInterface
     public function jsonSerialize(): array
     {
         return [
-            'role' => Role::ToolCall,
+            'role' => Role::ToolCall->value,
             'content' => $this->content,
             'tool_call_id' => $this->toolCall->id,
         ];

@@ -24,7 +24,7 @@ final readonly class SystemMessage implements MessageInterface
     public function jsonSerialize(): array
     {
         return [
-            'role' => Role::System,
+            'role' => Role::System->value,
             'content' => $this->content,
         ];
     }

@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\AsyncResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface;
+use PhpLlm\LlmChain\Platform\Contract;
 use PhpLlm\LlmChain\Platform\ModelClient;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
@@ -28,30 +29,34 @@ final readonly class Platform implements PlatformInterface
      * @param iterable<ModelClient>       $modelClients
      * @param iterable<ResponseConverter> $responseConverter
      */
-    public function __construct(iterable $modelClients, iterable $responseConverter)
-    {
+    public function __construct(
+        iterable $modelClients,
+        iterable $responseConverter,
+        private Contract $contract = new Contract([]),
+    ) {
         $this->modelClients = $modelClients instanceof \Traversable ? iterator_to_array($modelClients) : $modelClients;
         $this->responseConverter = $responseConverter instanceof \Traversable ? iterator_to_array($responseConverter) : $responseConverter;
     }
 
     public function request(Model $model, array|string|object $input, array $options = []): ResponseInterface
     {
+        $payload = $this->contract->convertRequestPayload($input, $model);
         $options = array_merge($model->getOptions(), $options);
 
-        $response = $this->doRequest($model, $input, $options);
+        $response = $this->doRequest($model, $payload, $options);
 
-        return $this->convertResponse($model, $input, $response, $options);
+        return $this->convertResponse($model, $response, $options);
     }
 
     /**
-     * @param array<mixed>|string|object $input
-     * @param array<string, mixed>       $options
+     * @param array<string, mixed> $payload
+     * @param array<string, mixed> $options
      */
-    private function doRequest(Model $model, array|string|object $input, array $options = []): HttpResponse
+    private function doRequest(Model $model, array $payload, array $options = []): HttpResponse
     {
         foreach ($this->modelClients as $modelClient) {
-            if ($modelClient->supports($model, $input)) {
-                return $modelClient->request($model, $input, $options);
+            if ($modelClient->supports($model)) {
+                return $modelClient->request($model, $payload, $options);
             }
         }
 
@@ -59,13 +64,12 @@ final readonly class Platform implements PlatformInterface
     }
 
     /**
-     * @param array<mixed>|string|object $input
-     * @param array<string, mixed>       $options
+     * @param array<string, mixed> $options
      */
-    private function convertResponse(Model $model, object|array|string $input, HttpResponse $response, array $options): ResponseInterface
+    private function convertResponse(Model $model, HttpResponse $response, array $options): ResponseInterface
     {
         foreach ($this->responseConverter as $responseConverter) {
-            if ($responseConverter->supports($model, $input)) {
+            if ($responseConverter->supports($model)) {
                 return new AsyncResponse($responseConverter, $response, $options);
             }
         }

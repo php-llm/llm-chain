@@ -10,10 +10,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 interface ResponseConverter
 {
-    /**
-     * @param array<string, mixed>|string|object $input
-     */
-    public function supports(Model $model, array|string|object $input): bool;
+    public function supports(Model $model): bool;
 
     /**
      * @param array<string, mixed> $options

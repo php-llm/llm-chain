@@ -14,7 +14,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class ResponseConverter implements PlatformResponseConverter
 {
-    public function supports(Model $model, array|string|object $input): bool
+    public function supports(Model $model): bool
     {
         return $model instanceof Embeddings;
     }
