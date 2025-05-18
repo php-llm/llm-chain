@@ -10,7 +10,6 @@ use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Role;
 use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -29,8 +28,10 @@ final class UserMessageTest extends TestCase
     {
         $obj = new UserMessage(new Text('foo'));
 
-        self::assertSame(\json_encode(['role' => Role::User, 'content' => 'foo']), \json_encode($obj));
         self::assertSame(Role::User, $obj->getRole());
+        self::assertCount(1, $obj->content);
+        self::assertInstanceOf(Text::class, $obj->content[0]);
+        self::assertSame('foo', $obj->content[0]->text);
     }
 
     #[Test]
@@ -71,43 +72,5 @@ final class UserMessageTest extends TestCase
         $message = new UserMessage(new Text('foo'), new ImageUrl('https://foo.com/bar.jpg'));
 
         self::assertTrue($message->hasImageContent());
-    }
-
-    #[Test]
-    #[DataProvider('provideSerializationTests')]
-    public function serializationResultsAsExpected(UserMessage $message, array $expectedArray): void
-    {
-        self::assertSame(\json_encode($message), \json_encode($expectedArray));
-    }
-
-    public static function provideSerializationTests(): \Generator
-    {
-        yield 'With only text' => [
-            new UserMessage(new Text('foo')),
-            ['role' => Role::User, 'content' => 'foo'],
-        ];
-
-        yield 'With single image' => [
-            new UserMessage(new Text('foo'), new ImageUrl('https://foo.com/bar.jpg')),
-            [
-                'role' => Role::User,
-                'content' => [
-                    ['type' => 'text', 'text' => 'foo'],
-                    ['type' => 'image_url', 'image_url' => ['url' => 'https://foo.com/bar.jpg']],
-                ],
-            ],
-        ];
-
-        yield 'With single multiple images' => [
-            new UserMessage(new Text('foo'), new ImageUrl('https://foo.com/bar.jpg'), new ImageUrl('https://foo.com/baz.jpg')),
-            [
-                'role' => Role::User,
-                'content' => [
-                    ['type' => 'text', 'text' => 'foo'],
-                    ['type' => 'image_url', 'image_url' => ['url' => 'https://foo.com/bar.jpg']],
-                    ['type' => 'image_url', 'image_url' => ['url' => 'https://foo.com/baz.jpg']],
-                ],
-            ],
-        ];
     }
 }

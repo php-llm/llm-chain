@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Model\Message;
 
-interface MessageInterface extends \JsonSerializable
+interface MessageInterface
 {
     public function getRole(): Role;
 }

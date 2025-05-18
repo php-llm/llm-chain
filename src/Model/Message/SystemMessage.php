@@ -14,18 +14,4 @@ final readonly class SystemMessage implements MessageInterface
     {
         return Role::System;
     }
-
-    /**
-     * @return array{
-     *     role: Role::System,
-     *     content: string
-     * }
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'role' => Role::System,
-            'content' => $this->content,
-        ];
-    }
 }

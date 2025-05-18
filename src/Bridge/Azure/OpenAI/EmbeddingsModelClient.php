@@ -31,12 +31,12 @@ final readonly class EmbeddingsModelClient implements ModelClient
         Assert::stringNotEmpty($apiKey, 'The API key must not be empty.');
     }
 
-    public function supports(Model $model, object|array|string $input): bool
+    public function supports(Model $model): bool
     {
         return $model instanceof Embeddings;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, object|array|string $payload, array $options = []): ResponseInterface
     {
         $url = sprintf('https://%s/openai/deployments/%s/embeddings', $this->baseUrl, $this->deployment);
 
@@ -47,7 +47,7 @@ final readonly class EmbeddingsModelClient implements ModelClient
             'query' => ['api-version' => $this->apiVersion],
             'json' => array_merge($options, [
                 'model' => $model->getName(),
-                'input' => $input,
+                'input' => $payload,
             ]),
         ]);
     }
