@@ -6,7 +6,6 @@ namespace PhpLlm\LlmChain\Bridge\TransformersPHP;
 
 use Codewithkyrian\Transformers\Transformers;
 use PhpLlm\LlmChain\Exception\RuntimeException;
-use PhpLlm\LlmChain\Platform;
 
 final readonly class PlatformFactory
 {
@@ -16,6 +15,6 @@ final readonly class PlatformFactory
             throw new RuntimeException('TransformersPHP is not installed. Please install it using "composer require codewithkyrian/transformers".');
         }
 
-        return new Platform([$handler = new Handler()], [$handler]);
+        return new Platform();
     }
 }
