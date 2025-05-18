@@ -1,7 +1,7 @@
 <?php
 
 use PhpLlm\LlmChain\Bridge\HuggingFace\ApiClient;
-use PhpLlm\LlmChain\Bridge\HuggingFace\Model;
+use PhpLlm\LlmChain\Model\Model;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

@@ -4,28 +4,23 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\OpenAI;
 
+use PhpLlm\LlmChain\Model\Capability;
 use PhpLlm\LlmChain\Model\Model;
 
-final readonly class Whisper implements Model
+class Whisper extends Model
 {
     public const WHISPER_1 = 'whisper-1';
 
     /**
      * @param array<string, mixed> $options
      */
-    public function __construct(
-        private string $name = self::WHISPER_1,
-        private array $options = [],
-    ) {
-    }
-
-    public function getName(): string
+    public function __construct(string $name = self::WHISPER_1, array $options = [])
     {
-        return $this->name;
-    }
+        $capabilities = [
+            Capability::INPUT_AUDIO,
+            Capability::OUTPUT_TEXT,
+        ];
 
-    public function getOptions(): array
-    {
-        return $this->options;
+        parent::__construct($name, $capabilities, $options);
     }
 }

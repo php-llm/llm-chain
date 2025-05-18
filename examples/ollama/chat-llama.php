@@ -16,9 +16,9 @@ if (empty($_ENV['OLLAMA_HOST_URL'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OLLAMA_HOST_URL']);
-$llm = new Llama('llama3.2');
+$model = new Llama('llama3.2');
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::forSystem('You are a helpful assistant.'),
     Message::ofUser('Tina has one brother and one sister. How many sisters do Tina\'s siblings have?'),

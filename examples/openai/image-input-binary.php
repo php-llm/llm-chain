@@ -17,9 +17,9 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
 }
 
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
-$chain = new Chain($platform, $llm);
+$chain = new Chain($platform, $model);
 $messages = new MessageBag(
     Message::forSystem('You are an image analyzer bot that helps identify the content of images.'),
     Message::ofUser(

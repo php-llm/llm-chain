@@ -20,14 +20,14 @@ if (empty($_ENV['OPENAI_API_KEY']) || empty($_ENV['BRAVE_API_KEY'])) {
     exit(1);
 }
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$llm = new GPT(GPT::GPT_4O_MINI);
+$model = new GPT(GPT::GPT_4O_MINI);
 
 $httpClient = HttpClient::create();
 $brave = new Brave($httpClient, $_ENV['BRAVE_API_KEY']);
 $crawler = new Crawler($httpClient);
 $toolbox = Toolbox::create($brave, $crawler);
 $processor = new ChainProcessor($toolbox);
-$chain = new Chain($platform, $llm, [$processor], [$processor]);
+$chain = new Chain($platform, $model, [$processor], [$processor]);
 
 $messages = new MessageBag(Message::ofUser('What was the latest game result of Dallas Cowboys?'));
 $response = $chain->call($messages);
