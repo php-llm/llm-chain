@@ -121,16 +121,17 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
             throw new RuntimeException('Response does not contain any content');
         }
 
-        if (!isset($data['content'][0]['text'])) {
-            throw new RuntimeException('Response content does not contain any text');
-        }
-
         $toolCalls = [];
         foreach ($data['content'] as $content) {
             if ('tool_use' === $content['type']) {
                 $toolCalls[] = new ToolCall($content['id'], $content['name'], $content['input']);
             }
         }
+
+        if (!isset($data['content'][0]['text']) && 0 === count($toolCalls)) {
+            throw new RuntimeException('Response content does not contain any text nor tool calls.');
+        }
+
         if (!empty($toolCalls)) {
             return new ToolCallResponse(...$toolCalls);
         }
