@@ -42,7 +42,7 @@ final readonly class Claude implements LanguageModel
 
     public function supportsImageInput(): bool
     {
-        return false; // it does, but implementation here is still open.
+        return true;
     }
 
     public function supportsStreaming(): bool
