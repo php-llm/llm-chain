@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Bridge\AwsBedrock\Language;
-
-use PhpLlm\LlmChain\Bridge\AwsBedrock\BedrockLanguageModel;
+namespace PhpLlm\LlmChain\Bridge\AwsBedrock;
 
 final readonly class AmazonNova implements BedrockLanguageModel
 {
