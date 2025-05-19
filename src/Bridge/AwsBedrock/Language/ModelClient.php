@@ -139,7 +139,8 @@ final readonly class ModelClient implements PlatformResponseFactory
             $inferenceConfig = array_reduce(
                 array_filter(
                     $options,
-                    fn ($value, $optionKey) => in_array($optionKey, ['max_tokens', 'stop_sequences', 'temperature', 'top_p'])
+                    fn ($value, $optionKey) => in_array($optionKey, ['max_tokens', 'stop_sequences', 'temperature', 'top_p']),
+                    ARRAY_FILTER_USE_BOTH
                 ),
                 function (array $inferenceConfigAcc, string $optionValue, string $optionKey) use (&$options) {
                     unset($options[$optionKey]);
@@ -162,7 +163,8 @@ final readonly class ModelClient implements PlatformResponseFactory
             $additionalModelRequestFields = array_reduce(
                 array_filter(
                     $options,
-                    fn ($value, $optionKey) => in_array($optionKey, ['top_k'])
+                    fn ($value, $optionKey) => in_array($optionKey, ['top_k']),
+                    ARRAY_FILTER_USE_BOTH
                 ),
                 function (array $additionalModelRequestFieldsAcc, string $optionValue, string $optionKey) use (&$options) {
                     unset($options[$optionKey]);
