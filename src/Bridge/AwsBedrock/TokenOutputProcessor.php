@@ -24,19 +24,14 @@ final class TokenOutputProcessor implements OutputProcessor
 
         $metadata = $output->response->getMetadata();
 
-        $metadata->add(
-            'remaining_tokens',
-            (int) $rawResponse->getHeaders(false)['x-ratelimit-remaining-tokens'][0],
-        );
-
         $content = $rawResponse->toArray(false);
 
         if (!\array_key_exists('usage', $content)) {
             return;
         }
 
-        $metadata->add('prompt_tokens', $content['usage']['prompt_tokens'] ?? null);
-        $metadata->add('completion_tokens', $content['usage']['completion_tokens'] ?? null);
-        $metadata->add('total_tokens', $content['usage']['total_tokens'] ?? null);
+        $metadata->add('prompt_tokens', $content['usage']['inputTokens'] ?? null);
+        $metadata->add('completion_tokens', $content['usage']['outputTokens'] ?? null);
+        $metadata->add('total_tokens', $content['usage']['totalTokens'] ?? null);
     }
 }

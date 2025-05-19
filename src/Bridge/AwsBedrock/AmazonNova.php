@@ -49,7 +49,7 @@ final readonly class AmazonNova implements BedrockLanguageModel
 
     public function supportsStreaming(): bool
     {
-        return true;
+        return false; // It does, but it's not implemented yet.
     }
 
     public function supportsToolCalling(): bool
