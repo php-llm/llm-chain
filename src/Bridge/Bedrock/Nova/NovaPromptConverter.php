@@ -14,6 +14,8 @@ use PhpLlm\LlmChain\Model\Message\ToolCallMessage;
 use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 
+use function Symfony\Component\String\u;
+
 final class NovaPromptConverter
 {
     /**
@@ -72,20 +74,21 @@ final class NovaPromptConverter
         }
 
         if (is_string($message->content)) {
-            $content['text'] = $message->content;
+            $convertedMessage['content'][]['text'] = $message->content;
         } else {
             foreach ($message->content as $value) {
+                $contentPart = [];
                 if ($value instanceof Text) {
-                    $content['text'] = $value->text;
+                    $contentPart['text'] = $value->text;
                 } elseif ($value instanceof Image) {
-                    $content['image']['source']['bytes'] = $value->url;
+                    $contentPart['image']['format'] = u($value->url)->after('data:image/')->before(';')->replace('jpg', 'jpeg')->toString();
+                    $contentPart['image']['source']['bytes'] = u($value->url)->after('base64,')->toString();
                 } else {
                     throw new RuntimeException('Unsupported message type.');
                 }
+                $convertedMessage['content'][] = $contentPart;
             }
         }
-
-        $convertedMessage['content'] = [$content];
 
         return $convertedMessage;
     }

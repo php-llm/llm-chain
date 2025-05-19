@@ -12,15 +12,20 @@ use PhpLlm\LlmChain\Bridge\Bedrock\BedrockModelClient;
 use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
+use PhpLlm\LlmChain\Model\Message\Content\Content;
+use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Message\MessageInterface;
 use PhpLlm\LlmChain\Model\Message\ToolCallMessage;
+use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
 use Webmozart\Assert\Assert;
+
+use function Symfony\Component\String\u;
 
 final readonly class ClaudeHandler implements BedrockModelClient
 {
@@ -85,6 +90,26 @@ final readonly class ClaudeHandler implements BedrockModelClient
                             'input' => empty($toolCall->arguments) ? new \stdClass() : $toolCall->arguments,
                         ];
                     }, $message->toolCalls),
+                ];
+            }
+            if ($message instanceof UserMessage && $message->hasImageContent()) {
+                // make sure images are encoded for Bedrock invocation
+                return [
+                    'role' => 'user',
+                    'content' => array_map(static function (Content $content) {
+                        if ($content instanceof Image) {
+                            return [
+                                'type' => 'image',
+                                'source' => [
+                                    'type' => 'base64',
+                                    'media_type' => u($content->url)->after('data:')->before(';')->replace('jpg', 'jpeg')->toString(),
+                                    'data' => u($content->url)->after('base64,')->toString(),
+                                ],
+                            ];
+                        }
+
+                        return $content;
+                    }, $message->content),
                 ];
             }
 
