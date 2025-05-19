@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 
-use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Exception\ContentFilterException;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Model;
+use PhpLlm\LlmChain\Model\OpenAiCompatibleLanguageModel;
 use PhpLlm\LlmChain\Model\Response\Choice;
 use PhpLlm\LlmChain\Model\Response\ChoiceResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
@@ -26,7 +26,7 @@ final class ResponseConverter implements PlatformResponseConverter
 {
     public function supports(Model $model, array|string|object $input): bool
     {
-        return $model instanceof GPT;
+        return $model instanceof OpenAiCompatibleLanguageModel;
     }
 
     public function convert(HttpResponse $response, array $options = []): LlmResponse
