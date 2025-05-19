@@ -133,31 +133,9 @@ final readonly class ClaudeHandler implements BedrockModelClient
 
     private function getModelId(Model $model): string
     {
-        $euRegions = ['eu-west-1', 'eu-central-1', 'eu-west-2', 'eu-west-3', 'eu-south-1', 'eu-north-1'];
-        $usRegions = ['us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'];
-
         $configuredRegion = $this->bedrockRuntimeClient->getConfiguration()->get('region');
-        $isEuRegion = in_array($configuredRegion, $euRegions, true);
-        $isUsRegion = in_array($configuredRegion, $usRegions, true);
-        if ($isEuRegion && $isUsRegion) {
-            throw new RuntimeException('Unsupported region: '.$configuredRegion);
-        }
+        $regionPrefix = substr((string) $configuredRegion, 0, 2);
 
-        $supportedModels = [
-            Claude::SONNET_37,
-            Claude::SONNET_35,
-            Claude::SONNET_3,
-            Claude::HAIKU_3,
-            Claude::HAIKU_35,
-            Claude::OPUS_3,
-        ];
-
-        if (!in_array($model->getName(), $supportedModels, true)) {
-            throw new RuntimeException('Unsupported model: '.$model->getName());
-        }
-
-        $prefix = $isEuRegion ? 'eu' : 'us';
-
-        return $prefix.'.anthropic.'.$model->getName().'-v1:0';
+        return $regionPrefix.'.anthropic.'.$model->getName().'-v1:0';
     }
 }

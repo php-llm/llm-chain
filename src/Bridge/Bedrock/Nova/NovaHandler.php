@@ -105,18 +105,9 @@ class NovaHandler implements BedrockModelClient
 
     private function getModelId(Model $model): string
     {
-        $euRegions = ['eu-west-1', 'eu-central-1', 'eu-west-2', 'eu-west-3', 'eu-south-1', 'eu-north-1'];
-        $usRegions = ['us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'];
-
         $configuredRegion = $this->bedrockRuntimeClient->getConfiguration()->get('region');
-        $isEuRegion = in_array($configuredRegion, $euRegions, true);
-        $isUsRegion = in_array($configuredRegion, $usRegions, true);
-        if ($isEuRegion && $isUsRegion) {
-            throw new RuntimeException('Unsupported region: '.$configuredRegion);
-        }
+        $regionPrefix = substr((string) $configuredRegion, 0, 2);
 
-        $prefix = $isEuRegion ? 'eu' : 'us';
-
-        return $prefix.'.amazon.'.$model->getName().'-v1:0';
+        return $regionPrefix.'.amazon.'.$model->getName().'-v1:0';
     }
 }
