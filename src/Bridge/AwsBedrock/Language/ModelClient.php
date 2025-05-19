@@ -20,6 +20,7 @@ use PhpLlm\LlmChain\Platform\ModelClient as PlatformResponseFactory;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Webmozart\Assert\Assert;
 
 final readonly class ModelClient implements PlatformResponseFactory
 {
@@ -31,6 +32,8 @@ final readonly class ModelClient implements PlatformResponseFactory
         private string $region,
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
+
+        Assert::stringNotEmpty($region, 'The region must not be empty.');
     }
 
     public function supports(Model $model, array|string|object $input): bool

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\AwsBedrock;
 
 use Aws\Credentials\Credentials;
+use PhpLlm\LlmChain\Bridge\AwsBedrock\Embeddings\ModelClient as EmbeddingsModelClient;
+use PhpLlm\LlmChain\Bridge\AwsBedrock\Embeddings\ResponseConverter as EmbeddingsResponseConverter;
 use PhpLlm\LlmChain\Bridge\AwsBedrock\Language\ModelClient as LanguageModelClient;
 use PhpLlm\LlmChain\Bridge\AwsBedrock\Language\ResponseConverter as LanguageResponseConverter;
 use PhpLlm\LlmChain\Platform;
@@ -32,8 +34,10 @@ final class PlatformFactory
 
         return new Platform([
             new LanguageModelClient($httpClient, $requesterSigner, $region),
+            new EmbeddingsModelClient($httpClient, $requesterSigner, $region),
         ], [
             new LanguageResponseConverter(),
+            new EmbeddingsResponseConverter(),
         ]);
     }
 }
