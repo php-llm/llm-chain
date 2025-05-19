@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\Google;
 
+use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
+use PhpLlm\LlmChain\Model\Response\Choice;
+use PhpLlm\LlmChain\Model\Response\ChoiceResponse;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\StreamResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
+use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
 use PhpLlm\LlmChain\Platform\ModelClient;
 use PhpLlm\LlmChain\Platform\ResponseConverter;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
@@ -54,6 +59,29 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
 
         $generationConfig = ['generationConfig' => $options];
         unset($generationConfig['generationConfig']['stream']);
+        unset($generationConfig['generationConfig']['tools']);
+
+        if (isset($options['tools'])) {
+            $toolConfig = array_map(
+                function (Metadata $toolConfig) {
+                    $parameters = $toolConfig->parameters;
+                    unset($parameters['additionalProperties']);
+
+                    return [
+                        'functionDeclarations' => [
+                            [
+                                'description' => $toolConfig->description,
+                                'name' => $toolConfig->name,
+                                'parameters' => $parameters,
+                            ],
+                        ],
+                    ];
+                }, $options['tools']
+            );
+
+            unset($options['tools']);
+            $generationConfig['tools'] = $toolConfig;
+        }
 
         return $this->httpClient->request('POST', $url, [
             'headers' => [
@@ -78,11 +106,27 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
 
         $data = $response->toArray();
 
-        if (!isset($data['candidates'][0]['content']['parts'][0]['text'])) {
+        if (!isset($data['candidates'][0]['content']['parts'][0])) {
             throw new RuntimeException('Response does not contain any content');
         }
 
-        return new TextResponse($data['candidates'][0]['content']['parts'][0]['text']);
+        /** @var Choice[] $choices */
+        $choices = array_map(
+            fn ($content) => $this->convertChoice(
+                $content
+            ),
+            $data['candidates']
+        );
+
+        if (1 !== count($choices)) {
+            return new ChoiceResponse(...$choices);
+        }
+
+        if ($choices[0]->hasToolCall()) {
+            return new ToolCallResponse(...$choices[0]->getToolCalls());
+        }
+
+        return new TextResponse($choices[0]->getContent());
     }
 
     private function convertStream(ResponseInterface $response): \Generator
@@ -124,5 +168,33 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
                 yield $data['candidates'][0]['content']['parts'][0]['text'];
             }
         }
+    }
+
+    private function convertChoice(array $choice): Choice
+    {
+        $stopReason = $choice['finishReason'];
+
+        $contentPart = $choice['content']['parts'][0] ?? [];
+
+        if (isset($contentPart['functionCall'])) {
+            return new Choice(
+                toolCalls: [
+                    $this->convertToolCall($contentPart['functionCall']),
+                ]
+            );
+        }
+
+        if (isset($contentPart['text'])) {
+            return new Choice(
+                $contentPart['text']
+            );
+        }
+
+        throw new RuntimeException(sprintf('Unsupported finish reason "%s".', $stopReason));
+    }
+
+    private function convertToolCall(array $toolCall): ToolCall
+    {
+        return new ToolCall($toolCall['id'] ?? '', $toolCall['name'], $toolCall['args']);
     }
 }

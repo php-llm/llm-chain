@@ -35,7 +35,7 @@ final readonly class Gemini implements LanguageModel
 
     public function supportsAudioInput(): bool
     {
-        return false; // it does, but implementation here is still open
+        return true;
     }
 
     public function supportsImageInput(): bool
@@ -55,6 +55,6 @@ final readonly class Gemini implements LanguageModel
 
     public function supportsToolCalling(): bool
     {
-        return false; // it does, but implementation here is still open
+        return true;
     }
 }
