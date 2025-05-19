@@ -8,10 +8,13 @@ use PhpLlm\LlmChain\Bridge\AwsBedrock\BedrockLanguageModel;
 use PhpLlm\LlmChain\Bridge\AwsBedrock\BedrockRequestSigner;
 use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
+use PhpLlm\LlmChain\Model\Message\Content\Content;
+use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
 use PhpLlm\LlmChain\Model\Message\MessageInterface;
-use PhpLlm\LlmChain\Model\Message\Role;
 use PhpLlm\LlmChain\Model\Message\ToolCallMessage;
+use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Platform\ModelClient as PlatformResponseFactory;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
@@ -81,19 +84,35 @@ final readonly class ModelClient implements PlatformResponseFactory
                                 ),
                             ],
                         ];
+                    } elseif ($inputEntry instanceof UserMessage) {
+                        return [
+                            'role' => 'user',
+                            'content' => array_map(
+                                function (Content $inputContent) {
+                                    if ($inputContent instanceof Text) {
+                                        return [
+                                            'text' => $inputContent->text,
+                                        ];
+                                    } elseif ($inputContent instanceof Image) {
+                                        return [
+                                            'image' => [
+                                                'format' => match ($inputContent->getFormat()) {
+                                                    'image/png' => 'png',
+                                                    'image/jpg', 'image/jpeg' => 'jpeg',
+                                                    'image/gif' => 'gif',
+                                                    'image/webp' => 'webp',
+                                                    default => throw new \Exception('Invalid Image type')
+                                                },
+                                                'source' => [
+                                                    'bytes' => $inputContent->asBase64(),
+                                                ],
+                                            ],
+                                        ];
+                                    }
+                                }, $inputEntry->content
+                            ),
+                        ];
                     }
-
-                    return [
-                        'role' => match ($inputEntry->getRole()) {
-                            Role::Assistant => 'assistant',
-                            default => 'user'
-                        },
-                        'content' => [
-                            [
-                                'text' => $inputEntry->jsonSerialize()['content'] ?? null,
-                            ],
-                        ],
-                    ];
                 },
                 $input->withoutSystemMessage()->getMessages()
             );

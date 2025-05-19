@@ -39,26 +39,26 @@ final readonly class AmazonNova implements BedrockLanguageModel
 
     public function supportsAudioInput(): bool
     {
-        return false; // it does, but implementation here is still open.
+        return false; // Only videos (!?)
     }
 
     public function supportsImageInput(): bool
     {
-        return false; // it does, but implementation here is still open.
+        return true;
     }
 
     public function supportsStreaming(): bool
     {
-        return false; // it does, but implementation here is still open.
+        return true;
     }
 
     public function supportsToolCalling(): bool
     {
-        return false; // it does, but implementation here is still open.
+        return true;
     }
 
     public function supportsStructuredOutput(): bool
     {
-        return false; // it does, but implementation here is still open.
+        return false;
     }
 }

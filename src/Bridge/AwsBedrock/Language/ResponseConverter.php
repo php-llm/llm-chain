@@ -38,21 +38,37 @@ final class ResponseConverter implements PlatformResponseConverter
         try {
             $data = $response->toArray();
         } catch (ClientExceptionInterface $e) {
-            $data = $response->toArray(throw: false);
-
-            if (isset($data['error']['code']) && 'content_filter' === $data['error']['code']) {
-                throw new ContentFilterException(message: $data['error']['message'], previous: $e);
+            if (400 === $response->getStatusCode()) {
+                throw new ContentFilterException(message: 'Validation error', previous: $e);
             }
 
             throw $e;
         }
 
-        if (!isset($data['choices'])) {
+        if (!isset($data['output']['message']['content'])) {
             throw new RuntimeException('Response does not contain choices');
         }
 
+        $stopReason = $data['stopReason'];
+
         /** @var Choice[] $choices */
-        $choices = \array_map($this->convertChoice(...), $data['choices']);
+        $choices = array_values(
+            array_filter(
+                array_map(
+                    fn ($content) => $this->convertChoice(
+                        $content, $stopReason
+                    ),
+                    $data['output']['message']['content']
+                ),
+                function (Choice $choiceEntry) use (&$stopReason) {
+                    if ('tool_use' === $stopReason) {
+                        return $choiceEntry->hasToolCall();
+                    }
+
+                    return true;
+                }
+            )
+        );
 
         if (1 !== count($choices)) {
             return new ChoiceResponse(...$choices);
@@ -141,53 +157,27 @@ final class ResponseConverter implements PlatformResponseConverter
         return isset($data['choices'][0]['finish_reason']) && 'tool_calls' === $data['choices'][0]['finish_reason'];
     }
 
-    /**
-     * @param array{
-     *     index: integer,
-     *     message: array{
-     *         role: 'assistant',
-     *         content: ?string,
-     *         tool_calls: array{
-     *             id: string,
-     *             type: 'function',
-     *             function: array{
-     *                 name: string,
-     *                 arguments: string
-     *             },
-     *         },
-     *         refusal: ?mixed
-     *     },
-     *     logprobs: string,
-     *     finish_reason: 'stop'|'length'|'tool_calls'|'content_filter',
-     * } $choice
-     */
-    private function convertChoice(array $choice): Choice
+    private function convertChoice(array $choice, string $stopReason): Choice
     {
-        if ('tool_calls' === $choice['finish_reason']) {
-            return new Choice(toolCalls: \array_map([$this, 'convertToolCall'], $choice['message']['tool_calls']));
+        if (isset($choice['toolUse'])) {
+            return new Choice(
+                toolCalls: [
+                    $this->convertToolCall($choice['toolUse']),
+                ]
+            );
         }
 
-        if (in_array($choice['finish_reason'], ['stop', 'length'], true)) {
-            return new Choice($choice['message']['content']);
+        if (isset($choice['text'])) {
+            return new Choice(
+                $choice['text']
+            );
         }
 
-        throw new RuntimeException(sprintf('Unsupported finish reason "%s".', $choice['finish_reason']));
+        throw new RuntimeException(sprintf('Unsupported finish reason "%s".', $stopReason));
     }
 
-    /**
-     * @param array{
-     *     id: string,
-     *     type: 'function',
-     *     function: array{
-     *         name: string,
-     *         arguments: string
-     *     }
-     * } $toolCall
-     */
     private function convertToolCall(array $toolCall): ToolCall
     {
-        $arguments = json_decode($toolCall['function']['arguments'], true, JSON_THROW_ON_ERROR);
-
-        return new ToolCall($toolCall['id'], $toolCall['function']['name'], $arguments);
+        return new ToolCall($toolCall['toolUseId'], $toolCall['name'], $toolCall['input']);
     }
 }
