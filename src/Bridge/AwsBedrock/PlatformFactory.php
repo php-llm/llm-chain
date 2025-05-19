@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Bridge\OpenAICompatible;
+namespace PhpLlm\LlmChain\Bridge\AwsBedrock;
 
 use Aws\Credentials\Credentials;
-use PhpLlm\LlmChain\Bridge\AwsBedrock\BedrockRequestSigner;
 use PhpLlm\LlmChain\Bridge\AwsBedrock\Language\ModelClient as LanguageModelClient;
 use PhpLlm\LlmChain\Bridge\AwsBedrock\Language\ResponseConverter as LanguageResponseConverter;
 use PhpLlm\LlmChain\Platform;
