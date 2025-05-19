@@ -7,9 +7,12 @@ namespace PhpLlm\LlmChain\Bridge\Anthropic;
 use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
+use PhpLlm\LlmChain\Model\Message\Content\Content;
+use PhpLlm\LlmChain\Model\Message\Content\Image;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Message\MessageInterface;
 use PhpLlm\LlmChain\Model\Message\ToolCallMessage;
+use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Model\Response\StreamResponse;
@@ -24,6 +27,8 @@ use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
+
+use function Symfony\Component\String\u;
 
 final readonly class ModelHandler implements ModelClient, ResponseConverter
 {
@@ -90,6 +95,26 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
                             'input' => empty($toolCall->arguments) ? new \stdClass() : $toolCall->arguments,
                         ];
                     }, $message->toolCalls),
+                ];
+            }
+            if ($message instanceof UserMessage && $message->hasImageContent()) {
+                // make sure images are encoded for Bedrock invocation
+                return [
+                    'role' => 'user',
+                    'content' => array_map(static function (Content $content) {
+                        if ($content instanceof Image) {
+                            return [
+                                'type' => 'image',
+                                'source' => [
+                                    'type' => 'base64',
+                                    'media_type' => u($content->url)->after('data:')->before(';')->replace('jpg', 'jpeg')->toString(),
+                                    'data' => u($content->url)->after('base64,')->toString(),
+                                ],
+                            ];
+                        }
+
+                        return $content;
+                    }, $message->content),
                 ];
             }
 
