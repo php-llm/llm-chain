@@ -10,6 +10,7 @@ use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessor;
 use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessor;
+use PhpLlm\LlmChain\Chain\Toolbox\Event\ChainIteractionsFinished;
 use PhpLlm\LlmChain\Chain\Toolbox\Event\ToolCallsExecuted;
 use PhpLlm\LlmChain\Chain\Toolbox\StreamResponse as ToolboxStreamResponse;
 use PhpLlm\LlmChain\Exception\MissingModelSupport;
@@ -103,6 +104,10 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
 
                 $response = $event->hasResponse() ? $event->response : $this->chain->call($messages, $output->options);
             } while ($response instanceof ToolCallResponse);
+
+            $this->eventDispatcher?->dispatch(
+                new ChainIteractionsFinished($messages)
+            );
 
             return $response;
         };
