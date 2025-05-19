@@ -6,12 +6,12 @@ namespace PhpLlm\LlmChain\Model\Response;
 
 use PhpLlm\LlmChain\Document\Vector;
 
-final readonly class VectorResponse implements ResponseInterface
+final class VectorResponse extends BaseResponse
 {
     /**
      * @var Vector[]
      */
-    private array $vectors;
+    private readonly array $vectors;
 
     public function __construct(Vector ...$vector)
     {

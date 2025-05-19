@@ -18,27 +18,27 @@ final class AudioTest extends TestCase
     #[Test]
     public function constructWithValidData(): void
     {
-        $audio = new Audio('base64data', 'mp3');
+        $audio = new Audio('somedata', 'audio/mpeg');
 
-        self::assertSame('base64data', $audio->data);
-        self::assertSame('mp3', $audio->format);
+        self::assertSame('somedata', $audio->asBinary());
+        self::assertSame('audio/mpeg', $audio->getFormat());
     }
 
     #[Test]
     public function fromDataUrlWithValidUrl(): void
     {
-        $dataUrl = 'data:audio/mp3;base64,SUQzBAAAAAAAfVREUkMAAAAMAAADMj';
+        $dataUrl = 'data:audio/mpeg;base64,SUQzBAAAAAAAfVREUkMAAAAMAAADMg==';
         $audio = Audio::fromDataUrl($dataUrl);
 
-        self::assertSame('SUQzBAAAAAAAfVREUkMAAAAMAAADMj', $audio->data);
-        self::assertSame('mp3', $audio->format);
+        self::assertSame('SUQzBAAAAAAAfVREUkMAAAAMAAADMg==', $audio->asBase64());
+        self::assertSame('audio/mpeg', $audio->getFormat());
     }
 
     #[Test]
     public function fromDataUrlWithInvalidUrl(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid audio data URL format.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid audio data URL format.');
 
         Audio::fromDataUrl('invalid-url');
     }
@@ -48,15 +48,15 @@ final class AudioTest extends TestCase
     {
         $audio = Audio::fromFile(dirname(__DIR__, 3).'/Fixture/audio.mp3');
 
-        self::assertSame('mp3', $audio->format);
-        self::assertNotEmpty($audio->data);
+        self::assertSame('audio/mpeg', $audio->getFormat());
+        self::assertNotEmpty($audio->asBinary());
     }
 
     #[Test]
     public function fromFileWithInvalidPath(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The file "foo.mp3" does not exist or is not readable.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('The file "foo.mp3" does not exist or is not readable.');
 
         Audio::fromFile('foo.mp3');
     }
@@ -65,7 +65,7 @@ final class AudioTest extends TestCase
     #[DataProvider('provideAudioData')]
     public function jsonSerializeReturnsCorrectFormat(string $data, string $format, array $expected): void
     {
-        $audio = new Audio($data, $format);
+        $audio = new Audio(base64_decode($data), $format);
         $actual = $audio->jsonSerialize();
 
         self::assertSame($expected, $actual);
@@ -74,12 +74,12 @@ final class AudioTest extends TestCase
     public static function provideAudioData(): \Generator
     {
         yield 'mp3 data' => [
-            'SUQzBAAAAAAAfVREUkMAAAAMAAADMj',
-            'mp3',
+            'SUQzBAAAAAAAfVREUkMAAAAMAAADMg==',
+            'audio/mpeg',
             [
                 'type' => 'input_audio',
                 'input_audio' => [
-                    'data' => 'SUQzBAAAAAAAfVREUkMAAAAMAAADMj',
+                    'data' => 'SUQzBAAAAAAAfVREUkMAAAAMAAADMg==',
                     'format' => 'mp3',
                 ],
             ],
@@ -87,7 +87,7 @@ final class AudioTest extends TestCase
 
         yield 'wav data' => [
             'UklGRiQAAABXQVZFZm10IBA=',
-            'wav',
+            'audio/wav',
             [
                 'type' => 'input_audio',
                 'input_audio' => [

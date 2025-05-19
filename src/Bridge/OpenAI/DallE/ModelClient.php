@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\OpenAI\DallE;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\DallE;
+use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Platform\ModelClient as PlatformResponseFactory;
@@ -47,7 +48,7 @@ final readonly class ModelClient implements PlatformResponseFactory, PlatformRes
     {
         $response = $response->toArray();
         if (!isset($response['data'][0])) {
-            throw new \RuntimeException('No image generated.');
+            throw new RuntimeException('No image generated.');
         }
 
         $images = [];

@@ -24,6 +24,9 @@ coverage:
 run-examples:
 	./example
 
+huggingface-models:
+	php examples/huggingface/_model-listing.php
+
 ci: ci-stable
 
 ci-stable: deps-stable rector cs phpstan tests

@@ -6,12 +6,12 @@ namespace PhpLlm\LlmChain\Model\Response;
 
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 
-final readonly class ChoiceResponse implements ResponseInterface
+final class ChoiceResponse extends BaseResponse
 {
     /**
      * @var Choice[]
      */
-    private array $choices;
+    private readonly array $choices;
 
     public function __construct(Choice ...$choices)
     {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Model\Message;
 
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
-use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Model\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\Role;
@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ToolCallMessage::class)]
 #[UsesClass(Role::class)]
 #[UsesClass(ToolCall::class)]
-#[UsesClass(Image::class)]
+#[UsesClass(ImageUrl::class)]
 #[UsesClass(Text::class)]
 #[Small]
 final class MessageTest extends TestCase
@@ -84,9 +84,9 @@ final class MessageTest extends TestCase
     {
         $message = Message::ofUser(
             new Text('Hi, my name is John.'),
-            new Image('http://images.local/my-image.png'),
+            new ImageUrl('http://images.local/my-image.png'),
             'The following image is a joke.',
-            new Image('http://images.local/my-image2.png'),
+            new ImageUrl('http://images.local/my-image2.png'),
         );
 
         self::assertCount(4, $message->content);

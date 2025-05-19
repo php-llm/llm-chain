@@ -31,7 +31,7 @@ class ChainProcessorTest extends TestCase
         $toolbox = $this->createStub(ToolboxInterface::class);
         $toolbox->method('getMap')->willReturn([]);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsToolCalling')->willReturn(true);
 
         $chainProcessor = new ChainProcessor($toolbox);
@@ -50,7 +50,7 @@ class ChainProcessorTest extends TestCase
         $tool2 = new Metadata(new ExecutionReference('ClassTool2', 'method1'), 'tool2', 'description2', null);
         $toolbox->method('getMap')->willReturn([$tool1, $tool2]);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsToolCalling')->willReturn(true);
 
         $chainProcessor = new ChainProcessor($toolbox);
@@ -69,7 +69,7 @@ class ChainProcessorTest extends TestCase
         $tool2 = new Metadata(new ExecutionReference('ClassTool2', 'method1'), 'tool2', 'description2', null);
         $toolbox->method('getMap')->willReturn([$tool1, $tool2]);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsToolCalling')->willReturn(true);
 
         $chainProcessor = new ChainProcessor($toolbox);
@@ -83,9 +83,9 @@ class ChainProcessorTest extends TestCase
     #[Test]
     public function processInputWithUnsupportedToolCallingWillThrowException(): void
     {
-        $this->expectException(MissingModelSupport::class);
+        self::expectException(MissingModelSupport::class);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsToolCalling')->willReturn(false);
 
         $chainProcessor = new ChainProcessor($this->createStub(ToolboxInterface::class));

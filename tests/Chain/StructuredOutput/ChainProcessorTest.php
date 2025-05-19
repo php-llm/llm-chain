@@ -15,13 +15,12 @@ use PhpLlm\LlmChain\Model\Response\StructuredResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
 use PhpLlm\LlmChain\Tests\Double\ConfigurableResponseFormatFactory;
 use PhpLlm\LlmChain\Tests\Fixture\SomeStructure;
+use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\MathReasoning;
+use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\Step;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[CoversClass(ChainProcessor::class)]
@@ -37,11 +36,9 @@ final class ChainProcessorTest extends TestCase
     #[Test]
     public function processInputWithOutputStructure(): void
     {
-        $responseFormatFactory = new ConfigurableResponseFormatFactory(['some' => 'format']);
-        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
-        $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
+        $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory(['some' => 'format']));
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsStructuredOutput')->willReturn(true);
 
         $input = new Input($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
@@ -54,11 +51,9 @@ final class ChainProcessorTest extends TestCase
     #[Test]
     public function processInputWithoutOutputStructure(): void
     {
-        $responseFormatFactory = new ConfigurableResponseFormatFactory();
-        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
-        $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
+        $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory());
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $input = new Input($llm, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
@@ -69,13 +64,11 @@ final class ChainProcessorTest extends TestCase
     #[Test]
     public function processInputThrowsExceptionWhenLlmDoesNotSupportStructuredOutput(): void
     {
-        $this->expectException(MissingModelSupport::class);
+        self::expectException(MissingModelSupport::class);
 
-        $responseFormatFactory = new ConfigurableResponseFormatFactory();
-        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
-        $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
+        $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory());
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsStructuredOutput')->willReturn(false);
 
         $input = new Input($llm, new MessageBag(), ['output_structure' => 'SomeStructure']);
@@ -86,11 +79,9 @@ final class ChainProcessorTest extends TestCase
     #[Test]
     public function processOutputWithResponseFormat(): void
     {
-        $responseFormatFactory = new ConfigurableResponseFormatFactory(['some' => 'format']);
-        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
-        $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
+        $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory(['some' => 'format']));
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $llm->method('supportsStructuredOutput')->willReturn(true);
 
         $options = ['output_structure' => SomeStructure::class];
@@ -109,13 +100,68 @@ final class ChainProcessorTest extends TestCase
     }
 
     #[Test]
+    public function processOutputWithComplexResponseFormat(): void
+    {
+        $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory(['some' => 'format']));
+
+        $llm = self::createMock(LanguageModel::class);
+        $llm->method('supportsStructuredOutput')->willReturn(true);
+
+        $options = ['output_structure' => MathReasoning::class];
+        $input = new Input($llm, new MessageBag(), $options);
+        $chainProcessor->processInput($input);
+
+        $response = new TextResponse(<<<JSON
+            {
+                "steps": [
+                    {
+                        "explanation": "We want to isolate the term with x. First, let's subtract 7 from both sides of the equation.",
+                        "output": "8x + 7 - 7 = -23 - 7"
+                    },
+                    {
+                        "explanation": "This simplifies to 8x = -30.",
+                        "output": "8x = -30"
+                    },
+                    {
+                        "explanation": "Next, to solve for x, we need to divide both sides of the equation by 8.",
+                        "output": "x = -30 / 8"
+                    },
+                    {
+                        "explanation": "Now we simplify -30 / 8 to its simplest form.",
+                        "output": "x = -15 / 4"
+                    },
+                    {
+                        "explanation": "Dividing both the numerator and the denominator by their greatest common divisor, we finalize our solution.",
+                        "output": "x = -3.75"
+                    }
+                ],
+                "finalAnswer": "x = -3.75"
+            }
+            JSON);
+
+        $output = new Output($llm, $response, new MessageBag(), $input->getOptions());
+
+        $chainProcessor->processOutput($output);
+
+        self::assertInstanceOf(StructuredResponse::class, $output->response);
+        self::assertInstanceOf(MathReasoning::class, $structure = $output->response->getContent());
+        self::assertCount(5, $structure->steps);
+        self::assertInstanceOf(Step::class, $structure->steps[0]);
+        self::assertInstanceOf(Step::class, $structure->steps[1]);
+        self::assertInstanceOf(Step::class, $structure->steps[2]);
+        self::assertInstanceOf(Step::class, $structure->steps[3]);
+        self::assertInstanceOf(Step::class, $structure->steps[4]);
+        self::assertSame('x = -3.75', $structure->finalAnswer);
+    }
+
+    #[Test]
     public function processOutputWithoutResponseFormat(): void
     {
         $responseFormatFactory = new ConfigurableResponseFormatFactory();
-        $serializer = $this->createMock(SerializerInterface::class);
+        $serializer = self::createMock(SerializerInterface::class);
         $chainProcessor = new ChainProcessor($responseFormatFactory, $serializer);
 
-        $llm = $this->createMock(LanguageModel::class);
+        $llm = self::createMock(LanguageModel::class);
         $response = new TextResponse('');
 
         $output = new Output($llm, $response, new MessageBag(), []);

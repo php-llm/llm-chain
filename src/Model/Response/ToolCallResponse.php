@@ -6,12 +6,12 @@ namespace PhpLlm\LlmChain\Model\Response;
 
 use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 
-final readonly class ToolCallResponse implements ResponseInterface
+final class ToolCallResponse extends BaseResponse
 {
     /**
      * @var ToolCall[]
      */
-    private array $toolCalls;
+    private readonly array $toolCalls;
 
     public function __construct(ToolCall ...$toolCalls)
     {

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Chain\Toolbox;
 
 use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Response\ResponseInterface;
+use PhpLlm\LlmChain\Model\Response\BaseResponse;
 use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
 
-final readonly class StreamResponse implements ResponseInterface
+final class StreamResponse extends BaseResponse
 {
     public function __construct(
-        private \Generator $generator,
-        private \Closure $handleToolCallsCallback,
+        private readonly \Generator $generator,
+        private readonly \Closure $handleToolCallsCallback,
     ) {
     }
 

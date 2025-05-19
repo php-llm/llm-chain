@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Model\Message;
 
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
-use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Model\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(UserMessage::class)]
 #[UsesClass(SystemMessage::class)]
 #[UsesClass(AssistantMessage::class)]
-#[UsesClass(Image::class)]
+#[UsesClass(ImageUrl::class)]
 #[UsesClass(Text::class)]
 #[UsesClass(ToolCall::class)]
 #[UsesClass(ToolCallMessage::class)]
@@ -163,7 +163,7 @@ final class MessageBagTest extends TestCase
         $messageBag = new MessageBag(
             Message::ofAssistant('It is time to sleep.'),
             Message::ofUser('Hello, world!'),
-            Message::ofUser('My hint for how to analyze an image.', new Image('http://image-generator.local/my-fancy-image.png')),
+            Message::ofUser('My hint for how to analyze an image.', new ImageUrl('http://image-generator.local/my-fancy-image.png')),
         );
 
         self::assertTrue($messageBag->containsImage());
@@ -177,7 +177,7 @@ final class MessageBagTest extends TestCase
             Message::ofAssistant('It is time to sleep.'),
             Message::ofUser('Hello, world!'),
             new AssistantMessage('Hello User!'),
-            Message::ofUser('My hint for how to analyze an image.', new Image('http://image-generator.local/my-fancy-image.png')),
+            Message::ofUser('My hint for how to analyze an image.', new ImageUrl('http://image-generator.local/my-fancy-image.png')),
         );
 
         $json = json_encode($messageBag);

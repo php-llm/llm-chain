@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Bridge\Meta;
 
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
-use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Model\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Message\SystemMessage;
@@ -60,7 +60,7 @@ final class LlamaPromptConverter
                     $contentParts[] = $value->text;
                 }
 
-                if ($value instanceof Image) {
+                if ($value instanceof ImageUrl) {
                     $contentParts[] = $value->url;
                 }
             }
@@ -70,7 +70,7 @@ final class LlamaPromptConverter
                 $contentParts[] = $value->text;
             }
 
-            if ($value instanceof Image) {
+            if ($value instanceof ImageUrl) {
                 $contentParts[] = $value->url;
             }
         } else {

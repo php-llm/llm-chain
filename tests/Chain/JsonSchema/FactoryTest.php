@@ -153,7 +153,7 @@ final class FactoryTest extends TestCase
                     'description' => 'A number given to the tool',
                 ],
             ],
-            'required' => ['text', 'number'],
+            'required' => ['text'],
             'additionalProperties' => false,
         ];
 

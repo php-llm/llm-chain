@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Chain\JsonSchema;
 
 use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
+use PhpLlm\LlmChain\Exception\InvalidArgumentException;
 use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\TypeInfo\Type\BuiltinType;
 use Symfony\Component\TypeInfo\Type\CollectionType;
@@ -98,7 +99,7 @@ final readonly class Factory
 
             if ($type->isNullable()) {
                 $schema['type'] = [$schema['type'], 'null'];
-            } else {
+            } elseif (!($element instanceof \ReflectionParameter && $element->isOptional())) {
                 $result['required'][] = $name;
             }
 
@@ -155,7 +156,7 @@ final readonly class Factory
 
             case $type->isIdentifiedBy(TypeIdentifier::OBJECT):
                 if ($type instanceof BuiltinType) {
-                    throw new \InvalidArgumentException('Cannot build schema from plain object type.');
+                    throw new InvalidArgumentException('Cannot build schema from plain object type.');
                 }
                 assert($type instanceof ObjectType);
                 if (in_array($type->getClassName(), ['DateTime', 'DateTimeImmutable', 'DateTimeInterface'], true)) {

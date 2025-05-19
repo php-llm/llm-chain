@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Tests\Bridge\Meta;
 
 use PhpLlm\LlmChain\Bridge\Meta\LlamaPromptConverter;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
-use PhpLlm\LlmChain\Model\Message\Content\Image;
+use PhpLlm\LlmChain\Model\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Model\Message\Content\Text;
 use PhpLlm\LlmChain\Model\Message\Message;
 use PhpLlm\LlmChain\Model\Message\MessageBag;
@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(LlamaPromptConverter::class)]
 #[Small]
 #[UsesClass(AssistantMessage::class)]
-#[UsesClass(Image::class)]
+#[UsesClass(ImageUrl::class)]
 #[UsesClass(Text::class)]
 #[UsesClass(Message::class)]
 #[UsesClass(MessageBag::class)]
@@ -119,7 +119,7 @@ final class LlamaPromptConverterTest extends TestCase
                 What is your name?
                 https://example.com/image.jpg<|eot_id|>
                 USER,
-            Message::ofUser('Hello, how are you?', 'What is your name?', new Image('https://example.com/image.jpg')),
+            Message::ofUser('Hello, how are you?', 'What is your name?', new ImageUrl('https://example.com/image.jpg')),
         ];
 
         yield 'AssistantMessage' => [

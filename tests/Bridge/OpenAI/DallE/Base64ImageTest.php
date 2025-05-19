@@ -26,8 +26,8 @@ final class Base64ImageTest extends TestCase
     #[Test]
     public function itThrowsExceptionWhenBase64ImageIsEmpty(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The base64 encoded image generated must be given.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('The base64 encoded image generated must be given.');
 
         new Base64Image('');
     }

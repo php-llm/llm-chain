@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Bridge\OpenAI\Whisper;
 
 use PhpLlm\LlmChain\Bridge\OpenAI\Whisper;
+use PhpLlm\LlmChain\Model\Message\Content\Audio;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Platform\ModelClient as BaseModelClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -23,19 +24,19 @@ final readonly class ModelClient implements BaseModelClient
 
     public function supports(Model $model, object|array|string $input): bool
     {
-        return $model instanceof Whisper && $input instanceof File;
+        return $model instanceof Whisper && $input instanceof Audio;
     }
 
     public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
     {
-        assert($input instanceof File);
+        assert($input instanceof Audio);
 
         return $this->httpClient->request('POST', 'https://api.openai.com/v1/audio/transcriptions', [
             'auth_bearer' => $this->apiKey,
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'body' => array_merge($options, $model->getOptions(), [
                 'model' => $model->getName(),
-                'file' => fopen($input->path, 'r'),
+                'file' => $input->asResource(),
             ]),
         ]);
     }

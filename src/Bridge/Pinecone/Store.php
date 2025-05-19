@@ -40,7 +40,7 @@ final readonly class Store implements VectorStoreInterface
             return;
         }
 
-        $this->getVectors()->upsert($vectors);
+        $this->getVectors()->upsert($vectors, $this->namespace);
     }
 
     public function query(Vector $vector, array $options = [], ?float $minScore = null): array
