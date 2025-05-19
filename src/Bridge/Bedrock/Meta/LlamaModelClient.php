@@ -8,7 +8,6 @@ use AsyncAws\BedrockRuntime\Result\InvokeModelResponse;
 use PhpLlm\LlmChain\Bridge\Bedrock\BedrockModelClient;
 use PhpLlm\LlmChain\Bridge\Meta\Llama;
 use PhpLlm\LlmChain\Bridge\Meta\LlamaPromptConverter;
-use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
@@ -57,19 +56,10 @@ class LlamaModelClient implements BedrockModelClient
 
     private function getModelId(Model $model): string
     {
-        $euRegions = ['eu-west-1', 'eu-central-1', 'eu-west-2', 'eu-west-3', 'eu-south-1', 'eu-north-1'];
-        $usRegions = ['us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'];
-
         $configuredRegion = $this->bedrockRuntimeClient->getConfiguration()->get('region');
-        $isEuRegion = in_array($configuredRegion, $euRegions, true);
-        $isUsRegion = in_array($configuredRegion, $usRegions, true);
-        if ($isEuRegion && $isUsRegion) {
-            throw new RuntimeException('Unsupported region: '.$configuredRegion);
-        }
-
-        $prefix = $isEuRegion ? 'eu' : 'us';
+        $regionPrefix = substr((string) $configuredRegion, 0, 2);
         $modifiedModelName = str_replace('llama-3', 'llama3', $model->getName());
 
-        return $prefix.'.meta.'.str_replace('.', '-', $modifiedModelName).'-v1:0';
+        return $regionPrefix.'.meta.'.str_replace('.', '-', $modifiedModelName).'-v1:0';
     }
 }
