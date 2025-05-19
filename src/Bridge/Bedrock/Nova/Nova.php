@@ -54,7 +54,9 @@ final readonly class Nova implements LanguageModel
 
     public function supportsToolCalling(): bool
     {
-        // It does support tool calling, but it cannot use tools without parameters
-        return true;
+        // Tool calling is supported but:
+        // Invoke currently has some validation errors on the bedrock api side when returning tool calling results.
+        // Its encouraged to use the converse api instead.
+        return false;
     }
 }
