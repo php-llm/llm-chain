@@ -39,6 +39,10 @@ final readonly class Nova implements LanguageModel
 
     public function supportsImageInput(): bool
     {
+        if (self::MICRO === $this->name) {
+            return false;
+        }
+
         return true;
     }
 
