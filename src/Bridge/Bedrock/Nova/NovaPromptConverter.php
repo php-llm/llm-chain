@@ -81,7 +81,7 @@ final class NovaPromptConverter
                 if ($value instanceof Text) {
                     $contentPart['text'] = $value->text;
                 } elseif ($value instanceof Image) {
-                    $contentPart['image']['format'] = u($value->getFormat())->replace('jpg', 'jpeg')->toString();
+                    $contentPart['image']['format'] = u($value->getFormat())->replace('image/', '')->replace('jpg', 'jpeg')->toString();
                     $contentPart['image']['source']['bytes'] = $value->asBase64();
                 } else {
                     throw new RuntimeException('Unsupported message type.');
