@@ -102,8 +102,8 @@ final readonly class ClaudeHandler implements BedrockModelClient
                                 'type' => 'image',
                                 'source' => [
                                     'type' => 'base64',
-                                    'media_type' => u($content->url)->after('data:')->before(';')->replace('jpg', 'jpeg')->toString(),
-                                    'data' => u($content->url)->after('base64,')->toString(),
+                                    'media_type' => u($content->getFormat())->replace('jpg', 'jpeg')->toString(),
+                                    'data' => $content->asBase64(),
                                 ],
                             ];
                         }
@@ -139,8 +139,8 @@ final readonly class ClaudeHandler implements BedrockModelClient
             throw new RuntimeException('Response does not contain any content');
         }
 
-        if (!isset($data['content'][0]['text'])) {
-            throw new RuntimeException('Response content does not contain any text');
+        if (!isset($data['content'][0]['text']) && !isset($data['content'][0]['type'])) {
+            throw new RuntimeException('Response content does not contain any text or type');
         }
 
         $toolCalls = [];

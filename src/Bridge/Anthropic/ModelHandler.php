@@ -107,8 +107,8 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
                                 'type' => 'image',
                                 'source' => [
                                     'type' => 'base64',
-                                    'media_type' => u($content->url)->after('data:')->before(';')->replace('jpg', 'jpeg')->toString(),
-                                    'data' => u($content->url)->after('base64,')->toString(),
+                                    'media_type' => u($content->getFormat())->replace('jpg', 'jpeg')->toString(),
+                                    'data' => $content->asBase64(),
                                 ],
                             ];
                         }
