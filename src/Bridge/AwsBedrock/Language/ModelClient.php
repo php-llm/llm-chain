@@ -140,23 +140,27 @@ final readonly class ModelClient implements PlatformResponseFactory
             }
 
             $inferenceConfig = array_reduce(
-                array_filter(
-                    $options,
-                    fn ($value, $optionKey) => in_array($optionKey, ['max_tokens', 'stop_sequences', 'temperature', 'top_p']),
-                    ARRAY_FILTER_USE_BOTH
+                array_keys(
+                    $filteredAttributes = array_filter(
+                        $options,
+                        fn ($value, $optionKey) => in_array($optionKey, ['max_tokens', 'stop_sequences', 'temperature', 'top_p']),
+                        ARRAY_FILTER_USE_BOTH
+                    )
                 ),
-                function (array $inferenceConfigAcc, string $optionValue, string $optionKey) use (&$options) {
+                function (array $inferenceConfigAcc, string $optionKey) use (&$options, &$filteredAttributes) {
                     unset($options[$optionKey]);
 
-                    $optionKey = implode(
-                        '',
-                        array_map(
-                            fn ($part, $partIndex) => 0 === $partIndex ? mb_lcfirst($part) : mb_ucfirst($part),
-                            explode('_', $optionKey)
+                    $newKey = mb_lcfirst(
+                        implode(
+                            '',
+                            array_map(
+                                fn ($part) => mb_ucfirst($part),
+                                explode('_', $optionKey)
+                            )
                         )
                     );
 
-                    $inferenceConfigAcc[$optionKey] = $optionValue;
+                    $inferenceConfigAcc[$newKey] = $filteredAttributes[$optionKey];
 
                     return $inferenceConfigAcc;
                 },
@@ -164,23 +168,27 @@ final readonly class ModelClient implements PlatformResponseFactory
             );
 
             $additionalModelRequestFields = array_reduce(
-                array_filter(
-                    $options,
-                    fn ($value, $optionKey) => in_array($optionKey, ['top_k']),
-                    ARRAY_FILTER_USE_BOTH
+                array_keys(
+                    $filteredAttributes = array_filter(
+                        $options,
+                        fn ($value, $optionKey) => in_array($optionKey, ['top_k']),
+                        ARRAY_FILTER_USE_BOTH
+                    )
                 ),
-                function (array $additionalModelRequestFieldsAcc, string $optionValue, string $optionKey) use (&$options) {
+                function (array $additionalModelRequestFieldsAcc, string $optionKey) use (&$options, &$filteredAttributes) {
                     unset($options[$optionKey]);
 
-                    $optionKey = implode(
-                        '',
-                        array_map(
-                            fn ($part, $partIndex) => 0 === $partIndex ? mb_lcfirst($part) : mb_ucfirst($part),
-                            explode('_', $optionKey)
+                    $newKey = mb_lcfirst(
+                        implode(
+                            '',
+                            array_map(
+                                fn ($part) => mb_ucfirst($part),
+                                explode('_', $optionKey)
+                            )
                         )
                     );
 
-                    $additionalModelRequestFieldsAcc[$optionKey] = $optionValue;
+                    $additionalModelRequestFieldsAcc[$newKey] = $filteredAttributes[$optionKey];
 
                     return $additionalModelRequestFieldsAcc;
                 },
@@ -196,7 +204,7 @@ final readonly class ModelClient implements PlatformResponseFactory
                     ($options['stream'] ?? false) ? 'converse-stream' : 'converse'
                 ),
                 jsonBody: array_filter(
-                    array_merge($options, [
+                    array_merge($model->getOptions(), $options, [
                         'messages' => $messagesMap,
                         'system' => $systemMessagesMap,
                         'toolConfig' => $toolConfig,

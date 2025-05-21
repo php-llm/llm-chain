@@ -36,9 +36,14 @@ final readonly class ModelClient implements PlatformResponseFactory
                 $this->region,
                 $model->getName(),
             ),
-            jsonBody: is_string($input) ? [
-                'inputText' => $input,
-            ] : $input
+            jsonBody: is_string($input) ? array_merge(
+                $model->getOptions(), [
+                    'inputText' => $input,
+                ]
+            ) : (
+                is_array($input) ?
+                    array_merge($model->getOptions(), $options, $input) : $input
+            )
         );
 
         return $this->httpClient->request('POST', $bedrockEndpoint, $signedParameters);
