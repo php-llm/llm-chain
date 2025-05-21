@@ -43,6 +43,8 @@ final readonly class ModelClient implements PlatformResponseFactory
 
     public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
     {
+        $options = array_merge($model->getOptions(), $options);
+
         if ($input instanceof MessageBag) {
             $systemMessagesMap = null;
 
@@ -204,7 +206,7 @@ final readonly class ModelClient implements PlatformResponseFactory
                     ($options['stream'] ?? false) ? 'converse-stream' : 'converse'
                 ),
                 jsonBody: array_filter(
-                    array_merge($model->getOptions(), $options, [
+                    array_merge($options, [
                         'messages' => $messagesMap,
                         'system' => $systemMessagesMap,
                         'toolConfig' => $toolConfig,
