@@ -56,7 +56,8 @@
         "symfony/event-dispatcher": "^6.4 || ^7.1",
         "symfony/finder": "^6.4 || ^7.1",
         "symfony/process": "^6.4 || ^7.1",
-        "symfony/var-dumper": "^6.4 || ^7.1"
+        "symfony/var-dumper": "^6.4 || ^7.1",
+        "aws/aws-sdk-php": "^3"
     },
     "suggest": {
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
@@ -64,7 +65,8 @@
         "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
         "symfony/css-selector": "For using the YouTube transcription tool.",
-        "symfony/dom-crawler": "For using the YouTube transcription tool."
+        "symfony/dom-crawler": "For using the YouTube transcription tool.",
+        "aws/aws-sdk-php": "For using AWS Bedrock"
     },
     "config": {
         "allow-plugins": {

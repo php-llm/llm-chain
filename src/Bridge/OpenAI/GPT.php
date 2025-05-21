@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Bridge\OpenAI;
 
-use PhpLlm\LlmChain\Model\LanguageModel;
+use PhpLlm\LlmChain\Model\OpenAiCompatibleLanguageModel;
 
-final class GPT implements LanguageModel
+final class GPT implements OpenAiCompatibleLanguageModel
 {
     public const GPT_35_TURBO = 'gpt-3.5-turbo';
     public const GPT_35_TURBO_INSTRUCT = 'gpt-3.5-turbo-instruct';
