@@ -12,7 +12,7 @@ final readonly class Embeddings implements EmbeddingsModel
     public function __construct(
         private string $name = self::TITAN_EMBED_TEXT_V2,
         private array $options = [],
-        private ?string $inferenceProfileRegion = null
+        private ?string $inferenceProfileRegion = null,
     ) {
     }
 

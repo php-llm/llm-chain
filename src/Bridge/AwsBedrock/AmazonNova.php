@@ -19,7 +19,7 @@ final readonly class AmazonNova implements BedrockLanguageModel
     public function __construct(
         private string $name = self::NOVA_LITE_V1,
         private array $options = [],
-        private ?string $inferenceProfileRegion = null
+        private ?string $inferenceProfileRegion = null,
     ) {
     }
 

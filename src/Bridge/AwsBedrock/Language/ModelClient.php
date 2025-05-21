@@ -106,7 +106,7 @@ final readonly class ModelClient implements PlatformResponseFactory
                                                     'image/jpg', 'image/jpeg' => 'jpeg',
                                                     'image/gif' => 'gif',
                                                     'image/webp' => 'webp',
-                                                    default => throw new \Exception('Invalid Image type')
+                                                    default => throw new \Exception('Invalid Image type'),
                                                 },
                                                 'source' => [
                                                     'bytes' => $inputContent->asBase64(),
