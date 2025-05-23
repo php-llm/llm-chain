@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\Toolbox;
 
+use PhpLlm\LlmChain\Chain\ChainInterface;
 use PhpLlm\LlmChain\Chain\Exception\MissingModelSupportException;
 use PhpLlm\LlmChain\Chain\Input;
+use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\Toolbox\ToolboxInterface;
 use PhpLlm\LlmChain\Platform\Capability;
+use PhpLlm\LlmChain\Platform\Message\AssistantMessage;
 use PhpLlm\LlmChain\Platform\Message\MessageBag;
+use PhpLlm\LlmChain\Platform\Message\ToolCallMessage;
 use PhpLlm\LlmChain\Platform\Model;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
 use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
 use PhpLlm\LlmChain\Platform\Tool\Tool;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,7 +26,10 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ChainProcessor::class)]
 #[UsesClass(Input::class)]
+#[UsesClass(Output::class)]
 #[UsesClass(Tool::class)]
+#[UsesClass(ToolCall::class)]
+#[UsesClass(ToolCallResponse::class)]
 #[UsesClass(ExecutionReference::class)]
 #[UsesClass(MessageBag::class)]
 #[UsesClass(MissingModelSupportException::class)]
@@ -86,5 +95,55 @@ class ChainProcessorTest extends TestCase
         $input = new Input($model, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
+    }
+
+    #[Test]
+    public function processOutputWithToolCallResponseKeepingMessages(): void
+    {
+        $toolbox = $this->createMock(ToolboxInterface::class);
+        $toolbox->expects($this->once())->method('execute')->willReturn('Test response');
+
+        $model = new Model('gpt-4', [Capability::TOOL_CALLING]);
+
+        $messageBag = new MessageBag();
+
+        $response = new ToolCallResponse(new ToolCall('id1', 'tool1', ['arg1' => 'value1']));
+
+        $chain = $this->createStub(ChainInterface::class);
+
+        $chainProcessor = new ChainProcessor($toolbox, keepToolMessages: true);
+        $chainProcessor->setChain($chain);
+
+        $output = new Output($model, $response, $messageBag, []);
+
+        $chainProcessor->processOutput($output);
+
+        self::assertCount(2, $messageBag);
+        self::assertInstanceOf(AssistantMessage::class, $messageBag->getMessages()[0]);
+        self::assertInstanceOf(ToolCallMessage::class, $messageBag->getMessages()[1]);
+    }
+
+    #[Test]
+    public function processOutputWithToolCallResponseForgettingMessages(): void
+    {
+        $toolbox = $this->createMock(ToolboxInterface::class);
+        $toolbox->expects($this->once())->method('execute')->willReturn('Test response');
+
+        $model = new Model('gpt-4', [Capability::TOOL_CALLING]);
+
+        $messageBag = new MessageBag();
+
+        $response = new ToolCallResponse(new ToolCall('id1', 'tool1', ['arg1' => 'value1']));
+
+        $chain = $this->createStub(ChainInterface::class);
+
+        $chainProcessor = new ChainProcessor($toolbox, keepToolMessages: false);
+        $chainProcessor->setChain($chain);
+
+        $output = new Output($model, $response, $messageBag, []);
+
+        $chainProcessor->processOutput($output);
+
+        self::assertCount(0, $messageBag);
     }
 }
