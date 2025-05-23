@@ -40,6 +40,7 @@
         "mongodb/mongodb": "<1.21"
     },
     "require-dev": {
+        "async-aws/bedrock-runtime": "^0.1.0",
         "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3",
         "codewithkyrian/transformers": "^0.5.3",
         "mongodb/mongodb": "^1.21",
@@ -59,6 +60,7 @@
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
     "suggest": {
+        "async-aws/bedrock-runtime": "For using the Bedrock platform.",
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
         "codewithkyrian/transformers": "For using the TransformersPHP with FFI to run models in PHP.",
         "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",

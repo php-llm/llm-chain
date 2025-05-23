@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Bridge\Anthropic;
+namespace PhpLlm\LlmChain\Bridge\Bedrock\Anthropic;
 
+use AsyncAws\BedrockRuntime\BedrockRuntimeClient;
+use AsyncAws\BedrockRuntime\Input\InvokeModelRequest;
+use AsyncAws\BedrockRuntime\Result\InvokeModelResponse;
+use PhpLlm\LlmChain\Bridge\Anthropic\Claude;
+use PhpLlm\LlmChain\Bridge\Bedrock\BedrockModelClient;
 use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Model\Message\AssistantMessage;
@@ -15,31 +20,19 @@ use PhpLlm\LlmChain\Model\Message\ToolCallMessage;
 use PhpLlm\LlmChain\Model\Message\UserMessage;
 use PhpLlm\LlmChain\Model\Model;
 use PhpLlm\LlmChain\Model\Response\ResponseInterface as LlmResponse;
-use PhpLlm\LlmChain\Model\Response\StreamResponse;
 use PhpLlm\LlmChain\Model\Response\TextResponse;
 use PhpLlm\LlmChain\Model\Response\ToolCall;
 use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
-use PhpLlm\LlmChain\Platform\ModelClient;
-use PhpLlm\LlmChain\Platform\ResponseConverter;
-use Symfony\Component\HttpClient\Chunk\ServerSentEvent;
-use Symfony\Component\HttpClient\EventSourceHttpClient;
-use Symfony\Component\HttpClient\Exception\JsonException;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 use function Symfony\Component\String\u;
 
-final readonly class ModelHandler implements ModelClient, ResponseConverter
+final readonly class ClaudeHandler implements BedrockModelClient
 {
-    private EventSourceHttpClient $httpClient;
-
     public function __construct(
-        HttpClientInterface $httpClient,
-        #[\SensitiveParameter] private string $apiKey,
-        private string $version = '2023-06-01',
+        private BedrockRuntimeClient $bedrockRuntimeClient,
+        private string $version = '2023-05-31',
     ) {
-        $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
     }
 
     public function supports(Model $model, array|string|object $input): bool
@@ -47,7 +40,7 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
         return $model instanceof Claude && $input instanceof MessageBagInterface;
     }
 
-    public function request(Model $model, object|array|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, object|array|string $input, array $options = []): LlmResponse
     {
         Assert::isInstanceOf($input, MessageBagInterface::class);
 
@@ -67,7 +60,9 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
         }
 
         $body = [
-            'model' => $model->getName(),
+            'anthropic_version' => 'bedrock-'.$this->version,
+            'max_tokens' => $model->getOptions()['max_tokens'],
+            'temperature' => $model->getOptions()['temperature'],
             'messages' => $input->withoutSystemMessage()->jsonSerialize(),
         ];
 
@@ -125,25 +120,27 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
             $body['system'] = $system->content;
         }
 
-        return $this->httpClient->request('POST', 'https://api.anthropic.com/v1/messages', [
-            'headers' => [
-                'x-api-key' => $this->apiKey,
-                'anthropic-version' => $this->version,
-            ],
-            'json' => array_merge($options, $body),
-        ]);
+        $request = [
+            'modelId' => $this->getModelId($model),
+            'contentType' => 'application/json',
+            'body' => json_encode(array_merge($options, $body), JSON_THROW_ON_ERROR),
+        ];
+
+        $invokeModelResponse = $this->bedrockRuntimeClient->invokeModel(new InvokeModelRequest($request));
+
+        return $this->convert($invokeModelResponse);
     }
 
-    public function convert(ResponseInterface $response, array $options = []): LlmResponse
+    public function convert(InvokeModelResponse $bedrockResponse): LlmResponse
     {
-        if ($options['stream'] ?? false) {
-            return new StreamResponse($this->convertStream($response));
-        }
-
-        $data = $response->toArray();
+        $data = json_decode($bedrockResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
         if (!isset($data['content']) || 0 === count($data['content'])) {
             throw new RuntimeException('Response does not contain any content');
+        }
+
+        if (!isset($data['content'][0]['text']) && !isset($data['content'][0]['type'])) {
+            throw new RuntimeException('Response content does not contain any text or type');
         }
 
         $toolCalls = [];
@@ -152,11 +149,6 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
                 $toolCalls[] = new ToolCall($content['id'], $content['name'], $content['input']);
             }
         }
-
-        if (!isset($data['content'][0]['text']) && 0 === count($toolCalls)) {
-            throw new RuntimeException('Response content does not contain any text nor tool calls.');
-        }
-
         if (!empty($toolCalls)) {
             return new ToolCallResponse(...$toolCalls);
         }
@@ -164,25 +156,11 @@ final readonly class ModelHandler implements ModelClient, ResponseConverter
         return new TextResponse($data['content'][0]['text']);
     }
 
-    private function convertStream(ResponseInterface $response): \Generator
+    private function getModelId(Model $model): string
     {
-        foreach ((new EventSourceHttpClient())->stream($response) as $chunk) {
-            if (!$chunk instanceof ServerSentEvent || '[DONE]' === $chunk->getData()) {
-                continue;
-            }
+        $configuredRegion = $this->bedrockRuntimeClient->getConfiguration()->get('region');
+        $regionPrefix = substr((string) $configuredRegion, 0, 2);
 
-            try {
-                $data = $chunk->getArrayData();
-            } catch (JsonException) {
-                // try catch only needed for Symfony 6.4
-                continue;
-            }
-
-            if ('content_block_delta' != $data['type'] || !isset($data['delta']['text'])) {
-                continue;
-            }
-
-            yield $data['delta']['text'];
-        }
+        return $regionPrefix.'.anthropic.'.$model->getName().'-v1:0';
     }
 }
