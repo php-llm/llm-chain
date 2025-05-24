@@ -40,7 +40,7 @@
         "mongodb/mongodb": "<1.21"
     },
     "require-dev": {
-        "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3",
+        "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3 || ^0.4",
         "codewithkyrian/transformers": "^0.5.3",
         "mongodb/mongodb": "^1.21",
         "php-cs-fixer/shim": "^3.70",
