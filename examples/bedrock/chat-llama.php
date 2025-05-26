@@ -1,6 +1,5 @@
 <?php
 
-use AsyncAws\BedrockRuntime\BedrockRuntimeClient;
 use PhpLlm\LlmChain\Bridge\Bedrock\PlatformFactory;
 use PhpLlm\LlmChain\Bridge\Meta\Llama;
 use PhpLlm\LlmChain\Chain;
@@ -17,10 +16,8 @@ if (empty($_ENV['AWS_ACCESS_KEY_ID']) || empty($_ENV['AWS_SECRET_ACCESS_KEY']) |
     exit(1);
 }
 
-$platform = PlatformFactory::create(
-    new BedrockRuntimeClient()
-);
-$llm = new Llama('llama-3.2-3b-instruct');
+$platform = PlatformFactory::create();
+$llm = new Llama(Llama::V3_2_3B_INSTRUCT);
 
 $chain = new Chain($platform, $llm);
 $messages = new MessageBag(

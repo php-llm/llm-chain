@@ -12,7 +12,7 @@ use PhpLlm\LlmChain\Bridge\Bedrock\Nova\NovaHandler;
 final readonly class PlatformFactory
 {
     public static function create(
-        ?BedrockRuntimeClient $bedrockRuntimeClient = null,
+        BedrockRuntimeClient $bedrockRuntimeClient = new BedrockRuntimeClient(),
     ): Platform {
         $modelClient[] = new ClaudeHandler($bedrockRuntimeClient);
         $modelClient[] = new NovaHandler($bedrockRuntimeClient);
