@@ -1,6 +1,5 @@
 <?php
 
-use AsyncAws\BedrockRuntime\BedrockRuntimeClient;
 use PhpLlm\LlmChain\Bridge\Anthropic\Claude;
 use PhpLlm\LlmChain\Bridge\Bedrock\PlatformFactory;
 use PhpLlm\LlmChain\Chain;
@@ -21,9 +20,7 @@ if (empty($_ENV['AWS_ACCESS_KEY_ID']) || empty($_ENV['AWS_SECRET_ACCESS_KEY']) |
     exit(1);
 }
 
-$platform = PlatformFactory::create(
-    new BedrockRuntimeClient()
-);
+$platform = PlatformFactory::create();
 $llm = new Claude();
 
 $wikipedia = new Wikipedia(HttpClient::create());
