@@ -11,6 +11,10 @@ return (new Config())
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRules([
         '@Symfony' => true,
+        '@Symfony:risky' => true,
+        'protected_to_private' => false,
+        'declare_strict_types' => false,
         'heredoc_indentation' => ['indentation' => 'start_plus_one'],
     ])
+    ->setRiskyAllowed(true)
     ->setFinder($finder);

@@ -35,7 +35,7 @@ final class WikipediaTest extends TestCase
              - Member states of the United Nations
              - Official languages of the United Nations
              - United States Secretary of State
-            
+
             Use the title of the article with tool "wikipedia_article" to load the content.
             EOT;
 
@@ -84,7 +84,7 @@ final class WikipediaTest extends TestCase
         $actual = $wikipedia->article('United Nations secretary-general');
         $expected = <<<EOT
             The article "United Nations secretary-general" redirects to article "Secretary-General of the United Nations".
-            
+
             This is the content of article "Secretary-General of the United Nations":
             The secretary-general of the United Nations (UNSG or UNSECGEN) is the chief administrative officer of the United Nations and head of the United Nations Secretariat, one of the six principal organs of the United Nations. And so on.
             EOT;

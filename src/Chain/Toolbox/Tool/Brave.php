@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox\Tool;
 
-use PhpLlm\LlmChain\Chain\JsonSchema\Attribute\With;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
+use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Attribute\With;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsTool('brave_search', 'Tool that searches the web using Brave Search')]

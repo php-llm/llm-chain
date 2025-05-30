@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\StructuredOutput;
 
-use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
-use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\StructuredOutput\ResponseFormatFactory;
+use PhpLlm\LlmChain\Platform\Contract\JsonSchema\DescriptionParser;
+use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Factory;
 use PhpLlm\LlmChain\Tests\Fixture\StructuredOutput\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;

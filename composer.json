@@ -46,6 +46,7 @@
         "mongodb/mongodb": "^1.21",
         "php-cs-fixer/shim": "^3.70",
         "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
         "phpstan/phpstan-webmozart-assert": "^2.0",
         "phpunit/phpunit": "^11.5",
         "probots-io/pinecone-php": "^1.0",

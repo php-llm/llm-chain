@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Store;
 
-use PhpLlm\LlmChain\Document\VectorDocument;
+use PhpLlm\LlmChain\Store\Document\VectorDocument;
 
 interface StoreInterface
 {

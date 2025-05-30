@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Chain\Toolbox\MetadataFactory;
 
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolConfigurationException;
-use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolMetadataException;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ChainFactory;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\MemoryFactory;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ReflectionFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolException;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\ChainFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\MemoryToolFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\ReflectionToolFactory;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoAttribute1;
@@ -22,19 +22,19 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ChainFactory::class)]
 #[Medium]
-#[UsesClass(MemoryFactory::class)]
-#[UsesClass(ReflectionFactory::class)]
-#[UsesClass(ToolMetadataException::class)]
+#[UsesClass(MemoryToolFactory::class)]
+#[UsesClass(ReflectionToolFactory::class)]
+#[UsesClass(ToolException::class)]
 final class ChainFactoryTest extends TestCase
 {
     private ChainFactory $factory;
 
     protected function setUp(): void
     {
-        $factory1 = (new MemoryFactory())
+        $factory1 = (new MemoryToolFactory())
             ->addTool(ToolNoAttribute1::class, 'reference', 'A reference tool')
             ->addTool(ToolOptionalParam::class, 'optional_param', 'Tool with optional param', 'bar');
-        $factory2 = new ReflectionFactory();
+        $factory2 = new ReflectionToolFactory();
 
         $this->factory = new ChainFactory([$factory1, $factory2]);
     }
@@ -42,25 +42,25 @@ final class ChainFactoryTest extends TestCase
     #[Test]
     public function testGetMetadataNotExistingClass(): void
     {
-        self::expectException(ToolMetadataException::class);
+        self::expectException(ToolException::class);
         self::expectExceptionMessage('The reference "NoClass" is not a valid tool.');
 
-        iterator_to_array($this->factory->getMetadata('NoClass'));
+        iterator_to_array($this->factory->getTool('NoClass'));
     }
 
     #[Test]
     public function testGetMetadataNotConfiguredClass(): void
     {
         self::expectException(ToolConfigurationException::class);
-        self::expectExceptionMessage(sprintf('Method "foo" not found in tool "%s".', ToolMisconfigured::class));
+        self::expectExceptionMessage(\sprintf('Method "foo" not found in tool "%s".', ToolMisconfigured::class));
 
-        iterator_to_array($this->factory->getMetadata(ToolMisconfigured::class));
+        iterator_to_array($this->factory->getTool(ToolMisconfigured::class));
     }
 
     #[Test]
     public function testGetMetadataWithAttributeSingleHit(): void
     {
-        $metadata = iterator_to_array($this->factory->getMetadata(ToolRequiredParams::class));
+        $metadata = iterator_to_array($this->factory->getTool(ToolRequiredParams::class));
 
         self::assertCount(1, $metadata);
     }
@@ -68,7 +68,7 @@ final class ChainFactoryTest extends TestCase
     #[Test]
     public function testGetMetadataOverwrite(): void
     {
-        $metadata = iterator_to_array($this->factory->getMetadata(ToolOptionalParam::class));
+        $metadata = iterator_to_array($this->factory->getTool(ToolOptionalParam::class));
 
         self::assertCount(1, $metadata);
         self::assertSame('optional_param', $metadata[0]->name);
@@ -79,7 +79,7 @@ final class ChainFactoryTest extends TestCase
     #[Test]
     public function testGetMetadataWithAttributeDoubleHit(): void
     {
-        $metadata = iterator_to_array($this->factory->getMetadata(ToolMultiple::class));
+        $metadata = iterator_to_array($this->factory->getTool(ToolMultiple::class));
 
         self::assertCount(2, $metadata);
     }
@@ -87,7 +87,7 @@ final class ChainFactoryTest extends TestCase
     #[Test]
     public function testGetMetadataWithMemorySingleHit(): void
     {
-        $metadata = iterator_to_array($this->factory->getMetadata(ToolNoAttribute1::class));
+        $metadata = iterator_to_array($this->factory->getTool(ToolNoAttribute1::class));
 
         self::assertCount(1, $metadata);
     }

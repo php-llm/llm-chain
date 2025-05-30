@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox\Tool;
 
+use PhpLlm\LlmChain\Chain\Exception\LogicException;
+use PhpLlm\LlmChain\Chain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
-use PhpLlm\LlmChain\Exception\LogicException;
-use PhpLlm\LlmChain\Exception\RuntimeException;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -43,7 +43,7 @@ final readonly class YouTubeTranscriber
         })->text();
 
         // Extract and parse the JSON data from the script
-        $start = strpos($scriptContent, 'var ytInitialPlayerResponse = ') + strlen('var ytInitialPlayerResponse = ');
+        $start = strpos($scriptContent, 'var ytInitialPlayerResponse = ') + \strlen('var ytInitialPlayerResponse = ');
         $dataString = substr($scriptContent, $start);
         $dataString = substr($dataString, 0, strrpos($dataString, ';') ?: null);
         $data = json_decode(trim($dataString), true);
@@ -64,6 +64,6 @@ final readonly class YouTubeTranscriber
             return $node->text().' ';
         });
 
-        return implode(PHP_EOL, $transcript);
+        return implode(\PHP_EOL, $transcript);
     }
 }

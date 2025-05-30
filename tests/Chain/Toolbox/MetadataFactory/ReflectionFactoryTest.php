@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\Toolbox\MetadataFactory;
 
-use PhpLlm\LlmChain\Chain\JsonSchema\DescriptionParser;
-use PhpLlm\LlmChain\Chain\JsonSchema\Factory;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolConfigurationException;
-use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolMetadataException;
-use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
-use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ReflectionFactory;
+use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolException;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\ReflectionToolFactory;
+use PhpLlm\LlmChain\Platform\Contract\JsonSchema\DescriptionParser;
+use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Factory;
+use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
+use PhpLlm\LlmChain\Platform\Tool\Tool;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMultiple;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolWrong;
@@ -20,46 +20,46 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ReflectionFactory::class)]
+#[CoversClass(ReflectionToolFactory::class)]
 #[UsesClass(AsTool::class)]
-#[UsesClass(Metadata::class)]
+#[UsesClass(Tool::class)]
 #[UsesClass(ExecutionReference::class)]
 #[UsesClass(Factory::class)]
 #[UsesClass(DescriptionParser::class)]
 #[UsesClass(ToolConfigurationException::class)]
-#[UsesClass(ToolMetadataException::class)]
+#[UsesClass(ToolException::class)]
 final class ReflectionFactoryTest extends TestCase
 {
-    private ReflectionFactory $factory;
+    private ReflectionToolFactory $factory;
 
     protected function setUp(): void
     {
-        $this->factory = new ReflectionFactory();
+        $this->factory = new ReflectionToolFactory();
     }
 
     #[Test]
     public function invalidReferenceNonExistingClass(): void
     {
-        self::expectException(ToolMetadataException::class);
+        self::expectException(ToolException::class);
         self::expectExceptionMessage('The reference "invalid" is not a valid tool.');
 
-        iterator_to_array($this->factory->getMetadata('invalid')); // @phpstan-ignore-line Yes, this class does not exist
+        iterator_to_array($this->factory->getTool('invalid')); // @phpstan-ignore-line Yes, this class does not exist
     }
 
     #[Test]
     public function withoutAttribute(): void
     {
-        self::expectException(ToolMetadataException::class);
-        self::expectExceptionMessage(sprintf('The class "%s" is not a tool, please add %s attribute.', ToolWrong::class, AsTool::class));
+        self::expectException(ToolException::class);
+        self::expectExceptionMessage(\sprintf('The class "%s" is not a tool, please add %s attribute.', ToolWrong::class, AsTool::class));
 
-        iterator_to_array($this->factory->getMetadata(ToolWrong::class));
+        iterator_to_array($this->factory->getTool(ToolWrong::class));
     }
 
     #[Test]
     public function getDefinition(): void
     {
-        /** @var Metadata[] $metadatas */
-        $metadatas = iterator_to_array($this->factory->getMetadata(ToolRequiredParams::class));
+        /** @var Tool[] $metadatas */
+        $metadatas = iterator_to_array($this->factory->getTool(ToolRequiredParams::class));
 
         self::assertToolConfiguration(
             metadata: $metadatas[0],
@@ -88,7 +88,7 @@ final class ReflectionFactoryTest extends TestCase
     #[Test]
     public function getDefinitionWithMultiple(): void
     {
-        $metadatas = iterator_to_array($this->factory->getMetadata(ToolMultiple::class));
+        $metadatas = iterator_to_array($this->factory->getTool(ToolMultiple::class));
 
         self::assertCount(2, $metadatas);
 
@@ -137,7 +137,7 @@ final class ReflectionFactoryTest extends TestCase
         );
     }
 
-    private function assertToolConfiguration(Metadata $metadata, string $className, string $name, string $description, string $method, array $parameters): void
+    private function assertToolConfiguration(Tool $metadata, string $className, string $name, string $description, string $method, array $parameters): void
     {
         self::assertSame($className, $metadata->reference->class);
         self::assertSame($method, $metadata->reference->method);
