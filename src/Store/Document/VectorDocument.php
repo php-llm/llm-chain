@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Store\Document;
 use PhpLlm\LlmChain\Platform\Vector\VectorInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class VectorDocument
 {
     public function __construct(

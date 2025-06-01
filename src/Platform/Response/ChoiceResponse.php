@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Response;
 
 use PhpLlm\LlmChain\Platform\Exception\InvalidArgumentException;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ChoiceResponse extends BaseResponse
 {
     /**

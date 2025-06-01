@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Response;
 
 use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class BinaryResponse extends BaseResponse
 {
     public function __construct(

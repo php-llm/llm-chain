@@ -10,6 +10,9 @@ use PhpLlm\LlmChain\Platform\ModelClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class LlamaModelClient implements ModelClientInterface
 {
     public function __construct(

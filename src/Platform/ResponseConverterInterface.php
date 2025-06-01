@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform;
 use PhpLlm\LlmChain\Platform\Response\ResponseInterface as LlmResponse;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 interface ResponseConverterInterface
 {
     public function supports(Model $model): bool;

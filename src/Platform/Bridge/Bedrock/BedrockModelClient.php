@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Bedrock;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\Response\ResponseInterface as LlmResponse;
 
+/**
+ * @author Björn Altmann
+ */
 interface BedrockModelClient
 {
     public function supports(Model $model): bool;

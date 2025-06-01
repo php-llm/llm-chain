@@ -15,6 +15,9 @@ use PhpLlm\LlmChain\Platform\Response\TextResponse;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
 
+/**
+ * @author Björn Altmann
+ */
 class NovaHandler implements BedrockModelClient
 {
     public function __construct(

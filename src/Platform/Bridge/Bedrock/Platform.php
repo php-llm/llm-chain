@@ -11,6 +11,9 @@ use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\PlatformInterface;
 use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
 
+/**
+ * @author Björn Altmann
+ */
 class Platform implements PlatformInterface
 {
     /**

@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Contract\JsonSchema\Attribute;
 
 use Webmozart\Assert\Assert;
 
+/**
+ * @author Oskar Stark <oskarstark@googlemail.com>
+ */
 #[\Attribute(\Attribute::TARGET_PARAMETER)]
 final readonly class With
 {

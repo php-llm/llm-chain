@@ -11,6 +11,9 @@ use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Factory;
 use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
 use PhpLlm\LlmChain\Platform\Tool\Tool;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 abstract class AbstractToolFactory implements ToolFactoryInterface
 {
     public function __construct(

@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\OpenAI;
 use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 class DallE extends Model
 {
     public const DALL_E_2 = 'dall-e-2';

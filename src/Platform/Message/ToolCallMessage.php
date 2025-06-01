@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Message;
 
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 
+/**
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 final readonly class ToolCallMessage implements MessageInterface
 {
     public function __construct(

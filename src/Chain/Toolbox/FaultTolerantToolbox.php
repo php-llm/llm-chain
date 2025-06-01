@@ -11,6 +11,8 @@ use PhpLlm\LlmChain\Platform\Tool\Tool;
 
 /**
  * Catches exceptions thrown by the inner tool box and returns error messages for the LLM instead.
+ *
+ * @author Christopher Hertel <mail@christopher-hertel.de>
  */
 final readonly class FaultTolerantToolbox implements ToolboxInterface
 {

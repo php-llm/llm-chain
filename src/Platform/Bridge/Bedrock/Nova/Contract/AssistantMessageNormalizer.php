@@ -10,6 +10,9 @@ use PhpLlm\LlmChain\Platform\Message\AssistantMessage;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class AssistantMessageNormalizer extends ModelContractNormalizer
 {
     protected function supportedDataClass(): string

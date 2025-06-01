@@ -14,6 +14,9 @@ use PhpLlm\LlmChain\Platform\Vector\Vector;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class ModelHandler implements ModelClientInterface, ResponseConverterInterface
 {
     public function __construct(

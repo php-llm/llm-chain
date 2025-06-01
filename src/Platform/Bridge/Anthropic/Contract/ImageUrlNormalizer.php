@@ -10,6 +10,9 @@ use PhpLlm\LlmChain\Platform\Message\Content\Image;
 use PhpLlm\LlmChain\Platform\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ImageUrlNormalizer extends ModelContractNormalizer
 {
     protected function supportedDataClass(): string

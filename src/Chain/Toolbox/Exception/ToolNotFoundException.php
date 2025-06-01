@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Chain\Toolbox\Exception;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ToolNotFoundException extends \RuntimeException implements ExceptionInterface
 {
     public ?ToolCall $toolCall = null;

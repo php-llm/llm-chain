@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Response;
 use PhpLlm\LlmChain\Platform\Response\Exception\RawResponseAlreadySetException;
 use Symfony\Contracts\HttpClient\ResponseInterface as SymfonyHttpResponse;
 
+/**
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 trait RawResponseAwareTrait
 {
     protected ?SymfonyHttpResponse $rawResponse = null;

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\StructuredOutput;
 
+/**
+ * @author Oskar Stark <oskarstark@googlemail.com>
+ */
 interface ResponseFormatFactoryInterface
 {
     /**

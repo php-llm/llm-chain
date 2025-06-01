@@ -8,6 +8,9 @@ use PhpLlm\LlmChain\Platform\Message\Message;
 use PhpLlm\LlmChain\Platform\Response\BaseResponse;
 use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
 
+/**
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 final class StreamResponse extends BaseResponse
 {
     public function __construct(

@@ -12,6 +12,9 @@ use Probots\Pinecone\Client;
 use Probots\Pinecone\Resources\Data\VectorResource;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class Store implements VectorStoreInterface
 {
     /**

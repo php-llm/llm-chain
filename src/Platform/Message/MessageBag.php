@@ -6,6 +6,8 @@ namespace PhpLlm\LlmChain\Platform\Message;
 
 /**
  * @final
+ *
+ * @author Christopher Hertel <mail@christopher-hertel.de>
  */
 class MessageBag implements MessageBagInterface
 {

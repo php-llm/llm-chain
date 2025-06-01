@@ -16,6 +16,9 @@ use PhpLlm\LlmChain\Platform\Response\TextResponse;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
 
+/**
+ * @author Björn Altmann
+ */
 final readonly class ClaudeHandler implements BedrockModelClient
 {
     public function __construct(

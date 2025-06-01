@@ -20,6 +20,9 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+/**
+ * @author Roy Garrido
+ */
 final readonly class ModelHandler implements ModelClientInterface, ResponseConverterInterface
 {
     private EventSourceHttpClient $httpClient;

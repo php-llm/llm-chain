@@ -9,6 +9,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Tool integration of tavily.com.
+ *
+ * @author Christopher Hertel <mail@christopher-hertel.de>
  */
 #[AsTool('tavily_search', description: 'search for information on the internet', method: 'search')]
 #[AsTool('tavily_extract', description: 'fetch content from websites', method: 'extract')]

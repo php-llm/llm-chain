@@ -22,6 +22,10 @@ use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 final class ResponseConverter implements PlatformResponseConverter
 {
     public function supports(Model $model): bool

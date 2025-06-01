@@ -12,6 +12,9 @@ use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class AssistantMessageNormalizer extends ModelContractNormalizer implements NormalizerAwareInterface
 {
     use NormalizerAwareTrait;

@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Chain\Toolbox;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolException;
 use PhpLlm\LlmChain\Platform\Tool\Tool;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 interface ToolFactoryInterface
 {
     /**

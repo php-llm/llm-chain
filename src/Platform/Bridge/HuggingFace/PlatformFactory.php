@@ -11,6 +11,9 @@ use PhpLlm\LlmChain\Platform\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class PlatformFactory
 {
     public static function create(

@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Chain\Toolbox\Exception;
 use PhpLlm\LlmChain\Chain\Exception\InvalidArgumentException;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ToolException extends InvalidArgumentException implements ExceptionInterface
 {
     public static function invalidReference(mixed $reference): self

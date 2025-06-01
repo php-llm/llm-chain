@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 
 use function Symfony\Component\String\u;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 readonly class File implements ContentInterface
 {
     final public function __construct(

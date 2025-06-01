@@ -20,6 +20,9 @@ use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class ResponseConverter implements ResponseConverterInterface
 {
     public function supports(Model $model): bool

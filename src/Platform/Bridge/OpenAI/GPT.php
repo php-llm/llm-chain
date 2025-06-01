@@ -7,6 +7,10 @@ namespace PhpLlm\LlmChain\Platform\Bridge\OpenAI;
 use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ * @author Oskar Stark <oskarstark@googlemail.com>
+ */
 class GPT extends Model
 {
     public const GPT_35_TURBO = 'gpt-3.5-turbo';

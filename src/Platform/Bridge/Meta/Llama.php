@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Meta;
 use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 class Llama extends Model
 {
     public const V3_3_70B_INSTRUCT = 'llama-3.3-70B-Instruct';

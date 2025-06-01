@@ -8,6 +8,9 @@ use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Attribute\With;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 #[AsTool('brave_search', 'Tool that searches the web using Brave Search')]
 final readonly class Brave
 {

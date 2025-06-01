@@ -11,6 +11,9 @@ use PhpLlm\LlmChain\Platform\Vector\Vector;
 use PhpLlm\LlmChain\Store\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 #[AsTool('similarity_search', description: 'Searches for documents similar to a query or sentence.')]
 final class SimilaritySearch
 {

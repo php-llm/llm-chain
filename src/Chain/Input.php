@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Chain;
 use PhpLlm\LlmChain\Platform\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class Input
 {
     /**

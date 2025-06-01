@@ -12,6 +12,9 @@ use PhpLlm\LlmChain\Platform\ResponseConverterInterface;
 use PhpLlm\LlmChain\Platform\Vector\Vector;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class ResponseConverter implements ResponseConverterInterface
 {
     public function supports(Model $model): bool

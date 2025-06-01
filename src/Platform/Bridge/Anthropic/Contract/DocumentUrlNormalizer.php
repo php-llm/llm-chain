@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Platform\Contract\Normalizer\ModelContractNormalizer;
 use PhpLlm\LlmChain\Platform\Message\Content\DocumentUrl;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class DocumentUrlNormalizer extends ModelContractNormalizer
 {
     protected function supportedDataClass(): string

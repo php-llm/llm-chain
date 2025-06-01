@@ -10,6 +10,8 @@ use PhpLlm\LlmChain\Platform\Tool\Tool;
 
 /**
  * @phpstan-import-type JsonSchema from Factory
+ *
+ * @author Christopher Hertel <mail@christopher-hertel.de>
  */
 class ToolNormalizer extends ModelContractNormalizer
 {

@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Platform\Contract;
 use PhpLlm\LlmChain\Platform\Message\Content\Audio;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class AudioNormalizer implements NormalizerInterface
 {
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool

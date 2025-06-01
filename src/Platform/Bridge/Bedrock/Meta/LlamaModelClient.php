@@ -11,6 +11,9 @@ use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Platform\Response\TextResponse;
 
+/**
+ * @author Björn Altmann
+ */
 class LlamaModelClient implements BedrockModelClient
 {
     public function __construct(

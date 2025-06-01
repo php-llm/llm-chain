@@ -16,6 +16,8 @@ use Webmozart\Assert\Assert;
 
 /**
  * @see https://platform.openai.com/docs/api-reference/images/create
+ *
+ * @author Denis Zunke <denis.zunke@gmail.com>
  */
 final readonly class ModelClient implements PlatformResponseFactory, PlatformResponseConverter
 {
