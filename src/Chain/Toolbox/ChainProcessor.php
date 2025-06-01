@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox;
 
-use PhpLlm\LlmChain\Chain\ChainAwareProcessor;
+use PhpLlm\LlmChain\Chain\ChainAwareInterface;
 use PhpLlm\LlmChain\Chain\ChainAwareTrait;
+use PhpLlm\LlmChain\Chain\Exception\MissingModelSupportException;
 use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\InputProcessor;
+use PhpLlm\LlmChain\Chain\InputProcessorInterface;
 use PhpLlm\LlmChain\Chain\Output;
-use PhpLlm\LlmChain\Chain\OutputProcessor;
+use PhpLlm\LlmChain\Chain\OutputProcessorInterface;
 use PhpLlm\LlmChain\Chain\Toolbox\Event\ToolCallsExecuted;
 use PhpLlm\LlmChain\Chain\Toolbox\StreamResponse as ToolboxStreamResponse;
-use PhpLlm\LlmChain\Exception\MissingModelSupport;
-use PhpLlm\LlmChain\Model\Message\AssistantMessage;
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Response\ResponseInterface;
-use PhpLlm\LlmChain\Model\Response\StreamResponse as GenericStreamResponse;
-use PhpLlm\LlmChain\Model\Response\ToolCallResponse;
+use PhpLlm\LlmChain\Platform\Capability;
+use PhpLlm\LlmChain\Platform\Message\AssistantMessage;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
+use PhpLlm\LlmChain\Platform\Response\StreamResponse as GenericStreamResponse;
+use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
+use PhpLlm\LlmChain\Platform\Tool\Tool;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwareProcessor
+final class ChainProcessor implements InputProcessorInterface, OutputProcessorInterface, ChainAwareInterface
 {
     use ChainAwareTrait;
 
@@ -33,11 +35,11 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
 
     public function processInput(Input $input): void
     {
-        if (!$input->llm->supportsToolCalling()) {
-            throw MissingModelSupport::forToolCalling($input->llm::class);
+        if (!$input->model->supports(Capability::TOOL_CALLING)) {
+            throw MissingModelSupportException::forToolCalling($input->model::class);
         }
 
-        $toolMap = $this->toolbox->getMap();
+        $toolMap = $this->toolbox->getTools();
         if ([] === $toolMap) {
             return;
         }
@@ -45,7 +47,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
         $options = $input->getOptions();
         // only filter tool map if list of strings is provided as option
         if (isset($options['tools']) && $this->isFlatStringArray($options['tools'])) {
-            $toolMap = array_values(array_filter($toolMap, fn (Metadata $tool) => in_array($tool->name, $options['tools'], true)));
+            $toolMap = array_values(array_filter($toolMap, fn (Tool $tool) => \in_array($tool->name, $options['tools'], true)));
         }
 
         $options['tools'] = $toolMap;
@@ -75,7 +77,7 @@ final class ChainProcessor implements InputProcessor, OutputProcessor, ChainAwar
      */
     private function isFlatStringArray(array $tools): bool
     {
-        return array_reduce($tools, fn (bool $carry, mixed $item) => $carry && is_string($item), true);
+        return array_reduce($tools, fn (bool $carry, mixed $item) => $carry && \is_string($item), true);
     }
 
     private function handleToolCallsCallback(Output $output): \Closure

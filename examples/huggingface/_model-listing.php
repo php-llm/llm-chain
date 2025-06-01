@@ -1,11 +1,11 @@
 <?php
 
-use PhpLlm\LlmChain\Bridge\HuggingFace\ApiClient;
-use PhpLlm\LlmChain\Bridge\HuggingFace\Model;
+use PhpLlm\LlmChain\Platform\Bridge\HuggingFace\ApiClient;
+use PhpLlm\LlmChain\Platform\Model;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\SingleCommandApplication;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -15,7 +15,7 @@ $app = (new SingleCommandApplication('HuggingFace Model Listing'))
     ->setDescription('Lists all available models on HuggingFace')
     ->addOption('provider', 'p', InputOption::VALUE_REQUIRED, 'Name of the inference provider to filter models by')
     ->addOption('task', 't', InputOption::VALUE_REQUIRED, 'Name of the task to filter models by')
-    ->setCode(function (InputInterface $input, ConsoleOutput $output) {
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
         $io = new SymfonyStyle($input, $output);
         $io->title('HuggingFace Model Listing');
 

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Chain\InputProcessor;
 
 use PhpLlm\LlmChain\Chain\Input;
-use PhpLlm\LlmChain\Chain\InputProcessor;
-use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
+use PhpLlm\LlmChain\Chain\InputProcessorInterface;
 use PhpLlm\LlmChain\Chain\Toolbox\ToolboxInterface;
-use PhpLlm\LlmChain\Model\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Tool\Tool;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-final readonly class SystemPromptInputProcessor implements InputProcessor
+final readonly class SystemPromptInputProcessor implements InputProcessorInterface
 {
     /**
      * @param \Stringable|string    $systemPrompt the system prompt to prepend to the input messages
@@ -38,23 +38,23 @@ final readonly class SystemPromptInputProcessor implements InputProcessor
         $message = (string) $this->systemPrompt;
 
         if ($this->toolbox instanceof ToolboxInterface
-            && [] !== $this->toolbox->getMap()
+            && [] !== $this->toolbox->getTools()
         ) {
             $this->logger->debug('Append tool definitions to system prompt.');
 
-            $tools = implode(PHP_EOL.PHP_EOL, array_map(
-                fn (Metadata $tool) => <<<TOOL
+            $tools = implode(\PHP_EOL.\PHP_EOL, array_map(
+                fn (Tool $tool) => <<<TOOL
                     ## {$tool->name}
                     {$tool->description}
                     TOOL,
-                $this->toolbox->getMap()
+                $this->toolbox->getTools()
             ));
 
             $message = <<<PROMPT
                 {$this->systemPrompt}
-                
+
                 # Available tools
-                
+
                 {$tools}
                 PROMPT;
         }

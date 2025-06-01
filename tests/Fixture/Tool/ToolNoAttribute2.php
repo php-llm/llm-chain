@@ -12,7 +12,7 @@ final class ToolNoAttribute2
      */
     public function buy(int $id, int $amount): string
     {
-        return sprintf('You bought %d of product %d.', $amount, $id);
+        return \sprintf('You bought %d of product %d.', $amount, $id);
     }
 
     /**
@@ -20,6 +20,6 @@ final class ToolNoAttribute2
      */
     public function cancel(string $orderId): string
     {
-        return sprintf('You canceled order %s.', $orderId);
+        return \sprintf('You canceled order %s.', $orderId);
     }
 }

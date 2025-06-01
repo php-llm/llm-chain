@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Chain\Toolbox\Event;
 
 use PhpLlm\LlmChain\Chain\Toolbox\ToolCallResult;
-use PhpLlm\LlmChain\Model\Response\ResponseInterface;
+use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
 
 final class ToolCallsExecuted
 {

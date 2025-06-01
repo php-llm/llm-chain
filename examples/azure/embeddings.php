@@ -1,8 +1,8 @@
 <?php
 
-use PhpLlm\LlmChain\Bridge\Azure\OpenAI\PlatformFactory;
-use PhpLlm\LlmChain\Bridge\OpenAI\Embeddings;
-use PhpLlm\LlmChain\Model\Response\VectorResponse;
+use PhpLlm\LlmChain\Platform\Bridge\Azure\OpenAI\PlatformFactory;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings;
+use PhpLlm\LlmChain\Platform\Response\VectorResponse;
 use Symfony\Component\Dotenv\Dotenv;
 
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
@@ -10,7 +10,7 @@ require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 
 if (empty($_ENV['AZURE_OPENAI_BASEURL']) || empty($_ENV['AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT']) || empty($_ENV['AZURE_OPENAI_EMBEDDINGS_API_VERSION']) || empty($_ENV['AZURE_OPENAI_KEY'])
 ) {
-    echo 'Please set the AZURE_OPENAI_BASEURL, AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT, AZURE_OPENAI_EMBEDDINGS_API_VERSION, and AZURE_OPENAI_KEY environment variables.'.PHP_EOL;
+    echo 'Please set the AZURE_OPENAI_BASEURL, AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT, AZURE_OPENAI_EMBEDDINGS_API_VERSION, and AZURE_OPENAI_KEY environment variables.'.\PHP_EOL;
     exit(1);
 }
 
@@ -30,4 +30,4 @@ $response = $platform->request($embeddings, <<<TEXT
 
 assert($response instanceof VectorResponse);
 
-echo 'Dimensions: '.$response->getContent()[0]->getDimensions().PHP_EOL;
+echo 'Dimensions: '.$response->getContent()[0]->getDimensions().\PHP_EOL;

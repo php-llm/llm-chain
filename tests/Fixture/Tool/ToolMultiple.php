@@ -15,7 +15,7 @@ final class ToolMultiple
      */
     public function hello(string $world): string
     {
-        return sprintf('Hello "%s".', $world);
+        return \sprintf('Hello "%s".', $world);
     }
 
     /**
@@ -24,6 +24,6 @@ final class ToolMultiple
      */
     public function bar(string $text, int $number): string
     {
-        return sprintf('%s says "%d".', $text, $number);
+        return \sprintf('%s says "%d".', $text, $number);
     }
 }

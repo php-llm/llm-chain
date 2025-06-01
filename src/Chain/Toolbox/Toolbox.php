@@ -6,20 +6,25 @@ namespace PhpLlm\LlmChain\Chain\Toolbox;
 
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolExecutionException;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolNotFoundException;
-use PhpLlm\LlmChain\Chain\Toolbox\MetadataFactory\ReflectionFactory;
-use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Chain\Toolbox\ToolFactory\ReflectionToolFactory;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Tool\Tool;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 final class Toolbox implements ToolboxInterface
 {
     /**
+     * List of executable tools.
+     *
      * @var list<mixed>
      */
     private readonly array $tools;
 
     /**
-     * @var Metadata[]
+     * List of tool metadata objects.
+     *
+     * @var Tool[]
      */
     private array $map;
 
@@ -27,7 +32,7 @@ final class Toolbox implements ToolboxInterface
      * @param iterable<mixed> $tools
      */
     public function __construct(
-        private readonly MetadataFactory $metadataFactory,
+        private readonly ToolFactoryInterface $toolFactory,
         iterable $tools,
         private readonly LoggerInterface $logger = new NullLogger(),
     ) {
@@ -36,10 +41,10 @@ final class Toolbox implements ToolboxInterface
 
     public static function create(object ...$tools): self
     {
-        return new self(new ReflectionFactory(), $tools);
+        return new self(new ReflectionToolFactory(), $tools);
     }
 
-    public function getMap(): array
+    public function getTools(): array
     {
         if (isset($this->map)) {
             return $this->map;
@@ -47,7 +52,7 @@ final class Toolbox implements ToolboxInterface
 
         $map = [];
         foreach ($this->tools as $tool) {
-            foreach ($this->metadataFactory->getMetadata($tool::class) as $metadata) {
+            foreach ($this->toolFactory->getTool($tool::class) as $metadata) {
                 $map[] = $metadata;
             }
         }
@@ -58,22 +63,22 @@ final class Toolbox implements ToolboxInterface
     public function execute(ToolCall $toolCall): mixed
     {
         $metadata = $this->getMetadata($toolCall);
-        $tool = $this->getTool($metadata);
+        $tool = $this->getExecutable($metadata);
 
         try {
-            $this->logger->debug(sprintf('Executing tool "%s".', $toolCall->name), $toolCall->arguments);
+            $this->logger->debug(\sprintf('Executing tool "%s".', $toolCall->name), $toolCall->arguments);
             $result = $tool->{$metadata->reference->method}(...$toolCall->arguments);
         } catch (\Throwable $e) {
-            $this->logger->warning(sprintf('Failed to execute tool "%s".', $toolCall->name), ['exception' => $e]);
+            $this->logger->warning(\sprintf('Failed to execute tool "%s".', $toolCall->name), ['exception' => $e]);
             throw ToolExecutionException::executionFailed($toolCall, $e);
         }
 
         return $result;
     }
 
-    private function getMetadata(ToolCall $toolCall): Metadata
+    private function getMetadata(ToolCall $toolCall): Tool
     {
-        foreach ($this->getMap() as $metadata) {
+        foreach ($this->getTools() as $metadata) {
             if ($metadata->name === $toolCall->name) {
                 return $metadata;
             }
@@ -82,7 +87,7 @@ final class Toolbox implements ToolboxInterface
         throw ToolNotFoundException::notFoundForToolCall($toolCall);
     }
 
-    private function getTool(Metadata $metadata): object
+    private function getExecutable(Tool $metadata): object
     {
         foreach ($this->tools as $tool) {
             if ($tool instanceof $metadata->reference->class) {

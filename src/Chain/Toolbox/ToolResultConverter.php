@@ -15,16 +15,16 @@ final readonly class ToolResultConverter
             return null;
         }
 
-        if ($result instanceof \JsonSerializable || is_array($result)) {
-            return json_encode($result, flags: JSON_THROW_ON_ERROR);
+        if ($result instanceof \JsonSerializable || \is_array($result)) {
+            return json_encode($result, flags: \JSON_THROW_ON_ERROR);
         }
 
-        if (is_float($result) || $result instanceof \Stringable) {
+        if (\is_float($result) || $result instanceof \Stringable) {
             return (string) $result;
         }
 
         if ($result instanceof \DateTimeInterface) {
-            return $result->format(DATE_ATOM);
+            return $result->format(\DATE_ATOM);
         }
 
         return $result;

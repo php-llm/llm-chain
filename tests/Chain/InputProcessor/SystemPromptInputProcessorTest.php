@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Tests\Chain\InputProcessor;
 
-use PhpLlm\LlmChain\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessor\SystemPromptInputProcessor;
-use PhpLlm\LlmChain\Chain\Toolbox\ExecutionReference;
-use PhpLlm\LlmChain\Chain\Toolbox\Metadata;
 use PhpLlm\LlmChain\Chain\Toolbox\ToolboxInterface;
-use PhpLlm\LlmChain\Model\Message\Content\Text;
-use PhpLlm\LlmChain\Model\Message\Message;
-use PhpLlm\LlmChain\Model\Message\MessageBag;
-use PhpLlm\LlmChain\Model\Message\SystemMessage;
-use PhpLlm\LlmChain\Model\Message\UserMessage;
-use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\GPT;
+use PhpLlm\LlmChain\Platform\Message\Content\Text;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
+use PhpLlm\LlmChain\Platform\Message\SystemMessage;
+use PhpLlm\LlmChain\Platform\Message\UserMessage;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
+use PhpLlm\LlmChain\Platform\Tool\Tool;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoParams;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolRequiredParams;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -32,7 +32,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(SystemMessage::class)]
 #[UsesClass(UserMessage::class)]
 #[UsesClass(Text::class)]
-#[UsesClass(Metadata::class)]
+#[UsesClass(Tool::class)]
 #[UsesClass(ExecutionReference::class)]
 #[Small]
 final class SystemPromptInputProcessorTest extends TestCase
@@ -77,7 +77,7 @@ final class SystemPromptInputProcessorTest extends TestCase
         $processor = new SystemPromptInputProcessor(
             'This is a system prompt',
             new class implements ToolboxInterface {
-                public function getMap(): array
+                public function getTools(): array
                 {
                     return [];
                 }
@@ -105,11 +105,11 @@ final class SystemPromptInputProcessorTest extends TestCase
         $processor = new SystemPromptInputProcessor(
             'This is a system prompt',
             new class implements ToolboxInterface {
-                public function getMap(): array
+                public function getTools(): array
                 {
                     return [
-                        new Metadata(new ExecutionReference(ToolNoParams::class), 'tool_no_params', 'A tool without parameters', null),
-                        new Metadata(
+                        new Tool(new ExecutionReference(ToolNoParams::class), 'tool_no_params', 'A tool without parameters', null),
+                        new Tool(
                             new ExecutionReference(ToolRequiredParams::class, 'bar'),
                             'tool_required_params',
                             <<<DESCRIPTION
@@ -137,12 +137,12 @@ final class SystemPromptInputProcessorTest extends TestCase
         self::assertInstanceOf(UserMessage::class, $messages[1]);
         self::assertSame(<<<PROMPT
             This is a system prompt
-            
+
             # Available tools
-            
+
             ## tool_no_params
             A tool without parameters
-            
+
             ## tool_required_params
             A tool with required parameters
             or not
@@ -155,10 +155,10 @@ final class SystemPromptInputProcessorTest extends TestCase
         $processor = new SystemPromptInputProcessor(
             new SystemPromptService(),
             new class implements ToolboxInterface {
-                public function getMap(): array
+                public function getTools(): array
                 {
                     return [
-                        new Metadata(new ExecutionReference(ToolNoParams::class), 'tool_no_params', 'A tool without parameters', null),
+                        new Tool(new ExecutionReference(ToolNoParams::class), 'tool_no_params', 'A tool without parameters', null),
                     ];
                 }
 
@@ -178,9 +178,9 @@ final class SystemPromptInputProcessorTest extends TestCase
         self::assertInstanceOf(UserMessage::class, $messages[1]);
         self::assertSame(<<<PROMPT
             My dynamic system prompt.
-            
+
             # Available tools
-            
+
             ## tool_no_params
             A tool without parameters
             PROMPT, $messages[0]->content);

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain;
 
-use PhpLlm\LlmChain\Model\LanguageModel;
-use PhpLlm\LlmChain\Model\Message\MessageBagInterface;
+use PhpLlm\LlmChain\Platform\Message\MessageBagInterface;
+use PhpLlm\LlmChain\Platform\Model;
 
 final class Input
 {
@@ -13,7 +13,7 @@ final class Input
      * @param array<string, mixed> $options
      */
     public function __construct(
-        public LanguageModel $llm,
+        public Model $model,
         public MessageBagInterface $messages,
         private array $options,
     ) {

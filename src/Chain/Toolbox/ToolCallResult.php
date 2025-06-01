@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox;
 
-use PhpLlm\LlmChain\Model\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
 
 final readonly class ToolCallResult
 {
