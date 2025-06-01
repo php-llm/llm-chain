@@ -27,7 +27,10 @@ class Platform implements PlatformInterface
     ) {
         $this->contract = $contract ?? Contract::create(
             new AnthropicContract\AssistantMessageNormalizer(),
+            new AnthropicContract\DocumentNormalizer(),
+            new AnthropicContract\DocumentUrlNormalizer(),
             new AnthropicContract\ImageNormalizer(),
+            new AnthropicContract\ImageUrlNormalizer(),
             new AnthropicContract\MessageBagNormalizer(),
             new AnthropicContract\ToolCallMessageNormalizer(),
             new AnthropicContract\ToolNormalizer(),

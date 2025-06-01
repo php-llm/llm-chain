@@ -6,16 +6,14 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract;
 
 use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Claude;
 use PhpLlm\LlmChain\Platform\Contract\Normalizer\ModelContractNormalizer;
-use PhpLlm\LlmChain\Platform\Message\Content\Image;
+use PhpLlm\LlmChain\Platform\Message\Content\DocumentUrl;
 use PhpLlm\LlmChain\Platform\Model;
 
-use function Symfony\Component\String\u;
-
-final class ImageNormalizer extends ModelContractNormalizer
+final class DocumentUrlNormalizer extends ModelContractNormalizer
 {
     protected function supportedDataClass(): string
     {
-        return Image::class;
+        return DocumentUrl::class;
     }
 
     protected function supportsModel(Model $model): bool
@@ -24,18 +22,17 @@ final class ImageNormalizer extends ModelContractNormalizer
     }
 
     /**
-     * @param Image $data
+     * @param DocumentUrl $data
      *
-     * @return array{type: 'image', source: array{type: 'base64', media_type: string, data: string}}
+     * @return array{type: 'document', source: array{type: 'url', url: string}}
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
         return [
-            'type' => 'image',
+            'type' => 'document',
             'source' => [
-                'type' => 'base64',
-                'media_type' => u($data->getFormat())->replace('jpg', 'jpeg')->toString(),
-                'data' => $data->asBase64(),
+                'type' => 'url',
+                'url' => $data->url,
             ],
         ];
     }
