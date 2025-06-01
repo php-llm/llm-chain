@@ -68,9 +68,11 @@ $embeddings = new Embeddings();
   * [Google's Gemini](https://gemini.google.com/) with [Google](https://ai.google.dev/) and [OpenRouter](https://www.openrouter.com/) as Platform
   * [DeepSeek's R1](https://www.deepseek.com/) with [OpenRouter](https://www.openrouter.com/) as Platform
   * [Amazon's Nova](https://nova.amazon.com) with [AWS](https://aws.amazon.com/bedrock/) as Platform
+  * [Mistral's Mistral](https://www.mistral.ai/) with [Mistral](https://www.mistral.ai/) as Platform
 * Embeddings Models
   * [OpenAI's Text Embeddings](https://platform.openai.com/docs/guides/embeddings/embedding-models) with [OpenAI](https://platform.openai.com/docs/overview) and [Azure](https://learn.microsoft.com/azure/ai-services/openai/concepts/models) as Platform
   * [Voyage's Embeddings](https://docs.voyageai.com/docs/embeddings) with [Voyage](https://www.voyageai.com/) as Platform
+  * [Mistral Embed](https://www.mistral.ai/) with [Mistral](https://www.mistral.ai/) as Platform
 * Other Models
   * [OpenAI's Dall·E](https://platform.openai.com/docs/guides/image-generation) with [OpenAI](https://platform.openai.com/docs/overview) as Platform
   * [OpenAI's Whisper](https://platform.openai.com/docs/guides/speech-to-text) with [OpenAI](https://platform.openai.com/docs/overview) and [Azure](https://learn.microsoft.com/azure/ai-services/openai/concepts/models) as Platform
@@ -137,6 +139,7 @@ $response = $chain->call($messages, [
 1. [Meta's Llama with Replicate](examples/replicate/chat-llama.php)
 1. [Google's Gemini with Google](examples/google/chat.php)
 1. [Google's Gemini with OpenRouter](examples/openrouter/chat-gemini.php)
+1. [Mistral's Mistral with Mistral](examples/mistral/chat-mistral.php)
 
 ### Tools
 
@@ -409,7 +412,7 @@ use PhpLlm\LlmChain\Platform\Message\MessageBag;
 
 // Initialize Platform & Models
 
-$similaritySearch = new SimilaritySearch($embeddings, $store);
+$similaritySearch = new SimilaritySearch($model, $store);
 $toolbox = Toolbox::create($similaritySearch);
 $processor = new Chain($toolbox);
 $chain = new Chain($platform, $model, [$processor], [$processor]);
@@ -547,6 +550,7 @@ needs to be used.
 
 1. [Streaming Claude](examples/anthropic/stream.php)
 1. [Streaming GPT](examples/openai/stream.php)
+1. [Streaming Mistral](examples/mistral/stream.php)
 
 ### Image Processing
 
@@ -623,6 +627,7 @@ dump($vectors[0]->getData()); // Array of float values
 
 1. [OpenAI's Emebddings](examples/openai/embeddings.php)
 1. [Voyage's Embeddings](examples/voyage/embeddings.php)
+1. [Mistral's Embed](examples/mistral/embeddings.php)
 
 ### Parallel Platform Calls
 
