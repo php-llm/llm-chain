@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\OpenAI;
 
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 class Embeddings extends Model
 {
     public const TEXT_ADA_002 = 'text-embedding-ada-002';

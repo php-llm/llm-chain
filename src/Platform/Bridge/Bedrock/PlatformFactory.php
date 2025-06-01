@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Platform\Bridge\Bedrock\Anthropic\ClaudeHandler;
 use PhpLlm\LlmChain\Platform\Bridge\Bedrock\Meta\LlamaModelClient;
 use PhpLlm\LlmChain\Platform\Bridge\Bedrock\Nova\NovaHandler;
 
+/**
+ * @author Björn Altmann
+ */
 final readonly class PlatformFactory
 {
     public static function create(

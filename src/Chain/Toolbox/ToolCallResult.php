@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Chain\Toolbox;
 
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class ToolCallResult
 {
     public function __construct(

@@ -14,6 +14,9 @@ use Psr\Log\NullLogger;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\ClockInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class Embedder
 {
     private ClockInterface $clock;

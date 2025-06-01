@@ -25,6 +25,9 @@ use PhpLlm\LlmChain\Platform\ResponseConverterInterface as PlatformResponseConve
 use PhpLlm\LlmChain\Platform\Vector\Vector;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class ResponseConverter implements PlatformResponseConverter
 {
     public function supports(Model $model): bool

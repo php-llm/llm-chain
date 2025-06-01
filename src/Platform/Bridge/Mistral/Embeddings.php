@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Mistral;
 use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class Embeddings extends Model
 {
     public const MISTRAL_EMBED = 'mistral-embed';

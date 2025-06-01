@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Response;
 
 use PhpLlm\LlmChain\Platform\Vector\Vector;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class VectorResponse extends BaseResponse
 {
     /**

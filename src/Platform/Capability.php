@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 class Capability
 {
     // INPUT

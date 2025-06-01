@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform\Bridge\HuggingFace\Output;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class QuestionAnsweringResult
 {
     public function __construct(

@@ -12,6 +12,9 @@ use PhpLlm\LlmChain\Platform\Tool\Tool;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class Toolbox implements ToolboxInterface
 {
     /**

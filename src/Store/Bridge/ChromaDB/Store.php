@@ -11,6 +11,9 @@ use PhpLlm\LlmChain\Store\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class Store implements VectorStoreInterface
 {
     public function __construct(

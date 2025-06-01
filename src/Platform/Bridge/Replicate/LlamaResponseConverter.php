@@ -12,6 +12,9 @@ use PhpLlm\LlmChain\Platform\Response\TextResponse;
 use PhpLlm\LlmChain\Platform\ResponseConverterInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class LlamaResponseConverter implements ResponseConverterInterface
 {
     public function supports(Model $model): bool

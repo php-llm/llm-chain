@@ -11,6 +11,9 @@ use PhpLlm\LlmChain\Platform\Message\Content\Text;
 use PhpLlm\LlmChain\Platform\Message\UserMessage;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class UserMessageNormalizer extends ModelContractNormalizer
 {
     protected function supportedDataClass(): string

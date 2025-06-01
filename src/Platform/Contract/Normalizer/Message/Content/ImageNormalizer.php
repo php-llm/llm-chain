@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\Content;
 use PhpLlm\LlmChain\Platform\Message\Content\Image;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ImageNormalizer implements NormalizerInterface
 {
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool

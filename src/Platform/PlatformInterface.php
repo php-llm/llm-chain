@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform;
 
 use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 interface PlatformInterface
 {
     /**

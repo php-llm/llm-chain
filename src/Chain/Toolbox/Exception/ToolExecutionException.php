@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Chain\Toolbox\Exception;
 
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ToolExecutionException extends \RuntimeException implements ExceptionInterface
 {
     public ?ToolCall $toolCall = null;

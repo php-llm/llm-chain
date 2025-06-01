@@ -8,6 +8,9 @@ use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessorInterface;
 use PhpLlm\LlmChain\Platform\Response\StreamResponse;
 
+/**
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 final class TokenOutputProcessor implements OutputProcessorInterface
 {
     public function processOutput(Output $output): void

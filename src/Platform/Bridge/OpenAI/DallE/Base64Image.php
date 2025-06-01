@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\OpenAI\DallE;
 
 use Webmozart\Assert\Assert;
 
+/**
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 final readonly class Base64Image
 {
     public function __construct(

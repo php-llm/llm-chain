@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Contract\Normalizer\Message;
 use PhpLlm\LlmChain\Platform\Message\SystemMessage;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class SystemMessageNormalizer implements NormalizerInterface
 {
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool

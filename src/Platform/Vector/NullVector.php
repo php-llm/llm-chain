@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Vector;
 
 use PhpLlm\LlmChain\Store\Exception\RuntimeException;
 
+/**
+ * @author Oskar Stark <oskarstark@googlemail.com>
+ */
 final class NullVector implements VectorInterface
 {
     public function getData(): array

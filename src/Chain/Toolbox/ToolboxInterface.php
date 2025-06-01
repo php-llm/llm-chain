@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolNotFoundException;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Tool\Tool;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 interface ToolboxInterface
 {
     /**

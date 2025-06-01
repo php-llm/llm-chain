@@ -20,6 +20,9 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ChainProcessor implements InputProcessorInterface, OutputProcessorInterface
 {
     private string $outputStructure;

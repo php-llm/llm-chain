@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Bedrock\Nova;
 use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Björn Altmann
+ */
 final class Nova extends Model
 {
     public const MICRO = 'nova-micro';

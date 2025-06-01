@@ -8,6 +8,9 @@ use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Attribute\With;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 #[AsTool(name: 'weather_current', description: 'get current weather for a location', method: 'current')]
 #[AsTool(name: 'weather_forecast', description: 'get weather forecast for a location', method: 'forecast')]
 final readonly class OpenMeteo

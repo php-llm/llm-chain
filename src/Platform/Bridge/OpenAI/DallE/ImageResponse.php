@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\OpenAI\DallE;
 
 use PhpLlm\LlmChain\Platform\Response\BaseResponse;
 
+/**
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 class ImageResponse extends BaseResponse
 {
     /** @var list<Base64Image|UrlImage> */

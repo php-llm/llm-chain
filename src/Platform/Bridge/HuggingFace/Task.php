@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform\Bridge\HuggingFace;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 interface Task
 {
     public const AUDIO_CLASSIFICATION = 'audio-classification';

@@ -22,6 +22,9 @@ use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
 use PhpLlm\LlmChain\Platform\Tool\Tool;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ChainProcessor implements InputProcessorInterface, OutputProcessorInterface, ChainAwareInterface
 {
     use ChainAwareTrait;

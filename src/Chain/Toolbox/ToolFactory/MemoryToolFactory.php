@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Chain\Toolbox\ToolFactory;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolException;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class MemoryToolFactory extends AbstractToolFactory
 {
     /**

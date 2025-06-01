@@ -8,6 +8,10 @@ use PhpLlm\LlmChain\Platform\Response\Exception\RawResponseAlreadySetException;
 use PhpLlm\LlmChain\Platform\Response\Metadata\Metadata;
 use Symfony\Contracts\HttpClient\ResponseInterface as SymfonyHttpResponse;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 interface ResponseInterface
 {
     /**

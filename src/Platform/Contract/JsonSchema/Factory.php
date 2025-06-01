@@ -42,6 +42,8 @@ use Symfony\Component\TypeInfo\TypeResolver\TypeResolver;
  *     required: list<string>,
  *     additionalProperties: false,
  * }
+ *
+ * @author Christopher Hertel <mail@christopher-hertel.de>
  */
 final readonly class Factory
 {

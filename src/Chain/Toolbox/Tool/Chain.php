@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Platform\Message\Message;
 use PhpLlm\LlmChain\Platform\Message\MessageBag;
 use PhpLlm\LlmChain\Platform\Response\TextResponse;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class Chain
 {
     public function __construct(

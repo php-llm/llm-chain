@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Platform\Message\Content\ContentInterface;
 use PhpLlm\LlmChain\Platform\Message\Content\Image;
 use PhpLlm\LlmChain\Platform\Message\Content\ImageUrl;
 
+/**
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 final readonly class UserMessage implements MessageInterface
 {
     /**

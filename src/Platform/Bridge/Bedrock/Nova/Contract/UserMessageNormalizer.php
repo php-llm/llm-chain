@@ -14,6 +14,9 @@ use PhpLlm\LlmChain\Platform\Model;
 
 use function Symfony\Component\String\u;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class UserMessageNormalizer extends ModelContractNormalizer
 {
     protected function supportedDataClass(): string

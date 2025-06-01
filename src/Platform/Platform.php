@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Platform\Response\AsyncResponse;
 use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class Platform implements PlatformInterface
 {
     /**

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Store;
 
+/**
+ * @author Oskar Stark <oskarstark@googlemail.com>
+ */
 interface InitializableStoreInterface extends StoreInterface
 {
     /**

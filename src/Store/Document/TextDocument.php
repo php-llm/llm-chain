@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Store\Document;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class TextDocument
 {
     public function __construct(

@@ -19,6 +19,9 @@ use PhpLlm\LlmChain\Platform\Tool\Tool;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class Contract
 {
     public const CONTEXT_MODEL = 'model';

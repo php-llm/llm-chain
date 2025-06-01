@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Message;
 
 use OskarStark\Enum\Trait\Comparable;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 enum Role: string
 {
     use Comparable;

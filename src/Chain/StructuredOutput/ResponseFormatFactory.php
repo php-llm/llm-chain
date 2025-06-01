@@ -8,6 +8,9 @@ use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Factory;
 
 use function Symfony\Component\String\u;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class ResponseFormatFactory implements ResponseFormatFactoryInterface
 {
     public function __construct(

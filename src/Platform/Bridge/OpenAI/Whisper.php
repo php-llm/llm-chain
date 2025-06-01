@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\OpenAI;
 use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 class Whisper extends Model
 {
     public const WHISPER_1 = 'whisper-1';

@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Google;
 use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Roy Garrido
+ */
 class Gemini extends Model
 {
     public const GEMINI_2_FLASH = 'gemini-2.0-flash';

@@ -10,6 +10,9 @@ use PhpLlm\LlmChain\Platform\Contract\Normalizer\ModelContractNormalizer;
 use PhpLlm\LlmChain\Platform\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class MessageBagNormalizer extends ModelContractNormalizer
 {
     public function __construct(

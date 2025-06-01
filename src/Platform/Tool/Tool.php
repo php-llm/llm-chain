@@ -8,6 +8,8 @@ use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Factory;
 
 /**
  * @phpstan-import-type JsonSchema from Factory
+ *
+ * @author Christopher Hertel <mail@christopher-hertel.de>
  */
 final readonly class Tool
 {

@@ -8,6 +8,10 @@ use PhpLlm\LlmChain\Platform\Message\Content\ContentInterface;
 use PhpLlm\LlmChain\Platform\Message\Content\Text;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ * @author Denis Zunke <denis.zunke@gmail.com>
+ */
 final readonly class Message
 {
     // Disabled by default, just a bridge to the specific messages

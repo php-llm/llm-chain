@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Chain\Toolbox\Tool;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 #[AsTool('wikipedia_search', description: 'Searches Wikipedia for a given query', method: 'search')]
 #[AsTool('wikipedia_article', description: 'Retrieves a Wikipedia article by its title', method: 'article')]
 final readonly class Wikipedia

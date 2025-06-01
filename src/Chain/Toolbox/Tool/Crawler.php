@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 #[AsTool('crawler', 'A tool that crawls one page of a website and returns the visible text of it.')]
 final readonly class Crawler
 {

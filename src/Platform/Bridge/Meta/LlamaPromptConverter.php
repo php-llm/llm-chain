@@ -12,6 +12,9 @@ use PhpLlm\LlmChain\Platform\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Platform\Message\SystemMessage;
 use PhpLlm\LlmChain\Platform\Message\UserMessage;
 
+/**
+ * @author Oskar Stark <oskarstark@googlemail.com>
+ */
 final class LlamaPromptConverter
 {
     public function convertToPrompt(MessageBagInterface $messageBag): string

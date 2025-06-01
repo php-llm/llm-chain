@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Voyage;
 use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 class Voyage extends Model
 {
     public const V3 = 'voyage-3';

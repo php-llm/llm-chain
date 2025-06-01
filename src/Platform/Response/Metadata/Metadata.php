@@ -7,6 +7,8 @@ namespace PhpLlm\LlmChain\Platform\Response\Metadata;
 /**
  * @implements \IteratorAggregate<string, mixed>
  * @implements \ArrayAccess<string, mixed>
+ *
+ * @author Denis Zunke <denis.zunke@gmail.com>
  */
 class Metadata implements \JsonSerializable, \Countable, \IteratorAggregate, \ArrayAccess
 {

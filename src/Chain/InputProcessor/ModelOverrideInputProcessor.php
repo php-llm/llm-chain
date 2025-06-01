@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessorInterface;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ModelOverrideInputProcessor implements InputProcessorInterface
 {
     public function processInput(Input $input): void

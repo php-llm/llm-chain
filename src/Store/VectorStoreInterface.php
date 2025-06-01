@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Store;
 use PhpLlm\LlmChain\Platform\Vector\Vector;
 use PhpLlm\LlmChain\Store\Document\VectorDocument;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 interface VectorStoreInterface extends StoreInterface
 {
     /**

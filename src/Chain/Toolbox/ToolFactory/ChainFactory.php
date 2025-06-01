@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Chain\Toolbox\ToolFactory;
 use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolException;
 use PhpLlm\LlmChain\Chain\Toolbox\ToolFactoryInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final readonly class ChainFactory implements ToolFactoryInterface
 {
     /**

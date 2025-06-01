@@ -9,6 +9,9 @@ use PhpLlm\LlmChain\Platform\Response\Metadata\MetadataAwareTrait;
 use PhpLlm\LlmChain\Platform\ResponseConverterInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class AsyncResponse implements ResponseInterface
 {
     use MetadataAwareTrait;

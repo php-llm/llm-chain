@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform\Vector;
 
 use PhpLlm\LlmChain\Store\Exception\InvalidArgumentException;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class Vector implements VectorInterface
 {
     /**

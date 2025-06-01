@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Anthropic;
 use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Model;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 class Claude extends Model
 {
     public const HAIKU_3 = 'claude-3-haiku-20240307';

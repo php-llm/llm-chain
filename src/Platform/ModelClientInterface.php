@@ -6,6 +6,9 @@ namespace PhpLlm\LlmChain\Platform;
 
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 interface ModelClientInterface
 {
     public function supports(Model $model): bool;

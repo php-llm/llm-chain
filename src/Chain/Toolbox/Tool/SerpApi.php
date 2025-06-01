@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Chain\Toolbox\Tool;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 #[AsTool(name: 'serpapi', description: 'search for information on the internet')]
 final readonly class SerpApi
 {

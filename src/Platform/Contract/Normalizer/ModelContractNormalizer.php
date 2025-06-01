@@ -6,6 +6,9 @@ use PhpLlm\LlmChain\Platform\Contract;
 use PhpLlm\LlmChain\Platform\Model;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 abstract class ModelContractNormalizer implements NormalizerInterface
 {
     /**

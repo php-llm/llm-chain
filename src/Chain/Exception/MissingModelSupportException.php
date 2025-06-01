@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Exception;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class MissingModelSupportException extends RuntimeException
 {
     private function __construct(string $model, string $support)

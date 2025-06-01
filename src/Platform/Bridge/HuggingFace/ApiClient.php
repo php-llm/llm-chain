@@ -8,6 +8,9 @@ use PhpLlm\LlmChain\Platform\Model;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ApiClient
 {
     public function __construct(

@@ -9,6 +9,8 @@ use PhpLlm\LlmChain\Chain\Toolbox\Exception\ToolException;
 
 /**
  * Metadata factory that uses reflection in combination with `#[AsTool]` attribute to extract metadata from tools.
+ *
+ * @author Christopher Hertel <mail@christopher-hertel.de>
  */
 final class ReflectionToolFactory extends AbstractToolFactory
 {

@@ -7,6 +7,9 @@ namespace PhpLlm\LlmChain\Platform\Contract\Normalizer\Response;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+/**
+ * @author Christopher Hertel <mail@christopher-hertel.de>
+ */
 final class ToolCallNormalizer implements NormalizerInterface
 {
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
