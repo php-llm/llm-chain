@@ -6,9 +6,9 @@ namespace PhpLlm\LlmChain\Chain;
 
 trait ChainAwareTrait
 {
-    private Chain $chain;
+    private ChainInterface $chain;
 
-    public function setChain(Chain $chain): void
+    public function setChain(ChainInterface $chain): void
     {
         $this->chain = $chain;
     }

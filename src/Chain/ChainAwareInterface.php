@@ -6,5 +6,5 @@ namespace PhpLlm\LlmChain\Chain;
 
 interface ChainAwareInterface
 {
-    public function setChain(Chain $chain): void;
+    public function setChain(ChainInterface $chain): void;
 }
