@@ -27,4 +27,12 @@ trait RawResponseAwareTrait
     {
         return $this->rawResponse;
     }
+
+    public function __serialize(): array
+    {
+        $data = get_object_vars($this);
+        unset($data['rawResponse']);
+
+        return $data;
+    }
 }
