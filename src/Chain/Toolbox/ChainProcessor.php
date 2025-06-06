@@ -33,6 +33,7 @@ final class ChainProcessor implements InputProcessorInterface, OutputProcessorIn
         private readonly ToolboxInterface $toolbox,
         private readonly ToolResultConverter $resultConverter = new ToolResultConverter(),
         private readonly ?EventDispatcherInterface $eventDispatcher = null,
+        private readonly bool $keepToolMessages = false,
     ) {
     }
 
@@ -86,7 +87,7 @@ final class ChainProcessor implements InputProcessorInterface, OutputProcessorIn
     private function handleToolCallsCallback(Output $output): \Closure
     {
         return function (ToolCallResponse $response, ?AssistantMessage $streamedAssistantResponse = null) use ($output): ResponseInterface {
-            $messages = clone $output->messages;
+            $messages = $this->keepToolMessages ? $output->messages : clone $output->messages;
 
             if (null !== $streamedAssistantResponse && '' !== $streamedAssistantResponse->content) {
                 $messages->add($streamedAssistantResponse);

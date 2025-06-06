@@ -347,6 +347,34 @@ $eventDispatcher->addListener(ToolCallsExecuted::class, function (ToolCallsExecu
 });
 ```
 
+#### Keeping Tool Messages
+
+Sometimes you might wish to keep the tool messages (`AssistantMessage` containing the `toolCalls` and `ToolCallMessage` containing the response) in the context.
+Enable the `keepToolMessages` flag of the toolbox' `ChainProcessor` to ensure those messages will be added to your `MessageBag`.
+
+```php
+use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
+
+// Platform & LLM instantiation
+$messages = new MessageBag(
+    Message::forSystem(<<<PROMPT
+        Please answer all user questions only using the similary_search tool. Do not add information and if you cannot
+        find an answer, say so.
+        PROMPT),
+    Message::ofUser('...') // The user's question.
+);
+
+$yourTool = new YourTool();
+
+$toolbox = Toolbox::create($yourTool);
+$toolProcessor = new ChainProcessor($toolbox, keepToolMessages: true);
+
+$chain = new Chain($platform, $llm, inputProcessor: [$toolProcessor], outputProcessor: [$toolProcessor]);
+$response = $chain->call($messages);
+// $messages will now include the tool messages
+```
+
 #### Code Examples (with built-in tools)
 
 1. [Brave Tool](examples/toolbox/brave.php)
