@@ -6,6 +6,8 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Google;
 
 use PhpLlm\LlmChain\Platform\Bridge\Google\Contract\AssistantMessageNormalizer;
 use PhpLlm\LlmChain\Platform\Bridge\Google\Contract\MessageBagNormalizer;
+use PhpLlm\LlmChain\Platform\Bridge\Google\Contract\ToolCallMessageNormalizer;
+use PhpLlm\LlmChain\Platform\Bridge\Google\Contract\ToolNormalizer;
 use PhpLlm\LlmChain\Platform\Bridge\Google\Contract\UserMessageNormalizer;
 use PhpLlm\LlmChain\Platform\Contract;
 use PhpLlm\LlmChain\Platform\Platform;
@@ -28,6 +30,8 @@ final readonly class PlatformFactory
         return new Platform([$responseHandler], [$responseHandler], Contract::create(
             new AssistantMessageNormalizer(),
             new MessageBagNormalizer(),
+            new ToolNormalizer(),
+            new ToolCallMessageNormalizer(),
             new UserMessageNormalizer(),
         ));
     }
