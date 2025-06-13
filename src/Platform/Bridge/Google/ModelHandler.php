@@ -7,9 +7,13 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Google;
 use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\ModelClientInterface;
+use PhpLlm\LlmChain\Platform\Response\Choice;
+use PhpLlm\LlmChain\Platform\Response\ChoiceResponse;
 use PhpLlm\LlmChain\Platform\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Platform\Response\StreamResponse;
 use PhpLlm\LlmChain\Platform\Response\TextResponse;
+use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
 use PhpLlm\LlmChain\Platform\ResponseConverterInterface;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -52,6 +56,12 @@ final readonly class ModelHandler implements ModelClientInterface, ResponseConve
 
         $generationConfig = ['generationConfig' => $options];
         unset($generationConfig['generationConfig']['stream']);
+        unset($generationConfig['generationConfig']['tools']);
+
+        if (isset($options['tools'])) {
+            $generationConfig['tools'] = $options['tools'];
+            unset($options['tools']);
+        }
 
         return $this->httpClient->request('POST', $url, [
             'headers' => [
@@ -76,11 +86,22 @@ final readonly class ModelHandler implements ModelClientInterface, ResponseConve
 
         $data = $response->toArray();
 
-        if (!isset($data['candidates'][0]['content']['parts'][0]['text'])) {
+        if (!isset($data['candidates'][0]['content']['parts'][0])) {
             throw new RuntimeException('Response does not contain any content');
         }
 
-        return new TextResponse($data['candidates'][0]['content']['parts'][0]['text']);
+        /** @var Choice[] $choices */
+        $choices = array_map($this->convertChoice(...), $data['candidates']);
+
+        if (1 !== \count($choices)) {
+            return new ChoiceResponse(...$choices);
+        }
+
+        if ($choices[0]->hasToolCall()) {
+            return new ToolCallResponse(...$choices[0]->getToolCalls());
+        }
+
+        return new TextResponse($choices[0]->getContent());
     }
 
     private function convertStream(ResponseInterface $response): \Generator
@@ -121,5 +142,34 @@ final readonly class ModelHandler implements ModelClientInterface, ResponseConve
                 yield $data['candidates'][0]['content']['parts'][0]['text'];
             }
         }
+    }
+
+    private function convertChoice(array $choice): Choice
+    {
+        $stopReason = $choice['finishReason'];
+
+        $contentPart = $choice['content']['parts'][0] ?? [];
+
+        if (isset($contentPart['functionCall'])) {
+            return new Choice(toolCalls: [$this->convertToolCall($contentPart['functionCall'])]);
+        }
+
+        if (isset($contentPart['text'])) {
+            return new Choice($contentPart['text']);
+        }
+
+        throw new RuntimeException(\sprintf('Unsupported finish reason "%s".', $stopReason));
+    }
+
+    /**
+     * @param array{
+     *     id: string,
+     *     name: string,
+     *     args: array
+     * } $toolCall
+     */
+    private function convertToolCall(array $toolCall): ToolCall
+    {
+        return new ToolCall($toolCall['id'] ?? '', $toolCall['name'], $toolCall['args']);
     }
 }
