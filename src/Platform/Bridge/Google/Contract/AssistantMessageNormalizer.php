@@ -36,7 +36,17 @@ final class AssistantMessageNormalizer extends ModelContractNormalizer implement
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
         return [
-            ['text' => $data->content],
+            array_filter(
+                [
+                    'text' => $data->content,
+                    'functionCall' => ($data->toolCalls[0] ?? null) ? [
+                        'id' => $data->toolCalls[0]->id,
+                        'name' => $data->toolCalls[0]->name,
+                        'args' => $data->toolCalls[0]->arguments ?: new \ArrayObject(),
+                    ] : null,
+                ],
+                static fn ($content) => null !== $content,
+            ),
         ];
     }
 }
