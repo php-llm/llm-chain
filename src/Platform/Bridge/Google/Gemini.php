@@ -27,6 +27,7 @@ class Gemini extends Model
             Capability::INPUT_MESSAGES,
             Capability::INPUT_IMAGE,
             Capability::OUTPUT_STREAMING,
+            Capability::TOOL_CALLING,
         ];
 
         parent::__construct($name, $capabilities, $options);

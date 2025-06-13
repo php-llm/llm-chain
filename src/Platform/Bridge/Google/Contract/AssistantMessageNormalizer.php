@@ -35,8 +35,23 @@ final class AssistantMessageNormalizer extends ModelContractNormalizer implement
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
-        return [
-            ['text' => $data->content],
-        ];
+        $normalized = [];
+
+        if (isset($data->content)) {
+            $normalized['text'] = $data->content;
+        }
+
+        if (isset($data->toolCalls[0])) {
+            $normalized['functionCall'] = [
+                'id' => $data->toolCalls[0]->id,
+                'name' => $data->toolCalls[0]->name,
+            ];
+
+            if ($data->toolCalls[0]->arguments) {
+                $normalized['functionCall']['args'] = $data->toolCalls[0]->arguments;
+            }
+        }
+
+        return [$normalized];
     }
 }
