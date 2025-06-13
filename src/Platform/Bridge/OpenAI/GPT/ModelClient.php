@@ -36,9 +36,15 @@ final readonly class ModelClient implements PlatformResponseFactory
 
     public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
-        return $this->httpClient->request('POST', 'https://api.openai.com/v1/chat/completions', [
-            'auth_bearer' => $this->apiKey,
-            'json' => array_merge($options, $payload),
-        ]);
+        $base_url = $model->getOptions()['base_url'] ?? 'https://api.openai.com/v1';        
+        $chat_completions_url = $model->getOptions()['chat_completions_url'] ?? '/chat/completions';        
+        return $this->httpClient->request(
+            'POST', 
+            "{$base_url}{$chat_completions_url}", 
+            [
+                'auth_bearer' => $this->apiKey,
+                'json' => array_merge($options, $payload),
+            ]
+        );
     }
 }
