@@ -35,7 +35,7 @@ final readonly class ModelClient implements PlatformResponseFactory
         return $model instanceof GPT;
     }
 
-    public function request(Model $model, array|object|string $input, array $options = []): ResponseInterface
+    public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
         $base_url = $model->getOptions()['base_url'] ?? 'https://api.openai.com/v1';
         $chat_completions_url = $model->getOptions()['chat_completions_url'] ?? '/chat/completions';
@@ -45,10 +45,7 @@ final readonly class ModelClient implements PlatformResponseFactory
             "{$base_url}{$chat_completions_url}",
             [
                 'auth_bearer' => $this->apiKey,
-                'json' => array_merge($options, [
-                    'model' => $model->getVersion(),
-                    'messages' => $input,
-                ]),
+                'json' => array_merge($options, $payload),
             ]
         );
     }
