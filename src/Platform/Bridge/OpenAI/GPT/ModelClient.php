@@ -30,7 +30,7 @@ final readonly class ModelClient implements PlatformResponseFactory
         Assert::startsWith($apiKey, 'sk-', 'The API key must start with "sk-".');
     }
 
-    public function supports(Model $model, array|object|string $input): bool
+    public function supports(Model $model): bool
     {
         return $model instanceof GPT;
     }
