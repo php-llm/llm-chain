@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Platform\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\ModelClientInterface as PlatformResponseFactory;
+use SensitiveParameter;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -21,7 +22,7 @@ final readonly class ModelClient implements PlatformResponseFactory
 
     public function __construct(
         HttpClientInterface $httpClient,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         private string $apiKey,
     ) {
         $this->httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
@@ -29,21 +30,25 @@ final readonly class ModelClient implements PlatformResponseFactory
         Assert::startsWith($apiKey, 'sk-', 'The API key must start with "sk-".');
     }
 
-    public function supports(Model $model): bool
+    public function supports(Model $model, array|object|string $input): bool
     {
         return $model instanceof GPT;
     }
 
-    public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
+    public function request(Model $model, array|object|string $input, array $options = []): ResponseInterface
     {
-        $base_url = $model->getOptions()['base_url'] ?? 'https://api.openai.com/v1';        
-        $chat_completions_url = $model->getOptions()['chat_completions_url'] ?? '/chat/completions';        
+        $base_url = $model->getOptions()['base_url'] ?? 'https://api.openai.com/v1';
+        $chat_completions_url = $model->getOptions()['chat_completions_url'] ?? '/chat/completions';
+
         return $this->httpClient->request(
-            'POST', 
-            "{$base_url}{$chat_completions_url}", 
+            'POST',
+            "{$base_url}{$chat_completions_url}",
             [
                 'auth_bearer' => $this->apiKey,
-                'json' => array_merge($options, $payload),
+                'json' => array_merge($options, [
+                    'model' => $model->getVersion(),
+                    'messages' => $input,
+                ]),
             ]
         );
     }
