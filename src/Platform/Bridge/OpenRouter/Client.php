@@ -46,8 +46,6 @@ final readonly class Client implements ModelClientInterface, ResponseConverterIn
 
     public function convert(ResponseInterface $response, array $options = []): LlmResponse
     {
-        dump($response->getContent(false));
-
         $data = $response->toArray();
 
         if (!isset($data['choices'][0]['message'])) {
