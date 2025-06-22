@@ -13,7 +13,7 @@ use PhpLlm\LlmChain\Platform\Message\MessageBag;
 use PhpLlm\LlmChain\Store\Bridge\MongoDB\Store;
 use PhpLlm\LlmChain\Store\Document\Metadata;
 use PhpLlm\LlmChain\Store\Document\TextDocument;
-use PhpLlm\LlmChain\Store\Embedder;
+use PhpLlm\LlmChain\Store\Indexer;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Uid\Uuid;
 
@@ -52,8 +52,8 @@ foreach ($movies as $movie) {
 
 // create embeddings for documents
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$embedder = new Embedder($platform, $embeddings = new Embeddings(), $store);
-$embedder->embed($documents);
+$indexer = new Indexer($platform, $embeddings = new Embeddings(), $store);
+$indexer->index($documents);
 
 // initialize the index
 $store->initialize();

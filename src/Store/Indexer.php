@@ -17,7 +17,7 @@ use Symfony\Component\Clock\ClockInterface;
 /**
  * @author Christopher Hertel <mail@christopher-hertel.de>
  */
-final readonly class Embedder
+final readonly class Indexer
 {
     private ClockInterface $clock;
 
@@ -32,16 +32,16 @@ final readonly class Embedder
     }
 
     /**
-     * @param TextDocument|TextDocument[] $documents
+     * @param TextDocument|iterable<TextDocument> $documents
      */
-    public function embed(TextDocument|array $documents, int $chunkSize = 0, int $sleep = 0): void
+    public function index(TextDocument|iterable $documents, int $chunkSize = 0, int $sleep = 0): void
     {
         if ($documents instanceof TextDocument) {
             $documents = [$documents];
         }
 
         if ([] === $documents) {
-            $this->logger->debug('No documents to embed');
+            $this->logger->debug('No documents to index');
 
             return;
         }
