@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLlm\LlmChain\Tests\Store\Document;
+namespace PhpLlm\LlmChain\Tests\Platform\Vector;
 
 use PhpLlm\LlmChain\Platform\Vector\NullVector;
 use PhpLlm\LlmChain\Platform\Vector\VectorInterface;

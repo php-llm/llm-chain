@@ -391,22 +391,22 @@ $response = $chain->call($messages);
 LLM Chain supports document embedding and similarity search using vector stores like ChromaDB, Azure AI Search, MongoDB
 Atlas Search, or Pinecone.
 
-For populating a vector store, LLM Chain provides the service `Embedder`, which requires an instance of an
+For populating a vector store, LLM Chain provides the service `Indexer`, which requires an instance of an
 `EmbeddingsModel` and one of `StoreInterface`, and works with a collection of `Document` objects as input:
 
 ```php
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Store\Bridge\Pinecone\Store;
-use PhpLlm\LlmChain\Store\Embedder;
+use PhpLlm\LlmChain\Store\Indexer;
 use Probots\Pinecone\Pinecone;
 
-$embedder = new Embedder(
+$indexer = new Indexer(
     PlatformFactory::create($_ENV['OPENAI_API_KEY']),
     new Embeddings(),
     new Store(Pinecone::client($_ENV['PINECONE_API_KEY'], $_ENV['PINECONE_HOST']),
 );
-$embedder->embed($documents);
+$indexer->index($documents);
 ```
 
 The collection of `Document` instances is usually created by text input of your domain entities:
