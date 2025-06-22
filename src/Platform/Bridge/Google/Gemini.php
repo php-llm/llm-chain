@@ -26,6 +26,8 @@ class Gemini extends Model
         $capabilities = [
             Capability::INPUT_MESSAGES,
             Capability::INPUT_IMAGE,
+            Capability::INPUT_AUDIO,
+            Capability::INPUT_PDF,
             Capability::OUTPUT_STREAMING,
             Capability::TOOL_CALLING,
         ];
