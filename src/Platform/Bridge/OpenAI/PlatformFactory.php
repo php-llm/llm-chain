@@ -8,12 +8,15 @@ use PhpLlm\LlmChain\Platform\Bridge\OpenAI\DallE\ModelClient as DallEModelClient
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings\ModelClient as EmbeddingsModelClient;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings\ResponseConverter as EmbeddingsResponseConverter;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\GPT\ModelClient as GPTModelClient;
-use PhpLlm\LlmChain\Platform\Bridge\OpenAI\GPT\ResponseConverter as GPTResponseConverter;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\ResponseContract\OpenAIResponseParser;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\ResponseContract\OpenAIStreamParser;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\AudioNormalizer;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\ModelClient as WhisperModelClient;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\ResponseConverter as WhisperResponseConverter;
 use PhpLlm\LlmChain\Platform\Contract;
+use PhpLlm\LlmChain\Platform\Contract\ResponseDenormalizer;
 use PhpLlm\LlmChain\Platform\Platform;
+use PhpLlm\LlmChain\Platform\ResponseContract;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -39,7 +42,12 @@ final readonly class PlatformFactory
                 new WhisperModelClient($httpClient, $apiKey),
             ],
             [
-                new GPTResponseConverter(),
+                (new ResponseContract(
+                    new ResponseDenormalizer(
+                        new OpenAIResponseParser(),
+                        new OpenAIStreamParser(),
+                    )
+                ))->asConverter(),
                 new EmbeddingsResponseConverter(),
                 $dallEModelClient,
                 new WhisperResponseConverter(),

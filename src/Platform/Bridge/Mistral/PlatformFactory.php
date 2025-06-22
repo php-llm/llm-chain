@@ -8,9 +8,12 @@ use PhpLlm\LlmChain\Platform\Bridge\Mistral\Contract\ToolNormalizer;
 use PhpLlm\LlmChain\Platform\Bridge\Mistral\Embeddings\ModelClient as EmbeddingsModelClient;
 use PhpLlm\LlmChain\Platform\Bridge\Mistral\Embeddings\ResponseConverter as EmbeddingsResponseConverter;
 use PhpLlm\LlmChain\Platform\Bridge\Mistral\Llm\ModelClient as MistralModelClient;
-use PhpLlm\LlmChain\Platform\Bridge\Mistral\Llm\ResponseConverter as MistralResponseConverter;
+use PhpLlm\LlmChain\Platform\Bridge\Mistral\ResponseContract\MistralResponseParser;
+use PhpLlm\LlmChain\Platform\Bridge\Mistral\ResponseContract\MistralStreamParser;
 use PhpLlm\LlmChain\Platform\Contract;
+use PhpLlm\LlmChain\Platform\Contract\ResponseDenormalizer;
 use PhpLlm\LlmChain\Platform\Platform;
+use PhpLlm\LlmChain\Platform\ResponseContract;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -28,7 +31,15 @@ final class PlatformFactory
 
         return new Platform(
             [new EmbeddingsModelClient($httpClient, $apiKey), new MistralModelClient($httpClient, $apiKey)],
-            [new EmbeddingsResponseConverter(), new MistralResponseConverter()],
+            [
+                new EmbeddingsResponseConverter(),
+                (new ResponseContract(
+                    new ResponseDenormalizer(
+                        new MistralResponseParser(),
+                        new MistralStreamParser(),
+                    )
+                ))->asConverter(),
+            ],
             Contract::create(new ToolNormalizer()),
         );
     }
