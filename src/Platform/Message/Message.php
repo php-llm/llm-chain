@@ -19,9 +19,9 @@ final readonly class Message
     {
     }
 
-    public static function forSystem(string $content): SystemMessage
+    public static function forSystem(\Stringable|string $content): SystemMessage
     {
-        return new SystemMessage($content);
+        return new SystemMessage($content instanceof \Stringable ? (string) $content : $content);
     }
 
     /**
@@ -32,10 +32,10 @@ final readonly class Message
         return new AssistantMessage($content, $toolCalls);
     }
 
-    public static function ofUser(string|ContentInterface ...$content): UserMessage
+    public static function ofUser(\Stringable|string|ContentInterface ...$content): UserMessage
     {
         $content = array_map(
-            static fn (string|ContentInterface $entry) => \is_string($entry) ? new Text($entry) : $entry,
+            static fn (\Stringable|string|ContentInterface $entry) => $entry instanceof ContentInterface ? $entry : (\is_string($entry) ? new Text($entry) : new Text((string) $entry)),
             $content,
         );
 

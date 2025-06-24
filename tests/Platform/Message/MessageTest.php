@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Platform\Message;
 
 use PhpLlm\LlmChain\Platform\Message\AssistantMessage;
+use PhpLlm\LlmChain\Platform\Message\Content\ContentInterface;
 use PhpLlm\LlmChain\Platform\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Platform\Message\Content\Text;
 use PhpLlm\LlmChain\Platform\Message\Message;
@@ -32,9 +33,22 @@ use PHPUnit\Framework\TestCase;
 final class MessageTest extends TestCase
 {
     #[Test]
-    public function createSystemMessage(): void
+    public function createSystemMessageWithString(): void
     {
         $message = Message::forSystem('My amazing system prompt.');
+
+        self::assertSame('My amazing system prompt.', $message->content);
+    }
+
+    #[Test]
+    public function createSystemMessageWithStringable(): void
+    {
+        $message = Message::forSystem(new class implements \Stringable {
+            public function __toString(): string
+            {
+                return 'My amazing system prompt.';
+            }
+        });
 
         self::assertSame('My amazing system prompt.', $message->content);
     }
@@ -61,13 +75,42 @@ final class MessageTest extends TestCase
     }
 
     #[Test]
-    public function createUserMessage(): void
+    public function createUserMessageWithString(): void
     {
         $message = Message::ofUser('Hi, my name is John.');
 
         self::assertCount(1, $message->content);
         self::assertInstanceOf(Text::class, $message->content[0]);
         self::assertSame('Hi, my name is John.', $message->content[0]->text);
+    }
+
+    #[Test]
+    public function createUserMessageWithStringable(): void
+    {
+        $message = Message::ofUser(new class implements \Stringable {
+            public function __toString(): string
+            {
+                return 'Hi, my name is John.';
+            }
+        });
+
+        self::assertCount(1, $message->content);
+        self::assertInstanceOf(Text::class, $message->content[0]);
+        self::assertSame('Hi, my name is John.', $message->content[0]->text);
+    }
+
+    #[Test]
+    public function createUserMessageContentInterfaceImplementingStringable(): void
+    {
+        $message = Message::ofUser(new class implements ContentInterface, \Stringable {
+            public function __toString(): string
+            {
+                return 'I am a ContentInterface!';
+            }
+        });
+
+        self::assertCount(1, $message->content);
+        self::assertInstanceOf(ContentInterface::class, $message->content[0]);
     }
 
     #[Test]
