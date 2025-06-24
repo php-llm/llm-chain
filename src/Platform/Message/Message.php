@@ -35,7 +35,7 @@ final readonly class Message
     public static function ofUser(\Stringable|string|ContentInterface ...$content): UserMessage
     {
         $content = array_map(
-            static fn (string|ContentInterface $entry) => \is_string($entry) ? new Text($entry) : ($entry instanceof \Stringable ? new Text((string) $entry) : $entry),
+            static fn (\Stringable|string|ContentInterface $entry) => $entry instanceof ContentInterface ? $entry : (\is_string($entry) ? new Text($entry) : new Text((string) $entry)),
             $content,
         );
 

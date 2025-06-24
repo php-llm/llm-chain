@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Platform\Message;
 
 use PhpLlm\LlmChain\Platform\Message\AssistantMessage;
+use PhpLlm\LlmChain\Platform\Message\Content\ContentInterface;
 use PhpLlm\LlmChain\Platform\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Platform\Message\Content\Text;
 use PhpLlm\LlmChain\Platform\Message\Message;
@@ -96,6 +97,20 @@ final class MessageTest extends TestCase
         self::assertCount(1, $message->content);
         self::assertInstanceOf(Text::class, $message->content[0]);
         self::assertSame('Hi, my name is John.', $message->content[0]->text);
+    }
+
+    #[Test]
+    public function createUserMessageContentInterfaceImplementingStringable(): void
+    {
+        $message = Message::ofUser(new class implements ContentInterface, \Stringable {
+            public function __toString(): string
+            {
+                return 'I am a ContentInterface!';
+            }
+        });
+
+        self::assertCount(1, $message->content);
+        self::assertInstanceOf(ContentInterface::class, $message->content[0]);
     }
 
     #[Test]
