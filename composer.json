@@ -36,14 +36,11 @@
         "symfony/uid": "^6.4 || ^7.1",
         "webmozart/assert": "^1.11"
     },
-    "conflict": {
-        "mongodb/mongodb": "<1.21"
-    },
     "require-dev": {
         "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3 || ^0.4",
         "codewithkyrian/transformers": "^0.5.3",
         "async-aws/bedrock-runtime": "^0.1.0",
-        "mongodb/mongodb": "^1.21",
+        "mongodb/mongodb": "^1.21 || ^2.0",
         "php-cs-fixer/shim": "^3.70",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
