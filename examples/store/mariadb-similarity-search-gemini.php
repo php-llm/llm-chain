@@ -15,6 +15,7 @@ use PhpLlm\LlmChain\Platform\Message\MessageBag;
 use PhpLlm\LlmChain\Store\Bridge\MariaDB\Store;
 use PhpLlm\LlmChain\Store\Document\Metadata;
 use PhpLlm\LlmChain\Store\Document\TextDocument;
+use PhpLlm\LlmChain\Store\Document\Vectorizer;
 use PhpLlm\LlmChain\Store\Indexer;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Uid\Uuid;
@@ -57,7 +58,8 @@ $store->initialize(['dimensions' => 768]);
 // create embeddings for documents
 $platform = PlatformFactory::create($_ENV['GOOGLE_API_KEY']);
 $embeddings = new Embeddings(options: ['dimensions' => 768, 'task_type' => TaskType::SemanticSimilarity]);
-$indexer = new Indexer($platform, $embeddings, $store);
+$vectorizer = new Vectorizer($platform, $embeddings);
+$indexer = new Indexer($vectorizer, $store);
 $indexer->index($documents);
 
 $model = new Gemini(Gemini::GEMINI_2_FLASH_LITE);
