@@ -14,6 +14,7 @@ use PhpLlm\LlmChain\Platform\Message\MessageBag;
 use PhpLlm\LlmChain\Store\Bridge\MariaDB\Store;
 use PhpLlm\LlmChain\Store\Document\Metadata;
 use PhpLlm\LlmChain\Store\Document\TextDocument;
+use PhpLlm\LlmChain\Store\Document\Vectorizer;
 use PhpLlm\LlmChain\Store\Indexer;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Uid\Uuid;
@@ -55,7 +56,8 @@ $store->initialize();
 
 // create embeddings for documents
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
-$indexer = new Indexer($platform, $embeddings = new Embeddings(), $store);
+$vectorizer = new Vectorizer($platform, $embeddings = new Embeddings());
+$indexer = new Indexer($vectorizer, $store);
 $indexer->index($documents);
 
 $model = new GPT(GPT::GPT_4O_MINI);
