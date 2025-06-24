@@ -32,9 +32,22 @@ use PHPUnit\Framework\TestCase;
 final class MessageTest extends TestCase
 {
     #[Test]
-    public function createSystemMessage(): void
+    public function createSystemMessageWithString(): void
     {
         $message = Message::forSystem('My amazing system prompt.');
+
+        self::assertSame('My amazing system prompt.', $message->content);
+    }
+
+    #[Test]
+    public function createSystemMessageWithStringable(): void
+    {
+        $message = Message::forSystem(new class implements \Stringable {
+            public function __toString(): string
+            {
+                return 'My amazing system prompt.';
+            }
+        });
 
         self::assertSame('My amazing system prompt.', $message->content);
     }
@@ -61,9 +74,24 @@ final class MessageTest extends TestCase
     }
 
     #[Test]
-    public function createUserMessage(): void
+    public function createUserMessageWithString(): void
     {
         $message = Message::ofUser('Hi, my name is John.');
+
+        self::assertCount(1, $message->content);
+        self::assertInstanceOf(Text::class, $message->content[0]);
+        self::assertSame('Hi, my name is John.', $message->content[0]->text);
+    }
+
+    #[Test]
+    public function createUserMessageWithStringable(): void
+    {
+        $message = Message::ofUser(new class implements \Stringable {
+            public function __toString(): string
+            {
+                return 'Hi, my name is John.';
+            }
+        });
 
         self::assertCount(1, $message->content);
         self::assertInstanceOf(Text::class, $message->content[0]);
