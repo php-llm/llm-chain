@@ -37,9 +37,11 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
+        "ext-pdo": "*",
         "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3 || ^0.4",
         "codewithkyrian/transformers": "^0.5.3",
         "async-aws/bedrock-runtime": "^0.1.0",
+        "doctrine/dbal": "^3.0 || ^4.0",
         "mongodb/mongodb": "^1.21 || ^2.0",
         "php-cs-fixer/shim": "^3.70",
         "phpstan/phpstan": "^2.0",
@@ -58,9 +60,11 @@
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
     "suggest": {
+        "ext-pdo": "For using MariaDB as retrieval vector store.",
         "async-aws/bedrock-runtime": "For using the Bedrock platform.",
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
         "codewithkyrian/transformers": "For using the TransformersPHP with FFI to run models in PHP.",
+        "doctrine/dbal": "For using MariaDB via Doctrine as retrieval vector store",
         "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
         "symfony/css-selector": "For using the YouTube transcription tool.",
