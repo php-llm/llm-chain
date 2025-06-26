@@ -457,13 +457,15 @@ $response = $chain->call($messages);
 
 #### Code Examples
 
+1. [MariaDB Store](examples/store/mariadb-similarity-search.php)
 1. [MongoDB Store](examples/store/mongodb-similarity-search.php)
 1. [Pinecone Store](examples/store/pinecone-similarity-search.php)
 
 #### Supported Stores
 
-* [ChromaDB](https://trychroma.com) (requires `codewithkyrian/chromadb-php` as additional dependency)
 * [Azure AI Search](https://azure.microsoft.com/en-us/products/ai-services/ai-search)
+* [ChromaDB](https://trychroma.com) (requires `codewithkyrian/chromadb-php` as additional dependency)
+* [MariaDB](https://mariadb.org/projects/mariadb-vector/) (requires `ext-pdo`)
 * [MongoDB Atlas Search](https://mongodb.com/products/platform/atlas-vector-search) (requires `mongodb/mongodb` as additional dependency)
 * [Pinecone](https://pinecone.io) (requires `probots-io/pinecone-php` as additional dependency)
 
