@@ -106,7 +106,7 @@ final class MessageIdTest extends TestCase
     public function differentMessageTypesHaveDifferentIds(): void
     {
         $content = 'Same content';
-        
+
         $systemMessage = Message::forSystem($content);
         $assistantMessage = Message::ofAssistant($content);
         $userMessage = Message::ofUser($content);

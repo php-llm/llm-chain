@@ -28,7 +28,7 @@ final readonly class ToolCallMessage implements MessageInterface
         // Generate deterministic UUID based on tool call and content
         $toolCallData = sprintf('%s:%s:%s', $this->toolCall->id, $this->toolCall->name, serialize($this->toolCall->arguments));
         $data = sprintf('toolcall:%s:%s', $toolCallData, $this->content);
-        
+
         return Uuid::v5(self::getNamespace(), $data);
     }
 

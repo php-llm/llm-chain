@@ -36,7 +36,7 @@ final readonly class UserMessage implements MessageInterface
         // Generate deterministic UUID based on content and role
         $contentData = serialize($this->content);
         $data = sprintf('user:%s', $contentData);
-        
+
         return Uuid::v5(self::getNamespace(), $data);
     }
 

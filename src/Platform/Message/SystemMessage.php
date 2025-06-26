@@ -24,7 +24,7 @@ final readonly class SystemMessage implements MessageInterface
     {
         // Generate deterministic UUID based on content and role
         $data = sprintf('system:%s', $this->content);
-        
+
         return Uuid::v5(self::getNamespace(), $data);
     }
 

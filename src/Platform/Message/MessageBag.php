@@ -135,7 +135,7 @@ class MessageBag implements MessageBagInterface
     public function messagesNewerThan(Uuid $id): self
     {
         $messagesAfter = $this->messagesAfterId($id);
-        
+
         return new self(...$messagesAfter);
     }
 

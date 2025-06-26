@@ -40,9 +40,9 @@ final readonly class AssistantMessage implements MessageInterface
                 $this->toolCalls
             ));
         }
-        
+
         $data = sprintf('assistant:%s:%s', $this->content ?? '', $toolCallsData);
-        
+
         return Uuid::v5(self::getNamespace(), $data);
     }
 
