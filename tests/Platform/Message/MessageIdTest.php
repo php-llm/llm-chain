@@ -18,6 +18,7 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(SystemMessage::class)]
 #[CoversClass(AssistantMessage::class)]
@@ -29,34 +30,34 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ToolCall::class)]
 #[UsesClass(Text::class)]
 #[Small]
-final class MessageUidTest extends TestCase
+final class MessageIdTest extends TestCase
 {
     #[Test]
-    public function systemMessageHasDeterministicUid(): void
+    public function systemMessageHasDeterministicId(): void
     {
         $message1 = Message::forSystem('System prompt');
         $message2 = Message::forSystem('System prompt');
         $message3 = Message::forSystem('Different prompt');
 
-        self::assertNotEmpty($message1->getUid());
-        self::assertSame($message1->getUid(), $message2->getUid());
-        self::assertNotSame($message1->getUid(), $message3->getUid());
+        self::assertNotEmpty($message1->getId());
+        self::assertTrue($message1->getId()->equals($message2->getId()));
+        self::assertFalse($message1->getId()->equals($message3->getId()));
     }
 
     #[Test]
-    public function assistantMessageHasDeterministicUid(): void
+    public function assistantMessageHasDeterministicId(): void
     {
         $message1 = Message::ofAssistant('Hello there');
         $message2 = Message::ofAssistant('Hello there');
         $message3 = Message::ofAssistant('Different content');
 
-        self::assertNotEmpty($message1->getUid());
-        self::assertSame($message1->getUid(), $message2->getUid());
-        self::assertNotSame($message1->getUid(), $message3->getUid());
+        self::assertNotEmpty($message1->getId());
+        self::assertTrue($message1->getId()->equals($message2->getId()));
+        self::assertFalse($message1->getId()->equals($message3->getId()));
     }
 
     #[Test]
-    public function assistantMessageWithToolCallsHasDeterministicUid(): void
+    public function assistantMessageWithToolCallsHasDeterministicId(): void
     {
         $toolCall1 = new ToolCall('call_123', 'test_tool', ['param' => 'value']);
         $toolCall2 = new ToolCall('call_456', 'other_tool');
@@ -66,26 +67,26 @@ final class MessageUidTest extends TestCase
         $message3 = Message::ofAssistant('Content', [$toolCall2]);
         $message4 = Message::ofAssistant('Different content', [$toolCall1]);
 
-        self::assertNotEmpty($message1->getUid());
-        self::assertSame($message1->getUid(), $message2->getUid());
-        self::assertNotSame($message1->getUid(), $message3->getUid());
-        self::assertNotSame($message1->getUid(), $message4->getUid());
+        self::assertNotEmpty($message1->getId());
+        self::assertTrue($message1->getId()->equals($message2->getId()));
+        self::assertFalse($message1->getId()->equals($message3->getId()));
+        self::assertFalse($message1->getId()->equals($message4->getId()));
     }
 
     #[Test]
-    public function userMessageHasDeterministicUid(): void
+    public function userMessageHasDeterministicId(): void
     {
         $message1 = Message::ofUser('Hello');
         $message2 = Message::ofUser('Hello');
         $message3 = Message::ofUser('Different message');
 
-        self::assertNotEmpty($message1->getUid());
-        self::assertSame($message1->getUid(), $message2->getUid());
-        self::assertNotSame($message1->getUid(), $message3->getUid());
+        self::assertNotEmpty($message1->getId());
+        self::assertTrue($message1->getId()->equals($message2->getId()));
+        self::assertFalse($message1->getId()->equals($message3->getId()));
     }
 
     #[Test]
-    public function toolCallMessageHasDeterministicUid(): void
+    public function toolCallMessageHasDeterministicId(): void
     {
         $toolCall1 = new ToolCall('call_123', 'test_tool', ['param' => 'value']);
         $toolCall2 = new ToolCall('call_456', 'other_tool');
@@ -95,14 +96,14 @@ final class MessageUidTest extends TestCase
         $message3 = Message::ofToolCall($toolCall2, 'Result 1');
         $message4 = Message::ofToolCall($toolCall1, 'Result 2');
 
-        self::assertNotEmpty($message1->getUid());
-        self::assertSame($message1->getUid(), $message2->getUid());
-        self::assertNotSame($message1->getUid(), $message3->getUid());
-        self::assertNotSame($message1->getUid(), $message4->getUid());
+        self::assertNotEmpty($message1->getId());
+        self::assertTrue($message1->getId()->equals($message2->getId()));
+        self::assertFalse($message1->getId()->equals($message3->getId()));
+        self::assertFalse($message1->getId()->equals($message4->getId()));
     }
 
     #[Test]
-    public function differentMessageTypesHaveDifferentUids(): void
+    public function differentMessageTypesHaveDifferentIds(): void
     {
         $content = 'Same content';
         
@@ -110,13 +111,13 @@ final class MessageUidTest extends TestCase
         $assistantMessage = Message::ofAssistant($content);
         $userMessage = Message::ofUser($content);
 
-        self::assertNotSame($systemMessage->getUid(), $assistantMessage->getUid());
-        self::assertNotSame($systemMessage->getUid(), $userMessage->getUid());
-        self::assertNotSame($assistantMessage->getUid(), $userMessage->getUid());
+        self::assertFalse($systemMessage->getId()->equals($assistantMessage->getId()));
+        self::assertFalse($systemMessage->getId()->equals($userMessage->getId()));
+        self::assertFalse($assistantMessage->getId()->equals($userMessage->getId()));
     }
 
     #[Test]
-    public function messageBagCanFindMessageByUid(): void
+    public function messageBagCanFindMessageById(): void
     {
         $message1 = Message::forSystem('System');
         $message2 = Message::ofUser('User message');
@@ -124,43 +125,43 @@ final class MessageUidTest extends TestCase
 
         $bag = new MessageBag($message1, $message2, $message3);
 
-        self::assertSame($message1, $bag->findByUid($message1->getUid()));
-        self::assertSame($message2, $bag->findByUid($message2->getUid()));
-        self::assertSame($message3, $bag->findByUid($message3->getUid()));
-        self::assertNull($bag->findByUid('non-existent-uid'));
+        self::assertSame($message1, $bag->findById($message1->getId()));
+        self::assertSame($message2, $bag->findById($message2->getId()));
+        self::assertSame($message3, $bag->findById($message3->getId()));
+        self::assertNull($bag->findById(Uuid::v4())); // Random UUID
     }
 
     #[Test]
-    public function messageBagCanCheckIfUidExists(): void
+    public function messageBagCanCheckIfIdExists(): void
     {
         $message1 = Message::forSystem('System');
         $message2 = Message::ofUser('User message');
 
         $bag = new MessageBag($message1, $message2);
 
-        self::assertTrue($bag->hasMessageWithUid($message1->getUid()));
-        self::assertTrue($bag->hasMessageWithUid($message2->getUid()));
-        self::assertFalse($bag->hasMessageWithUid('non-existent-uid'));
+        self::assertTrue($bag->hasMessageWithId($message1->getId()));
+        self::assertTrue($bag->hasMessageWithId($message2->getId()));
+        self::assertFalse($bag->hasMessageWithId(Uuid::v4())); // Random UUID
     }
 
     #[Test]
-    public function messageBagCanGetAllUids(): void
+    public function messageBagCanGetAllIds(): void
     {
         $message1 = Message::forSystem('System');
         $message2 = Message::ofUser('User message');
         $message3 = Message::ofAssistant('Assistant response');
 
         $bag = new MessageBag($message1, $message2, $message3);
-        $uids = $bag->getUids();
+        $ids = $bag->getIds();
 
-        self::assertCount(3, $uids);
-        self::assertSame($message1->getUid(), $uids[0]);
-        self::assertSame($message2->getUid(), $uids[1]);
-        self::assertSame($message3->getUid(), $uids[2]);
+        self::assertCount(3, $ids);
+        self::assertTrue($message1->getId()->equals($ids[0]));
+        self::assertTrue($message2->getId()->equals($ids[1]));
+        self::assertTrue($message3->getId()->equals($ids[2]));
     }
 
     #[Test]
-    public function messageBagCanGetMessagesAfterUid(): void
+    public function messageBagCanGetMessagesAfterId(): void
     {
         $message1 = Message::forSystem('System');
         $message2 = Message::ofUser('User message');
@@ -169,13 +170,13 @@ final class MessageUidTest extends TestCase
 
         $bag = new MessageBag($message1, $message2, $message3, $message4);
 
-        $messagesAfterMessage2 = $bag->messagesAfterUid($message2->getUid());
+        $messagesAfterMessage2 = $bag->messagesAfterId($message2->getId());
         self::assertCount(2, $messagesAfterMessage2);
         self::assertSame($message3, $messagesAfterMessage2[0]);
         self::assertSame($message4, $messagesAfterMessage2[1]);
 
-        // If UID not found, should return all messages
-        $allMessages = $bag->messagesAfterUid('non-existent-uid');
+        // If ID not found, should return all messages
+        $allMessages = $bag->messagesAfterId(Uuid::v4()); // Random UUID
         self::assertCount(4, $allMessages);
     }
 
@@ -189,7 +190,7 @@ final class MessageUidTest extends TestCase
 
         $bag = new MessageBag($message1, $message2, $message3, $message4);
 
-        $newerBag = $bag->messagesNewerThan($message1->getUid());
+        $newerBag = $bag->messagesNewerThan($message1->getId());
         $newerMessages = $newerBag->getMessages();
 
         self::assertCount(3, $newerMessages);
@@ -199,12 +200,12 @@ final class MessageUidTest extends TestCase
     }
 
     #[Test]
-    public function uidIsValidSha256Hash(): void
+    public function idIsValidUuid(): void
     {
         $message = Message::forSystem('Test message');
-        $uid = $message->getUid();
+        $id = $message->getId();
 
-        // SHA256 hash should be 64 characters long and contain only hex characters
-        self::assertMatchesRegularExpression('/^[a-f0-9]{64}$/', $uid);
+        // Should be a valid UUID
+        self::assertInstanceOf(Uuid::class, $id);
     }
 }

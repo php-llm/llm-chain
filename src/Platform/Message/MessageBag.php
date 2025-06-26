@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform\Message;
 
+use Symfony\Component\Uid\Uuid;
+
 /**
  * @final
  *
@@ -103,12 +105,12 @@ class MessageBag implements MessageBagInterface
     }
 
     /**
-     * Get all messages that come after a message with the specified UID.
-     * If the UID is not found, returns all messages.
+     * Get all messages that come after a message with the specified ID.
+     * If the ID is not found, returns all messages.
      *
      * @return list<MessageInterface>
      */
-    public function messagesAfterUid(string $uid): array
+    public function messagesAfterId(Uuid $id): array
     {
         $found = false;
         $messagesAfter = [];
@@ -116,34 +118,34 @@ class MessageBag implements MessageBagInterface
         foreach ($this->messages as $message) {
             if ($found) {
                 $messagesAfter[] = $message;
-            } elseif ($message->getUid() === $uid) {
+            } elseif ($message->getId()->equals($id)) {
                 $found = true;
             }
         }
 
-        // If UID not found, return all messages
+        // If ID not found, return all messages
         return $found ? $messagesAfter : $this->messages;
     }
 
     /**
-     * Get messages newer than (excluding) the specified UID.
+     * Get messages newer than (excluding) the specified ID.
      *
      * @return self
      */
-    public function messagesNewerThan(string $uid): self
+    public function messagesNewerThan(Uuid $id): self
     {
-        $messagesAfter = $this->messagesAfterUid($uid);
+        $messagesAfter = $this->messagesAfterId($id);
         
         return new self(...$messagesAfter);
     }
 
     /**
-     * Find a message by its UID.
+     * Find a message by its ID.
      */
-    public function findByUid(string $uid): ?MessageInterface
+    public function findById(Uuid $id): ?MessageInterface
     {
         foreach ($this->messages as $message) {
-            if ($message->getUid() === $uid) {
+            if ($message->getId()->equals($id)) {
                 return $message;
             }
         }
@@ -152,22 +154,22 @@ class MessageBag implements MessageBagInterface
     }
 
     /**
-     * Check if a message with the specified UID exists in the bag.
+     * Check if a message with the specified ID exists in the bag.
      */
-    public function hasMessageWithUid(string $uid): bool
+    public function hasMessageWithId(Uuid $id): bool
     {
-        return $this->findByUid($uid) !== null;
+        return $this->findById($id) !== null;
     }
 
     /**
-     * Get all UIDs in the message bag in order.
+     * Get all IDs in the message bag in order.
      *
-     * @return list<string>
+     * @return list<Uuid>
      */
-    public function getUids(): array
+    public function getIds(): array
     {
         return array_map(
-            static fn (MessageInterface $message) => $message->getUid(),
+            static fn (MessageInterface $message) => $message->getId(),
             $this->messages
         );
     }
