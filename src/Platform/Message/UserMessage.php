@@ -30,6 +30,15 @@ final readonly class UserMessage implements MessageInterface
         return Role::User;
     }
 
+    public function getUid(): string
+    {
+        // Generate deterministic UID based on content and role
+        $contentData = serialize($this->content);
+        $data = sprintf('user:%s', $contentData);
+        
+        return hash('sha256', $data);
+    }
+
     public function hasAudioContent(): bool
     {
         foreach ($this->content as $content) {

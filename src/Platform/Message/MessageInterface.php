@@ -10,4 +10,6 @@ namespace PhpLlm\LlmChain\Platform\Message;
 interface MessageInterface
 {
     public function getRole(): Role;
+
+    public function getUid(): string;
 }

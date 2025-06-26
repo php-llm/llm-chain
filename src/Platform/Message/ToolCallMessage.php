@@ -21,4 +21,13 @@ final readonly class ToolCallMessage implements MessageInterface
     {
         return Role::ToolCall;
     }
+
+    public function getUid(): string
+    {
+        // Generate deterministic UID based on tool call and content
+        $toolCallData = sprintf('%s:%s:%s', $this->toolCall->id, $this->toolCall->name, serialize($this->toolCall->arguments));
+        $data = sprintf('toolcall:%s:%s', $toolCallData, $this->content);
+        
+        return hash('sha256', $data);
+    }
 }
