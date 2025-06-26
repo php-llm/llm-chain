@@ -126,12 +126,12 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
     }
 
     /**
-     * @param array{} $options
+     * @param array{dimensions?: positive-int} $options
      */
     public function initialize(array $options = []): void
     {
-        if ([] !== $options) {
-            throw new InvalidArgumentException('No supported options');
+        if ([] !== $options && !\array_key_exists('dimensions', $options)) {
+            throw new InvalidArgumentException('The only supported option is "dimensions"');
         }
 
         $serverVersion = $this->connection->getAttribute(\PDO::ATTR_SERVER_VERSION);
@@ -146,13 +146,14 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
                     CREATE TABLE IF NOT EXISTS %1$s (
                         id BINARY(16) NOT NULL PRIMARY KEY,
                         metadata JSON,
-                        %2$s VECTOR(1536) NOT NULL,
+                        %2$s VECTOR(%4$d) NOT NULL,
                         VECTOR INDEX %3$s (%2$s)
                     )
                     SQL,
                 $this->tableName,
                 $this->vectorFieldName,
                 $this->indexName,
+                $options['dimensions'] ?? 1536,
             ),
         );
     }
