@@ -12,8 +12,6 @@ use Symfony\Component\Uid\Uuid;
  */
 final readonly class AssistantMessage implements MessageInterface
 {
-    private static ?Uuid $namespace = null;
-
     /**
      * @param ?ToolCall[] $toolCalls
      */
@@ -52,7 +50,7 @@ final readonly class AssistantMessage implements MessageInterface
     {
         // Use a fixed namespace UUID for the LLM Chain message system
         // This ensures deterministic IDs across application runs
-        return self::$namespace ??= Uuid::fromString('6ba7b810-9dad-11d1-80b4-00c04fd430c8');
+        return Uuid::fromString('6ba7b810-9dad-11d1-80b4-00c04fd430c8');
     }
 
     public function hasToolCalls(): bool
