@@ -31,7 +31,11 @@ final readonly class ModelClient implements BaseModelClient
 
     public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
-        return $this->httpClient->request('POST', 'https://api.openai.com/v1/audio/transcriptions', [
+        $task = $options['task'] ?? Task::TRANSCRIPTION;
+        $endpoint = Task::TRANSCRIPTION === $task ? 'transcriptions' : 'translations';
+        unset($options['task']);
+
+        return $this->httpClient->request('POST', \sprintf('https://api.openai.com/v1/audio/%s', $endpoint), [
             'auth_bearer' => $this->apiKey,
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'body' => array_merge($options, $payload, ['model' => $model->getName()]),
