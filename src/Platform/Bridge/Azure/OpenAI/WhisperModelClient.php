@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Platform\Bridge\Azure\OpenAI;
 
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\Task;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\ModelClientInterface;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
@@ -41,7 +42,17 @@ final readonly class WhisperModelClient implements ModelClientInterface
 
     public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
-        $url = \sprintf('https://%s/openai/deployments/%s/audio/translations', $this->baseUrl, $this->deployment);
+        // Extract task from options if provided, default to transcription for backward compatibility
+        $task = $options['task'] ?? Task::TRANSCRIPTION;
+        unset($options['task']);
+
+        $endpoint = match ($task) {
+            Task::TRANSCRIPTION => 'transcriptions',
+            Task::TRANSLATION => 'translations',
+            default => 'transcriptions',
+        };
+
+        $url = \sprintf('https://%s/openai/deployments/%s/audio/%s', $this->baseUrl, $this->deployment, $endpoint);
 
         return $this->httpClient->request('POST', $url, [
             'headers' => [

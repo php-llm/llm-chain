@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper;
 
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper;
+use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\Task;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\ModelClientInterface as BaseModelClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -31,7 +32,17 @@ final readonly class ModelClient implements BaseModelClient
 
     public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
-        return $this->httpClient->request('POST', 'https://api.openai.com/v1/audio/transcriptions', [
+        // Extract task from options if provided, default to transcription for backward compatibility
+        $task = $options['task'] ?? Task::TRANSCRIPTION;
+        unset($options['task']);
+
+        $endpoint = match ($task) {
+            Task::TRANSCRIPTION => 'transcriptions',
+            Task::TRANSLATION => 'translations',
+            default => 'transcriptions',
+        };
+
+        return $this->httpClient->request('POST', "https://api.openai.com/v1/audio/{$endpoint}", [
             'auth_bearer' => $this->apiKey,
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'body' => array_merge($options, $payload, ['model' => $model->getName()]),
