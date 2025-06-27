@@ -38,17 +38,34 @@ final class ToolNormalizer extends ModelContractNormalizer
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
-        $parameters = $data->parameters;
-        unset($parameters['additionalProperties']);
-
         return [
             'functionDeclarations' => [
                 [
                     'description' => $data->description,
                     'name' => $data->name,
-                    'parameters' => $parameters,
+                    'parameters' => $data->parameters ? $this->removeAdditionalProperties($data->parameters) : null,
                 ],
             ],
         ];
+    }
+
+    /**
+     * @template T of array
+     *
+     * @phpstan-param T $data
+     *
+     * @phpstan-return T
+     */
+    private function removeAdditionalProperties(array $data): array
+    {
+        unset($data['additionalProperties']); // not supported by Gemini
+
+        foreach ($data as &$value) {
+            if (\is_array($value)) {
+                $value = $this->removeAdditionalProperties($value);
+            }
+        }
+
+        return $data;
     }
 }
