@@ -42,17 +42,11 @@ final readonly class WhisperModelClient implements ModelClientInterface
 
     public function request(Model $model, array|string $payload, array $options = []): ResponseInterface
     {
-        // Extract task from options if provided, default to transcription for backward compatibility
         $task = $options['task'] ?? Task::TRANSCRIPTION;
-        unset($options['task']);
-
-        $endpoint = match ($task) {
-            Task::TRANSCRIPTION => 'transcriptions',
-            Task::TRANSLATION => 'translations',
-            default => 'transcriptions',
-        };
-
+        $endpoint = Task::TRANSCRIPTION === $task ? 'transcriptions' : 'translations';
         $url = \sprintf('https://%s/openai/deployments/%s/audio/%s', $this->baseUrl, $this->deployment, $endpoint);
+
+        unset($options['task']);
 
         return $this->httpClient->request('POST', $url, [
             'headers' => [

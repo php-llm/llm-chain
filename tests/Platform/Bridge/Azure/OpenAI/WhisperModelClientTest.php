@@ -37,82 +37,64 @@ final class WhisperModelClientTest extends TestCase
     public function itUsesTranscriptionEndpointByDefault(): void
     {
         $httpClient = new MockHttpClient([
-            new MockResponse('{"text": "Hello World"}'),
+            function ($method, $url): MockResponse {
+                self::assertSame('POST', $method);
+                self::assertSame('https://test.azure.com/openai/deployments/whspr/audio/transcriptions?api-version=2023-12', $url);
+
+                return new MockResponse('{"text": "Hello World"}');
+            },
         ]);
-        
-        $client = new WhisperModelClient(
-            $httpClient,
-            'test.openai.azure.com',
-            'whisper-deployment',
-            '2023-12-01-preview',
-            'test-key'
-        );
+
+        $client = new WhisperModelClient($httpClient, 'test.azure.com', 'whspr', '2023-12', 'test-key');
         $model = new Whisper();
         $payload = ['file' => 'audio-data'];
 
         $client->request($model, $payload);
 
-        $requestInfo = $httpClient->getRequestsCount() > 0 ? 
-            $httpClient->getRequestsHistory()[0] : null;
-        
-        self::assertNotNull($requestInfo);
-        self::assertSame('POST', $requestInfo['method']);
-        self::assertStringContains('/audio/transcriptions', $requestInfo['url']);
+        self::assertSame(1, $httpClient->getRequestsCount());
     }
 
     #[Test]
     public function itUsesTranscriptionEndpointWhenTaskIsSpecified(): void
     {
         $httpClient = new MockHttpClient([
-            new MockResponse('{"text": "Hello World"}'),
+            function ($method, $url): MockResponse {
+                self::assertSame('POST', $method);
+                self::assertSame('https://test.azure.com/openai/deployments/whspr/audio/transcriptions?api-version=2023-12', $url);
+
+                return new MockResponse('{"text": "Hello World"}');
+            },
         ]);
-        
-        $client = new WhisperModelClient(
-            $httpClient,
-            'test.openai.azure.com',
-            'whisper-deployment',
-            '2023-12-01-preview',
-            'test-key'
-        );
+
+        $client = new WhisperModelClient($httpClient, 'test.azure.com', 'whspr', '2023-12', 'test-key');
         $model = new Whisper();
         $payload = ['file' => 'audio-data'];
         $options = ['task' => Task::TRANSCRIPTION];
 
         $client->request($model, $payload, $options);
 
-        $requestInfo = $httpClient->getRequestsCount() > 0 ? 
-            $httpClient->getRequestsHistory()[0] : null;
-        
-        self::assertNotNull($requestInfo);
-        self::assertSame('POST', $requestInfo['method']);
-        self::assertStringContains('/audio/transcriptions', $requestInfo['url']);
+        self::assertSame(1, $httpClient->getRequestsCount());
     }
 
     #[Test]
     public function itUsesTranslationEndpointWhenTaskIsSpecified(): void
     {
         $httpClient = new MockHttpClient([
-            new MockResponse('{"text": "Hello World"}'),
+            function ($method, $url): MockResponse {
+                self::assertSame('POST', $method);
+                self::assertSame('https://test.azure.com/openai/deployments/whspr/audio/translations?api-version=2023-12', $url);
+
+                return new MockResponse('{"text": "Hello World"}');
+            },
         ]);
-        
-        $client = new WhisperModelClient(
-            $httpClient,
-            'test.openai.azure.com',
-            'whisper-deployment',
-            '2023-12-01-preview',
-            'test-key'
-        );
+
+        $client = new WhisperModelClient($httpClient, 'test.azure.com', 'whspr', '2023-12', 'test-key');
         $model = new Whisper();
         $payload = ['file' => 'audio-data'];
         $options = ['task' => Task::TRANSLATION];
 
         $client->request($model, $payload, $options);
 
-        $requestInfo = $httpClient->getRequestsCount() > 0 ? 
-            $httpClient->getRequestsHistory()[0] : null;
-        
-        self::assertNotNull($requestInfo);
-        self::assertSame('POST', $requestInfo['method']);
-        self::assertStringContains('/audio/translations', $requestInfo['url']);
+        self::assertSame(1, $httpClient->getRequestsCount());
     }
 }

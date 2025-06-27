@@ -31,30 +31,35 @@ final class ModelClientTest extends TestCase
     public function itUsesTranscriptionEndpointByDefault(): void
     {
         $httpClient = new MockHttpClient([
-            new MockResponse('{"text": "Hello World"}'),
+            function ($method, $url): MockResponse {
+                self::assertSame('POST', $method);
+                self::assertSame('https://api.openai.com/v1/audio/transcriptions', $url);
+
+                return new MockResponse('{"text": "Hello World"}');
+            },
         ]);
-        
+
         $client = new ModelClient($httpClient, 'test-key');
         $model = new Whisper();
         $payload = ['file' => 'audio-data'];
 
         $client->request($model, $payload);
 
-        $requestInfo = $httpClient->getRequestsCount() > 0 ? 
-            $httpClient->getRequestsHistory()[0] : null;
-        
-        self::assertNotNull($requestInfo);
-        self::assertSame('POST', $requestInfo['method']);
-        self::assertSame('https://api.openai.com/v1/audio/transcriptions', $requestInfo['url']);
+        self::assertSame(1, $httpClient->getRequestsCount());
     }
 
     #[Test]
     public function itUsesTranscriptionEndpointWhenTaskIsSpecified(): void
     {
         $httpClient = new MockHttpClient([
-            new MockResponse('{"text": "Hello World"}'),
+            function ($method, $url): MockResponse {
+                self::assertSame('POST', $method);
+                self::assertSame('https://api.openai.com/v1/audio/transcriptions', $url);
+
+                return new MockResponse('{"text": "Hello World"}');
+            },
         ]);
-        
+
         $client = new ModelClient($httpClient, 'test-key');
         $model = new Whisper();
         $payload = ['file' => 'audio-data'];
@@ -62,21 +67,21 @@ final class ModelClientTest extends TestCase
 
         $client->request($model, $payload, $options);
 
-        $requestInfo = $httpClient->getRequestsCount() > 0 ? 
-            $httpClient->getRequestsHistory()[0] : null;
-        
-        self::assertNotNull($requestInfo);
-        self::assertSame('POST', $requestInfo['method']);
-        self::assertSame('https://api.openai.com/v1/audio/transcriptions', $requestInfo['url']);
+        self::assertSame(1, $httpClient->getRequestsCount());
     }
 
     #[Test]
     public function itUsesTranslationEndpointWhenTaskIsSpecified(): void
     {
         $httpClient = new MockHttpClient([
-            new MockResponse('{"text": "Hello World"}'),
+            function ($method, $url): MockResponse {
+                self::assertSame('POST', $method);
+                self::assertSame('https://api.openai.com/v1/audio/translations', $url);
+
+                return new MockResponse('{"text": "Hello World"}');
+            },
         ]);
-        
+
         $client = new ModelClient($httpClient, 'test-key');
         $model = new Whisper();
         $payload = ['file' => 'audio-data'];
@@ -84,11 +89,6 @@ final class ModelClientTest extends TestCase
 
         $client->request($model, $payload, $options);
 
-        $requestInfo = $httpClient->getRequestsCount() > 0 ? 
-            $httpClient->getRequestsHistory()[0] : null;
-        
-        self::assertNotNull($requestInfo);
-        self::assertSame('POST', $requestInfo['method']);
-        self::assertSame('https://api.openai.com/v1/audio/translations', $requestInfo['url']);
+        self::assertSame(1, $httpClient->getRequestsCount());
     }
 }
