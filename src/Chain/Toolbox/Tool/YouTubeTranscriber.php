@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Chain\Toolbox\Tool;
 
+use MrMySQL\YoutubeTranscript\TranscriptListFetcher;
 use PhpLlm\LlmChain\Chain\Exception\LogicException;
-use PhpLlm\LlmChain\Chain\Exception\RuntimeException;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
-use Symfony\Component\CssSelector\CssSelectorConverter;
-use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpClient\Psr18Client;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -20,11 +19,8 @@ final readonly class YouTubeTranscriber
     public function __construct(
         private HttpClientInterface $client,
     ) {
-        if (!class_exists(Crawler::class)) {
-            throw new LogicException('The Symfony DomCrawler component is required to use this tool. Try running "composer require symfony/dom-crawler".');
-        }
-        if (!class_exists(CssSelectorConverter::class)) {
-            throw new LogicException('The Symfony CSS Selector component is required to use this tool. Try running "composer require symfony/css-selector".');
+        if (!class_exists(TranscriptListFetcher::class)) {
+            throw new LogicException('The package `mrmysql/youtube-transcript` is required to use this tool. Try running "composer require mrmysql/youtube-transcript".');
         }
     }
 
@@ -33,40 +29,14 @@ final readonly class YouTubeTranscriber
      */
     public function __invoke(string $videoId): string
     {
-        // Fetch the HTML content of the YouTube video page
-        $htmlResponse = $this->client->request('GET', 'https://youtube.com/watch?v='.$videoId);
-        $html = $htmlResponse->getContent();
+        $psr18Client = new Psr18Client($this->client);
+        $fetcher = new TranscriptListFetcher($psr18Client, $psr18Client, $psr18Client);
 
-        // Use DomCrawler to parse the HTML
-        $crawler = new Crawler($html);
+        $list = $fetcher->fetch($videoId);
+        $transcript = $list->findTranscript($list->getAvailableLanguageCodes());
 
-        // Extract the script containing the ytInitialPlayerResponse
-        $scriptContent = $crawler->filter('script')->reduce(function (Crawler $node) {
-            return str_contains($node->text(), 'var ytInitialPlayerResponse = {');
-        })->text();
-
-        // Extract and parse the JSON data from the script
-        $start = strpos($scriptContent, 'var ytInitialPlayerResponse = ') + \strlen('var ytInitialPlayerResponse = ');
-        $dataString = substr($scriptContent, $start);
-        $dataString = substr($dataString, 0, strrpos($dataString, ';') ?: null);
-        $data = json_decode(trim($dataString), true);
-
-        // Extract the URL for the captions
-        if (!isset($data['captions']['playerCaptionsTracklistRenderer']['captionTracks'][0]['baseUrl'])) {
-            throw new RuntimeException('Captions are not available for this video.');
-        }
-        $captionsUrl = $data['captions']['playerCaptionsTracklistRenderer']['captionTracks'][0]['baseUrl'];
-
-        // Fetch and parse the captions XML
-        $xmlResponse = $this->client->request('GET', $captionsUrl);
-        $xmlContent = $xmlResponse->getContent();
-        $xmlCrawler = new Crawler($xmlContent);
-
-        // Collect all text elements from the captions
-        $transcript = $xmlCrawler->filter('text')->each(function (Crawler $node) {
-            return $node->text().' ';
-        });
-
-        return implode(\PHP_EOL, $transcript);
+        return array_reduce($transcript->fetch(), function (string $carry, array $item): string {
+            return $carry.\PHP_EOL.$item['text'];
+        }, '');
     }
 }

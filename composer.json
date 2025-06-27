@@ -43,6 +43,7 @@
         "async-aws/bedrock-runtime": "^0.1.0",
         "doctrine/dbal": "^3.0 || ^4.0",
         "mongodb/mongodb": "^1.21 || ^2.0",
+        "mrmysql/youtube-transcript": "^v0.0.5",
         "php-cs-fixer/shim": "^3.70",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
@@ -66,9 +67,9 @@
         "codewithkyrian/transformers": "For using the TransformersPHP with FFI to run models in PHP.",
         "doctrine/dbal": "For using MariaDB via Doctrine as retrieval vector store",
         "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
+        "mrmysql/youtube-transcript": "For using the YouTube transcription tool.",
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
-        "symfony/css-selector": "For using the YouTube transcription tool.",
-        "symfony/dom-crawler": "For using the YouTube transcription tool."
+        "symfony/dom-crawler": "For using the Crawler tool."
     },
     "config": {
         "allow-plugins": {
