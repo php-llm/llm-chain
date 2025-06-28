@@ -5,6 +5,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\SingleCommandApplication;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -17,6 +18,7 @@ require_once __DIR__.'/vendor/autoload.php';
 $app = (new SingleCommandApplication('LLM Chain Example Runner'))
     ->setDescription('Runs all LLM Chain examples in folder examples/')
     ->addArgument('subdirectory', InputArgument::OPTIONAL, 'Subdirectory to run examples from, e.g. "anthropic" or "huggingface".')
+    ->addOption('filter', 'f', InputOption::VALUE_REQUIRED, 'Filter examples by name, e.g. "audio" or "toolcall".')
     ->setCode(function (InputInterface $input, OutputInterface $output) {
         $io = new SymfonyStyle($input, $output);
         $io->title('LLM Chain Examples');
@@ -31,9 +33,14 @@ $app = (new SingleCommandApplication('LLM Chain Example Runner'))
             }
         }
 
+        $filter = '*.php';
+        if (null !== $additionalFilter = $input->getOption('filter')) {
+            $filter = sprintf('*%s*.php', $additionalFilter);
+        }
+
         $examples = (new Finder())
             ->in($directory)
-            ->name('*.php')
+            ->name($filter)
             ->sortByName()
             ->files();
 
