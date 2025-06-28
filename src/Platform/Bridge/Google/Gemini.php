@@ -29,6 +29,7 @@ class Gemini extends Model
             Capability::INPUT_AUDIO,
             Capability::INPUT_PDF,
             Capability::OUTPUT_STREAMING,
+            Capability::OUTPUT_STRUCTURED,
             Capability::TOOL_CALLING,
         ];
 
