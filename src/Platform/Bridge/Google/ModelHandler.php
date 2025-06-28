@@ -63,10 +63,19 @@ final readonly class ModelHandler implements ModelClientInterface, ResponseConve
         $generationConfig = ['generationConfig' => $options];
         unset($generationConfig['generationConfig']['stream']);
         unset($generationConfig['generationConfig']['tools']);
+        unset($generationConfig['generationConfig']['server_tools']);
 
         if (isset($options['tools'])) {
             $generationConfig['tools'] = $options['tools'];
             unset($options['tools']);
+        }
+
+        foreach ($options['server_tools'] ?? [] as $tool => $params) {
+            if (!$params) {
+                continue;
+            }
+
+            $generationConfig['tools'][] = [$tool => true === $params ? new \ArrayObject() : $params];
         }
 
         return $this->httpClient->request('POST', $url, [
