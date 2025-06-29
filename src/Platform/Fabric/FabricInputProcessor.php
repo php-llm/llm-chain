@@ -26,7 +26,7 @@ final readonly class FabricInputProcessor implements InputProcessorInterface
     {
         $options = $input->getOptions();
 
-        if (!isset($options['fabric_pattern'])) {
+        if (!\array_key_exists('fabric_pattern', $options)) {
             return;
         }
 
