@@ -801,7 +801,6 @@ final class MyProcessor implements OutputProcessorInterface, ChainAwareInterface
 }
 ```
 
-
 ## Memory
 
 LLM Chain supports adding contextual memory to your conversations, which allows the model to recall past interactions or relevant information from different sources. Memory providers inject information into the system prompt, providing the model with context without changing your application logic.
@@ -818,64 +817,119 @@ use PhpLlm\LlmChain\Chain\Memory\StaticMemoryProvider;
 
 // Platform & LLM instantiation
 
-$personalFacts = new StaticMemoryProvider(
-    'My name is Wilhelm Tell',
-    'I wish to be a swiss national hero',
-    'I am struggling with hitting apples but want to be professional with the bow and arrow',
-);
-$memoryProcessor = new MemoryInputProcessor($personalFacts);
+// Create memory providers
+$conversationHistory = new StaticMemoryProvider([
+    'User: What is the capital of France?',
+    'Assistant: The capital of France is Paris.',
+]);
 
-$chain = new Chain($platform, $model, [$memoryProcessor]);
-$messages = new MessageBag(Message::ofUser('What do we do today?'));
-$response = $chain->call($messages);
-```
+$contextualInfo = new StaticMemoryProvider([
+    'The user prefers concise answers',
+    'Current date: ' . date('Y-m-d'),
+]);
 
-### Memory Providers
-
-The library includes some implementations that are usable out of the box.
-
-#### Static Memory
-
-The static memory can be utilized to provide static information form, for example, user settings, basic knowledge of your application
-or any other thing that should be remembered als always there without the need of having it statically added to the system prompt by
-yourself.
-
-```php
-use PhpLlm\LlmChain\Chain\Memory\StaticMemoryProvider;
-
-$staticMemory = new StaticMemoryProvider(
-    'The user is allergic to nuts',
-    'The user prefers brief explanations',
-);
-```
-
-#### Embedding Provider
-
-Based on an embedding storage the given user message is utilized to inject knowledge from the storage. This could be general knowledge that was stored there and could fit the users input without the need for tools or past conversation pieces that should be recalled for
-the current message bag.
-
-```php
-use PhpLlm\LlmChain\Chain\Memory\EmbeddingProvider;
-
-$embeddingsMemory = new EmbeddingProvider(
-    $platform,
-    $embeddings, // Your embeddings model to use for vectorizing the users message
-    $store       // Your vector store to query for fitting context
+// Create memory processor with providers
+$memoryProcessor = new MemoryInputProcessor(
+    $conversationHistory,
+    $contextualInfo,
 );
 
+// Add to chain
+$chain = new Chain(
+    $platform, 
+    $model, 
+    inputProcessors: [$memoryProcessor]
+);
+
+$response = $chain->call('What did I just ask you about?');
+// The model now has access to the conversation history and can reference the previous question
 ```
 
-### Dynamically Memory Usage
+### Available Memory Providers
 
-The memory configuration is globally given for the chain. Sometimes there is the need to explicit disable the memory when it is not needed for some calls or calls are not in the wanted context for a call. So there is the option `use_memory` that is enabled by default but can be disabled on premise.
+#### Static Memory Provider
+
+Pre-defined memories that don't change during execution:
 
 ```php
-$response = $chain->call($messages, [
+$staticMemory = new StaticMemoryProvider([
+    'User profile: Developer interested in AI',
+    'Application context: Customer support chatbot',
+]);
+```
+
+#### Document Store Memory Provider
+
+Dynamically fetch relevant memories from a document store:
+
+```php
+use PhpLlm\LlmChain\Chain\Memory\DocumentStoreMemoryProvider;
+
+$documentStore = // ... your document store instance
+$embeddingsModel = // ... your embeddings model
+
+$memoryProvider = new DocumentStoreMemoryProvider(
+    $documentStore,
+    $embeddingsModel,
+    10 // number of relevant documents to retrieve
+);
+```
+
+This provider will search for relevant documents based on the current input and include them as context.
+
+### Controlling Memory Usage
+
+You can enable or disable memory on a per-call basis using the `use_memory` option:
+
+```php
+// Disable memory for this specific call
+$response = $chain->call('What is 2+2?', [
     'use_memory' => false,
 ]);
 ```
 
+### Fabric Patterns
 
+LLM Chain supports [Fabric](https://github.com/danielmiessler/fabric), a popular collection of system prompts from the AI community. These patterns provide pre-built, tested prompts for common tasks like summarization, analysis, and content creation.
+
+> [!NOTE]
+> Using Fabric patterns requires the `php-llm/fabric-pattern` package to be installed separately.
+
+#### Installation
+
+```bash
+composer require php-llm/fabric-pattern
+```
+
+#### Usage
+
+```php
+use PhpLlm\LlmChain\Platform\Fabric\FabricPrompt;
+use PhpLlm\LlmChain\Platform\Message\Message;
+
+// Create a system message from a Fabric pattern
+$systemMessage = Message::fabric(FabricPrompt::summarize());
+
+// Or customize it with additional instructions
+$systemMessage = Message::fabric(FabricPrompt::summarize('Focus on technical details'));
+
+$chain = new Chain($platform, $model);
+$response = $chain->call([
+    $systemMessage,
+    Message::forUser('Your long article text here...')
+]);
+```
+
+#### Available Patterns
+
+Some popular patterns include:
+- `summarize` - Create concise summaries
+- `analyze_claims` - Fact-check and analyze claims
+- `extract_wisdom` - Extract key insights and wisdom
+- `improve_writing` - Improve writing quality and clarity
+- `create_quiz` - Generate quiz questions from content
+
+For a full list of available patterns, visit the [Fabric patterns directory](https://github.com/danielmiessler/fabric/tree/main/patterns).
 ## HuggingFace
 
 LLM Chain comes out of the box with an integration for [HuggingFace](https://huggingface.co/)  which is a platform for
