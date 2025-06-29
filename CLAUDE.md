@@ -103,3 +103,6 @@ This is a PHP library for building LLM-based applications with a unified abstrac
 - PHPStan level 6 compliance
 - PSR-12 coding style (enforced by PHP CS Fixer)
 - Comprehensive PHPDoc comments for public APIs
+
+### Commit Guidelines
+- Use conventional commits for consistent and meaningful commit messages
