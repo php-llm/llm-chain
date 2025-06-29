@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV7;
 
 #[CoversClass(AssistantMessage::class)]
 #[UsesClass(ToolCall::class)]
@@ -42,5 +43,24 @@ final class AssistantMessageTest extends TestCase
         self::assertNull($message->content);
         self::assertSame([$toolCall], $message->toolCalls);
         self::assertTrue($message->hasToolCalls());
+    }
+
+    #[Test]
+    public function messageHasUid(): void
+    {
+        $message = new AssistantMessage('foo');
+
+        self::assertInstanceOf(UuidV7::class, $message->uid);
+        self::assertInstanceOf(UuidV7::class, $message->getUid());
+        self::assertSame($message->uid, $message->getUid());
+    }
+
+    #[Test]
+    public function differentMessagesHaveDifferentUids(): void
+    {
+        $message1 = new AssistantMessage('foo');
+        $message2 = new AssistantMessage('bar');
+
+        self::assertNotEquals($message1->getUid()->toRfc4122(), $message2->getUid()->toRfc4122());
     }
 }

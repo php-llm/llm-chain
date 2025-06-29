@@ -33,7 +33,7 @@
         "symfony/property-info": "^6.4 || ^7.1",
         "symfony/serializer": "^6.4 || ^7.1",
         "symfony/type-info": "^7.2.3",
-        "symfony/uid": "^6.4 || ^7.1",
+        "symfony/uid": "^7.3",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {

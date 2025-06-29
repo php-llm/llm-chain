@@ -14,6 +14,7 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV7;
 
 #[CoversClass(UserMessage::class)]
 #[UsesClass(Text::class)]
@@ -72,5 +73,24 @@ final class UserMessageTest extends TestCase
         $message = new UserMessage(new Text('foo'), new ImageUrl('https://foo.com/bar.jpg'));
 
         self::assertTrue($message->hasImageContent());
+    }
+
+    #[Test]
+    public function messageHasUid(): void
+    {
+        $message = new UserMessage(new Text('foo'));
+
+        self::assertInstanceOf(UuidV7::class, $message->uid);
+        self::assertInstanceOf(UuidV7::class, $message->getUid());
+        self::assertSame($message->uid, $message->getUid());
+    }
+
+    #[Test]
+    public function differentMessagesHaveDifferentUids(): void
+    {
+        $message1 = new UserMessage(new Text('foo'));
+        $message2 = new UserMessage(new Text('bar'));
+
+        self::assertNotEquals($message1->getUid()->toRfc4122(), $message2->getUid()->toRfc4122());
     }
 }
