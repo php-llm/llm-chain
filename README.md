@@ -769,6 +769,82 @@ final class MyProcessor implements OutputProcessorInterface, ChainAwareInterface
 }
 ```
 
+### Fabric Patterns
+
+LLM Chain supports [Fabric](https://github.com/danielmiessler/fabric), a popular collection of system prompts from the AI community. These patterns provide pre-built, tested prompts for common tasks like summarization, analysis, and content creation.
+
+> [!NOTE]
+> Using Fabric patterns requires the `php-llm/fabric-pattern` package to be installed separately.
+
+#### Installation
+
+```bash
+composer require php-llm/fabric-pattern
+```
+
+#### Usage with Message Factory
+
+The simplest way to use Fabric patterns is through the `Message::fabric()` factory method:
+
+```php
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
+
+$messages = new MessageBag(
+    Message::fabric('create_summary'),
+    Message::ofUser($articleContent)
+);
+
+$response = $chain->call($messages);
+```
+
+#### Usage with Input Processor
+
+For more flexibility, you can use the `FabricInputProcessor` to dynamically load patterns:
+
+```php
+use PhpLlm\LlmChain\Chain\Chain;
+use PhpLlm\LlmChain\Platform\Fabric\FabricInputProcessor;
+
+// Initialize Platform and LLM
+
+$processor = new FabricInputProcessor();
+$chain = new Chain($platform, $model, [$processor]);
+
+$messages = new MessageBag(
+    Message::ofUser('Analyze this article for potential security issues: ...')
+);
+
+// Use any Fabric pattern via options
+$response = $chain->call($messages, ['fabric_pattern' => 'analyze_threat_report']);
+```
+
+#### Custom Pattern Locations
+
+If you have your own collection of patterns or want to use a local copy:
+
+```php
+use PhpLlm\LlmChain\Platform\Fabric\FabricRepository;
+
+// Use custom pattern directory
+$repository = new FabricRepository('/path/to/custom/patterns');
+$processor = new FabricInputProcessor($repository);
+
+// Or with the factory method
+$message = Message::fabric('my_custom_pattern', '/path/to/custom/patterns');
+```
+
+#### Available Patterns
+
+Some popular Fabric patterns include:
+- `create_summary` - Create a comprehensive summary
+- `analyze_claims` - Analyze and fact-check claims
+- `extract_wisdom` - Extract key insights and wisdom
+- `improve_writing` - Improve writing quality and clarity
+- `create_quiz` - Generate quiz questions from content
+
+For a full list of available patterns, visit the [Fabric patterns directory](https://github.com/danielmiessler/fabric/tree/main/patterns).
+
 ## HuggingFace
 
 LLM Chain comes out of the box with an integration for [HuggingFace](https://huggingface.co/)  which is a platform for
