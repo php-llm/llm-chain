@@ -10,6 +10,7 @@ namespace PhpLlm\LlmChain\Platform\Fabric;
 final readonly class FabricPrompt implements FabricPromptInterface
 {
     /**
+     * @param non-empty-string $pattern
      * @param array<string, mixed> $metadata
      */
     public function __construct(
@@ -19,6 +20,9 @@ final readonly class FabricPrompt implements FabricPromptInterface
     ) {
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getPattern(): string
     {
         return $this->pattern;

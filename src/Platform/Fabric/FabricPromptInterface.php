@@ -11,6 +11,8 @@ interface FabricPromptInterface
 {
     /**
      * Get the pattern name (e.g., 'create_summary').
+     *
+     * @return non-empty-string
      */
     public function getPattern(): string;
 
