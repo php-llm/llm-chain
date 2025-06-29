@@ -16,13 +16,10 @@ use PhpLlm\LlmChain\Platform\Message\SystemMessage;
  * This processor allows adding Fabric patterns through options:
  * - fabric_pattern: string - The pattern name to load
  */
-final class FabricInputProcessor implements InputProcessorInterface
+final readonly class FabricInputProcessor implements InputProcessorInterface
 {
-    private ?FabricRepository $repository;
-
-    public function __construct(?FabricRepository $repository = null)
+    public function __construct(private ?FabricRepository $repository = null)
     {
-        $this->repository = $repository;
     }
 
     public function processInput(Input $input): void

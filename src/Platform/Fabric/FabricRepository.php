@@ -26,9 +26,7 @@ class FabricRepository
             if (is_dir($fabricPatternPath)) {
                 $this->patternsPath = $fabricPatternPath;
             } else {
-                throw new \RuntimeException(
-                    'Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern'
-                );
+                throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
             }
         } else {
             $this->patternsPath = $patternsPath;
