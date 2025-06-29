@@ -46,7 +46,7 @@ final class ToolCallMessageTest extends TestCase
         $message1 = new ToolCallMessage($toolCall, 'bar');
         $message2 = new ToolCallMessage($toolCall, 'baz');
 
-        self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
+        self::assertNotSame($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
     }
 
     #[Test]
@@ -56,6 +56,6 @@ final class ToolCallMessageTest extends TestCase
         $message1 = new ToolCallMessage($toolCall, 'bar');
         $message2 = new ToolCallMessage($toolCall, 'bar');
 
-        self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
+        self::assertNotSame($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
     }
 }

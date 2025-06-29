@@ -61,7 +61,7 @@ final class AssistantMessageTest extends TestCase
         $message1 = new AssistantMessage('foo');
         $message2 = new AssistantMessage('bar');
 
-        self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
+        self::assertNotSame($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
     }
 
     #[Test]
@@ -70,6 +70,6 @@ final class AssistantMessageTest extends TestCase
         $message1 = new AssistantMessage('foo');
         $message2 = new AssistantMessage('foo');
 
-        self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
+        self::assertNotSame($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
     }
 }

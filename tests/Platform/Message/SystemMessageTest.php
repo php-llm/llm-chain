@@ -41,7 +41,7 @@ final class SystemMessageTest extends TestCase
         $message1 = new SystemMessage('foo');
         $message2 = new SystemMessage('bar');
 
-        self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
+        self::assertNotSame($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
     }
 
     #[Test]
@@ -50,6 +50,6 @@ final class SystemMessageTest extends TestCase
         $message1 = new SystemMessage('foo');
         $message2 = new SystemMessage('foo');
 
-        self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
+        self::assertNotSame($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
     }
 }
