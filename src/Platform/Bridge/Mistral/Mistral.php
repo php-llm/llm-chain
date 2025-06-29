@@ -34,7 +34,7 @@ final class Mistral extends Model
             Capability::INPUT_MESSAGES,
             Capability::OUTPUT_TEXT,
             Capability::OUTPUT_STREAMING,
-            Capability::OUTPUT_STRUCTURED,
+            Capability::STRUCTURED_OUTPUT,
         ];
 
         if (\in_array($name, [self::PIXSTRAL, self::PIXSTRAL_LARGE, self::MISTRAL_SMALL], true)) {

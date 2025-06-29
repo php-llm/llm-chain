@@ -46,7 +46,7 @@ final class ChainProcessor implements InputProcessorInterface, OutputProcessorIn
             return;
         }
 
-        if (!$input->model->supports(Capability::OUTPUT_STRUCTURED)) {
+        if (!$input->model->supports(Capability::STRUCTURED_OUTPUT)) {
             throw MissingModelSupportException::forStructuredOutput($input->model::class);
         }
 

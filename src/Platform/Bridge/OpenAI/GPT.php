@@ -75,7 +75,7 @@ class GPT extends Model
         }
 
         if (\in_array($name, self::STRUCTURED_OUTPUT_SUPPORTING, true)) {
-            $capabilities[] = Capability::OUTPUT_STRUCTURED;
+            $capabilities[] = Capability::STRUCTURED_OUTPUT;
         }
 
         parent::__construct($name, $capabilities, $options);
