@@ -18,11 +18,9 @@ use PhpLlm\LlmChain\Platform\Message\SystemMessage;
  */
 final readonly class FabricInputProcessor implements InputProcessorInterface
 {
-    private FabricRepository $repository;
-
-    public function __construct(?FabricRepository $repository = null)
-    {
-        $this->repository = $repository ?? new FabricRepository();
+    public function __construct(
+        private FabricRepository $repository = new FabricRepository(),
+    ) {
     }
 
     public function processInput(Input $input): void

@@ -12,14 +12,14 @@ use PhpLlm\LlmChain\Platform\Message\MessageBag;
 require_once dirname(__DIR__).'/../vendor/autoload.php';
 
 if (empty($_ENV['OPENAI_API_KEY'])) {
-    echo 'Please set the OPENAI_API_KEY environment variable.'.PHP_EOL;
+    echo 'Please set the OPENAI_API_KEY environment variable.'.\PHP_EOL;
     exit(1);
 }
 
 // Check if Fabric patterns package is installed
 if (!is_dir(dirname(__DIR__, 2).'/vendor/php-llm/fabric-pattern')) {
-    echo 'Fabric patterns are not installed.'.PHP_EOL;
-    echo 'Please install them with: composer require php-llm/fabric-pattern'.PHP_EOL;
+    echo 'Fabric patterns are not installed.'.\PHP_EOL;
+    echo 'Please install them with: composer require php-llm/fabric-pattern'.\PHP_EOL;
     exit(1);
 }
 
@@ -51,6 +51,6 @@ $messages = new MessageBag(
 // Call with Fabric pattern
 $response = $chain->call($messages, ['fabric_pattern' => 'analyze_code']);
 
-echo 'Code Analysis using Fabric pattern "analyze_code":'.PHP_EOL;
-echo '=================================================='.PHP_EOL;
-echo $response->getContent().PHP_EOL;
+echo 'Code Analysis using Fabric pattern "analyze_code":'.\PHP_EOL;
+echo '=================================================='.\PHP_EOL;
+echo $response->getContent().\PHP_EOL;
