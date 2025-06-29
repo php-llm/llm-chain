@@ -18,8 +18,11 @@ use PhpLlm\LlmChain\Platform\Message\SystemMessage;
  */
 final readonly class FabricInputProcessor implements InputProcessorInterface
 {
-    public function __construct(private ?FabricRepository $repository = null)
+    private FabricRepository $repository;
+
+    public function __construct(?FabricRepository $repository = null)
     {
+        $this->repository = $repository ?? new FabricRepository();
     }
 
     public function processInput(Input $input): void
@@ -36,8 +39,7 @@ final readonly class FabricInputProcessor implements InputProcessorInterface
         }
 
         // Load the pattern and prepend as system message
-        $repository = $this->repository ?? new FabricRepository();
-        $fabricPrompt = $repository->load($pattern);
+        $fabricPrompt = $this->repository->load($pattern);
         $systemMessage = new SystemMessage($fabricPrompt->getContent());
 
         // Prepend the system message
