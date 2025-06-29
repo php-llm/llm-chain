@@ -45,7 +45,7 @@
         "mrmysql/youtube-transcript": "^v0.0.5",
         "php-cs-fixer/shim": "^3.70",
         "php-http/discovery": "^1.20",
-        "php-llm/fabric-pattern": "^0.1 || ^1.0",
+        "php-llm/fabric-pattern": "^0.1",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
         "phpstan/phpstan-webmozart-assert": "^2.0",
