@@ -51,6 +51,6 @@ $messages = new MessageBag(
 // Call with Fabric pattern
 $response = $chain->call($messages, ['fabric_pattern' => 'analyze_code']);
 
-echo 'Code Analysis using Fabric pattern:'.PHP_EOL;
-echo '==================================='.PHP_EOL;
+echo 'Code Analysis using Fabric pattern "analyze_code":'.PHP_EOL;
+echo '=================================================='.PHP_EOL;
 echo $response->getContent().PHP_EOL;

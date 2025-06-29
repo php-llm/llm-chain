@@ -50,6 +50,6 @@ $messages = new MessageBag(
 // Call the chain
 $response = $chain->call($messages);
 
-echo 'Summary using Fabric pattern:'.PHP_EOL;
-echo '=============================='.PHP_EOL;
+echo 'Summary using Fabric pattern "create_summary":'.PHP_EOL;
+echo '=============================================='.PHP_EOL;
 echo $response->getContent().PHP_EOL;
