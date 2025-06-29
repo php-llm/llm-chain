@@ -45,6 +45,7 @@
         "mrmysql/youtube-transcript": "^v0.0.5",
         "php-cs-fixer/shim": "^3.70",
         "php-http/discovery": "^1.20",
+        "php-llm/fabric-pattern": "^0.1 || ^1.0",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
         "phpstan/phpstan-webmozart-assert": "^2.0",
@@ -62,6 +63,18 @@
         "symfony/http-foundation": "^6.4 || ^7.1",
         "symfony/process": "^6.4 || ^7.1",
         "symfony/var-dumper": "^6.4 || ^7.1"
+    },
+    "suggest": {
+        "ext-pdo": "For using MariaDB as retrieval vector store.",
+        "async-aws/bedrock-runtime": "For using the Bedrock platform.",
+        "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
+        "codewithkyrian/transformers": "For using the TransformersPHP with FFI to run models in PHP.",
+        "doctrine/dbal": "For using MariaDB via Doctrine as retrieval vector store",
+        "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
+        "mrmysql/youtube-transcript": "For using the YouTube transcription tool.",
+        "php-llm/fabric-pattern": "For using Fabric patterns - a collection of pre-built system prompts.",
+        "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
+        "symfony/dom-crawler": "For using the Crawler tool."
     },
     "config": {
         "allow-plugins": {
