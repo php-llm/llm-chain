@@ -17,6 +17,7 @@ use PhpLlm\LlmChain\Platform\Contract\JsonSchema\Factory;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
 use PhpLlm\LlmChain\Platform\Tool\Tool;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolDate;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolException;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolMisconfigured;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolNoAttribute1;
@@ -53,6 +54,7 @@ final class ToolboxTest extends TestCase
             new ToolOptionalParam(),
             new ToolNoParams(),
             new ToolException(),
+            new ToolDate(),
         ]);
     }
 
@@ -115,11 +117,30 @@ final class ToolboxTest extends TestCase
             'This tool is broken',
         );
 
+        $toolDate = new Tool(
+            new ExecutionReference(ToolDate::class, '__invoke'),
+            'tool_date',
+            'A tool with date parameter',
+            [
+                'type' => 'object',
+                'properties' => [
+                    'date' => [
+                        'type' => 'string',
+                        'format' => 'date-time',
+                        'description' => 'The date',
+                    ],
+                ],
+                'required' => ['date'],
+                'additionalProperties' => false,
+            ],
+        );
+
         $expected = [
             $toolRequiredParams,
             $toolOptionalParam,
             $toolNoParams,
             $toolException,
+            $toolDate,
         ];
 
         self::assertEquals($expected, $actual);
@@ -173,6 +194,12 @@ final class ToolboxTest extends TestCase
             'Hello says "3".',
             'tool_required_params',
             ['text' => 'Hello', 'number' => 3],
+        ];
+
+        yield 'tool_date' => [
+            'Weekday: Sunday',
+            'tool_date',
+            ['date' => '2025-06-29'],
         ];
     }
 
