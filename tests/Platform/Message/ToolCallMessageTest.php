@@ -48,4 +48,14 @@ final class ToolCallMessageTest extends TestCase
 
         self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
     }
+
+    #[Test]
+    public function sameMessagesHaveDifferentUids(): void
+    {
+        $toolCall = new ToolCall('foo', 'bar');
+        $message1 = new ToolCallMessage($toolCall, 'bar');
+        $message2 = new ToolCallMessage($toolCall, 'bar');
+
+        self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
+    }
 }

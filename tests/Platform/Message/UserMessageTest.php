@@ -93,4 +93,13 @@ final class UserMessageTest extends TestCase
 
         self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
     }
+
+    #[Test]
+    public function sameMessagesHaveDifferentUids(): void
+    {
+        $message1 = new UserMessage(new Text('foo'));
+        $message2 = new UserMessage(new Text('foo'));
+
+        self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
+    }
 }

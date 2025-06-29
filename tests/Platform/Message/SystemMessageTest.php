@@ -43,4 +43,13 @@ final class SystemMessageTest extends TestCase
 
         self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
     }
+
+    #[Test]
+    public function sameMessagesHaveDifferentUids(): void
+    {
+        $message1 = new SystemMessage('foo');
+        $message2 = new SystemMessage('foo');
+
+        self::assertNotEquals($message1->getId()->toRfc4122(), $message2->getId()->toRfc4122());
+    }
 }
