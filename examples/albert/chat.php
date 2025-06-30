@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use PhpLlm\LlmChain\Chain\Chain;
+use PhpLlm\LlmChain\Platform\Bridge\Albert\PlatformFactory;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\GPT;
-use PhpLlm\LlmChain\Platform\Bridge\OpenAI\PlatformFactory;
 use PhpLlm\LlmChain\Platform\Message\Message;
 use PhpLlm\LlmChain\Platform\Message\MessageBag;
 
@@ -24,9 +24,10 @@ if (empty($albertApiUrl)) {
     exit(1);
 }
 
+// Create platform instance for Albert API
 $platform = PlatformFactory::create(
     apiKey: $albertApiKey,
-    baseUrl: rtrim((string) $albertApiUrl, '/').'/v1/',
+    albertUrl: $albertApiUrl,
 );
 
 $model = new GPT('gpt-4o');
