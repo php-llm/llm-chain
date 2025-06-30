@@ -18,12 +18,12 @@ $albertApiKey = $_ENV['ALBERT_API_KEY'] ?? null;
 $albertApiUrl = $_ENV['ALBERT_API_URL'] ?? null;
 
 if (empty($albertApiKey)) {
-    echo 'Please set the ALBERT_API_KEY environment variable.'.PHP_EOL;
+    echo 'Please set the ALBERT_API_KEY environment variable.'.\PHP_EOL;
     exit(1);
 }
 
 if (empty($albertApiUrl)) {
-    echo 'Please set the ALBERT_API_URL environment variable (e.g., https://your-albert-instance.com).'.PHP_EOL;
+    echo 'Please set the ALBERT_API_URL environment variable (e.g., https://your-albert-instance.com).'.\PHP_EOL;
     exit(1);
 }
 
@@ -57,7 +57,7 @@ final class FrenchDepartments
 // Initialize Albert API
 $platform = PlatformFactory::create(
     apiKey: $albertApiKey,
-    baseUrl: rtrim($albertApiUrl, '/').'/v1/',
+    baseUrl: rtrim((string) $albertApiUrl, '/').'/v1/',
 );
 
 $model = new GPT($_ENV['ALBERT_MODEL'] ?? 'albert-7b-v2');
@@ -76,6 +76,6 @@ $messages = new MessageBag(
 
 $response = $chain->call($messages);
 
-echo 'Albert API Tool Calling Response:'.PHP_EOL;
-echo '================================='.PHP_EOL;
-echo $response->getContent().PHP_EOL;
+echo 'Albert API Tool Calling Response:'.\PHP_EOL;
+echo '================================='.\PHP_EOL;
+echo $response->getContent().\PHP_EOL;

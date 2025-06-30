@@ -15,18 +15,18 @@ $albertApiKey = $_ENV['ALBERT_API_KEY'] ?? null;
 $albertApiUrl = $_ENV['ALBERT_API_URL'] ?? null;
 
 if (empty($albertApiKey)) {
-    echo 'Please set the ALBERT_API_KEY environment variable.'.PHP_EOL;
+    echo 'Please set the ALBERT_API_KEY environment variable.'.\PHP_EOL;
     exit(1);
 }
 
 if (empty($albertApiUrl)) {
-    echo 'Please set the ALBERT_API_URL environment variable (e.g., https://your-albert-instance.com).'.PHP_EOL;
+    echo 'Please set the ALBERT_API_URL environment variable (e.g., https://your-albert-instance.com).'.\PHP_EOL;
     exit(1);
 }
 
 $platform = PlatformFactory::create(
     apiKey: $albertApiKey,
-    baseUrl: rtrim($albertApiUrl, '/').'/v1/',
+    baseUrl: rtrim((string) $albertApiUrl, '/').'/v1/',
 );
 
 $model = new GPT($_ENV['ALBERT_MODEL'] ?? 'albert-7b-v2');
@@ -40,8 +40,8 @@ $messages = new MessageBag(
 // Enable streaming for real-time response
 $response = $chain->call($messages, ['stream' => true]);
 
-echo 'Albert API Streaming Response:'.PHP_EOL;
-echo '=============================='.PHP_EOL;
+echo 'Albert API Streaming Response:'.\PHP_EOL;
+echo '=============================='.\PHP_EOL;
 
 // Stream the response token by token
 foreach ($response->getContent() as $token) {
@@ -49,4 +49,4 @@ foreach ($response->getContent() as $token) {
     flush(); // Ensure immediate output
 }
 
-echo PHP_EOL;
+echo \PHP_EOL;

@@ -15,18 +15,18 @@ $albertApiKey = $_ENV['ALBERT_API_KEY'] ?? null;
 $albertApiUrl = $_ENV['ALBERT_API_URL'] ?? null;
 
 if (empty($albertApiKey)) {
-    echo 'Please set the ALBERT_API_KEY environment variable.'.PHP_EOL;
+    echo 'Please set the ALBERT_API_KEY environment variable.'.\PHP_EOL;
     exit(1);
 }
 
 if (empty($albertApiUrl)) {
-    echo 'Please set the ALBERT_API_URL environment variable (e.g., https://your-albert-instance.com).'.PHP_EOL;
+    echo 'Please set the ALBERT_API_URL environment variable (e.g., https://your-albert-instance.com).'.\PHP_EOL;
     exit(1);
 }
 
 $platform = PlatformFactory::create(
     apiKey: $albertApiKey,
-    baseUrl: rtrim($albertApiUrl, '/').'/v1/',
+    baseUrl: rtrim((string) $albertApiUrl, '/').'/v1/',
 );
 
 $model = new GPT($_ENV['ALBERT_MODEL'] ?? 'albert-7b-v2');
@@ -35,17 +35,17 @@ $chain = new Chain($platform, $model);
 // Albert API supports RAG out of the box
 // You can pass document context as part of your messages
 $documentContext = <<<'CONTEXT'
-Document: AI Strategy of France
+    Document: AI Strategy of France
 
-France has launched a comprehensive national AI strategy with the following key objectives:
-1. Strengthening the AI ecosystem and attracting talent
-2. Developing sovereign AI capabilities
-3. Ensuring ethical and responsible AI development
-4. Supporting AI adoption in public services
-5. Investing €1.5 billion in AI research and development
+    France has launched a comprehensive national AI strategy with the following key objectives:
+    1. Strengthening the AI ecosystem and attracting talent
+    2. Developing sovereign AI capabilities
+    3. Ensuring ethical and responsible AI development
+    4. Supporting AI adoption in public services
+    5. Investing €1.5 billion in AI research and development
 
-The Albert project is part of this strategy, providing a sovereign AI solution for French public administration.
-CONTEXT;
+    The Albert project is part of this strategy, providing a sovereign AI solution for French public administration.
+    CONTEXT;
 
 $messages = new MessageBag(
     Message::forSystem(
@@ -58,6 +58,6 @@ $messages = new MessageBag(
 
 $response = $chain->call($messages);
 
-echo 'Albert API RAG Response:'.PHP_EOL;
-echo '========================'.PHP_EOL;
-echo $response->getContent().PHP_EOL;
+echo 'Albert API RAG Response:'.\PHP_EOL;
+echo '========================'.\PHP_EOL;
+echo $response->getContent().\PHP_EOL;
