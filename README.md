@@ -89,6 +89,32 @@ a **MessageBag** to a **Chain**, which takes care of LLM invocation and response
 Messages can be of different types, most importantly `UserMessage`, `SystemMessage`, or `AssistantMessage`, and can also
 have different content types, like `Text`, `Image` or `Audio`.
 
+#### Message Unique IDs
+
+Each message automatically receives a unique identifier (UUID v7) upon creation.
+This provides several benefits:
+
+- **Traceability**: Track individual messages through your application
+- **Time-ordered**: UUIDs are naturally sortable by creation time
+- **Timestamp extraction**: Get the exact creation time from the ID
+- **Database-friendly**: Sequential nature improves index performance
+
+```php
+use PhpLlm\LlmChain\Platform\Message\Message;
+
+$message = Message::ofUser('Hello, AI!');
+
+// Access the unique ID
+$id = $message->getId(); // Returns Symfony\Component\Uid\Uuid instance
+
+// Extract creation timestamp
+$createdAt = $id->getDateTime(); // Returns \DateTimeImmutable
+echo $createdAt->format('Y-m-d H:i:s.u'); // e.g., "2025-06-29 15:30:45.123456"
+
+// Get string representation
+echo $id->toRfc4122(); // e.g., "01928d1f-6f2e-7123-a456-123456789abc"
+```
+
 #### Example Chain call with messages
 
 ```php

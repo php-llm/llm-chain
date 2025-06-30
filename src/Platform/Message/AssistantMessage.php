@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Platform\Message;
 
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @author Denis Zunke <denis.zunke@gmail.com>
  */
 final readonly class AssistantMessage implements MessageInterface
 {
+    public Uuid $id;
+
     /**
      * @param ?ToolCall[] $toolCalls
      */
@@ -18,11 +21,17 @@ final readonly class AssistantMessage implements MessageInterface
         public ?string $content = null,
         public ?array $toolCalls = null,
     ) {
+        $this->id = Uuid::v7();
     }
 
     public function getRole(): Role
     {
         return Role::Assistant;
+    }
+
+    public function getId(): Uuid
+    {
+        return $this->id;
     }
 
     public function hasToolCalls(): bool
