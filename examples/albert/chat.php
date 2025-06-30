@@ -31,9 +31,8 @@ $platform = PlatformFactory::create(
     baseUrl: rtrim((string) $albertApiUrl, '/').'/v1/', // Ensure proper URL format
 );
 
-// Use the model name provided by your Albert instance
-// This could be a custom model or one of the supported backends
-$model = new GPT($_ENV['ALBERT_MODEL'] ?? 'albert-7b-v2');
+// Use a model name - Albert will route to the appropriate backend
+$model = new GPT('gpt-4o');
 
 $chain = new Chain($platform, $model);
 

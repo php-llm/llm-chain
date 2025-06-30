@@ -11,7 +11,6 @@
 ```bash
 export ALBERT_API_KEY="your-api-key"
 export ALBERT_API_URL="https://your-albert-instance.com"
-export ALBERT_MODEL="albert-7b-v2"  # or your configured model
 ```
 
 ## Examples
@@ -28,17 +27,6 @@ php examples/albert/rag.php
 ```
 Shows how to use Albert's built-in RAG capabilities with document context.
 
-### Streaming
-```bash
-php examples/albert/stream.php
-```
-Demonstrates real-time streaming responses from Albert API.
-
-### Tool Calling
-```bash
-php examples/albert/toolcall.php
-```
-Shows how to use function/tool calling with Albert API.
 
 ## Configuration
 
@@ -63,6 +51,6 @@ $platform = PlatformFactory::create(
 
 ## Notes
 
-- The model name depends on your Albert deployment configuration
+- Albert will route requests to the appropriate backend based on your deployment configuration
 - Albert supports various model backends (OpenAI, vLLM, HuggingFace TEI)
 - Check your Albert instance documentation for available models and features

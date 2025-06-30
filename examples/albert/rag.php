@@ -29,7 +29,7 @@ $platform = PlatformFactory::create(
     baseUrl: rtrim((string) $albertApiUrl, '/').'/v1/',
 );
 
-$model = new GPT($_ENV['ALBERT_MODEL'] ?? 'albert-7b-v2');
+$model = new GPT('gpt-4o');
 $chain = new Chain($platform, $model);
 
 // Albert API supports RAG out of the box
