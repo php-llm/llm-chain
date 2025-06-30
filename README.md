@@ -141,7 +141,7 @@ $response = $chain->call($messages, [
 1. [Google's Gemini with Google](examples/google/chat.php)
 1. [Google's Gemini with OpenRouter](examples/openrouter/chat-gemini.php)
 1. [Mistral's Mistral with Mistral](examples/mistral/chat-mistral.php)
-1. [Albert API (French Sovereign AI)](examples/albert/chat.php)
+1. [Albert API (French Sovereign AI)](examples/albert/rag.php)
 
 ### Tools
 

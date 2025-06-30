@@ -13,13 +13,7 @@ export ALBERT_API_KEY="your-api-key"
 export ALBERT_API_URL="https://your-albert-instance.com"
 ```
 
-## Examples
-
-### Basic Chat
-```bash
-php examples/albert/chat.php
-```
-Demonstrates basic conversation with Albert API.
+## Example
 
 ### RAG (Retrieval-Augmented Generation)
 ```bash
