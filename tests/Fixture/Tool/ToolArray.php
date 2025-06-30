@@ -6,7 +6,7 @@ namespace PhpLlm\LlmChain\Tests\Fixture\Tool;
 
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 
-#[AsTool('tool_no_params', 'A tool without parameters')]
+#[AsTool('tool_array', 'A tool with array parameters')]
 final class ToolArray
 {
     /**

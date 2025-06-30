@@ -28,7 +28,8 @@ final readonly class ToolCallArgumentResolver implements ToolCallArgumentResolve
         $arguments = [];
 
         foreach ($toolCall->arguments as $name => $value) {
-            $arguments[$name] = $this->denormalizer->denormalize($value, (string) $parameters[$name]->getType());
+            $parameterType = (string) $parameters[$name]->getType();
+            $arguments[$name] = 'array' === $parameterType ? $value : $this->denormalizer->denormalize($value, $parameterType);
         }
 
         return $arguments;
