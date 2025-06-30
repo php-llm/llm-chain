@@ -6,6 +6,7 @@ use PhpLlm\LlmChain\Chain\Toolbox\ToolCallArgumentResolver;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Tool\ExecutionReference;
 use PhpLlm\LlmChain\Platform\Tool\Tool;
+use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolArray;
 use PhpLlm\LlmChain\Tests\Fixture\Tool\ToolDate;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,5 +29,25 @@ class ToolCallArgumentResolverTest extends TestCase
         $toolCall = new ToolCall('invocation', 'tool_date', ['date' => '2025-06-29']);
 
         self::assertEquals(['date' => new \DateTimeImmutable('2025-06-29')], $resolver->resolveArguments($tool, $metadata, $toolCall));
+    }
+
+    #[Test]
+    public function resolveScalarArrayArguments(): void
+    {
+        $resolver = new ToolCallArgumentResolver();
+
+        $tool = new ToolArray();
+        $metadata = new Tool(new ExecutionReference(ToolArray::class, '__invoke'), 'tool_array', 'A tool with array parameters');
+        $toolCall = new ToolCall('tool_id_1234', 'tool_array', [
+            'urls' => ['https://symfony.com', 'https://php.net'],
+            'ids' => [1, 2, 3],
+        ]);
+
+        $expected = [
+            'urls' => ['https://symfony.com', 'https://php.net'],
+            'ids' => [1, 2, 3],
+        ];
+
+        self::assertSame($expected, $resolver->resolveArguments($tool, $metadata, $toolCall));
     }
 }
