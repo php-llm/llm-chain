@@ -31,7 +31,7 @@ final class AssistantMessageNormalizer implements NormalizerInterface, Normalize
     /**
      * @param AssistantMessage $data
      *
-     * @return array{role: 'assistant', content: string}
+     * @return array{role: 'assistant', content?: string, tool_calls?: array<array<string, mixed>>}
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
