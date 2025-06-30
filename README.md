@@ -91,7 +91,8 @@ have different content types, like `Text`, `Image` or `Audio`.
 
 #### Message Unique IDs
 
-Each message automatically receives a unique identifier (UUID v7) upon creation. This provides several benefits:
+Each message automatically receives a unique identifier (UUID v7) upon creation.
+This provides several benefits:
 
 - **Traceability**: Track individual messages through your application
 - **Time-ordered**: UUIDs are naturally sortable by creation time
