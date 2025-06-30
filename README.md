@@ -69,6 +69,7 @@ $embeddings = new Embeddings();
   * [DeepSeek's R1](https://www.deepseek.com/) with [OpenRouter](https://www.openrouter.com/) as Platform
   * [Amazon's Nova](https://nova.amazon.com) with [AWS](https://aws.amazon.com/bedrock/) as Platform
   * [Mistral's Mistral](https://www.mistral.ai/) with [Mistral](https://www.mistral.ai/) as Platform
+  * OpenAI-compatible models via [Albert API](https://github.com/etalab-ia/albert-api) (French government's sovereign AI gateway)
 * Embeddings Models
   * [OpenAI's Text Embeddings](https://platform.openai.com/docs/guides/embeddings/embedding-models) with [OpenAI](https://platform.openai.com/docs/overview) and [Azure](https://learn.microsoft.com/azure/ai-services/openai/concepts/models) as Platform
   * [Voyage's Embeddings](https://docs.voyageai.com/docs/embeddings) with [Voyage](https://www.voyageai.com/) as Platform
@@ -130,6 +131,7 @@ $response = $chain->call($messages, [
 
 #### Code Examples
 
+1. [Albert API (French Sovereign AI)](examples/albert/chat.php)
 1. [Anthropic's Claude](examples/anthropic/chat.php)
 1. [OpenAI's GPT with Azure](examples/azure/chat-gpt.php)
 1. [OpenAI's GPT](examples/openai/chat.php)
