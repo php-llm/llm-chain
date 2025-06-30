@@ -40,8 +40,6 @@ $messages = new MessageBag(
 // Enable streaming for real-time response
 $response = $chain->call($messages, ['stream' => true]);
 
-echo 'Albert API Streaming Response:'.\PHP_EOL;
-echo '=============================='.\PHP_EOL;
 
 // Stream the response token by token
 foreach ($response->getContent() as $token) {

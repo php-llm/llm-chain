@@ -44,6 +44,4 @@ $messages = new MessageBag(
 
 $response = $chain->call($messages);
 
-echo 'Albert API Response:'.\PHP_EOL;
-echo '==================='.\PHP_EOL;
 echo $response->getContent().\PHP_EOL;
