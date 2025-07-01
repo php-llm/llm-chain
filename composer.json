@@ -83,6 +83,9 @@
         },
         "sort-packages": true
     },
+    "conflict": {
+        "mongodb/mongodb": "<1.21"
+    },
     "autoload": {
         "psr-4": {
             "PhpLlm\\LlmChain\\": "src/"
