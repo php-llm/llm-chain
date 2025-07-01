@@ -84,64 +84,9 @@ $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
 ]);
 ```
 
-## Implementation Details
+## Example
 
-The server tools implementation works by:
-
-1. Converting server tool configurations into the format expected by Google's API
-2. For boolean `true` values, an empty `ArrayObject` is sent as required by the API
-3. Server tools are added to the `tools` array in the API request
-4. The `server_tools` option is separate from regular `tools` to prevent toolbox tools from being overwritten
-
-## Best Practices
-
-1. **Enable only needed tools** - Each enabled tool increases latency and token usage
-2. **Consider rate limits** - Server tools may have usage limits
-3. **Combine wisely** - Use server tools for external data and custom tools for application logic
-4. **Handle failures gracefully** - Server tools may fail due to network issues or API limits
-
-## Complete Example
-
-```php
-use PhpLlm\LlmChain\Chain\Chain;
-use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
-use PhpLlm\LlmChain\Chain\Toolbox\Tool\Clock;
-use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
-use PhpLlm\LlmChain\Platform\Bridge\Google\Gemini;
-use PhpLlm\LlmChain\Platform\Bridge\Google\PlatformFactory;
-use PhpLlm\LlmChain\Platform\Message\Message;
-use PhpLlm\LlmChain\Platform\Message\MessageBag;
-
-// Initialize platform
-$platform = PlatformFactory::create($_ENV['GOOGLE_API_KEY']);
-
-// Configure model with server tools
-$llm = new Gemini('gemini-2.5-pro-preview-03-25', [
-    'server_tools' => [
-        'url_context' => true,
-        'google_search' => true
-    ],
-    'temperature' => 0.7
-]);
-
-// Optional: Add custom tools
-$toolbox = Toolbox::create(new Clock());
-$processor = new ChainProcessor($toolbox);
-
-// Create chain
-$chain = new Chain($platform, $llm);
-
-// Use with URL context
-$messages = new MessageBag(
-    Message::ofUser(
-        'Compare the current EUR/USD exchange rate from https://www.xe.com with historical rates. 
-         What has been the trend over the past month?'
-    )
-);
-
-$response = $chain->call($messages);
-echo $response->getContent() . PHP_EOL;
-```
+See [examples/google/server-tools.php](../examples/google/server-tools.php) for a complete working example.
 
 ## Limitations
 
