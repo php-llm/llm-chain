@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\GPT\ResponseConverter;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\AudioNormalizer;
 use PhpLlm\LlmChain\Platform\Contract;
+use PhpLlm\LlmChain\Platform\ContractInterface;
 use PhpLlm\LlmChain\Platform\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -24,6 +25,7 @@ final readonly class PlatformFactory
         #[\SensitiveParameter]
         string $apiKey,
         ?HttpClientInterface $httpClient = null,
+        ?ContractInterface $contract = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
         $embeddingsResponseFactory = new EmbeddingsModelClient($httpClient, $baseUrl, $deployment, $apiVersion, $apiKey);
@@ -33,7 +35,7 @@ final readonly class PlatformFactory
         return new Platform(
             [$GPTResponseFactory, $embeddingsResponseFactory, $whisperResponseFactory],
             [new ResponseConverter(), new Embeddings\ResponseConverter(), new \PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\ResponseConverter()],
-            Contract::create(new AudioNormalizer()),
+            $contract ?? Contract::create(new AudioNormalizer()),
         );
     }
 }

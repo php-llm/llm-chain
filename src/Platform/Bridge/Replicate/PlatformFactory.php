@@ -6,6 +6,7 @@ namespace PhpLlm\LlmChain\Platform\Bridge\Replicate;
 
 use PhpLlm\LlmChain\Platform\Bridge\Replicate\Contract\LlamaMessageBagNormalizer;
 use PhpLlm\LlmChain\Platform\Contract;
+use PhpLlm\LlmChain\Platform\ContractInterface;
 use PhpLlm\LlmChain\Platform\Platform;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\HttpClient\HttpClient;
@@ -20,11 +21,12 @@ final class PlatformFactory
         #[\SensitiveParameter]
         string $apiKey,
         ?HttpClientInterface $httpClient = null,
+        ?ContractInterface $contract = null,
     ): Platform {
         return new Platform(
             [new LlamaModelClient(new Client($httpClient ?? HttpClient::create(), new Clock(), $apiKey))],
             [new LlamaResponseConverter()],
-            Contract::create(new LlamaMessageBagNormalizer()),
+            $contract ?? Contract::create(new LlamaMessageBagNormalizer()),
         );
     }
 }

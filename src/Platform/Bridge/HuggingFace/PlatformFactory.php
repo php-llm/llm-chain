@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Platform\Bridge\HuggingFace;
 use PhpLlm\LlmChain\Platform\Bridge\HuggingFace\Contract\FileNormalizer;
 use PhpLlm\LlmChain\Platform\Bridge\HuggingFace\Contract\MessageBagNormalizer;
 use PhpLlm\LlmChain\Platform\Contract;
+use PhpLlm\LlmChain\Platform\ContractInterface;
 use PhpLlm\LlmChain\Platform\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -21,13 +22,14 @@ final readonly class PlatformFactory
         string $apiKey,
         string $provider = Provider::HF_INFERENCE,
         ?HttpClientInterface $httpClient = null,
+        ?ContractInterface $contract = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
 
         return new Platform(
             [new ModelClient($httpClient, $provider, $apiKey)],
             [new ResponseConverter()],
-            Contract::create(
+            $contract ?? Contract::create(
                 new FileNormalizer(),
                 new MessageBagNormalizer(),
             ),
