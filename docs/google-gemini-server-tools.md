@@ -10,14 +10,6 @@ Google Gemini provides several server-side tools that can be enabled when callin
 - **Google Search** - Performs web searches using Google
 - **Code Execution** - Executes code in a sandboxed environment
 
-## Installation
-
-Server tools are available through the Google platform bridge:
-
-```php
-composer require php-llm/llm-chain
-```
-
 ## Basic Usage
 
 To use server tools, specify them in the model options when creating a Gemini instance:
