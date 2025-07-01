@@ -84,43 +84,6 @@ $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
 ]);
 ```
 
-## Advanced Configuration
-
-### Server Tools with Parameters
-
-For server tools that accept parameters, you can pass an array instead of `true`:
-
-```php
-$llm = new Gemini('gemini-2.5-pro-preview-03-25', [
-    'server_tools' => [
-        'url_context' => [
-            // Future parameters can be added here
-        ]
-    ]
-]);
-```
-
-### Combining with Custom Tools
-
-Server tools can be used alongside custom tools from the toolbox:
-
-```php
-use PhpLlm\LlmChain\Chain\Toolbox\Tool\Clock;
-use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
-
-$toolbox = Toolbox::create(new Clock());
-$processor = new ChainProcessor($toolbox);
-$chain = new Chain($platform, $llm);
-
-$llm = new Gemini('gemini-2.5-pro-preview-03-25', [
-    'server_tools' => [
-        'url_context' => true
-    ]
-]);
-
-// Both server tools and custom tools will be available
-```
-
 ## Implementation Details
 
 The server tools implementation works by:
