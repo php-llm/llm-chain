@@ -13,12 +13,12 @@ use Symfony\Component\Dotenv\Dotenv;
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__, 2).'/.env');
 
-if (empty($_ENV['GOOGLE_API_KEY'])) {
-    echo 'Please set the GOOGLE_API_KEY environment variable.'.\PHP_EOL;
+if (empty($_ENV['GEMINI_API_KEY'])) {
+    echo 'Please set the GEMINI_API_KEY environment variable.'.\PHP_EOL;
     exit(1);
 }
 
-$platform = PlatformFactory::create($_ENV['GOOGLE_API_KEY']);
+$platform = PlatformFactory::create($_ENV['GEMINI_API_KEY']);
 
 // Available server-side tools as of 2025-06-28: url_context, google_search, code_execution
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', ['server_tools' => ['url_context' => true], 'temperature' => 1.0]);
