@@ -176,7 +176,7 @@ Tools are services that can be called by the LLM to provide additional features 
 
 Some platforms provide built-in server-side tools for enhanced capabilities without custom implementations:
 
-1. **Google Gemini** - URL Context, Google Search, Code Execution. See the [Server Tools Documentation](docs/google-server-tools.md) for detailed usage instructions.
+1. **Google Gemini** - URL Context, Google Search, Code Execution. See the [Server Tools Documentation](docs/google-gemini-server-tools.md) for detailed usage instructions.
 
 Tool calling can be enabled by registering the processors in the chain:
 
