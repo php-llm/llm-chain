@@ -21,8 +21,6 @@ The URL Context tool allows Gemini to fetch and analyze content from web pages. 
 - Understanding context from external sources
 
 ```php
-<?php
-
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'url_context' => true
@@ -41,8 +39,6 @@ $response = $chain->call($messages);
 The Google Search tool enables the model to search the web and incorporate search results into its responses:
 
 ```php
-<?php
-
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'google_search' => true
@@ -61,8 +57,6 @@ $response = $chain->call($messages);
 The Code Execution tool provides a sandboxed environment for running code:
 
 ```php
-<?php
-
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'code_execution' => true
@@ -81,8 +75,6 @@ $response = $chain->call($messages);
 You can enable multiple server tools simultaneously:
 
 ```php
-<?php
-
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'url_context' => true,
@@ -99,8 +91,6 @@ $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
 For server tools that accept parameters, you can pass an array instead of `true`:
 
 ```php
-<?php
-
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'url_context' => [
@@ -115,8 +105,6 @@ $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
 Server tools can be used alongside custom tools from the toolbox:
 
 ```php
-<?php
-
 use PhpLlm\LlmChain\Chain\Toolbox\Tool\Clock;
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 
@@ -152,8 +140,6 @@ The server tools implementation works by:
 ## Complete Example
 
 ```php
-<?php
-
 use PhpLlm\LlmChain\Chain\Chain;
 use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
 use PhpLlm\LlmChain\Chain\Toolbox\Tool\Clock;
