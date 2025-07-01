@@ -90,7 +90,6 @@ See [examples/google/server-tools.php](../examples/google/server-tools.php) for 
 
 ## Limitations
 
-- Server tools are only available for Google Gemini models
 - API key must have appropriate permissions
 - Server tools may have usage quotas
 - Response times may vary based on the complexity of server tool operations
