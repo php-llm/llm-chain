@@ -10,27 +10,6 @@ Google Gemini provides several server-side tools that can be enabled when callin
 - **Google Search** - Performs web searches using Google
 - **Code Execution** - Executes code in a sandboxed environment
 
-## Basic Usage
-
-To use server tools, specify them in the model options when creating a Gemini instance:
-
-```php
-<?php
-
-use PhpLlm\LlmChain\Platform\Bridge\Google\Gemini;
-use PhpLlm\LlmChain\Platform\Bridge\Google\PlatformFactory;
-
-$platform = PlatformFactory::create($_ENV['GOOGLE_API_KEY']);
-
-// Enable URL Context tool
-$llm = new Gemini('gemini-2.5-pro-preview-03-25', [
-    'server_tools' => [
-        'url_context' => true
-    ],
-    'temperature' => 1.0
-]);
-```
-
 ## Available Server Tools
 
 ### URL Context
