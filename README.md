@@ -172,6 +172,10 @@ $response = $chain->call($messages, [
 To integrate LLMs with your application, LLM Chain supports [tool calling](https://platform.openai.com/docs/guides/function-calling) out of the box.
 Tools are services that can be called by the LLM to provide additional features or process data.
 
+#### Server Tools (Google Gemini)
+
+Google Gemini provides built-in server-side tools for enhanced capabilities without custom implementations. See the [Server Tools Documentation](docs/google-server-tools.md) for detailed usage instructions.
+
 Tool calling can be enabled by registering the processors in the chain:
 
 ```php
