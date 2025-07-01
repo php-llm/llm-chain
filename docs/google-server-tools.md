@@ -23,6 +23,8 @@ composer require php-llm/llm-chain
 To use server tools, specify them in the model options when creating a Gemini instance:
 
 ```php
+<?php
+
 use PhpLlm\LlmChain\Platform\Bridge\Google\Gemini;
 use PhpLlm\LlmChain\Platform\Bridge\Google\PlatformFactory;
 
@@ -48,6 +50,8 @@ The URL Context tool allows Gemini to fetch and analyze content from web pages. 
 - Understanding context from external sources
 
 ```php
+<?php
+
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'url_context' => true
@@ -66,6 +70,8 @@ $response = $chain->call($messages);
 The Google Search tool enables the model to search the web and incorporate search results into its responses:
 
 ```php
+<?php
+
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'google_search' => true
@@ -84,6 +90,8 @@ $response = $chain->call($messages);
 The Code Execution tool provides a sandboxed environment for running code:
 
 ```php
+<?php
+
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'code_execution' => true
@@ -102,6 +110,8 @@ $response = $chain->call($messages);
 You can enable multiple server tools simultaneously:
 
 ```php
+<?php
+
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'url_context' => true,
@@ -118,6 +128,8 @@ $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
 For server tools that accept parameters, you can pass an array instead of `true`:
 
 ```php
+<?php
+
 $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
     'server_tools' => [
         'url_context' => [
@@ -132,6 +144,8 @@ $llm = new Gemini('gemini-2.5-pro-preview-03-25', [
 Server tools can be used alongside custom tools from the toolbox:
 
 ```php
+<?php
+
 use PhpLlm\LlmChain\Chain\Toolbox\Tool\Clock;
 use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
 
@@ -216,11 +230,3 @@ echo $response->getContent() . PHP_EOL;
 - Server tools may have usage quotas
 - Response times may vary based on the complexity of server tool operations
 - Not all Gemini model versions support all server tools
-
-## Future Considerations
-
-As the feature evolves, consider:
-
-- Additional server tools may become available
-- Parameters for existing tools may be expanded
-- Integration patterns may be refined based on usage
