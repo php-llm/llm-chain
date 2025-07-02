@@ -51,7 +51,7 @@ final class AssistantMessageNormalizer extends ModelContractNormalizer implement
                     'type' => 'tool_use',
                     'id' => $toolCall->id,
                     'name' => $toolCall->name,
-                    'input' => empty($toolCall->arguments) ? new \stdClass() : $toolCall->arguments,
+                    'input' => $toolCall->arguments ?: new \stdClass(),
                 ];
             }, $data->toolCalls),
         ];
