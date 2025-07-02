@@ -74,7 +74,7 @@ class NovaHandler implements BedrockModelClient
                 $toolCalls[] = new ToolCall($content['toolUse']['toolUseId'], $content['toolUse']['name'], $content['toolUse']['input']);
             }
         }
-        if (!empty($toolCalls)) {
+        if (0 !== \count($toolCalls)) {
             return new ToolCallResponse(...$toolCalls);
         }
 

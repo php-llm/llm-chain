@@ -23,7 +23,7 @@ use Symfony\Component\Uid\Uuid;
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__, 2).'/.env');
 
-if (empty($_ENV['GEMINI_API_KEY']) || empty($_ENV['MARIADB_URI'])) {
+if (!$_ENV['GEMINI_API_KEY'] || !$_ENV['MARIADB_URI']) {
     echo 'Please set GEMINI_API_KEY and MARIADB_URI environment variables.'.\PHP_EOL;
     exit(1);
 }
