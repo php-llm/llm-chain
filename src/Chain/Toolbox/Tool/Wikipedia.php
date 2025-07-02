@@ -34,7 +34,7 @@ final readonly class Wikipedia
 
         $titles = array_map(fn (array $item) => $item['title'], $result['query']['search']);
 
-        if (empty($titles)) {
+        if (!$titles) {
             return 'No articles were found on Wikipedia.';
         }
 
