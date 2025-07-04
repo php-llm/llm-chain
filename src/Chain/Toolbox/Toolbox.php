@@ -39,8 +39,8 @@ final class Toolbox implements ToolboxInterface
     public function __construct(
         private readonly ToolFactoryInterface $toolFactory,
         iterable $tools,
+        private readonly ToolCallArgumentResolver $argumentResolver = new ToolCallArgumentResolver(),
         private readonly LoggerInterface $logger = new NullLogger(),
-        private readonly ToolCallArgumentResolverInterface $argumentResolver = new ToolCallArgumentResolver(),
         private readonly ?EventDispatcherInterface $eventDispatcher = null,
     ) {
         $this->tools = $tools instanceof \Traversable ? iterator_to_array($tools) : $tools;
@@ -75,7 +75,7 @@ final class Toolbox implements ToolboxInterface
         try {
             $this->logger->debug(\sprintf('Executing tool "%s".', $toolCall->name), $toolCall->arguments);
 
-            $arguments = $this->argumentResolver->resolveArguments($tool, $metadata, $toolCall);
+            $arguments = $this->argumentResolver->resolveArguments($metadata, $toolCall);
             $this->eventDispatcher?->dispatch(new ToolCallArgumentsResolved($tool, $metadata, $arguments));
 
             $result = $tool->{$metadata->reference->method}(...$arguments);

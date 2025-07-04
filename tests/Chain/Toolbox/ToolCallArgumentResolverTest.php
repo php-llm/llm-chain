@@ -24,11 +24,10 @@ class ToolCallArgumentResolverTest extends TestCase
     {
         $resolver = new ToolCallArgumentResolver();
 
-        $tool = new ToolDate();
         $metadata = new Tool(new ExecutionReference(ToolDate::class, '__invoke'), 'tool_date', 'test');
         $toolCall = new ToolCall('invocation', 'tool_date', ['date' => '2025-06-29']);
 
-        self::assertEquals(['date' => new \DateTimeImmutable('2025-06-29')], $resolver->resolveArguments($tool, $metadata, $toolCall));
+        self::assertEquals(['date' => new \DateTimeImmutable('2025-06-29')], $resolver->resolveArguments($metadata, $toolCall));
     }
 
     #[Test]
@@ -36,7 +35,6 @@ class ToolCallArgumentResolverTest extends TestCase
     {
         $resolver = new ToolCallArgumentResolver();
 
-        $tool = new ToolArray();
         $metadata = new Tool(new ExecutionReference(ToolArray::class, '__invoke'), 'tool_array', 'A tool with array parameters');
         $toolCall = new ToolCall('tool_id_1234', 'tool_array', [
             'urls' => ['https://symfony.com', 'https://php.net'],
@@ -48,6 +46,6 @@ class ToolCallArgumentResolverTest extends TestCase
             'ids' => [1, 2, 3],
         ];
 
-        self::assertSame($expected, $resolver->resolveArguments($tool, $metadata, $toolCall));
+        self::assertSame($expected, $resolver->resolveArguments($metadata, $toolCall));
     }
 }
