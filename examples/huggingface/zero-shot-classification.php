@@ -22,4 +22,4 @@ $response = $platform->request($model, $text, [
     'candidate_labels' => ['refund', 'legal', 'faq'],
 ]);
 
-dump($response->getContent());
+dump($response->asObject());

@@ -7,7 +7,6 @@ namespace PhpLlm\LlmChain\Chain\Toolbox\Tool;
 use PhpLlm\LlmChain\Chain\Toolbox\Attribute\AsTool;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\PlatformInterface;
-use PhpLlm\LlmChain\Platform\Vector\Vector;
 use PhpLlm\LlmChain\Store\Document\VectorDocument;
 use PhpLlm\LlmChain\Store\VectorStoreInterface;
 
@@ -34,8 +33,7 @@ final class SimilaritySearch
      */
     public function __invoke(string $searchTerm): string
     {
-        /** @var Vector[] $vectors */
-        $vectors = $this->platform->request($this->model, $searchTerm)->getContent();
+        $vectors = $this->platform->request($this->model, $searchTerm)->asVectors();
         $this->usedDocuments = $this->vectorStore->query($vectors[0]);
 
         if (0 === \count($this->usedDocuments)) {

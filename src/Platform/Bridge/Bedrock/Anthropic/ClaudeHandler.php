@@ -11,7 +11,6 @@ use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Claude;
 use PhpLlm\LlmChain\Platform\Bridge\Bedrock\BedrockModelClient;
 use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 use PhpLlm\LlmChain\Platform\Model;
-use PhpLlm\LlmChain\Platform\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Platform\Response\TextResponse;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
@@ -32,7 +31,7 @@ final readonly class ClaudeHandler implements BedrockModelClient
         return $model instanceof Claude;
     }
 
-    public function request(Model $model, array|string $payload, array $options = []): LlmResponse
+    public function request(Model $model, array|string $payload, array $options = []): InvokeModelResponse
     {
         unset($payload['model']);
 
@@ -50,12 +49,10 @@ final readonly class ClaudeHandler implements BedrockModelClient
             'body' => json_encode(array_merge($options, $payload), \JSON_THROW_ON_ERROR),
         ];
 
-        $invokeModelResponse = $this->bedrockRuntimeClient->invokeModel(new InvokeModelRequest($request));
-
-        return $this->convert($invokeModelResponse);
+        return $this->bedrockRuntimeClient->invokeModel(new InvokeModelRequest($request));
     }
 
-    public function convert(InvokeModelResponse $bedrockResponse): LlmResponse
+    public function convert(InvokeModelResponse $bedrockResponse): ToolCallResponse|TextResponse
     {
         $data = json_decode($bedrockResponse->getBody(), true, 512, \JSON_THROW_ON_ERROR);
 

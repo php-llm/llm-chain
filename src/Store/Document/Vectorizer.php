@@ -30,7 +30,7 @@ final readonly class Vectorizer
         if ($this->model->supports(Capability::INPUT_MULTIPLE)) {
             $response = $this->platform->request($this->model, array_map(fn (TextDocument $document) => $document->content, $documents));
 
-            $vectors = $response->getContent();
+            $vectors = $response->asVectors();
         } else {
             $responses = [];
             foreach ($documents as $document) {
@@ -39,7 +39,7 @@ final readonly class Vectorizer
 
             $vectors = [];
             foreach ($responses as $response) {
-                $vectors = array_merge($vectors, $response->getContent());
+                $vectors = array_merge($vectors, $response->asVectors());
             }
         }
 

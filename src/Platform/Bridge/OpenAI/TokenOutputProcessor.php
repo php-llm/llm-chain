@@ -7,6 +7,7 @@ namespace PhpLlm\LlmChain\Platform\Bridge\OpenAI;
 use PhpLlm\LlmChain\Chain\Output;
 use PhpLlm\LlmChain\Chain\OutputProcessorInterface;
 use PhpLlm\LlmChain\Platform\Response\StreamResponse;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * @author Denis Zunke <denis.zunke@gmail.com>
@@ -20,8 +21,8 @@ final class TokenOutputProcessor implements OutputProcessorInterface
             return;
         }
 
-        $rawResponse = $output->response->getRawResponse();
-        if (null === $rawResponse) {
+        $rawResponse = $output->response->getRawResponse()?->getRawObject();
+        if (!$rawResponse instanceof ResponseInterface) {
             return;
         }
 

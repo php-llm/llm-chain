@@ -34,5 +34,5 @@ foreach (range('A', 'D') as $letter) {
 
 echo 'Waiting for the responses ...'.\PHP_EOL;
 foreach ($responses as $response) {
-    echo 'Next Letter: '.$response->getContent().\PHP_EOL;
+    echo 'Next Letter: '.$response->asText().\PHP_EOL;
 }

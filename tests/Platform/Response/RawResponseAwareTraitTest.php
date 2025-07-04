@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Platform\Response;
 
 use PhpLlm\LlmChain\Platform\Response\Exception\RawResponseAlreadySetException;
+use PhpLlm\LlmChain\Platform\Response\RawHttpResponse;
 use PhpLlm\LlmChain\Platform\Response\RawResponseAwareTrait;
 use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\Small;
@@ -24,8 +25,8 @@ final class RawResponseAwareTraitTest extends TestCase
         $response = $this->createTestClass();
         $rawResponse = self::createMock(SymfonyHttpResponse::class);
 
-        $response->setRawResponse($rawResponse);
-        self::assertSame($rawResponse, $response->getRawResponse());
+        $response->setRawResponse(new RawHttpResponse($rawResponse));
+        self::assertSame($rawResponse, $response->getRawResponse()?->getRawObject());
     }
 
     #[Test]
@@ -36,8 +37,8 @@ final class RawResponseAwareTraitTest extends TestCase
         $response = $this->createTestClass();
         $rawResponse = self::createMock(SymfonyHttpResponse::class);
 
-        $response->setRawResponse($rawResponse);
-        $response->setRawResponse($rawResponse);
+        $response->setRawResponse(new RawHttpResponse($rawResponse));
+        $response->setRawResponse(new RawHttpResponse($rawResponse));
     }
 
     private function createTestClass(): object
