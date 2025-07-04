@@ -23,8 +23,8 @@ use Symfony\Component\Uid\Uuid;
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__, 2).'/.env');
 
-if (empty($_ENV['GOOGLE_API_KEY']) || empty($_ENV['MARIADB_URI'])) {
-    echo 'Please set GOOGLE_API_KEY and MARIADB_URI environment variables.'.\PHP_EOL;
+if (empty($_ENV['GEMINI_API_KEY']) || empty($_ENV['MARIADB_URI'])) {
+    echo 'Please set GEMINI_API_KEY and MARIADB_URI environment variables.'.\PHP_EOL;
     exit(1);
 }
 
@@ -56,7 +56,7 @@ foreach ($movies as $i => $movie) {
 $store->initialize(['dimensions' => 768]);
 
 // create embeddings for documents
-$platform = PlatformFactory::create($_ENV['GOOGLE_API_KEY']);
+$platform = PlatformFactory::create($_ENV['GEMINI_API_KEY']);
 $embeddings = new Embeddings(options: ['dimensions' => 768, 'task_type' => TaskType::SemanticSimilarity]);
 $vectorizer = new Vectorizer($platform, $embeddings);
 $indexer = new Indexer($vectorizer, $store);
