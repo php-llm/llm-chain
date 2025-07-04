@@ -40,7 +40,7 @@ final class ChainProcessorTest extends TestCase
     {
         $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory(['some' => 'format']));
 
-        $model = new Model('gpt-4', [Capability::OUTPUT_STRUCTURED]);
+        $model = new Model('gpt-4', [Capability::STRUCTURED_OUTPUT]);
         $input = new Input($model, new MessageBag(), ['output_structure' => 'SomeStructure']);
 
         $chainProcessor->processInput($input);
@@ -53,7 +53,7 @@ final class ChainProcessorTest extends TestCase
     {
         $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory());
 
-        $model = new Model('gpt-4', [Capability::OUTPUT_STRUCTURED]);
+        $model = new Model('gpt-4', [Capability::STRUCTURED_OUTPUT]);
         $input = new Input($model, new MessageBag(), []);
 
         $chainProcessor->processInput($input);
@@ -79,7 +79,7 @@ final class ChainProcessorTest extends TestCase
     {
         $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory(['some' => 'format']));
 
-        $model = new Model('gpt-4', [Capability::OUTPUT_STRUCTURED]);
+        $model = new Model('gpt-4', [Capability::STRUCTURED_OUTPUT]);
         $options = ['output_structure' => SomeStructure::class];
         $input = new Input($model, new MessageBag(), $options);
         $chainProcessor->processInput($input);
@@ -100,7 +100,7 @@ final class ChainProcessorTest extends TestCase
     {
         $chainProcessor = new ChainProcessor(new ConfigurableResponseFormatFactory(['some' => 'format']));
 
-        $model = new Model('gpt-4', [Capability::OUTPUT_STRUCTURED]);
+        $model = new Model('gpt-4', [Capability::STRUCTURED_OUTPUT]);
         $options = ['output_structure' => MathReasoning::class];
         $input = new Input($model, new MessageBag(), $options);
         $chainProcessor->processInput($input);
