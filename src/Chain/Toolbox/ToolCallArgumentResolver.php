@@ -12,14 +12,17 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @author Valtteri R <valtzu@gmail.com>
  */
-final readonly class ToolCallArgumentResolver implements ToolCallArgumentResolverInterface
+final readonly class ToolCallArgumentResolver
 {
     public function __construct(
         private DenormalizerInterface $denormalizer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()]),
     ) {
     }
 
-    public function resolveArguments(object $tool, Tool $metadata, ToolCall $toolCall): array
+    /**
+     * @return array<string, mixed>
+     */
+    public function resolveArguments(Tool $metadata, ToolCall $toolCall): array
     {
         $method = new \ReflectionMethod($metadata->reference->class, $metadata->reference->method);
 
