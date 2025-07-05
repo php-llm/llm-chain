@@ -25,4 +25,4 @@ $response = $platform->request($model, $input, [
     'task' => Task::QUESTION_ANSWERING,
 ]);
 
-dump($response->getContent());
+dump($response->asObject());

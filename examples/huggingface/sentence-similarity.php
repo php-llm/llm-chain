@@ -29,4 +29,4 @@ $response = $platform->request($model, $input, [
     'task' => Task::SENTENCE_SIMILARITY,
 ]);
 
-dump($response->getContent());
+dump($response->asObject());

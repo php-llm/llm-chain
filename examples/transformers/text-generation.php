@@ -23,4 +23,4 @@ $response = $platform->request($model, 'How many continents are there in the wor
     'task' => Task::Text2TextGeneration,
 ]);
 
-echo $response->getContent().\PHP_EOL;
+echo $response->asText().\PHP_EOL;

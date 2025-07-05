@@ -22,4 +22,4 @@ $response = $platform->request($model, $audio, [
     'task' => Task::AUDIO_CLASSIFICATION,
 ]);
 
-dump($response->getContent());
+dump($response->asObject());

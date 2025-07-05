@@ -22,4 +22,4 @@ $response = $platform->request($model, $audio, [
     'task' => Task::AUTOMATIC_SPEECH_RECOGNITION,
 ]);
 
-echo $response->getContent().\PHP_EOL;
+echo $response->asText().\PHP_EOL;

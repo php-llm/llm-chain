@@ -9,7 +9,7 @@ use PhpLlm\LlmChain\Platform\Contract;
 use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\PlatformInterface;
-use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
+use PhpLlm\LlmChain\Platform\Response\ResponsePromise;
 
 /**
  * @author Björn Altmann
@@ -47,7 +47,7 @@ class Platform implements PlatformInterface
         $this->modelClients = $modelClients instanceof \Traversable ? iterator_to_array($modelClients) : $modelClients;
     }
 
-    public function request(Model $model, array|string|object $input, array $options = []): ResponseInterface
+    public function request(Model $model, array|string|object $input, array $options = []): ResponsePromise
     {
         $payload = $this->contract->createRequestPayload($model, $input);
         $options = array_merge($model->getOptions(), $options);
@@ -63,11 +63,17 @@ class Platform implements PlatformInterface
      * @param array<string, mixed>|string $payload
      * @param array<string, mixed>        $options
      */
-    private function doRequest(Model $model, array|string $payload, array $options = []): ResponseInterface
+    private function doRequest(Model $model, array|string $payload, array $options = []): ResponsePromise
     {
         foreach ($this->modelClients as $modelClient) {
             if ($modelClient->supports($model)) {
-                return $modelClient->request($model, $payload, $options);
+                $response = $modelClient->request($model, $payload, $options);
+
+                return new ResponsePromise(
+                    $modelClient->convert(...),
+                    new RawBedrockResponse($response),
+                    $options,
+                );
             }
         }
 

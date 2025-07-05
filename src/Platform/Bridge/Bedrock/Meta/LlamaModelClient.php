@@ -8,7 +8,6 @@ use AsyncAws\BedrockRuntime\Result\InvokeModelResponse;
 use PhpLlm\LlmChain\Platform\Bridge\Bedrock\BedrockModelClient;
 use PhpLlm\LlmChain\Platform\Bridge\Meta\Llama;
 use PhpLlm\LlmChain\Platform\Model;
-use PhpLlm\LlmChain\Platform\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Platform\Response\TextResponse;
 
 /**
@@ -26,18 +25,16 @@ class LlamaModelClient implements BedrockModelClient
         return $model instanceof Llama;
     }
 
-    public function request(Model $model, array|string $payload, array $options = []): LlmResponse
+    public function request(Model $model, array|string $payload, array $options = []): InvokeModelResponse
     {
-        $response = $this->bedrockRuntimeClient->invokeModel(new InvokeModelRequest([
+        return $this->bedrockRuntimeClient->invokeModel(new InvokeModelRequest([
             'modelId' => $this->getModelId($model),
             'contentType' => 'application/json',
             'body' => json_encode($payload, \JSON_THROW_ON_ERROR),
         ]));
-
-        return $this->convert($response);
     }
 
-    public function convert(InvokeModelResponse $bedrockResponse): LlmResponse
+    public function convert(InvokeModelResponse $bedrockResponse): TextResponse
     {
         $responseBody = json_decode($bedrockResponse->getBody(), true, 512, \JSON_THROW_ON_ERROR);
 

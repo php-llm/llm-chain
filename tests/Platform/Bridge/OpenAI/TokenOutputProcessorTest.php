@@ -9,6 +9,7 @@ use PhpLlm\LlmChain\Platform\Bridge\OpenAI\TokenOutputProcessor;
 use PhpLlm\LlmChain\Platform\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\Response\Metadata\Metadata;
+use PhpLlm\LlmChain\Platform\Response\RawHttpResponse;
 use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
 use PhpLlm\LlmChain\Platform\Response\StreamResponse;
 use PhpLlm\LlmChain\Platform\Response\TextResponse;
@@ -125,7 +126,7 @@ final class TokenOutputProcessorTest extends TestCase
         self::assertNull($metadata->get('total_tokens'));
     }
 
-    private function createRawResponse(array $data = []): SymfonyHttpResponse
+    private function createRawResponse(array $data = []): RawHttpResponse
     {
         $rawResponse = self::createStub(SymfonyHttpResponse::class);
         $rawResponse->method('getHeaders')->willReturn([
@@ -133,7 +134,7 @@ final class TokenOutputProcessorTest extends TestCase
         ]);
         $rawResponse->method('toArray')->willReturn($data);
 
-        return $rawResponse;
+        return new RawHttpResponse($rawResponse);
     }
 
     private function createOutput(ResponseInterface $response): Output

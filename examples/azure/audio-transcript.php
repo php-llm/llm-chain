@@ -25,4 +25,4 @@ $file = Audio::fromFile(dirname(__DIR__, 2).'/tests/Fixture/audio.mp3');
 
 $response = $platform->request($model, $file);
 
-echo $response->getContent().\PHP_EOL;
+echo $response->asText().\PHP_EOL;

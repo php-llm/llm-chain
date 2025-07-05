@@ -11,7 +11,6 @@ use PhpLlm\LlmChain\Platform\Capability;
 use PhpLlm\LlmChain\Platform\Message\MessageBagInterface;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\PlatformInterface;
-use PhpLlm\LlmChain\Platform\Response\AsyncResponse;
 use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -69,11 +68,7 @@ final readonly class Chain implements ChainInterface
         }
 
         try {
-            $response = $this->platform->request($model, $messages, $options);
-
-            if ($response instanceof AsyncResponse) {
-                $response = $response->unwrap();
-            }
+            $response = $this->platform->request($model, $messages, $options)->getResponse();
         } catch (ClientExceptionInterface $e) {
             $message = $e->getMessage();
             $content = $e->getResponse()->toArray(false);

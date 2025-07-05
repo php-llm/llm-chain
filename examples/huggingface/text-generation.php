@@ -20,4 +20,4 @@ $response = $platform->request($model, 'The quick brown fox jumps over the lazy'
     'task' => Task::TEXT_GENERATION,
 ]);
 
-echo $response->getContent().\PHP_EOL;
+echo $response->asText().\PHP_EOL;

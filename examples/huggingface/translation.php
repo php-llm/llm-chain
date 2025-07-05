@@ -22,4 +22,4 @@ $response = $platform->request($model, 'Меня зовут Вольфганг �
     'tgt_lang' => 'en',
 ]);
 
-echo $response->getContent().\PHP_EOL;
+echo $response->asText().\PHP_EOL;

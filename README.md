@@ -680,7 +680,7 @@ use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings;
 
 $embeddings = new Embeddings($platform, Embeddings::TEXT_3_SMALL);
 
-$vectors = $platform->request($embeddings, $textInput)->getContent();
+$vectors = $platform->request($embeddings, $textInput)->asVectors();
 
 dump($vectors[0]->getData()); // Array of float values
 ```
@@ -703,7 +703,7 @@ foreach ($inputs as $input) {
 }
 
 foreach ($responses as $response) {
-    echo $response->getContent().PHP_EOL;
+    echo $response->asText().PHP_EOL;
 }
 ```
 
@@ -822,7 +822,7 @@ $response = $platform->request($model, $image, [
     'task' => Task::OBJECT_DETECTION, // defining a task is mandatory for internal request & response handling
 ]);
 
-dump($response->getContent());
+dump($response->asObject());
 ```
 
 #### Code Examples
@@ -867,7 +867,7 @@ $response = $platform->request($model, 'How many continents are there in the wor
     'task' => Task::Text2TextGeneration,
 ]);
 
-echo $response->getContent().PHP_EOL;
+echo $response->asText().PHP_EOL;
 ```
 
 #### Code Examples

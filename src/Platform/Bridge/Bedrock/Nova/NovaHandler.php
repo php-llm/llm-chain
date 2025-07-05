@@ -10,7 +10,6 @@ use AsyncAws\BedrockRuntime\Result\InvokeModelResponse;
 use PhpLlm\LlmChain\Platform\Bridge\Bedrock\BedrockModelClient;
 use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 use PhpLlm\LlmChain\Platform\Model;
-use PhpLlm\LlmChain\Platform\Response\ResponseInterface as LlmResponse;
 use PhpLlm\LlmChain\Platform\Response\TextResponse;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Response\ToolCallResponse;
@@ -30,7 +29,7 @@ class NovaHandler implements BedrockModelClient
         return $model instanceof Nova;
     }
 
-    public function request(Model $model, array|string $payload, array $options = []): LlmResponse
+    public function request(Model $model, array|string $payload, array $options = []): InvokeModelResponse
     {
         $modelOptions = [];
         if (isset($options['tools'])) {
@@ -51,12 +50,10 @@ class NovaHandler implements BedrockModelClient
             'body' => json_encode(array_merge($payload, $modelOptions), \JSON_THROW_ON_ERROR),
         ];
 
-        $invokeModelResponse = $this->bedrockRuntimeClient->invokeModel(new InvokeModelRequest($request));
-
-        return $this->convert($invokeModelResponse);
+        return $this->bedrockRuntimeClient->invokeModel(new InvokeModelRequest($request));
     }
 
-    public function convert(InvokeModelResponse $bedrockResponse): LlmResponse
+    public function convert(InvokeModelResponse $bedrockResponse): ToolCallResponse|TextResponse
     {
         $data = json_decode($bedrockResponse->getBody(), true, 512, \JSON_THROW_ON_ERROR);
 
