@@ -17,6 +17,7 @@ use PhpLlm\LlmChain\Platform\Contract\Normalizer\Response\ToolCallNormalizer;
 use PhpLlm\LlmChain\Platform\Contract\Normalizer\ToolNormalizer;
 use PhpLlm\LlmChain\Platform\Tool\Tool;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
@@ -52,6 +53,9 @@ readonly class Contract
 
         // Response
         $normalizer[] = new ToolCallNormalizer();
+
+        // JsonSerializable objects as extension point to library interfaces
+        $normalizer[] = new JsonSerializableNormalizer();
 
         return new self(
             new Serializer($normalizer),

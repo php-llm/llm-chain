@@ -24,6 +24,8 @@ use PhpLlm\LlmChain\Platform\Message\Content\Image;
 use PhpLlm\LlmChain\Platform\Message\Content\ImageUrl;
 use PhpLlm\LlmChain\Platform\Message\Message;
 use PhpLlm\LlmChain\Platform\Message\MessageBag;
+use PhpLlm\LlmChain\Platform\Message\MessageInterface;
+use PhpLlm\LlmChain\Platform\Message\Role;
 use PhpLlm\LlmChain\Platform\Message\SystemMessage;
 use PhpLlm\LlmChain\Platform\Message\UserMessage;
 use PhpLlm\LlmChain\Platform\Model;
@@ -33,6 +35,7 @@ use PHPUnit\Framework\Attributes\Large;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\Uuid;
 
 #[Large]
 #[CoversClass(Contract::class)]
@@ -187,6 +190,37 @@ final class ContractTest extends TestCase
                         ['type' => 'text', 'text' => 'My hint for how to analyze an image.'],
                         ['type' => 'image_url', 'image_url' => ['url' => 'http://image-generator.local/my-fancy-image.png']],
                     ]],
+                ],
+                'model' => 'gpt-4o',
+            ],
+        ];
+
+        $customSerializableMessage = new class implements MessageInterface, \JsonSerializable {
+            public function getRole(): Role
+            {
+                return Role::User;
+            }
+
+            public function getId(): Uuid
+            {
+                return Uuid::v7();
+            }
+
+            public function jsonSerialize(): array
+            {
+                return [
+                    'role' => 'user',
+                    'content' => 'This is a custom serializable message.',
+                ];
+            }
+        };
+
+        yield 'MessageBag with custom message from GPT' => [
+            'model' => new GPT(),
+            'input' => new MessageBag($customSerializableMessage),
+            'expected' => [
+                'messages' => [
+                    ['role' => 'user', 'content' => 'This is a custom serializable message.'],
                 ],
                 'model' => 'gpt-4o',
             ],
