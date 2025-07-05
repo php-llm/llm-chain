@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform\Bridge\Google;
 
-use PhpLlm\LlmChain\Platform\Bridge\Google\Contract\GoogleSet;
+use PhpLlm\LlmChain\Platform\Bridge\Google\Contract\GoogleContract;
 use PhpLlm\LlmChain\Platform\Bridge\Google\Embeddings\ModelClient;
 use PhpLlm\LlmChain\Platform\Contract;
-use PhpLlm\LlmChain\Platform\ContractInterface;
 use PhpLlm\LlmChain\Platform\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -21,7 +20,7 @@ final readonly class PlatformFactory
         #[\SensitiveParameter]
         string $apiKey,
         ?HttpClientInterface $httpClient = null,
-        ?ContractInterface $contract = null,
+        ?Contract $contract = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
         $responseHandler = new ModelHandler($httpClient, $apiKey);
@@ -30,7 +29,7 @@ final readonly class PlatformFactory
         return new Platform(
             [$responseHandler, $embeddings],
             [$responseHandler, $embeddings],
-            $contract ?? Contract::create(...GoogleSet::get()),
+            $contract ?? GoogleContract::create(),
         );
     }
 }

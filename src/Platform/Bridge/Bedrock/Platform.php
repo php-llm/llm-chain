@@ -6,7 +6,6 @@ use PhpLlm\LlmChain\Platform\Bridge\Anthropic\Contract as AnthropicContract;
 use PhpLlm\LlmChain\Platform\Bridge\Bedrock\Nova\Contract as NovaContract;
 use PhpLlm\LlmChain\Platform\Bridge\Meta\Contract as LlamaContract;
 use PhpLlm\LlmChain\Platform\Contract;
-use PhpLlm\LlmChain\Platform\ContractInterface;
 use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 use PhpLlm\LlmChain\Platform\Model;
 use PhpLlm\LlmChain\Platform\PlatformInterface;
@@ -27,7 +26,7 @@ class Platform implements PlatformInterface
      */
     public function __construct(
         iterable $modelClients,
-        private ?ContractInterface $contract = null,
+        private ?Contract $contract = null,
     ) {
         $this->contract = $contract ?? Contract::create(
             new AnthropicContract\AssistantMessageNormalizer(),

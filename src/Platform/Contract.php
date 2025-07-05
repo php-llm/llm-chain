@@ -4,7 +4,17 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform;
 
-use PhpLlm\LlmChain\Platform\Contract\PlatformSet;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\AssistantMessageNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\Content\AudioNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\Content\ImageNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\Content\ImageUrlNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\Content\TextNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\MessageBagNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\SystemMessageNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\ToolCallMessageNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Message\UserMessageNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\Response\ToolCallNormalizer;
+use PhpLlm\LlmChain\Platform\Contract\Normalizer\ToolNormalizer;
 use PhpLlm\LlmChain\Platform\Tool\Tool;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -13,19 +23,38 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @author Christopher Hertel <mail@christopher-hertel.de>
  */
-final readonly class Contract implements ContractInterface
+readonly class Contract
 {
     public const CONTEXT_MODEL = 'model';
 
-    public function __construct(
-        private NormalizerInterface $normalizer,
+    final public function __construct(
+        protected NormalizerInterface $normalizer,
     ) {
     }
 
     public static function create(NormalizerInterface ...$normalizer): self
     {
+        // Messages
+        $normalizer[] = new MessageBagNormalizer();
+        $normalizer[] = new AssistantMessageNormalizer();
+        $normalizer[] = new SystemMessageNormalizer();
+        $normalizer[] = new ToolCallMessageNormalizer();
+        $normalizer[] = new UserMessageNormalizer();
+
+        // Message Content
+        $normalizer[] = new AudioNormalizer();
+        $normalizer[] = new ImageNormalizer();
+        $normalizer[] = new ImageUrlNormalizer();
+        $normalizer[] = new TextNormalizer();
+
+        // Options
+        $normalizer[] = new ToolNormalizer();
+
+        // Response
+        $normalizer[] = new ToolCallNormalizer();
+
         return new self(
-            new Serializer(array_merge($normalizer, PlatformSet::get())),
+            new Serializer($normalizer),
         );
     }
 
@@ -34,7 +63,7 @@ final readonly class Contract implements ContractInterface
      *
      * @return array<string, mixed>|string
      */
-    public function createRequestPayload(Model $model, object|array|string $input): string|array
+    final public function createRequestPayload(Model $model, object|array|string $input): string|array
     {
         return $this->normalizer->normalize($input, context: [self::CONTEXT_MODEL => $model]);
     }
@@ -44,7 +73,7 @@ final readonly class Contract implements ContractInterface
      *
      * @return array<string, mixed>
      */
-    public function createToolOption(array $tools, Model $model): array
+    final public function createToolOption(array $tools, Model $model): array
     {
         return $this->normalizer->normalize($tools, context: [self::CONTEXT_MODEL => $model, AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true]);
     }

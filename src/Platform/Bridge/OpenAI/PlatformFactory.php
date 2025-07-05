@@ -13,7 +13,6 @@ use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\AudioNormalizer;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\ModelClient as WhisperModelClient;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\ResponseConverter as WhisperResponseConverter;
 use PhpLlm\LlmChain\Platform\Contract;
-use PhpLlm\LlmChain\Platform\ContractInterface;
 use PhpLlm\LlmChain\Platform\Platform;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -27,7 +26,7 @@ final readonly class PlatformFactory
         #[\SensitiveParameter]
         string $apiKey,
         ?HttpClientInterface $httpClient = null,
-        ?ContractInterface $contract = null,
+        ?Contract $contract = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
 

@@ -8,7 +8,7 @@ use AsyncAws\BedrockRuntime\BedrockRuntimeClient;
 use PhpLlm\LlmChain\Platform\Bridge\Bedrock\Anthropic\ClaudeHandler;
 use PhpLlm\LlmChain\Platform\Bridge\Bedrock\Meta\LlamaModelClient;
 use PhpLlm\LlmChain\Platform\Bridge\Bedrock\Nova\NovaHandler;
-use PhpLlm\LlmChain\Platform\ContractInterface;
+use PhpLlm\LlmChain\Platform\Contract;
 
 /**
  * @author Björn Altmann
@@ -17,7 +17,7 @@ final readonly class PlatformFactory
 {
     public static function create(
         BedrockRuntimeClient $bedrockRuntimeClient = new BedrockRuntimeClient(),
-        ?ContractInterface $contract = null,
+        ?Contract $contract = null,
     ): Platform {
         $modelClient[] = new ClaudeHandler($bedrockRuntimeClient);
         $modelClient[] = new NovaHandler($bedrockRuntimeClient);
