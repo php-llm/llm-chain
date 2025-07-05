@@ -21,13 +21,14 @@ final readonly class PlatformFactory
         string $apiKey,
         string $provider = Provider::HF_INFERENCE,
         ?HttpClientInterface $httpClient = null,
+        ?Contract $contract = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
 
         return new Platform(
             [new ModelClient($httpClient, $provider, $apiKey)],
             [new ResponseConverter()],
-            Contract::create(
+            $contract ?? Contract::create(
                 new FileNormalizer(),
                 new MessageBagNormalizer(),
             ),

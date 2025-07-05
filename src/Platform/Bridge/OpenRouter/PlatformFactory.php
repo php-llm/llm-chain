@@ -21,14 +21,19 @@ final class PlatformFactory
         #[\SensitiveParameter]
         string $apiKey,
         ?HttpClientInterface $httpClient = null,
+        ?Contract $contract = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
         $handler = new Client($httpClient, $apiKey);
 
-        return new Platform([$handler], [$handler], Contract::create(
-            new AssistantMessageNormalizer(),
-            new MessageBagNormalizer(),
-            new UserMessageNormalizer(),
-        ));
+        return new Platform(
+            [$handler],
+            [$handler],
+            $contract ?? Contract::create(
+                new AssistantMessageNormalizer(),
+                new MessageBagNormalizer(),
+                new UserMessageNormalizer(),
+            ),
+        );
     }
 }

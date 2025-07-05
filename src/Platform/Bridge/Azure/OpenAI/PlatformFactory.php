@@ -24,6 +24,7 @@ final readonly class PlatformFactory
         #[\SensitiveParameter]
         string $apiKey,
         ?HttpClientInterface $httpClient = null,
+        ?Contract $contract = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
         $embeddingsResponseFactory = new EmbeddingsModelClient($httpClient, $baseUrl, $deployment, $apiVersion, $apiKey);
@@ -33,7 +34,7 @@ final readonly class PlatformFactory
         return new Platform(
             [$GPTResponseFactory, $embeddingsResponseFactory, $whisperResponseFactory],
             [new ResponseConverter(), new Embeddings\ResponseConverter(), new \PhpLlm\LlmChain\Platform\Bridge\OpenAI\Whisper\ResponseConverter()],
-            Contract::create(new AudioNormalizer()),
+            $contract ?? Contract::create(new AudioNormalizer()),
         );
     }
 }

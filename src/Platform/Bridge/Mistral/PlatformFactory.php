@@ -23,13 +23,14 @@ final class PlatformFactory
         #[\SensitiveParameter]
         string $apiKey,
         ?HttpClientInterface $httpClient = null,
+        ?Contract $contract = null,
     ): Platform {
         $httpClient = $httpClient instanceof EventSourceHttpClient ? $httpClient : new EventSourceHttpClient($httpClient);
 
         return new Platform(
             [new EmbeddingsModelClient($httpClient, $apiKey), new MistralModelClient($httpClient, $apiKey)],
             [new EmbeddingsResponseConverter(), new MistralResponseConverter()],
-            Contract::create(new ToolNormalizer()),
+            $contract ?? Contract::create(new ToolNormalizer()),
         );
     }
 }

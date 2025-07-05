@@ -20,11 +20,12 @@ final class PlatformFactory
         #[\SensitiveParameter]
         string $apiKey,
         ?HttpClientInterface $httpClient = null,
+        ?Contract $contract = null,
     ): Platform {
         return new Platform(
             [new LlamaModelClient(new Client($httpClient ?? HttpClient::create(), new Clock(), $apiKey))],
             [new LlamaResponseConverter()],
-            Contract::create(new LlamaMessageBagNormalizer()),
+            $contract ?? Contract::create(new LlamaMessageBagNormalizer()),
         );
     }
 }
