@@ -48,7 +48,7 @@ class ResponseConverter implements ResponseConverterInterface
             throw new RuntimeException('Response content does not contain any text nor tool calls.');
         }
 
-        if (!empty($toolCalls)) {
+        if (0 !== \count($toolCalls)) {
             return new ToolCallResponse(...$toolCalls);
         }
 

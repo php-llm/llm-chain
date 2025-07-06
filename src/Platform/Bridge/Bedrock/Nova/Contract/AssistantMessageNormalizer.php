@@ -50,7 +50,7 @@ final class AssistantMessageNormalizer extends ModelContractNormalizer
                         'toolUse' => [
                             'toolUseId' => $toolCall->id,
                             'name' => $toolCall->name,
-                            'input' => empty($toolCall->arguments) ? new \stdClass() : $toolCall->arguments,
+                            'input' => 0 !== \count($toolCall->arguments) ? $toolCall->arguments : new \stdClass(),
                         ],
                     ];
                 }, $data->toolCalls),
