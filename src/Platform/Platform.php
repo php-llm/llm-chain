@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Platform;
 
 use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
-use PhpLlm\LlmChain\Platform\Response\AsyncResponse;
-use PhpLlm\LlmChain\Platform\Response\ResponseInterface;
+use PhpLlm\LlmChain\Platform\Response\RawHttpResponse;
+use PhpLlm\LlmChain\Platform\Response\ResponsePromise;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as HttpResponse;
 
 /**
@@ -38,7 +39,7 @@ final class Platform implements PlatformInterface
         $this->responseConverter = $responseConverter instanceof \Traversable ? iterator_to_array($responseConverter) : $responseConverter;
     }
 
-    public function request(Model $model, array|string|object $input, array $options = []): ResponseInterface
+    public function request(Model $model, array|string|object $input, array $options = []): ResponsePromise
     {
         $payload = $this->contract->createRequestPayload($model, $input);
         $options = array_merge($model->getOptions(), $options);
@@ -70,11 +71,15 @@ final class Platform implements PlatformInterface
     /**
      * @param array<string, mixed> $options
      */
-    private function convertResponse(Model $model, HttpResponse $response, array $options): ResponseInterface
+    private function convertResponse(Model $model, HttpResponse $response, array $options): ResponsePromise
     {
         foreach ($this->responseConverter as $responseConverter) {
             if ($responseConverter->supports($model)) {
-                return new AsyncResponse($responseConverter, $response, $options);
+                return new ResponsePromise(
+                    fn (ResponseInterface $response, array $options) => $responseConverter->convert($response, $options),
+                    new RawHttpResponse($response),
+                    $options,
+                );
             }
         }
 

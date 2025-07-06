@@ -23,6 +23,6 @@ $response = $platform->request(
     ],
 );
 
-foreach ($response->getContent() as $index => $image) {
+foreach ($response->getResponse()->getContent() as $index => $image) {
     echo 'Image '.$index.': '.$image->url.\PHP_EOL;
 }

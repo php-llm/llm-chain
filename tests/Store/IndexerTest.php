@@ -7,7 +7,7 @@ namespace PhpLlm\LlmChain\Tests\Store;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\Embeddings;
 use PhpLlm\LlmChain\Platform\Message\ToolCallMessage;
 use PhpLlm\LlmChain\Platform\Platform;
-use PhpLlm\LlmChain\Platform\Response\AsyncResponse;
+use PhpLlm\LlmChain\Platform\Response\ResponsePromise;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
 use PhpLlm\LlmChain\Platform\Response\VectorResponse;
 use PhpLlm\LlmChain\Platform\Vector\Vector;
@@ -35,7 +35,7 @@ use Symfony\Component\Uid\Uuid;
 #[UsesClass(ToolCall::class)]
 #[UsesClass(Embeddings::class)]
 #[UsesClass(Platform::class)]
-#[UsesClass(AsyncResponse::class)]
+#[UsesClass(ResponsePromise::class)]
 #[UsesClass(VectorResponse::class)]
 final class IndexerTest extends TestCase
 {

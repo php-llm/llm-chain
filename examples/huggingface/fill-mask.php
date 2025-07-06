@@ -20,4 +20,4 @@ $response = $platform->request($model, 'Hello I\'m a <mask> model.', [
     'task' => Task::FILL_MASK,
 ]);
 
-dump($response->getContent());
+dump($response->asObject());

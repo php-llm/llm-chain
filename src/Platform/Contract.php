@@ -79,6 +79,9 @@ readonly class Contract
      */
     final public function createToolOption(array $tools, Model $model): array
     {
-        return $this->normalizer->normalize($tools, context: [self::CONTEXT_MODEL => $model, AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true]);
+        return $this->normalizer->normalize($tools, context: [
+            self::CONTEXT_MODEL => $model,
+            AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true,
+        ]);
     }
 }

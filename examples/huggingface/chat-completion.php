@@ -23,4 +23,4 @@ $response = $platform->request($model, $messages, [
     'task' => Task::CHAT_COMPLETION,
 ]);
 
-echo $response->getContent().\PHP_EOL;
+echo $response->asText().\PHP_EOL;
