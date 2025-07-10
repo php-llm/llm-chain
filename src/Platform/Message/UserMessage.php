@@ -9,6 +9,7 @@ use PhpLlm\LlmChain\Platform\Message\Content\ContentInterface;
 use PhpLlm\LlmChain\Platform\Message\Content\Image;
 use PhpLlm\LlmChain\Platform\Message\Content\ImageUrl;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * @author Denis Zunke <denis.zunke@gmail.com>
@@ -20,7 +21,7 @@ final readonly class UserMessage implements MessageInterface
      */
     public array $content;
 
-    public Uuid $id;
+    public UuidV7 $id;
 
     public function __construct(
         ContentInterface ...$content,
@@ -34,7 +35,7 @@ final readonly class UserMessage implements MessageInterface
         return Role::User;
     }
 
-    public function getId(): Uuid
+    public function getId(): UuidV7
     {
         return $this->id;
     }
