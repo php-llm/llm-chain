@@ -36,6 +36,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 #[Large]
 #[CoversClass(Contract::class)]
@@ -201,7 +202,7 @@ final class ContractTest extends TestCase
                 return Role::User;
             }
 
-            public function getId(): Uuid
+            public function getId(): UuidV7
             {
                 return Uuid::v7();
             }
