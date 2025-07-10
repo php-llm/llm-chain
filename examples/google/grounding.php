@@ -1,0 +1,47 @@
+<?php
+
+use PhpLlm\LlmChain\Chain\Chain;
+use PhpLlm\LlmChain\Chain\Toolbox\ChainProcessor;
+use PhpLlm\LlmChain\Chain\Toolbox\Tool\Clock;
+use PhpLlm\LlmChain\Chain\Toolbox\Toolbox;
+use PhpLlm\LlmChain\Platform\Bridge\Google\Gemini;
+use PhpLlm\LlmChain\Platform\Bridge\Google\GroundingOutputProcessor;
+use PhpLlm\LlmChain\Platform\Bridge\Google\PlatformFactory;
+use PhpLlm\LlmChain\Platform\Message\Message;
+use PhpLlm\LlmChain\Platform\Message\MessageBag;
+use Symfony\Component\Dotenv\Dotenv;
+
+require_once dirname(__DIR__, 2).'/vendor/autoload.php';
+(new Dotenv())->loadEnv(dirname(__DIR__, 2).'/.env');
+
+if (!$_ENV['GEMINI_API_KEY']) {
+    echo 'Please set the GEMINI_API_KEY environment variable.'.\PHP_EOL;
+    exit(1);
+}
+
+$platform = PlatformFactory::create($_ENV['GEMINI_API_KEY']);
+
+// Available server-side tools as of 2025-06-28: url_context, google_search, code_execution
+$llm = new Gemini('gemini-2.5-pro-preview-03-25', ['server_tools' => ['google_search' => true], 'temperature' => 1.0]);
+
+$toolbox = Toolbox::create(new Clock());
+$processor = new ChainProcessor($toolbox);
+$chain = new Chain($platform, $llm, outputProcessors: [new GroundingOutputProcessor()]);
+
+$messages = new MessageBag(Message::ofUser('Summarize what is Symfony framework in 3 sentences'));
+
+$response = $chain->call($messages);
+
+echo $response->getContent().\PHP_EOL;
+
+$metadata = $response->getMetadata()['grounding'];
+
+printf(
+    <<<'FORMAT'
+        Search queries: %s
+        Sources: %s
+
+        FORMAT,
+    implode(', ', $metadata['webSearchQueries']),
+    implode(', ', array_unique(array_column(array_column($metadata['groundingChunks'], 'web'), 'title')))
+);
