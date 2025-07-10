@@ -14,8 +14,7 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__, 2).'/.env');
 
-if (!$_ENV['AWS_ACCESS_KEY_ID'] || !$_ENV['AWS_SECRET_ACCESS_KEY'] || !$_ENV['AWS_DEFAULT_REGION']
-) {
+if (!$_ENV['AWS_ACCESS_KEY_ID'] || !$_ENV['AWS_SECRET_ACCESS_KEY'] || !$_ENV['AWS_DEFAULT_REGION']) {
     echo 'Please set the AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY and AWS_DEFAULT_REGION environment variables.'.\PHP_EOL;
     exit(1);
 }

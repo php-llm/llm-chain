@@ -7,8 +7,7 @@ use Symfony\Component\Dotenv\Dotenv;
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 (new Dotenv())->loadEnv(dirname(__DIR__, 2).'/.env');
 
-if (!$_ENV['AZURE_OPENAI_BASEURL'] || !$_ENV['AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT'] || !$_ENV['AZURE_OPENAI_EMBEDDINGS_API_VERSION'] || !$_ENV['AZURE_OPENAI_KEY']
-) {
+if (!$_ENV['AZURE_OPENAI_BASEURL'] || !$_ENV['AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT'] || !$_ENV['AZURE_OPENAI_EMBEDDINGS_API_VERSION'] || !$_ENV['AZURE_OPENAI_KEY']) {
     echo 'Please set the AZURE_OPENAI_BASEURL, AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT, AZURE_OPENAI_EMBEDDINGS_API_VERSION, and AZURE_OPENAI_KEY environment variables.'.\PHP_EOL;
     exit(1);
 }
