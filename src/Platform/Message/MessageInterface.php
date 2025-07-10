@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform\Message;
 
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 
 /**
