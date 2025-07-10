@@ -63,19 +63,6 @@
         "symfony/process": "^6.4 || ^7.1",
         "symfony/var-dumper": "^6.4 || ^7.1"
     },
-    "suggest": {
-        "ext-pdo": "For using MariaDB as retrieval vector store.",
-        "async-aws/bedrock-runtime": "For using the Bedrock platform.",
-        "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
-        "codewithkyrian/transformers": "For using the TransformersPHP with FFI to run models in PHP.",
-        "doctrine/dbal": "For using MariaDB via Doctrine as retrieval vector store",
-        "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
-        "mrmysql/youtube-transcript": "For using the YouTube transcription tool.",
-        "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store.",
-        "symfony/dom-crawler": "For using the Crawler tool.",
-        "symfony/http-foundation": "For using the SessionStore as message store.",
-        "psr/cache": "For using the CacheStore as message store."
-    },
     "config": {
         "allow-plugins": {
             "codewithkyrian/transformers-libsloader": true,

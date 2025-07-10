@@ -59,6 +59,9 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
         private bool $bulkWrite = false,
         private LoggerInterface $logger = new NullLogger(),
     ) {
+        if (!class_exists(Client::class)) {
+            throw new \RuntimeException('For using MongoDB Atlas as retrieval vector store, the mongodb/mongodb package is required. Try running "composer require mongodb/mongodb"');
+        }
     }
 
     public function add(VectorDocument ...$documents): void
