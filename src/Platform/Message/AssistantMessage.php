@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Platform\Message;
 
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
+use Symfony\Component\Uid\TimeBasedUidInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\Uid\Uuid;
  */
 final readonly class AssistantMessage implements MessageInterface
 {
-    public Uuid $id;
+    public TimeBasedUidInterface $id;
 
     /**
      * @param ?ToolCall[] $toolCalls
@@ -29,7 +30,7 @@ final readonly class AssistantMessage implements MessageInterface
         return Role::Assistant;
     }
 
-    public function getId(): Uuid
+    public function getId(): TimeBasedUidInterface
     {
         return $this->id;
     }

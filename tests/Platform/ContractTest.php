@@ -35,6 +35,7 @@ use PHPUnit\Framework\Attributes\Large;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\TimeBasedUidInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[Large]
@@ -201,7 +202,7 @@ final class ContractTest extends TestCase
                 return Role::User;
             }
 
-            public function getId(): Uuid
+            public function getId(): TimeBasedUidInterface
             {
                 return Uuid::v7();
             }

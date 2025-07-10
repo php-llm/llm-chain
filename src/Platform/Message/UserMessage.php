@@ -8,6 +8,7 @@ use PhpLlm\LlmChain\Platform\Message\Content\Audio;
 use PhpLlm\LlmChain\Platform\Message\Content\ContentInterface;
 use PhpLlm\LlmChain\Platform\Message\Content\Image;
 use PhpLlm\LlmChain\Platform\Message\Content\ImageUrl;
+use Symfony\Component\Uid\TimeBasedUidInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -20,7 +21,7 @@ final readonly class UserMessage implements MessageInterface
      */
     public array $content;
 
-    public Uuid $id;
+    public TimeBasedUidInterface $id;
 
     public function __construct(
         ContentInterface ...$content,
@@ -34,7 +35,7 @@ final readonly class UserMessage implements MessageInterface
         return Role::User;
     }
 
-    public function getId(): Uuid
+    public function getId(): TimeBasedUidInterface
     {
         return $this->id;
     }
