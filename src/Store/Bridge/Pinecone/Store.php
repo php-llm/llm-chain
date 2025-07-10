@@ -26,6 +26,9 @@ final readonly class Store implements VectorStoreInterface
         private array $filter = [],
         private int $topK = 3,
     ) {
+        if (!class_exists(Client::class)) {
+            throw new \RuntimeException('For using the Pinecone as retrieval vector store, the probots-io/pinecone-php package is required. Try running "composer require probots-io/pinecone-php"');
+        }
     }
 
     public function add(VectorDocument ...$documents): void

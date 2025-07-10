@@ -18,6 +18,9 @@ final readonly class SessionStore implements MessageStoreInterface
         RequestStack $requestStack,
         private string $sessionKey = 'messages',
     ) {
+        if (!class_exists(RequestStack::class)) {
+            throw new \RuntimeException('For using the SessionStore as message store, the symfony/http-foundation package is required. Try running "composer require symfony/http-foundation"');
+        }
         $this->session = $requestStack->getSession();
     }
 
