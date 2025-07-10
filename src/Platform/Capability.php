@@ -21,7 +21,7 @@ class Capability
     public const OUTPUT_AUDIO = 'output-audio';
     public const OUTPUT_IMAGE = 'output-image';
     public const OUTPUT_STREAMING = 'output-streaming';
-    public const OUTPUT_STRUCTURED = 'output-structured';
+    public const STRUCTURED_OUTPUT = 'structured-output';
     public const OUTPUT_TEXT = 'output-text';
 
     // FUNCTIONALITY
