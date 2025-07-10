@@ -19,6 +19,10 @@ final readonly class PlatformFactory
         BedrockRuntimeClient $bedrockRuntimeClient = new BedrockRuntimeClient(),
         ?Contract $contract = null,
     ): Platform {
+        if (!class_exists(BedrockRuntimeClient::class)) {
+            throw new \RuntimeException('For using the Bedrock platform, the async-aws/bedrock-runtime package is required. Try running "composer require async-aws/bedrock-runtime"');
+        }
+
         $modelClient[] = new ClaudeHandler($bedrockRuntimeClient);
         $modelClient[] = new NovaHandler($bedrockRuntimeClient);
         $modelClient[] = new LlamaModelClient($bedrockRuntimeClient);
