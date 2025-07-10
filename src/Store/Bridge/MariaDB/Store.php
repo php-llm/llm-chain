@@ -34,7 +34,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
         private string $indexName,
         private string $vectorFieldName,
     ) {
-        if (!extension_loaded('pdo')) {
+        if (!\extension_loaded('pdo')) {
             throw new \RuntimeException('For using MariaDB as retrieval vector store, the PDO extension is required. Try running "composer require ext-pdo"');
         }
     }
