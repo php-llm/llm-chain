@@ -20,7 +20,7 @@ final readonly class YouTubeTranscriber
         private HttpClientInterface $client,
     ) {
         if (!class_exists(TranscriptListFetcher::class)) {
-            throw new LogicException('For using the YouTube transcription tool, the mrmysql/youtube-transcript package is required. Try running "composer require mrmysql/youtube-transcript"');
+            throw new LogicException('For using the YouTube transcription tool, the mrmysql/youtube-transcript package is required. Try running "composer require mrmysql/youtube-transcript".');
         }
     }
 

@@ -19,7 +19,7 @@ final readonly class Crawler
         private HttpClientInterface $httpClient,
     ) {
         if (!class_exists(DomCrawler::class)) {
-            throw new RuntimeException('For using the Crawler tool, the symfony/dom-crawler package is required. Try running "composer require symfony/dom-crawler"');
+            throw new RuntimeException('For using the Crawler tool, the symfony/dom-crawler package is required. Try running "composer require symfony/dom-crawler".');
         }
     }
 

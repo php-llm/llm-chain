@@ -21,7 +21,7 @@ final readonly class Store implements VectorStoreInterface
         private string $collectionName,
     ) {
         if (!class_exists(Client::class)) {
-            throw new \RuntimeException('For using the ChromaDB as retrieval vector store, the codewithkyrian/chromadb-php package is required. Try running "composer require codewithkyrian/chromadb-php"');
+            throw new \RuntimeException('For using the ChromaDB as retrieval vector store, the codewithkyrian/chromadb-php package is required. Try running "composer require codewithkyrian/chromadb-php".');
         }
     }
 

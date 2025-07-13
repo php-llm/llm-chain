@@ -50,7 +50,7 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
     public static function fromDbal(Connection $connection, string $tableName, string $indexName = 'embedding', string $vectorFieldName = 'embedding'): self
     {
         if (!class_exists(Connection::class)) {
-            throw new \RuntimeException('For using MariaDB via Doctrine as retrieval vector store, the doctrine/dbal package is required. Try running "composer require doctrine/dbal"');
+            throw new \RuntimeException('For using MariaDB via Doctrine as retrieval vector store, the doctrine/dbal package is required. Try running "composer require doctrine/dbal".');
         }
 
         $pdo = $connection->getNativeConnection();
