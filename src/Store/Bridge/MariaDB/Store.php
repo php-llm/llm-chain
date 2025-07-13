@@ -34,6 +34,9 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
         private string $indexName,
         private string $vectorFieldName,
     ) {
+        if (!\extension_loaded('pdo')) {
+            throw new \RuntimeException('For using MariaDB as retrieval vector store, the PDO extension needs to be enabled.');
+        }
     }
 
     public static function fromPdo(\PDO $connection, string $tableName, string $indexName = 'embedding', string $vectorFieldName = 'embedding'): self
@@ -46,6 +49,10 @@ final readonly class Store implements VectorStoreInterface, InitializableStoreIn
      */
     public static function fromDbal(Connection $connection, string $tableName, string $indexName = 'embedding', string $vectorFieldName = 'embedding'): self
     {
+        if (!class_exists(Connection::class)) {
+            throw new \RuntimeException('For using MariaDB as retrieval vector store, the PDO extension needs to be enabled.');
+        }
+
         $pdo = $connection->getNativeConnection();
 
         if (!$pdo instanceof \PDO) {

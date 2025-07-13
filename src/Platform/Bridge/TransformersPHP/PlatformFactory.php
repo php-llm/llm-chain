@@ -15,7 +15,7 @@ final readonly class PlatformFactory
     public static function create(): Platform
     {
         if (!class_exists(Transformers::class)) {
-            throw new RuntimeException('TransformersPHP is not installed. Please install it using "composer require codewithkyrian/transformers".');
+            throw new RuntimeException('For using the TransformersPHP with FFI to run models in PHP, the codewithkyrian/transformers package is required. Try running "composer require codewithkyrian/transformers".');
         }
 
         return new Platform();
