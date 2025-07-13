@@ -17,7 +17,7 @@ final readonly class CacheStore implements MessageStoreInterface
         private int $ttl = 86400,
     ) {
         if (!interface_exists(CacheItemPoolInterface::class)) {
-            throw new \RuntimeException('For using the CacheStore as message store, the psr/cache package is required. Try running "composer require psr/cache"');
+            throw new \RuntimeException('For using the CacheStore as message store, the psr/cache package is required. Try running "composer require psr/cache".');
         }
     }
 
