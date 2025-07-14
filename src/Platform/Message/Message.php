@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform\Message;
 
-use PhpLlm\LlmChain\Platform\Fabric\FabricRepository;
+use PhpLlm\FabricPattern\Pattern;
 use PhpLlm\LlmChain\Platform\Message\Content\ContentInterface;
 use PhpLlm\LlmChain\Platform\Message\Content\Text;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
@@ -33,16 +33,17 @@ final readonly class Message
      * Note: Only one SystemMessage is supported per MessageBag. If you need to use
      * a Fabric pattern with an existing SystemMessage, you'll need to combine them manually.
      *
-     * @param string|null $patternsPath Optional custom patterns path
-     *
      * @throws \RuntimeException if fabric-pattern package is not installed
      */
-    public static function fabric(string $pattern, ?string $patternsPath = null): SystemMessage
+    public static function fabric(string $pattern): SystemMessage
     {
-        $repository = new FabricRepository($patternsPath);
-        $fabricPrompt = $repository->load($pattern);
+        if (!class_exists(Pattern::class)) {
+            throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
+        }
 
-        return new SystemMessage($fabricPrompt->getContent());
+        $content = (new Pattern())->load($pattern);
+
+        return new SystemMessage($content);
     }
 
     /**

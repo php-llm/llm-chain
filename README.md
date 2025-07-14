@@ -920,6 +920,27 @@ $response = $chain->call([
 ]);
 ```
 
+#### Usage with Input Processor
+
+For more flexibility, you can use the `FabricInputProcessor` to dynamically load patterns:
+
+```php
+use PhpLlm\LlmChain\Chain\Chain;
+use PhpLlm\LlmChain\Platform\Fabric\FabricInputProcessor;
+
+// Initialize Platform and LLM
+
+$processor = new FabricInputProcessor();
+$chain = new Chain($platform, $model, [$processor]);
+
+$messages = new MessageBag(
+    Message::ofUser('Analyze this article for potential security issues: ...')
+);
+
+// Use any Fabric pattern via options
+$response = $chain->call($messages, ['fabric_pattern' => 'analyze_threat_report']);
+```
+
 #### Available Patterns
 
 Some popular patterns include:

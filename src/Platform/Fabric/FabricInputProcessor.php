@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform\Fabric;
 
+use PhpLlm\FabricPattern\Pattern;
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessorInterface;
 use PhpLlm\LlmChain\Platform\Message\SystemMessage;
@@ -16,11 +17,6 @@ use PhpLlm\LlmChain\Platform\Message\SystemMessage;
  */
 final readonly class FabricInputProcessor implements InputProcessorInterface
 {
-    public function __construct(
-        private FabricRepository $repository = new FabricRepository(),
-    ) {
-    }
-
     public function processInput(Input $input): void
     {
         $options = $input->getOptions();
@@ -39,9 +35,14 @@ final readonly class FabricInputProcessor implements InputProcessorInterface
             throw new \LogicException('Cannot add Fabric pattern: MessageBag already contains a system message');
         }
 
+        // Check if fabric-pattern package is installed
+        if (!class_exists(Pattern::class)) {
+            throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
+        }
+
         // Load the pattern and prepend as system message
-        $fabricPrompt = $this->repository->load($pattern);
-        $systemMessage = new SystemMessage($fabricPrompt->getContent());
+        $content = (new Pattern())->load($pattern);
+        $systemMessage = new SystemMessage($content);
 
         // Prepend the system message
         $input->messages = $input->messages->prepend($systemMessage);
