@@ -21,12 +21,16 @@ class FabricRepository
     public function __construct(?string $patternsPath = null)
     {
         if (null === $patternsPath) {
-            // Check if fabric-pattern package is installed
+            // Check if fabric-pattern package is installed by checking for its Pattern class
+            if (!class_exists(\PhpLlm\FabricPattern\Pattern::class)) {
+                throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
+            }
+            
             $fabricPatternPath = \dirname(__DIR__, 4).'/fabric-pattern/patterns';
             if (is_dir($fabricPatternPath)) {
                 $this->patternsPath = $fabricPatternPath;
             } else {
-                throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
+                throw new \RuntimeException('Fabric patterns directory not found at expected location');
             }
         } else {
             $this->patternsPath = $patternsPath;
