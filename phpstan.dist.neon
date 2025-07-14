@@ -11,6 +11,6 @@ parameters:
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
         -
-            message: '#no value type specified in iterable type array#'
+            identifier: missingType.iterableValue
             path: tests/*
 
