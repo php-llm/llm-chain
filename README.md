@@ -53,7 +53,7 @@ use PhpLlm\LlmChain\Platform\Bridge\OpenAI\PlatformFactory;
 $platform = PlatformFactory::create($_ENV['OPENAI_API_KEY']);
 
 // Language Model: GPT (OpenAI)
-$llm = new GPT(GPT::GPT_4O_MINI); 
+$llm = new GPT(GPT::GPT_4O_MINI);
 
 // Embeddings Model: Embeddings (OpenAI)
 $embeddings = new Embeddings();
@@ -268,7 +268,7 @@ final class MyTool
     public function __invoke(
         #[With(pattern: '/([a-z0-1]){5}/')]
         string $name,
-        #[With(minimum: 0, maximum: 10)]   
+        #[With(minimum: 0, maximum: 10)]
         int $number,
     ): string {
         // ...
@@ -501,7 +501,7 @@ $response = $chain->call($messages);
 * [MongoDB Atlas Search](https://mongodb.com/products/platform/atlas-vector-search) (requires `mongodb/mongodb` as additional dependency)
 * [Pinecone](https://pinecone.io) (requires `probots-io/pinecone-php` as additional dependency)
 
-See [issue #28](https://github.com/php-llm/llm-chain/issues/28) for planned support of other models and platforms. 
+See [issue #28](https://github.com/php-llm/llm-chain/issues/28) for planned support of other models and platforms.
 
 ## Advanced Usage & Features
 
@@ -749,7 +749,7 @@ final class MyProcessor implements InputProcessorInterface
         $options = $input->getOptions();
         $options['foo'] = 'bar';
         $input->setOptions($options);
-        
+
         // mutate MessageBag
         $input->messages->append(new AssistantMessage(sprintf('Please answer using the locale %s', $this->locale)));
     }
@@ -800,6 +800,81 @@ final class MyProcessor implements OutputProcessorInterface, ChainAwareInterface
     }
 }
 ```
+
+
+## Memory
+
+LLM Chain supports adding contextual memory to your conversations, which allows the model to recall past interactions or relevant information from different sources. Memory providers inject information into the system prompt, providing the model with context without changing your application logic.
+
+### Using Memory
+
+Memory integration is handled through the `MemoryInputProcessor` and one or more `MemoryProviderInterface` implementations. Here's how to set it up:
+
+```php
+<?php
+use PhpLlm\LlmChain\Chain\Chain;
+use PhpLlm\LlmChain\Chain\Memory\MemoryInputProcessor;
+use PhpLlm\LlmChain\Chain\Memory\StaticMemoryProvider;
+
+// Platform & LLM instantiation
+
+$personalFacts = new StaticMemoryProvider(
+    'My name is Wilhelm Tell',
+    'I wish to be a swiss national hero',
+    'I am struggling with hitting apples but want to be professional with the bow and arrow',
+);
+$memoryProcessor = new MemoryInputProcessor($personalFacts);
+
+$chain = new Chain($platform, $model, [$memoryProcessor]);
+$messages = new MessageBag(Message::ofUser('What do we do today?'));
+$response = $chain->call($messages);
+```
+
+### Memory Providers
+
+The library includes some implementations that are usable out of the box.
+
+#### Static Memory
+
+The static memory can be utilized to provide static information form, for example, user settings, basic knowledge of your application
+or any other thing that should be remembered als always there without the need of having it statically added to the system prompt by
+yourself.
+
+```php
+use PhpLlm\LlmChain\Chain\Memory\StaticMemoryProvider;
+
+$staticMemory = new StaticMemoryProvider(
+    'The user is allergic to nuts',
+    'The user prefers brief explanations',
+);
+```
+
+#### Embedding Provider
+
+Based on an embedding storage the given user message is utilized to inject knowledge from the storage. This could be general knowledge that was stored there and could fit the users input without the need for tools or past conversation pieces that should be recalled for
+the current message bag.
+
+```php
+use PhpLlm\LlmChain\Chain\Memory\EmbeddingProvider;
+
+$embeddingsMemory = new EmbeddingProvider(
+    $platform,
+    $embeddings, // Your embeddings model to use for vectorizing the users message
+    $store       // Your vector store to query for fitting context
+);
+
+```
+
+### Dynamically Memory Usage
+
+The memory configuration is globally given for the chain. Sometimes there is the need to explicit disable the memory when it is not needed for some calls or calls are not in the wanted context for a call. So there is the option `use_memory` that is enabled by default but can be disabled on premise.
+
+```php
+$response = $chain->call($messages, [
+    'use_memory' => false,
+]);
+```
+
 
 ## HuggingFace
 
