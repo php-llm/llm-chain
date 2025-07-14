@@ -25,14 +25,14 @@ final readonly class EmbeddingProvider implements MemoryProviderInterface
     ) {
     }
 
-    public function loadMemory(Input $input): ?Memory
+    public function loadMemory(Input $input): array
     {
         $messages = $input->messages->getMessages();
         /** @var MessageInterface|null $userMessage */
         $userMessage = $messages[array_key_last($messages)] ?? null;
 
         if (!$userMessage instanceof UserMessage) {
-            return null;
+            return [];
         }
 
         $userMessageTextContent = array_filter(
@@ -41,7 +41,7 @@ final readonly class EmbeddingProvider implements MemoryProviderInterface
         );
 
         if (0 === \count($userMessageTextContent)) {
-            return null;
+            return [];
         }
 
         $userMessageTextContent = array_shift($userMessageTextContent);
@@ -50,7 +50,7 @@ final readonly class EmbeddingProvider implements MemoryProviderInterface
         $vectors = $this->platform->request($this->model, $userMessageTextContent->text)->asVectors();
         $foundEmbeddingContent = $this->vectorStore->query($vectors[0]);
         if (0 === \count($foundEmbeddingContent)) {
-            return null;
+            return [];
         }
 
         $content = '## Dynamic memories fitting user message'.\PHP_EOL.\PHP_EOL;
@@ -58,6 +58,6 @@ final readonly class EmbeddingProvider implements MemoryProviderInterface
             $content .= json_encode($document->metadata);
         }
 
-        return new Memory($content);
+        return [new Memory($content)];
     }
 }

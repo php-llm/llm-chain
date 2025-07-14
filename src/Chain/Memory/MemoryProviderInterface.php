@@ -11,5 +11,8 @@ use PhpLlm\LlmChain\Chain\Input;
  */
 interface MemoryProviderInterface
 {
-    public function loadMemory(Input $input): ?Memory;
+    /**
+     * @return list<Memory>
+     */
+    public function loadMemory(Input $input): array;
 }

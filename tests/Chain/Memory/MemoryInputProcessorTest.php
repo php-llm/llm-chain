@@ -62,12 +62,12 @@ final class MemoryInputProcessorTest extends TestCase
         $firstMemoryProvider = $this->createMock(MemoryProviderInterface::class);
         $firstMemoryProvider->expects($this->once())
             ->method('loadMemory')
-            ->willReturn(new Memory('First memory content'));
+            ->willReturn([new Memory('First memory content')]);
 
         $secondMemoryProvider = $this->createMock(MemoryProviderInterface::class);
         $secondMemoryProvider->expects($this->once())
             ->method('loadMemory')
-            ->willReturn(null);
+            ->willReturn([]);
 
         $memoryInputProcessor = new MemoryInputProcessor(
             $firstMemoryProvider,
@@ -86,7 +86,7 @@ final class MemoryInputProcessorTest extends TestCase
                 You are a helpful and kind assistant.
 
                 # Conversation Memory
-                This is the memory i have found for this conversation. The memory has more weight to answer user input,
+                This is the memory I have found for this conversation. The memory has more weight to answer user input,
                 so try to answer utilizing the memory as much as possible. Your answer must be changed to fit the given
                 memory. If the memory is irrelevant, ignore it. Do not reply to the this section of the prompt and do not
                 reference it as this is just for your reference.
@@ -103,7 +103,7 @@ final class MemoryInputProcessorTest extends TestCase
         $firstMemoryProvider = $this->createMock(MemoryProviderInterface::class);
         $firstMemoryProvider->expects($this->once())
             ->method('loadMemory')
-            ->willReturn(new Memory('First memory content'));
+            ->willReturn([new Memory('First memory content')]);
 
         $memoryInputProcessor = new MemoryInputProcessor($firstMemoryProvider);
 
@@ -117,7 +117,7 @@ final class MemoryInputProcessorTest extends TestCase
         self::assertSame(
             <<<MARKDOWN
                 # Conversation Memory
-                This is the memory i have found for this conversation. The memory has more weight to answer user input,
+                This is the memory I have found for this conversation. The memory has more weight to answer user input,
                 so try to answer utilizing the memory as much as possible. Your answer must be changed to fit the given
                 memory. If the memory is irrelevant, ignore it. Do not reply to the this section of the prompt and do not
                 reference it as this is just for your reference.
@@ -129,12 +129,44 @@ final class MemoryInputProcessorTest extends TestCase
     }
 
     #[Test]
+    public function itIsAddingMultipleMemoryFromSingleProviderToSystemPrompt(): void
+    {
+        $firstMemoryProvider = $this->createMock(MemoryProviderInterface::class);
+        $firstMemoryProvider->expects($this->once())
+            ->method('loadMemory')
+            ->willReturn([new Memory('First memory content'), new Memory('Second memory content')]);
+
+        $memoryInputProcessor = new MemoryInputProcessor($firstMemoryProvider);
+
+        $memoryInputProcessor->processInput($input = new Input(
+            self::createStub(Model::class),
+            new MessageBag(),
+            []
+        ));
+
+        self::assertArrayNotHasKey('use_memory', $input->getOptions());
+        self::assertSame(
+            <<<MARKDOWN
+                # Conversation Memory
+                This is the memory I have found for this conversation. The memory has more weight to answer user input,
+                so try to answer utilizing the memory as much as possible. Your answer must be changed to fit the given
+                memory. If the memory is irrelevant, ignore it. Do not reply to the this section of the prompt and do not
+                reference it as this is just for your reference.
+
+                First memory content
+                Second memory content
+                MARKDOWN,
+            $input->messages->getSystemMessage()->content,
+        );
+    }
+
+    #[Test]
     public function itIsNotAddingAnythingIfMemoryWasEmpty(): void
     {
         $firstMemoryProvider = $this->createMock(MemoryProviderInterface::class);
         $firstMemoryProvider->expects($this->once())
             ->method('loadMemory')
-            ->willReturn(null);
+            ->willReturn([]);
 
         $memoryInputProcessor = new MemoryInputProcessor($firstMemoryProvider);
 

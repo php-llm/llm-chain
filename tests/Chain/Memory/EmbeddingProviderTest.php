@@ -133,7 +133,7 @@ final class EmbeddingProviderTest extends TestCase
             [],
         ));
 
-        self::assertNull($memory);
+        self::assertCount(0, $memory);
     }
 
     #[Test]
@@ -171,14 +171,14 @@ final class EmbeddingProviderTest extends TestCase
             [],
         ));
 
-        self::assertNotNull($memory);
+        self::assertCount(1, $memory);
         self::assertSame(
             <<<MARKDOWN
                 ## Dynamic memories fitting user message
 
                 {"fact":"The sky is blue"}{"fact":"Water is wet"}
                 MARKDOWN,
-            $memory->content,
+            $memory[0]->content,
         );
     }
 }

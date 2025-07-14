@@ -34,7 +34,7 @@ final class StaticMemoryProviderTest extends TestCase
             []
         ));
 
-        self::assertNull($memory);
+        self::assertCount(0, $memory);
     }
 
     #[Test]
@@ -51,8 +51,9 @@ final class StaticMemoryProviderTest extends TestCase
             []
         ));
 
-        self::assertInstanceOf(Memory::class, $memory);
+        self::assertCount(1, $memory);
+        self::assertInstanceOf(Memory::class, $memory[0]);
         $expectedContent = "## Static Memory\n\n- {$fact1}\n- {$fact2}";
-        self::assertSame($expectedContent, $memory->content);
+        self::assertSame($expectedContent, $memory[0]->content);
     }
 }

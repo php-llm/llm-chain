@@ -21,10 +21,10 @@ final readonly class StaticMemoryProvider implements MemoryProviderInterface
         $this->memory = $memory;
     }
 
-    public function loadMemory(Input $input): ?Memory
+    public function loadMemory(Input $input): array
     {
         if (0 === \count($this->memory)) {
-            return null;
+            return [];
         }
 
         $content = '## Static Memory'.\PHP_EOL;
@@ -33,6 +33,6 @@ final readonly class StaticMemoryProvider implements MemoryProviderInterface
             $content .= \PHP_EOL.'- '.$memory;
         }
 
-        return new Memory($content);
+        return [new Memory($content)];
     }
 }

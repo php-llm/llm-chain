@@ -45,13 +45,17 @@ final readonly class MemoryInputProcessor implements InputProcessorInterface
 
         $memory = '';
         foreach ($this->memoryProviders as $provider) {
-            $memoryMessage = $provider->loadMemory($input);
+            $memoryMessages = $provider->loadMemory($input);
 
-            if (null === $memoryMessage) {
+            if (0 === \count($memoryMessages)) {
                 continue;
             }
 
-            $memory .= \PHP_EOL.\PHP_EOL.$memoryMessage->content;
+            $memory .= \PHP_EOL.\PHP_EOL;
+            $memory .= implode(
+                \PHP_EOL,
+                array_map(static fn (Memory $memory): string => $memory->content, $memoryMessages),
+            );
         }
 
         if ('' === $memory) {
