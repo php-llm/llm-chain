@@ -21,8 +21,8 @@ class FabricRepository
     public function __construct(?string $patternsPath = null)
     {
         if (null === $patternsPath) {
-            // Check if fabric-pattern package is installed by checking for its Pattern class
-            if (!class_exists(\PhpLlm\FabricPattern\Pattern::class)) {
+            // Check if Fabric patterns package is installed
+            if (!is_dir(\dirname(__DIR__, 2).'/vendor/php-llm/fabric-pattern')) {
                 throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
             }
             
