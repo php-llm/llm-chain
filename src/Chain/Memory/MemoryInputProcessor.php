@@ -15,7 +15,7 @@ final readonly class MemoryInputProcessor implements InputProcessorInterface
 {
     private const MEMORY_PROMPT_MESSAGE = <<<MARKDOWN
         # Conversation Memory
-        This is the memory i have found for this conversation. The memory has more weight to answer user input,
+        This is the memory I have found for this conversation. The memory has more weight to answer user input,
         so try to answer utilizing the memory as much as possible. Your answer must be changed to fit the given
         memory. If the memory is irrelevant, ignore it. Do not reply to the this section of the prompt and do not
         reference it as this is just for your reference.
