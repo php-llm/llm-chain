@@ -15,7 +15,7 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
     exit(1);
 }
 
-if (!is_dir(dirname(__DIR__, 2).'/vendor/php-llm/fabric-pattern')) {
+if (!class_exists(\PhpLlm\FabricPattern\Pattern::class)) {
     echo 'Fabric patterns are not installed. Please install them with: composer require php-llm/fabric-pattern'.\PHP_EOL;
     exit(1);
 }

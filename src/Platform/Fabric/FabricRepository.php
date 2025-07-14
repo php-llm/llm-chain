@@ -22,7 +22,7 @@ class FabricRepository
     {
         if (null === $patternsPath) {
             // Check if Fabric patterns package is installed
-            if (!is_dir(\dirname(__DIR__, 2).'/vendor/php-llm/fabric-pattern')) {
+            if (!class_exists(\PhpLlm\FabricPattern\Pattern::class)) {
                 throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
             }
             
