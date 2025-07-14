@@ -9,8 +9,6 @@ use PhpLlm\LlmChain\Chain\InputProcessorInterface;
 use PhpLlm\LlmChain\Platform\Message\SystemMessage;
 
 /**
- * Input processor for Fabric patterns.
- *
  * Requires the "php-llm/fabric-pattern" package to be installed.
  *
  * This processor allows adding Fabric patterns through options:
