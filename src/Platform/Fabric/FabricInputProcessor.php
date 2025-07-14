@@ -34,6 +34,11 @@ final readonly class FabricInputProcessor implements InputProcessorInterface
             throw new \InvalidArgumentException('The "fabric_pattern" option must be a string');
         }
 
+        // Check if there's already a system message
+        if (null !== $input->messages->getSystemMessage()) {
+            throw new \LogicException('Cannot add Fabric pattern: MessageBag already contains a system message');
+        }
+
         // Load the pattern and prepend as system message
         $fabricPrompt = $this->repository->load($pattern);
         $systemMessage = new SystemMessage($fabricPrompt->getContent());

@@ -145,4 +145,22 @@ final class FabricInputProcessorTest extends TestCase
 
         $processor->processInput($input);
     }
+
+    #[Test]
+    public function processInputThrowsExceptionWhenSystemMessageExists(): void
+    {
+        $repository = $this->createMock(FabricRepository::class);
+        $repository->expects($this->never())->method('load');
+
+        $processor = new FabricInputProcessor($repository);
+
+        $messages = new MessageBag(new SystemMessage('Existing system message'));
+        $model = new Model('test-model', []);
+        $input = new Input($model, $messages, ['fabric_pattern' => 'test_pattern']);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot add Fabric pattern: MessageBag already contains a system message');
+
+        $processor->processInput($input);
+    }
 }

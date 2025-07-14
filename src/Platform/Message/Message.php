@@ -30,6 +30,9 @@ final readonly class Message
      *
      * Requires the "php-llm/fabric-pattern" package to be installed.
      *
+     * Note: Only one SystemMessage is supported per MessageBag. If you need to use
+     * a Fabric pattern with an existing SystemMessage, you'll need to combine them manually.
+     *
      * @param string|null $patternsPath Optional custom patterns path
      *
      * @throws \RuntimeException if fabric-pattern package is not installed
