@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpLlm\FabricPattern\Pattern;
 use PhpLlm\LlmChain\Chain\Chain;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\GPT;
 use PhpLlm\LlmChain\Platform\Bridge\OpenAI\PlatformFactory;
@@ -16,7 +17,7 @@ if (empty($_ENV['OPENAI_API_KEY'])) {
     exit(1);
 }
 
-if (!class_exists(\PhpLlm\FabricPattern\Pattern::class)) {
+if (!class_exists(Pattern::class)) {
     echo 'Fabric patterns are not installed. Please install them with: composer require php-llm/fabric-pattern'.\PHP_EOL;
     exit(1);
 }

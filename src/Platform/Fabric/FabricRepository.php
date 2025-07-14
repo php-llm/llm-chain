@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLlm\LlmChain\Platform\Fabric;
 
+use PhpLlm\FabricPattern\Pattern;
 use PhpLlm\LlmChain\Platform\Fabric\Exception\PatternNotFoundException;
 
 /**
@@ -22,7 +23,7 @@ class FabricRepository
     {
         if (null === $patternsPath) {
             // Check if Fabric patterns package is installed
-            if (!class_exists(\PhpLlm\FabricPattern\Pattern::class)) {
+            if (!class_exists(Pattern::class)) {
                 throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
             }
             
