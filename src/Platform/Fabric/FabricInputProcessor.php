@@ -7,13 +7,13 @@ namespace PhpLlm\LlmChain\Platform\Fabric;
 use PhpLlm\FabricPattern\Pattern;
 use PhpLlm\LlmChain\Chain\Input;
 use PhpLlm\LlmChain\Chain\InputProcessorInterface;
+use PhpLlm\LlmChain\Platform\Exception\InvalidArgumentException;
+use PhpLlm\LlmChain\Platform\Exception\LogicException;
+use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 use PhpLlm\LlmChain\Platform\Message\SystemMessage;
 
 /**
  * Requires the "php-llm/fabric-pattern" package to be installed.
- *
- * This processor allows adding Fabric patterns through options:
- * - fabric_pattern: string - The pattern name to load
  */
 final readonly class FabricInputProcessor implements InputProcessorInterface
 {
@@ -27,27 +27,22 @@ final readonly class FabricInputProcessor implements InputProcessorInterface
 
         $pattern = $options['fabric_pattern'];
         if (!\is_string($pattern)) {
-            throw new \InvalidArgumentException('The "fabric_pattern" option must be a string');
+            throw new InvalidArgumentException('The "fabric_pattern" option must be a string');
         }
 
-        // Check if there's already a system message
         if (null !== $input->messages->getSystemMessage()) {
-            throw new \LogicException('Cannot add Fabric pattern: MessageBag already contains a system message');
+            throw new LogicException('Cannot add Fabric pattern: MessageBag already contains a system message');
         }
 
-        // Check if fabric-pattern package is installed
         if (!class_exists(Pattern::class)) {
-            throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
+            throw new RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
         }
 
-        // Load the pattern and prepend as system message
         $content = (new Pattern())->load($pattern);
         $systemMessage = new SystemMessage($content);
 
-        // Prepend the system message
         $input->messages = $input->messages->prepend($systemMessage);
 
-        // Remove the fabric option from the chain options
         unset($options['fabric_pattern']);
         $input->setOptions($options);
     }

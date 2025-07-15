@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Platform\Message;
 
 use PhpLlm\FabricPattern\Pattern;
+use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 use PhpLlm\LlmChain\Platform\Message\Content\ContentInterface;
 use PhpLlm\LlmChain\Platform\Message\Content\Text;
 use PhpLlm\LlmChain\Platform\Response\ToolCall;
@@ -38,7 +39,7 @@ final readonly class Message
     public static function fabric(string $pattern): SystemMessage
     {
         if (!class_exists(Pattern::class)) {
-            throw new \RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
+            throw new RuntimeException('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package: composer require php-llm/fabric-pattern');
         }
 
         $content = (new Pattern())->load($pattern);

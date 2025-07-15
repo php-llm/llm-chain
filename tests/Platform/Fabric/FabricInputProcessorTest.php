@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace PhpLlm\LlmChain\Tests\Platform\Fabric;
 
 use PhpLlm\LlmChain\Chain\Input;
+use PhpLlm\LlmChain\Platform\Exception\InvalidArgumentException;
+use PhpLlm\LlmChain\Platform\Exception\LogicException;
+use PhpLlm\LlmChain\Platform\Exception\RuntimeException;
 use PhpLlm\LlmChain\Platform\Fabric\FabricInputProcessor;
 use PhpLlm\LlmChain\Platform\Message\MessageBag;
 use PhpLlm\LlmChain\Platform\Message\SystemMessage;
@@ -42,7 +45,7 @@ final class FabricInputProcessorTest extends TestCase
         $model = new Model('test-model', []);
         $input = new Input($model, $messages, ['fabric_pattern' => 123]);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The "fabric_pattern" option must be a string');
 
         $processor->processInput($input);
@@ -57,7 +60,7 @@ final class FabricInputProcessorTest extends TestCase
         $model = new Model('test-model', []);
         $input = new Input($model, $messages, ['fabric_pattern' => 'test_pattern']);
 
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Cannot add Fabric pattern: MessageBag already contains a system message');
 
         $processor->processInput($input);
@@ -72,7 +75,7 @@ final class FabricInputProcessorTest extends TestCase
         $model = new Model('test-model', []);
         $input = new Input($model, $messages, ['fabric_pattern' => 'test_pattern']);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Fabric patterns not found. Please install the "php-llm/fabric-pattern" package');
 
         $processor->processInput($input);
