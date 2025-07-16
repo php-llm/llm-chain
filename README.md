@@ -1,5 +1,10 @@
 # LLM Chain
 
+> [!IMPORTANT]  
+> **PHP LLM becomes Symfony AI** - this project moved to [github.com/symfony/ai](https://github.com/symfony/ai).
+> Please use the new repository for all future development, issues, and contributions.
+> Thanks for your contributions - we hope to see you at Symfony AI!
+
 PHP library for building LLM-based and AI-based features and applications.
 
 This library is not stable yet, but still rather experimental. Feel free to try it out, give feedback, ask questions,
