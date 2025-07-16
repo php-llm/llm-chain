@@ -19,6 +19,7 @@
             "email": "oskarstark@googlemail.com"
         }
     ],
+    "abandoned": "symfony/ai-agent",
     "require": {
         "php": ">=8.2",
         "ext-fileinfo": "*",
